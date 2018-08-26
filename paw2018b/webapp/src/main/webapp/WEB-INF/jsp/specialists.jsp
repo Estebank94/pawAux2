@@ -55,7 +55,7 @@
 
 <div class="main container">
     <c:choose>
-        <c:when test="${not empty search.name}">
+        <c:when test="${(not empty search.name) or (not empty search.insurance) or (not empty search.location) or (not empty search.specialty)}">
             <div class="row">
                 <div class="col-md-9">
                     <div class="card card-doctor d-flex flex-row">
