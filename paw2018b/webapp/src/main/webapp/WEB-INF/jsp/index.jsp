@@ -22,24 +22,27 @@
     <div class="container padding-top-big padding-bottom-big">
         <p class="jumbotron-subtitle">Sacá turnos con los mejores medicos, al instante.</p>
         <div class="navbar-search-home">
-            <div class="input-group container">
-                <input type="text" aria-label="Buscar por especialista" placeholder="Buscar por especialista, sintoma o procedimiento..." class="form-control">
-                <select class="custom-select col-sm-3" id="ubicacion">
-                    <option selected>Ubicación</option>
-                    <option value="1">Palermo</option>
-                    <option value="2">Belgrano</option>
-                    <option value="3">Recoleta</option>
-                </select>
-                <select class="custom-select col-sm-3" id="prepaga">
-                    <option selected>Prepaga y Plan</option>
-                    <option value="1">OSDE</option>
-                    <option value="2">Swiss Medical</option>
-                    <option value="3">Omint</option>
-                </select>
-                <div class="input-group-append">
-                    <button class="btn btn-primary custom-btn" type="button"><a  class="a-white" href="specialists.html"><i class="fas fa-search"></i> Buscar</a></button>
+            <form action="processForm" method="GET">
+                <div class="input-group container">
+                    <input type="text" aria-label="Buscar por nombre del medico" placeholder="Nombre del medico" class="form-control" name="searchName"> <!--added name!-->
+                    <input type="text" aria-label="Buscar por especialidad" placeholder="Especialidad" class="form-control">
+                    <select class="custom-select" id="ubicacion">
+                        <option selected>Ubicación</option>
+                        <option value="1">Palermo</option>  <!-- me parece que vamos  a tener que cambiar los values por algo mas referencial-->
+                        <option value="2">Belgrano</option>
+                        <option value="3">Recoleta</option>
+                    </select>
+                    <select class="custom-select" id="prepaga" path="medicalCare">
+                        <option selected>Prepaga y Plan</option>
+                        <option value="1">OSDE</option> <!--vamos a tener que tener en cuenta el tema de los distintos planes. Como? -->
+                        <option value="2">Swiss Medical</option>
+                        <option value="3">Omint</option>
+                    </select>
+                    <div class="input-group-append">
+                        <input type="submit" class="btn btn-primary custom-btn" value="Buscar"/>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
