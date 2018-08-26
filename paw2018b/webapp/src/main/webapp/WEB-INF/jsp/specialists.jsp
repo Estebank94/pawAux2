@@ -11,8 +11,12 @@
     <title>Lists of Doctors</title>
 </head>
 <body>
-Doctor Name: ${name}
+Doctor Name: ${search.name}
 <br>
-Specialty: ${specialty}
+Specialty: ${search.specialty}
+<br>
+Location: ${search.location}
+<br>
+Insurance: ${search.insurance}
 </body>
 </html>

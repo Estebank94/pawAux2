@@ -24,27 +24,27 @@
     <div class="container padding-top-big padding-bottom-big">
         <p class="jumbotron-subtitle">Sacá turnos con los mejores medicos, al instante.</p>
         <div class="navbar-search-home">
-            <form action="processForm" method="GET" modelAttribute="">
+            <form:form action="processForm" method="GET" modelAttribute="search">
                 <div class="input-group container">
-                    <input type="text" aria-label="Buscar por nombre del medico" placeholder="Nombre del medico" class="form-control" name="doctorName" path=""> <!--added name!-->
-                    <input type="text" aria-label="Buscar por especialidad" placeholder="Especialidad" class="form-control" name="specialty" path="">
-                    <select class="custom-select" id="ubicacion">
-                        <option selected>Ubicación</option>
-                        <option value="1">Palermo</option>  <!-- me parece que vamos  a tener que cambiar los values por algo mas referencial-->
-                        <option value="2">Belgrano</option>
-                        <option value="3">Recoleta</option>
-                    </select>
-                    <select class="custom-select" id="prepaga" path="medicalCare">
-                        <form selected>Prepaga y Plan</form>
-                        <option value="1">OSDE</option> <!--vamos a tener que tener en cuenta el tema de los distintos planes. Como? -->
-                        <option value="2">Swiss Medical</option>
-                        <option value="3">Omint</option>
-                    </select>
+                    <form:input type="text" aria-label="Buscar por nombre del medico" placeholder="Nombre del medico" class="form-control" path="name"/>
+                    <form:input type="text" aria-label="Buscar por especialidad" placeholder="Especialidad" class="form-control" path="specialty"/>
+                    <form:select class="custom-select" id="ubicacion" path="location">
+                        <form:option selected="Ubicación" value="0">Ubicación</form:option>
+                        <form:option value="1">Palermo </form:option>
+                        <form:option value="2">Belgrano</form:option>
+                        <form:option value="3">Recoleta</form:option>
+                    </form:select>
+                    <form:select class="custom-select" id="prepaga" path="insurance">
+                        <form:option selected="Prepaga" value="0">Prepaga</form:option>
+                        <form:option value="1">OSDE</form:option>
+                        <form:option value="2">Swiss Medical</form:option>
+                        <form:option value="3">Omint</form:option>
+                    </form:select>
                     <div class="input-group-append">
-                        <input type="submit" class="btn btn-primary custom-btn" value="Buscar" path=""/>
+                        <input type="submit" class="btn btn-primary custom-btn" value="Buscar" path="submit"/>
                     </div>
                 </div>
-            </form>
+            </form:form>
         </div>
     </div>
 </div>
