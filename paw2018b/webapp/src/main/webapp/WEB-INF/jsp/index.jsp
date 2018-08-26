@@ -29,16 +29,16 @@
                     <form:input type="text" aria-label="Buscar por nombre del medico" placeholder="Nombre del medico" class="form-control" path="name"/>
                     <form:input type="text" aria-label="Buscar por especialidad" placeholder="Especialidad" class="form-control" path="specialty"/>
                     <form:select class="custom-select" id="ubicacion" path="location">
-                        <form:option selected="Ubicación" value="0">Ubicación</form:option>
-                        <form:option value="1">Palermo </form:option>
-                        <form:option value="2">Belgrano</form:option>
-                        <form:option value="3">Recoleta</form:option>
+                        <form:option selected="Ubicación" value="">Ubicación</form:option>
+                        <form:option value="Palermo">Palermo </form:option>
+                        <form:option value="Belgrano">Belgrano</form:option>
+                        <form:option value="Recoleta">Recoleta</form:option>
                     </form:select>
                     <form:select class="custom-select" id="prepaga" path="insurance">
-                        <form:option selected="Prepaga" value="0">Prepaga</form:option>
-                        <form:option value="1">OSDE</form:option>
-                        <form:option value="2">Swiss Medical</form:option>
-                        <form:option value="3">Omint</form:option>
+                        <form:option selected="Prepaga" value="">Prepaga</form:option>
+                        <form:option value="OSDE">OSDE</form:option>
+                        <form:option value="Swiss Medical">Swiss Medical</form:option>
+                        <form:option value="Omint">Omint</form:option>
                     </form:select>
                     <div class="input-group-append">
                         <input type="submit" class="btn btn-primary custom-btn" value="Buscar" path="submit"/>
@@ -86,11 +86,11 @@
     </div>
 </div>
 
-<div class="footer-grey">
+<!--<div class="footer-grey">
   <div class="container">
     <p class="footer-text">© Copyright 2018. Waldoc</p>
   </div>
-</div>
+</div>-->
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

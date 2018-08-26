@@ -35,7 +35,6 @@ public class Search {
         return insurance;
     }
 
-    public void setInsurance(String ensurance) {
-        this.insurance = insurance;
+    public void setInsurance(String insurance) { this.insurance = insurance;
     }
 }
