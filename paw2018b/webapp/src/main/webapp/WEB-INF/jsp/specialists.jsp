@@ -29,7 +29,7 @@
 </nav>
 
 <div class="navbar-search">
-    <form:form action="processForm" method="GET" modelAttribute="search">
+    <form:form action="processForm" method="GET" modelAttribute="search" accept-charset="ISO-8859-1">
     <div class="input-group container">
         <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del médico" class="form-control" path="name"/>
         <form:input type="text" aria-label="Buscar por especialidad" placeholder="Buscar por especialidad" class="form-control" path="specialty"/>

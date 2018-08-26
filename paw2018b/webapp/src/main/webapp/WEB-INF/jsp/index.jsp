@@ -25,7 +25,7 @@
     <div class="container padding-top-big padding-bottom-big">
         <p class="jumbotron-subtitle">Sacá turnos con los mejores médicos, al instante.</p>
         <div class="navbar-search-home">
-            <form:form action="processForm" method="GET" modelAttribute="search">
+            <form:form action="processForm" method="GET" modelAttribute="search" accept-charset="ISO-8859-1">
                 <div class="input-group container">
                     <form:input type="text" aria-label="Buscar por nombre del médico" placeholder="Nombre del médico" class="form-control" path="name"/>
                     <form:input type="text" aria-label="Buscar por especialidad" placeholder="Especialidad" class="form-control" path="specialty"/>
