@@ -25,7 +25,7 @@
 
 .card-doctor
 {
-  margin: 20px;
+  margin-top: 30px;
 }
 
 h3
@@ -230,6 +230,18 @@ hr
   border-top: 1px solid #eeeeee;
 }
 
+.hr-sidebar
+{
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
+.hr-header-sidebar
+{
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
 .bg-white
 {
   background-color: #FFFFFF;
@@ -238,6 +250,13 @@ hr
 h3
 {
   font-size: 24px;
+  color: #0A2D44;
+  font-weight: bold;
+}
+
+h4
+{
+  font-size: 20px;
   color: #0A2D44;
   font-weight: bold;
 }
@@ -276,4 +295,38 @@ h3
 .star-grey
 {
   color: #E3E4E5;
+}
+
+.star-small
+{
+  font-size: 16px;
+}
+
+.star-container
+{
+  margin-left: 2px;
+}
+
+.sidebar-nav-fixed {
+  background-color: #FFF;
+  border-radius: 5px;
+  padding: 16px;
+  margin-top: 30px;
+  border: 1px solid rgba(0,0,0,.125);
+}
+
+.sidebar-title
+{
+  margin-bottom: 8px;
+}
+
+.list-group-item-action
+{
+!important border-radius: 5px;
+  color: #000;
+}
+
+.active
+{
+  border-radius: 5px;
 }

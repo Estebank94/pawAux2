@@ -46,7 +46,7 @@
             <form:option value="Omint">Omint</form:option>
         </form:select>
         <div class="input-group-append">
-            <input type="submit" class="btn btn-primary custom-btn" value="Buscar" path="submit"/>
+            <input type="submit" class="btn btn-outline-light" value="Buscar" path="submit"/>
         </div>
     </div>
     </form:form>
@@ -57,7 +57,7 @@
     <c:choose>
         <c:when test="${not empty search.name}">
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-md-9">
                     <div class="card card-doctor d-flex flex-row">
                         <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar">
                         <div class="card-body">
@@ -76,6 +76,115 @@
                                 <br>
                                 <p class="doctor-text"><i class="far fa-clock"></i>  Lunes a Viernes de 8 a 16hs</p>
                                 <p class="doctor-text"><i class="fas fa-map-marker-alt"></i>  Av. Libertador 3000, Buenos Aires</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="sidebar-nav-fixed pull-right affix">
+                        <h3 class="sidebar-title">Filtrar Resultados</h3>
+                        <hr class="hr-header-sidebar">
+                        <div>
+                            <h4 class="sidebar-title">Plan Prepaga</h4>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    Todas
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    210
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    310
+                                </label>
+                            </div>
+                        </div>
+                        <hr class="hr-sidebar">
+                        <div>
+                            <h4 class="sidebar-title">Sexo</h4>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                                <label class="form-check-label" for="exampleRadios1">
+                                    Todos
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                                <label class="form-check-label" for="exampleRadios1">
+                                    Masculino
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                                <label class="form-check-label" for="exampleRadios1">
+                                    Femenino
+                                </label>
+                            </div>
+                        </div>
+                        <hr class="hr-sidebar">
+                        <div>
+                            <h4 class="sidebar-title">Estrellas</h4>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    Todas
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    <div class="row star-container">
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    <div class="row star-container">
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    <div class="row star-container">
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    <div class="row star-container">
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    <div class="row star-container">
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                    </div>
+                                </label>
                             </div>
                         </div>
                     </div>
