@@ -15,7 +15,7 @@
 <body class="body-background">
 <nav class="navbar navbar-dark" style="background-color: #FFFFFF; padding-bottom: 0px;">
     <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
             <h1 class="navbar-brand-home"><strong>Waldoc</strong></h1>
         </a>
     </div>
