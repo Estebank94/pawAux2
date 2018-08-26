@@ -22,7 +22,7 @@
 <body class="body-background">
 <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
     <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
             <h1><strong>Waldoc</strong></h1>
         </a>
     </div>
@@ -31,7 +31,7 @@
 <div class="navbar-search">
     <form:form action="processForm" method="GET" modelAttribute="search">
     <div class="input-group container">
-        <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del medico" class="form-control" path="name"/>
+        <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del médico" class="form-control" path="name"/>
         <form:input type="text" aria-label="Buscar por especialidad" placeholder="Buscar por especialidad" class="form-control" path="specialty"/>
         <form:select class="custom-select col-sm-3" id="location" path="location">
             <form:option selected="Ubicación" value="">Ubicación</form:option>
@@ -54,31 +54,36 @@
 
 
 <div class="main container">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card card-doctor d-flex flex-row">
-                <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar">
-                <div class="card-body">
-                    <div class="card-text">
-                        <h3>${search.name}</h3>
-                        <p class="doctor-specialty">${search.specialty}</p>
-                        <br>
-                        <div class="row container">
-                            <i class="fas fa-star star-yellow"></i>
-                            <i class="fas fa-star star-yellow"></i>
-                            <i class="fas fa-star star-yellow"></i>
-                            <i class="fas fa-star star-yellow"></i>
-                            <i class="fas fa-star star-grey"></i>
+    <c:choose>
+        <c:when test="${not empty search.name}">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card card-doctor d-flex flex-row">
+                        <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar">
+                        <div class="card-body">
+                            <div class="card-text">
+                                <h3>${search.name}</h3>
+                                <p class="doctor-specialty">${search.specialty}</p>
+                                <br>
+                                <div class="row container">
+                                    <i class="fas fa-star star-yellow"></i>
+                                    <i class="fas fa-star star-yellow"></i>
+                                    <i class="fas fa-star star-yellow"></i>
+                                    <i class="fas fa-star star-yellow"></i>
+                                    <i class="fas fa-star star-grey"></i>
+                                </div>
+                                <p class="doctor-text">"Muy buena atención, muy puntual"</p>
+                                <br>
+                                <p class="doctor-text"><i class="far fa-clock"></i>  Lunes a Viernes de 8 a 16hs</p>
+                                <p class="doctor-text"><i class="fas fa-map-marker-alt"></i>  Av. Libertador 3000, Buenos Aires</p>
+                            </div>
                         </div>
-                        <p class="doctor-text">"Muy buena atencion, muy puntual"</p>
-                        <br>
-                        <p class="doctor-text"><i class="far fa-clock"></i>  Lunes a Viernes de 8 a 16hs</p>
-                        <p class="doctor-text"><i class="fas fa-map-marker-alt"></i>  Av. Libertador 3000, Buenos Aires</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </c:when>
+        <c:when test="${(empty search.name) and (empty search.specialty) and (empty search.location) and (empty search.insurance)}"> <br> <p>No hay forma de buscar nada </p> </c:when>
+    </c:choose>
 </div>
 
 <footer class="footer-grey">

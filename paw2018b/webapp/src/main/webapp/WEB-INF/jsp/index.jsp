@@ -23,11 +23,11 @@
 
 <div class="jumbotron jumbotron-background">
     <div class="container padding-top-big padding-bottom-big">
-        <p class="jumbotron-subtitle">Sacá turnos con los mejores medicos, al instante.</p>
+        <p class="jumbotron-subtitle">Sacá turnos con los mejores médicos, al instante.</p>
         <div class="navbar-search-home">
             <form:form action="processForm" method="GET" modelAttribute="search">
                 <div class="input-group container">
-                    <form:input type="text" aria-label="Buscar por nombre del medico" placeholder="Nombre del medico" class="form-control" path="name"/>
+                    <form:input type="text" aria-label="Buscar por nombre del médico" placeholder="Nombre del médico" class="form-control" path="name"/>
                     <form:input type="text" aria-label="Buscar por especialidad" placeholder="Especialidad" class="form-control" path="specialty"/>
                     <form:select class="custom-select" id="location" path="location">
                         <form:option selected="Ubicación" value="">Ubicación</form:option>
@@ -52,7 +52,7 @@
 
 <div class="container">
     <div class="margin-big">
-        <p class="jumbotron-subtitle">Sacar un turno nunca fue tan facil</p>
+        <p class="jumbotron-subtitle">Sacar un turno nunca fue tan fácil</p>
         <p class="jumbotron-text">Seguí estos simples pasos</p>
     </div>
 
@@ -60,8 +60,8 @@
         <img src="./img/1.jpg" class="image-rectangle">
         <div>
             <div class="list-home">
-                <h3>1. Defini tus sintomas</h3>
-                <p class="doctor-text">Lorem ipsum dolor sit. Tenemos el medico adecuado.</p>
+                <h3>1. Definí tus sintomas</h3>
+                <p class="doctor-text">Lorem ipsum dolor sit. Tenemos el médico adecuado.</p>
             </div>
         </div>
     </div>
@@ -70,8 +70,8 @@
         <img src="./img/2.jpg" class="image-rectangle-right">
         <div>
             <div class="list-home-right">
-                <h3>2. Encontra al medico que mas te gusta.</h3>
-                <p>Lorem ipsum dolor sit. Tenemos el medico adecuado.</p>
+                <h3>2. Encontrá al médico que más te gusta.</h3>
+                <p>Lorem ipsum dolor sit. Tenemos el médico adecuado.</p>
             </div>
         </div>
     </div>
@@ -80,8 +80,8 @@
         <img src="./img/3.jpg" class="image-rectangle">
         <div>
             <div class="list-home">
-                <h3>3. Saca tu turno.</h3>
-                <p>Lorem ipsum dolor sit. Tenemos el medico adecuado.</p>
+                <h3>3. Sacá tu turno.</h3>
+                <p>Lorem ipsum dolor sit. Tenemos el médico adecuado.</p>
             </div>
         </div>
     </div>
