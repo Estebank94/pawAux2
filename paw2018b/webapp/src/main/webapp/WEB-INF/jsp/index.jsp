@@ -28,13 +28,13 @@
                 <div class="input-group container">
                     <form:input type="text" aria-label="Buscar por nombre del medico" placeholder="Nombre del medico" class="form-control" path="name"/>
                     <form:input type="text" aria-label="Buscar por especialidad" placeholder="Especialidad" class="form-control" path="specialty"/>
-                    <form:select class="custom-select" id="ubicacion" path="location">
+                    <form:select class="custom-select" id="location" path="location">
                         <form:option selected="Ubicación" value="">Ubicación</form:option>
                         <form:option value="Palermo">Palermo </form:option>
                         <form:option value="Belgrano">Belgrano</form:option>
                         <form:option value="Recoleta">Recoleta</form:option>
                     </form:select>
-                    <form:select class="custom-select" id="prepaga" path="insurance">
+                    <form:select class="custom-select" id="insurance" path="insurance">
                         <form:option selected="Prepaga" value="">Prepaga</form:option>
                         <form:option value="OSDE">OSDE</form:option>
                         <form:option value="Swiss Medical">Swiss Medical</form:option>

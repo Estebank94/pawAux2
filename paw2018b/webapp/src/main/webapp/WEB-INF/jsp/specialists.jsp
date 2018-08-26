@@ -7,6 +7,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,24 +28,27 @@
 </nav>
 
 <div class="navbar-search">
+    <form:form action="processForm" method="GET" modelAttribute="search">
     <div class="input-group container">
-        <input type="text" aria-label="Buscar por especialista" placeholder="Buscar por especialista, sintoma o procedimiento..." class="form-control">
-        <select class="custom-select col-sm-3" id="ubicacion">
-            <option selected>Ubicación</option>
-            <option value="1">Palermo</option>
-            <option value="2">Belgrano</option>
-            <option value="3">Recoleta</option>
-        </select>
-        <select class="custom-select col-sm-3" id="prepaga">
-            <option selected>Prepaga y Plan</option>
-            <option value="1">OSDE</option>
-            <option value="2">Swiss Medical</option>
-            <option value="3">Omint</option>
-        </select>
+        <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del medico" class="form-control" path="name"/>
+        <form:input type="text" aria-label="Buscar por especialidad" placeholder="Buscar por especialidad" class="form-control" path="specialty"/>
+        <form:select class="custom-select col-sm-3" id="location" path="location">
+            <form:option selected="Ubicación" value="">Ubicación</form:option>
+            <form:option value="Palermo">Palermo</form:option>
+            <form:option value="Belgrano">Belgrano</form:option>
+            <form:option value="Recoleta">Recoleta</form:option>
+        </form:select>
+        <form:select class="custom-select col-sm-3" id="insurance" path="insurance">
+            <form:option selected="Prepaga" value="">Prepaga</form:option>
+            <form:option value="OSDE">OSDE</form:option>
+            <form:option value="Swiss Medical">Swiss Medical</form:option>
+            <form:option value="Omint">Omint</form:option>
+        </form:select>
         <div class="input-group-append">
-            <button class="btn btn-outline-light" type="button"> <i class="fas fa-search"></i> Buscar</button>
+            <input type="submit" class="btn btn-primary custom-btn" value="Buscar" path="submit"/>
         </div>
     </div>
+    </form:form>
 </div>
 
 
@@ -55,8 +59,8 @@
                 <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar">
                 <div class="card-body">
                     <div class="card-text">
-                        <h3>Dr. Andres Miller</h3>
-                        <p class="doctor-specialty">Medico Clinico</p>
+                        <h3>${search.name}</h3>
+                        <p class="doctor-specialty">${search.specialty}</p>
                         <br>
                         <div class="row container">
                             <i class="fas fa-star star-yellow"></i>
