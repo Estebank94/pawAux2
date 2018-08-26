@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,10 +24,10 @@
     <div class="container padding-top-big padding-bottom-big">
         <p class="jumbotron-subtitle">Sacá turnos con los mejores medicos, al instante.</p>
         <div class="navbar-search-home">
-            <form action="processForm" method="GET">
+            <form action="processForm" method="GET" modelAttribute="">
                 <div class="input-group container">
-                    <input type="text" aria-label="Buscar por nombre del medico" placeholder="Nombre del medico" class="form-control" name="doctorName"> <!--added name!-->
-                    <input type="text" aria-label="Buscar por especialidad" placeholder="Especialidad" class="form-control" name="specialty">
+                    <input type="text" aria-label="Buscar por nombre del medico" placeholder="Nombre del medico" class="form-control" name="doctorName" path=""> <!--added name!-->
+                    <input type="text" aria-label="Buscar por especialidad" placeholder="Especialidad" class="form-control" name="specialty" path="">
                     <select class="custom-select" id="ubicacion">
                         <option selected>Ubicación</option>
                         <option value="1">Palermo</option>  <!-- me parece que vamos  a tener que cambiar los values por algo mas referencial-->
@@ -34,13 +35,13 @@
                         <option value="3">Recoleta</option>
                     </select>
                     <select class="custom-select" id="prepaga" path="medicalCare">
-                        <option selected>Prepaga y Plan</option>
+                        <form selected>Prepaga y Plan</form>
                         <option value="1">OSDE</option> <!--vamos a tener que tener en cuenta el tema de los distintos planes. Como? -->
                         <option value="2">Swiss Medical</option>
                         <option value="3">Omint</option>
                     </select>
                     <div class="input-group-append">
-                        <input type="submit" class="btn btn-primary custom-btn" value="Buscar"/>
+                        <input type="submit" class="btn btn-primary custom-btn" value="Buscar" path=""/>
                     </div>
                 </div>
             </form>

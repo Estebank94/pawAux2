@@ -25,10 +25,10 @@ public class HelloWorldController {
 	}
 
 	@RequestMapping("/processForm")
-	public ModelAndView processForm(@RequestParam("doctorName") String name, @RequestParam("") String specialty, Model model) {
+	public ModelAndView processForm(@RequestParam("doctorName") String name, @RequestParam("specialty") String specialty) {
 		final ModelAndView mav = new ModelAndView("specialists");
-		model.addAttribute("name", name);
-		model.addAttribute("specialty", specialty);
+		mav.addObject("name", name);
+		mav.addObject("specialty", specialty);
 		return mav;
 	}
 }
