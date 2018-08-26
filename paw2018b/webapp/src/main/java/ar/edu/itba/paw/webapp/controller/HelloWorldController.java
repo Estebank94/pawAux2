@@ -25,10 +25,10 @@ public class HelloWorldController {
 	}
 
 	@RequestMapping("/processForm")
-	/*we map the web request, if they go to my website they will see THIS*/
-	public ModelAndView processForm(@RequestParam("searchName") String search, Model model) {
+	public ModelAndView processForm(@RequestParam("doctorName") String name, @RequestParam("") String specialty, Model model) {
 		final ModelAndView mav = new ModelAndView("specialists");
-		model.addAttribute("message", search);
+		model.addAttribute("name", name);
+		model.addAttribute("specialty", specialty);
 		return mav;
 	}
 }

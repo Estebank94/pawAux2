@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css" />">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 </head>
-<body class="body-background">zz
+<body class="body-background">
 <nav class="navbar navbar-dark" style="background-color: #FFFFFF; padding-bottom: 0px;">
     <div class="container">
         <a class="navbar-brand" href="#">
@@ -25,8 +25,8 @@
         <div class="navbar-search-home">
             <form action="processForm" method="GET">
                 <div class="input-group container">
-                    <input type="text" aria-label="Buscar por nombre del medico" placeholder="Nombre del medico" class="form-control" name="searchName"> <!--added name!-->
-                    <input type="text" aria-label="Buscar por especialidad" placeholder="Especialidad" class="form-control">
+                    <input type="text" aria-label="Buscar por nombre del medico" placeholder="Nombre del medico" class="form-control" name="doctorName"> <!--added name!-->
+                    <input type="text" aria-label="Buscar por especialidad" placeholder="Especialidad" class="form-control" name="specialty">
                     <select class="custom-select" id="ubicacion">
                         <option selected>Ubicación</option>
                         <option value="1">Palermo</option>  <!-- me parece que vamos  a tener que cambiar los values por algo mas referencial-->
@@ -85,11 +85,11 @@
     </div>
 </div>
 
-<!-- <div class="footer-grey">
+<div class="footer-grey">
   <div class="container">
     <p class="footer-text">© Copyright 2018. Waldoc</p>
   </div>
-</div> -->
+</div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

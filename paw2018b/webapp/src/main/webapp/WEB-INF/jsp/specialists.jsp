@@ -11,6 +11,8 @@
     <title>Lists of Doctors</title>
 </head>
 <body>
-Doctor Name: ${message}
+Doctor Name: ${name}
+<br>
+Specialty: ${specialty}
 </body>
 </html>
