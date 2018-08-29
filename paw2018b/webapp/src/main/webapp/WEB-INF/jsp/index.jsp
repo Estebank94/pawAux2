@@ -57,7 +57,7 @@
     </div>
 
     <div class="d-flex flex-row margin-bottom-medium">
-        <img src="./img/1.jpg" class="image-rectangle">
+        <img src="/resources/images/1.jpg" class="image-rectangle">
         <div>
             <div class="list-home">
                 <h3>1. Definí tus sintomas</h3>
@@ -67,7 +67,7 @@
     </div>
 
     <div class="d-flex flex-row-reverse margin-bottom-medium">
-        <img src="./img/2.jpg" class="image-rectangle-right">
+        <img src="/resources/images/2.jpg" class="image-rectangle-right">
         <div>
             <div class="list-home-right">
                 <h3>2. Encontrá al médico que más te gusta.</h3>
@@ -77,7 +77,7 @@
     </div>
 
     <div class="d-flex flex-row margin-bottom-medium">
-        <img src="./img/3.jpg" class="image-rectangle">
+        <img src="/resources/images/3.jpg" class="image-rectangle">
         <div>
             <div class="list-home">
                 <h3>3. Sacá tu turno.</h3>
