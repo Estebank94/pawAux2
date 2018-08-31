@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.DoctorDao;
 import ar.edu.itba.paw.models.Doctor;
+import ar.edu.itba.paw.models.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -40,6 +41,72 @@ public class DoctorDaoImpl implements DoctorDao {
             }
             return Optional.of(list);
     }
+
+    @Override
+    public Optional<List<Doctor>> findDoctors(Search search) {
+            String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ";
+            String from = "FROM doctor ";
+            String where = generateWhere(search);
+            String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
+                    "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  " +
+                    "LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id " +
+                    "LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID " +
+                    "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ";
+            String groupBy = "GROUP BY doctor.id, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName";
+
+            final List<Doctor> list = jdbcTemplate.query(select + from+ leftJoins + where + groupBy, ROW_MAPPER);
+
+            if(list.isEmpty()){
+                return Optional.empty();
+            }
+            return Optional.of(list);
+    }
+
+    public String generateWhere(Search search) {
+            String where = "WHERE ";
+
+            if(search.getName() != null) {
+                where+="firstName ~* '" + search.getName() + "' ";
+
+//                if(search.getSpecialty() != null) {
+//                    where+="AND specialty ~* '" + search.getSpecialty() +"' ";
+//                }
+//
+//                if(search.getLocation() != null) {
+//                    where+="AND location ~* '" + search.getLocation() +"' ";
+//                }
+//
+//                if(search.getInsurance() != null) {
+//                    where+="AND insurance ~* '" + search.getInsurance() +"' ";
+//                }
+
+            }
+
+            else if(search.getSpecialty() != null) {
+                where+="specialty=";
+
+                if(search.getLocation() != null) {
+                    where+="AND location=";
+                }
+
+                if(search.getInsurance() != null) {
+                    where+="AND insurance=";
+                }
+
+            }
+
+            else if(search.getLocation() != null) {
+                where+="location=";
+
+                if(search.getInsurance() != null) {
+                    where+="AND insurance=";
+                }
+
+            }
+
+        return where;
+    }
+
 };
 
 
