@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.models.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,6 +17,9 @@ public class HelloWorldController {
 	 @Autowired
 	 @Qualifier("userServiceImpl")
 	 private UserService us;
+
+	 @Autowired
+	 private DoctorService doctorService;
 	
 	@RequestMapping("/")
 	public ModelAndView helloWorld() {
@@ -27,6 +31,7 @@ public class HelloWorldController {
 	@RequestMapping("/processForm")
 	public ModelAndView processForm(@ModelAttribute("search") Search theSearch) {
 		final ModelAndView mav = new ModelAndView("specialists");
+		System.out.println(doctorService.listDoctors());
 		return mav;
 	}
 }

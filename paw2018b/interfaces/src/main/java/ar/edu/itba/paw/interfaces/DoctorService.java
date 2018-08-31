@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface DoctorService {
 
-    public Optional<List<Doctor>> listDoctors();
+   Optional<List<Doctor>> listDoctors();
 
 }
