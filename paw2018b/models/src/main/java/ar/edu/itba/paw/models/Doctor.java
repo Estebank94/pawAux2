@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
  * Created by estebankramer on 31/08/2018.
  */
@@ -12,6 +14,7 @@ public class Doctor {
     String avatar;
     Integer id;
 
+    @Autowired
     public Doctor(String firstName, String lastName, String sex, String address, String avatar, Integer id) {
         this.firstName = firstName;
         this.lastName = lastName;
