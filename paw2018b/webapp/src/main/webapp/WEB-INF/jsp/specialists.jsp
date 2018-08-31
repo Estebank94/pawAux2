@@ -58,27 +58,29 @@
         <c:when test="${(not empty search.name) or (not empty search.insurance) or (not empty search.location) or (not empty search.specialty)}">
             <div class="row">
                 <div class="col-md-9">
-                    <div class="card card-doctor d-flex flex-row">
-                        <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar">
-                        <div class="card-body">
-                            <div class="card-text">
-                                <h3>${search.name}</h3>
-                                <p class="doctor-specialty">${search.specialty}</p>
-                                <br>
-                                <div class="row container">
-                                    <i class="fas fa-star star-yellow"></i>
-                                    <i class="fas fa-star star-yellow"></i>
-                                    <i class="fas fa-star star-yellow"></i>
-                                    <i class="fas fa-star star-yellow"></i>
-                                    <i class="fas fa-star star-grey"></i>
+                    <c:forEach items="${doctorList}" var="doctorListItem">
+                        <div class="card card-doctor d-flex flex-row">
+                            <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar">
+                            <div class="card-body">
+                                <div class="card-text">
+                                    <h3>${doctorListItem.lastName}, ${doctorListItem.firstName}</h3>
+                                    <p class="doctor-specialty">Agregar Especialidad</p>
+                                    <br>
+                                    <div class="row container">
+                                        <i class="fas fa-star star-yellow"></i>
+                                        <i class="fas fa-star star-yellow"></i>
+                                        <i class="fas fa-star star-yellow"></i>
+                                        <i class="fas fa-star star-yellow"></i>
+                                        <i class="fas fa-star star-grey"></i>
+                                    </div>
+                                    <p class="doctor-text">"Muy buena atención, muy puntual"</p>
+                                    <br>
+                                    <p class="doctor-text"><i class="far fa-clock"></i>  Lunes a Viernes de 8 a 16hs</p>
+                                    <p class="doctor-text"><i class="fas fa-map-marker-alt"></i> ${doctorListItem.address}, CABA</p>
                                 </div>
-                                <p class="doctor-text">"Muy buena atención, muy puntual"</p>
-                                <br>
-                                <p class="doctor-text"><i class="far fa-clock"></i>  Lunes a Viernes de 8 a 16hs</p>
-                                <p class="doctor-text"><i class="fas fa-map-marker-alt"></i>  Av. Libertador 3000, Buenos Aires</p>
                             </div>
                         </div>
-                    </div>
+                    </c:forEach>
                 </div>
                 <div class="col-md-3">
                     <div class="sidebar-nav-fixed pull-right affix">
@@ -195,11 +197,11 @@
     </c:choose>
 </div>
 
-<footer class="footer-grey">
-    <div class="container">
-        <p class="footer-text">© Copyright 2018. Waldoc</p>
-    </div>
-</footer>
+<%--<footer class="footer-grey">--%>
+    <%--<div class="container">--%>
+        <%--<p class="footer-text">© Copyright 2018. Waldoc</p>--%>
+    <%--</div>--%>
+<%--</footer>--%>
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
