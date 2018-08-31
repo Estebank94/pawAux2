@@ -60,8 +60,8 @@
         <img src="/resources/images/1.jpg" class="image-rectangle">
         <div>
             <div class="list-home">
-                <h3>1. Definí tus sintomas</h3>
-                <p class="doctor-text">Lorem ipsum dolor sit. Tenemos el médico adecuado.</p>
+                <h3>Buscá</h3>
+                <p class="doctor-text">Contamos con los mejores medicos.</p>
             </div>
         </div>
     </div>
@@ -70,8 +70,8 @@
         <img src="/resources/images/2.jpg" class="image-rectangle-right">
         <div>
             <div class="list-home-right">
-                <h3>2. Encontrá al médico que más te gusta.</h3>
-                <p>Lorem ipsum dolor sit. Tenemos el médico adecuado.</p>
+                <h3>Elegí</h3>
+                <p>Lee las especificaciones de los medicos y elegi el adecuado.</p>
             </div>
         </div>
     </div>
@@ -80,8 +80,8 @@
         <img src="/resources/images/3.jpg" class="image-rectangle">
         <div>
             <div class="list-home">
-                <h3>3. Sacá tu turno.</h3>
-                <p>Lorem ipsum dolor sit. Tenemos el médico adecuado.</p>
+                <h3>Reservá</h3>
+                <p>Usa la informacion de contacto para reservar un turno.</p>
             </div>
         </div>
     </div>
