@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Search {
 
     private String name;
@@ -36,4 +39,13 @@ public class Search {
     }
 
     public void setInsurance(String insurance) { this.insurance = insurance; }
+
+    public String[] splitName(String name){
+
+//        https://stackoverflow.com/questions/7899525/how-to-split-a-string-by-space/7899558
+
+        String[] answer = name.split("\\s+");
+        return answer;
+    }
+
 }
