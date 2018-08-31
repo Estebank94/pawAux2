@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.DoctorDao;
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.models.Doctor;
+import ar.edu.itba.paw.models.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,11 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public Optional<List<Doctor>> listDoctors() {
         return doctorDao.listDoctors();
+    }
+
+    @Override
+    public Optional<List<Doctor>> findDoctors(Search search) {
+        return doctorDao.findDoctors(search);
     }
 
 }
