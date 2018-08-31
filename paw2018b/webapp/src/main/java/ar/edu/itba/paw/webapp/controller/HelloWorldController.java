@@ -31,7 +31,7 @@ public class HelloWorldController {
 	@RequestMapping("/processForm")
 	public ModelAndView processForm(@ModelAttribute("search") Search theSearch) {
 		final ModelAndView mav = new ModelAndView("specialists");
-		System.out.println(doctorService.listDoctors());
+		mav.addObject("doctorList", doctorService.findDoctors(theSearch).get());
 		return mav;
 	}
 }
