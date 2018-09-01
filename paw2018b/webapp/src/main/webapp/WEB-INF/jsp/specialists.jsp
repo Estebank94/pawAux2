@@ -60,7 +60,7 @@
                 <div class="col-md-9">
                     <c:forEach items="${doctorList}" var="doctorListItem">
                         <div class="card card-doctor d-flex flex-row">
-                            <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar">
+                            <img src=${doctorListItem.avatar} class="avatar">
                             <div class="card-body">
                                 <div class="card-text">
                                     <h3>${doctorListItem.lastName}, ${doctorListItem.firstName}</h3>
