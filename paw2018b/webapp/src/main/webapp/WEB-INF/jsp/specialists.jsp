@@ -75,7 +75,7 @@
                                     </div>
                                     <p class="doctor-text">"Muy buena atención, muy puntual"</p>
                                     <br>
-                                    <p class="doctor-text"><i class="far fa-clock"></i>  Lunes a Viernes de 8 a 16hs</p>
+                                    <p class="doctor-text"><i class="far fa-clock"></i> ${doctorListItem.workingHours} </p>
                                     <p class="doctor-text"><i class="fas fa-map-marker-alt"></i> ${doctorListItem.address}, CABA</p>
                                 </div>
                             </div>
