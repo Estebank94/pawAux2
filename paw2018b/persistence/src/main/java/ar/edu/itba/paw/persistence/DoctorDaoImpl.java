@@ -24,7 +24,7 @@ public class DoctorDaoImpl implements DoctorDao {
         @Override
         public Doctor mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Doctor(rs.getString("firstName"), rs.getString("lastName"), rs.getString("sex"),
-                    rs.getString("address"), rs.getString("avatar"), rs.getInt("id"));}
+                    rs.getString("address"), rs.getString("avatar"), rs.getString("workingHours"), rs.getInt("id"));}
         };
 
         @Autowired
@@ -44,7 +44,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public Optional<List<Doctor>> findDoctors(Search search) {
-            String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ";
+            String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ";
             String from = "FROM doctor ";
             String where = generateWhere(search);
             String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
