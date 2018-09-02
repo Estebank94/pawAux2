@@ -34,7 +34,7 @@
         <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del médico" class="form-control" path="name"/>
         <form:input type="text" aria-label="Buscar por especialidad" placeholder="Buscar por especialidad" class="form-control" path="specialty"/>
         <form:select class="custom-select" id="insurance" path="insurance" items="${insuranceList}" itemLabel="name" itemValue="id">
-            <form:option selected="Prepaga" value="">Prepaga</form:option>
+            <form:option selected="Prepaga" value="Prepaga">Prepaga</form:option>
         </form:select>
         <div class="input-group-append">
             <input type="submit" class="btn btn-outline-light" value="Buscar" path="submit"/>
@@ -78,7 +78,7 @@
                 <div>
                     <h4 class="sidebar-title">Plan Prepaga</h4>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" checked>
                         <label class="form-check-label" for="defaultCheck1">
                             Todas
                         </label>
@@ -106,13 +106,13 @@
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
                         <label class="form-check-label" for="exampleRadios1">
                             Masculino
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
                         <label class="form-check-label" for="exampleRadios1">
                             Femenino
                         </label>
@@ -122,7 +122,7 @@
                 <div>
                     <h4 class="sidebar-title">Estrellas</h4>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" checked>
                         <label class="form-check-label" for="defaultCheck1">
                             Todas
                         </label>
