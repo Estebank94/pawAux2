@@ -62,7 +62,7 @@
                     <div class="card-body">
                         <div class="card-text">
                             <h3>${doctorListItem.lastName}, ${doctorListItem.firstName}</h3>
-                            <p class="doctor-specialty">Agregar Especialidad</p>
+                            <p class="doctor-specialty">${doctorListItem.specialty}</p>
                             <br>
                             <div class="row container">
                                 <i class="fas fa-star star-yellow"></i>
