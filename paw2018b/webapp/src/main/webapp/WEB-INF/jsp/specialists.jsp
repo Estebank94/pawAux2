@@ -33,17 +33,8 @@
     <div class="input-group container">
         <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del médico" class="form-control" path="name"/>
         <form:input type="text" aria-label="Buscar por especialidad" placeholder="Buscar por especialidad" class="form-control" path="specialty"/>
-        <form:select class="custom-select col-sm-3" id="location" path="location">
-            <form:option selected="Ubicación" value="">Ubicación</form:option>
-            <form:option value="Palermo">Palermo</form:option>
-            <form:option value="Belgrano">Belgrano</form:option>
-            <form:option value="Recoleta">Recoleta</form:option>
-        </form:select>
-        <form:select class="custom-select col-sm-3" id="insurance" path="insurance">
+        <form:select class="custom-select" id="insurance" path="insurance" items="${insuranceList}" itemLabel="name" itemValue="id">
             <form:option selected="Prepaga" value="">Prepaga</form:option>
-            <form:option value="OSDE">OSDE</form:option>
-            <form:option value="Swiss Medical">Swiss Medical</form:option>
-            <form:option value="Omint">Omint</form:option>
         </form:select>
         <div class="input-group-append">
             <input type="submit" class="btn btn-outline-light" value="Buscar" path="submit"/>
