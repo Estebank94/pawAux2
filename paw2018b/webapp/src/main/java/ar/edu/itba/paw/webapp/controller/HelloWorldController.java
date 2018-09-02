@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.DoctorService;
+import ar.edu.itba.paw.interfaces.SearchService;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Search;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,16 @@ public class HelloWorldController {
 
 	 @Autowired
 	 private DoctorService doctorService;
+
+	@Autowired
+	private SearchService searchService;
 	
 	@RequestMapping("/")
 	public ModelAndView helloWorld() {
 		final ModelAndView mav = new ModelAndView("index");
 		mav.addObject("search", new Search());
+
+		mav.addObject("insuranceList", searchService.listInsurances().get());
 		return mav;
 	}
 
