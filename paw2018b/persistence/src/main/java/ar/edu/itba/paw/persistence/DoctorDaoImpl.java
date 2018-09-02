@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +45,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public Optional<List<Doctor>> findDoctors(Search search) {
+
             String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ";
             String from = "FROM doctor ";
             String where = generateWhere(search);
@@ -54,12 +56,22 @@ public class DoctorDaoImpl implements DoctorDao {
                     "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ";
             String groupBy = "GROUP BY doctor.id, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName";
 
-            final List<Doctor> list = jdbcTemplate.query(select + from+ leftJoins + where + groupBy, ROW_MAPPER);
+           final List<Doctor> list = jdbcTemplate.query(select + from+ leftJoins + where + groupBy, ROW_MAPPER);
 
             if(list.isEmpty()){
                 return Optional.empty();
             }
-            return Optional.of(list);
+
+            List<Integer> rta = new ArrayList<>();
+            List<Doctor> dct = new ArrayList<>();
+
+            for(Doctor doctor : list){
+                if(!rta.contains(doctor.getId())){
+                    rta.add(doctor.getId());
+                    dct.add(doctor);
+                }
+            }
+            return Optional.of(dct);
     }
 
     public String generateWhere(Search search) {
@@ -68,39 +80,35 @@ public class DoctorDaoImpl implements DoctorDao {
             if(search.getName() != null) {
                 where+="firstName ~* '" + search.getName() + "' ";
 
-//                if(search.getSpecialty() != null) {
-//                    where+="AND specialty ~* '" + search.getSpecialty() +"' ";
-//                }
+                if(search.getSpecialty() != null) {
+                    where+="AND specialty.specialtyName ~* '" + search.getSpecialty() +"' ";
+                }
 //
 //                if(search.getLocation() != null) {
 //                    where+="AND location ~* '" + search.getLocation() +"' ";
 //                }
 //
-//                if(search.getInsurance() != null) {
-//                    where+="AND insurance ~* '" + search.getInsurance() +"' ";
-//                }
+                if(search.getInsurance() != null) {
+                    where+="AND insurance.insuranceName ~* '" + search.getInsurance() +"' ";
+                }
 
             }
 
             else if(search.getSpecialty() != null) {
-                where+="specialty=";
+                where+="specialty.specialtyName= '" + search.getSpecialty() + "' ";
 
                 if(search.getLocation() != null) {
                     where+="AND location=";
                 }
 
                 if(search.getInsurance() != null) {
-                    where+="AND insurance=";
+                    where+="AND insurance.insuranceName= '" + search.getInsurance() + "' ";
                 }
 
             }
 
-            else if(search.getLocation() != null) {
-                where+="location=";
-
-                if(search.getInsurance() != null) {
-                    where+="AND insurance=";
-                }
+            else if(search.getInsurance() != null) {
+                where+="insurance.insuranceName= '" + search.getInsurance() + "' " ;
 
             }
 
