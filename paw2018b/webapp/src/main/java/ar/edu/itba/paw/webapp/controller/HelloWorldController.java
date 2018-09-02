@@ -54,6 +54,7 @@ public class HelloWorldController {
 		}
 
 		mav.addObject("doctorList", doctorsList);
+		mav.addObject("insuranceList", searchService.listInsurances().get());
 		return mav;
 	}
 }
