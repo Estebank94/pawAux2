@@ -24,7 +24,7 @@ public class DoctorDaoImpl implements DoctorDao {
         @Override
         public Doctor mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Doctor(rs.getString("firstName"), rs.getString("lastName"), rs.getString("sex"),
-                    rs.getString("address"), rs.getString("avatar"), rs.getString("workingHours"), rs.getInt("id"));}
+                    rs.getString("address"), rs.getString("avatar"), rs.getString("specialtyName"), rs.getString("workingHours"), rs.getInt("id"));}
         };
 
         @Autowired
