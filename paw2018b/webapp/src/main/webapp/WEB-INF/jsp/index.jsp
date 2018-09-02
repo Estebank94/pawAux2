@@ -29,7 +29,7 @@
                 <div class="input-group container">
                     <form:input type="text" aria-label="Buscar por nombre del médico" placeholder="Nombre del médico" class="form-control" path="name"/>
                     <form:input type="text" aria-label="Buscar por especialidad" placeholder="Especialidad" class="form-control" path="specialty"/>
-                    <form:select class="custom-select" id="insurance" path="insurance" items="${insuranceList}" itemLabel="name" itemValue="id">
+                    <form:select class="custom-select" id="insurance" path="insurance" items="${insuranceList}" itemLabel="name" itemValue="name">
                         <form:option selected="Prepaga" value="">Prepaga</form:option>
                     </form:select>
                     <div class="input-group-append">
