@@ -12,18 +12,28 @@ public class Doctor {
     String sex;
     String address;
     String avatar;
+    String specialty;
     String workingHours;
     Integer id;
 
     @Autowired
-    public Doctor(String firstName, String lastName, String sex, String address, String avatar, String workingHours, Integer id) {
+    public Doctor(String firstName, String lastName, String sex, String address, String avatar, String specialty, String workingHours, Integer id) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.sex = sex;
         this.address = address;
         this.avatar = avatar;
+        this.specialty = specialty;
         this.workingHours = workingHours;
         this.id = id;
+    }
+
+    public String getSpecialty() {
+        return specialty;
+    }
+
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
     }
 
     public String getWorkingHours() {
