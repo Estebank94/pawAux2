@@ -69,6 +69,10 @@ public class DoctorDaoImpl implements DoctorDao {
            final List<Doctor> list = jdbcTemplate.query(select + from+ leftJoins + where + groupBy, ROW_MAPPER);
 
             if(list.isEmpty()){
+                //TODO
+                //Vamos a tener que reveer esto porque no siempre me tiene que dar
+                //todos si por ejemplo me dice che ... quiero cardiologo pero no tengo de esa obra social
+                //listar cardiologos aunque no sean de su obra social, su urgencia es el cardiologo !!
                 return Optional.empty();
             }
 
@@ -81,6 +85,7 @@ public class DoctorDaoImpl implements DoctorDao {
                     dct.add(doctor);
                 }
                 for(Doctor doctorIt : dct){
+                    //TODO
                     //Cuando veo que tengo el ID del doctor en mi lista de ya vistos, tendria que encontrar
                     //la forma de que el doctor ahora tenga una lista, y en esa lista, le pongo las insurances y los planes
                     //de las mismas + tener en cuenta un mapa, un algo de eso.
@@ -104,7 +109,7 @@ public class DoctorDaoImpl implements DoctorDao {
 //                    where+="AND location ~* '" + search.getLocation() +"' ";
 //                }
 //
-                if(!search.getInsurance().isEmpty()) {
+                if(!search.getInsurance().matches("no")) {
                     where+="AND insurance.insuranceName ~* '" + search.getInsurance() +"' ";
                 }
 
@@ -119,13 +124,13 @@ public class DoctorDaoImpl implements DoctorDao {
 //                    where+="AND location=";
 //                }
 
-                if(!search.getInsurance().isEmpty()) {
+                if(!search.getInsurance().matches("no")) {
                     where+="AND insurance.insuranceName= '" + search.getInsurance() + "' ";
                 }
 
             }
 
-            else if(!search.getInsurance().isEmpty()) {
+            else if(!search.getInsurance().matches("no")) {
 
                 where+="insurance.insuranceName= '" + search.getInsurance() + "' " ;
 
