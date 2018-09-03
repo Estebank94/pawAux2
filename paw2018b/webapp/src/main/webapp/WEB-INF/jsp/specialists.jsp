@@ -28,7 +28,7 @@
     </div>
 </nav>
 
-<div class="navbar-search">
+<div class="navbar-search sticky-top">
     <form:form action="processForm" method="GET" modelAttribute="search" accept-charset="ISO-8859-1">
     <div class="input-group container">
         <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del médico" class="form-control" path="name"/>
