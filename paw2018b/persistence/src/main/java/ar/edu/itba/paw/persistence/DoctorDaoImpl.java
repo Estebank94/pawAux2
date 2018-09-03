@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,6 +80,11 @@ public class DoctorDaoImpl implements DoctorDao {
                     rta.add(doctor.getId());
                     dct.add(doctor);
                 }
+                for(Doctor doctorIt : dct){
+                    //Cuando veo que tengo el ID del doctor en mi lista de ya vistos, tendria que encontrar
+                    //la forma de que el doctor ahora tenga una lista, y en esa lista, le pongo las insurances y los planes
+                    //de las mismas + tener en cuenta un mapa, un algo de eso.
+                }
             }
             return Optional.of(dct);
     }
@@ -86,10 +92,11 @@ public class DoctorDaoImpl implements DoctorDao {
     public String generateWhere(Search search) {
             String where = "WHERE ";
 
-            if(search.getName() != null) {
+
+            if(!search.getName().isEmpty()) {
                 where+="firstName ~* '" + search.getName() + "' ";
 
-                if(search.getSpecialty() != null) {
+                if(!search.getSpecialty().isEmpty()) {
                     where+="AND specialty.specialtyName ~* '" + search.getSpecialty() +"' ";
                 }
 //
@@ -97,26 +104,29 @@ public class DoctorDaoImpl implements DoctorDao {
 //                    where+="AND location ~* '" + search.getLocation() +"' ";
 //                }
 //
-                if(search.getInsurance() != null) {
+                if(!search.getInsurance().isEmpty()) {
                     where+="AND insurance.insuranceName ~* '" + search.getInsurance() +"' ";
                 }
 
             }
 
-            else if(search.getSpecialty() != null) {
+
+            else if(!search.getSpecialty().isEmpty()) {
+
                 where+="specialty.specialtyName= '" + search.getSpecialty() + "' ";
 
-                if(search.getLocation() != null) {
-                    where+="AND location=";
-                }
+//                if(!search.getLocation().isEmpty()) {
+//                    where+="AND location=";
+//                }
 
-                if(search.getInsurance() != null) {
+                if(!search.getInsurance().isEmpty()) {
                     where+="AND insurance.insuranceName= '" + search.getInsurance() + "' ";
                 }
 
             }
 
-            else if(search.getInsurance() != null) {
+            else if(!search.getInsurance().isEmpty()) {
+
                 where+="insurance.insuranceName= '" + search.getInsurance() + "' " ;
 
             }
