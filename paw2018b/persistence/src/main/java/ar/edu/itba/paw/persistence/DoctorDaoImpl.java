@@ -118,7 +118,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
             else if(!search.getSpecialty().isEmpty()) {
 
-                where+="specialty.specialtyName= '" + search.getSpecialty() + "' ";
+                where+="specialty.specialtyName ~* '" + search.getSpecialty() + "' ";
 
 //                if(!search.getLocation().isEmpty()) {
 //                    where+="AND location=";
