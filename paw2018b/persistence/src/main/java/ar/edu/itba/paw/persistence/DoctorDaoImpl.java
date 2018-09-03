@@ -45,7 +45,7 @@ public class DoctorDaoImpl implements DoctorDao {
                 "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ";
         String groupBy = "GROUP BY doctor.id, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName";
 
-        final List<Doctor> list = jdbcTemplate.query(select + from+ leftJoins + groupBy, ROW_MAPPER);
+        final List<Doctor> list = jdbcTemplate.query(select + from + leftJoins + groupBy, ROW_MAPPER);
 
         if(list.isEmpty()){
             return Optional.empty();
@@ -59,6 +59,9 @@ public class DoctorDaoImpl implements DoctorDao {
             String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ";
             String from = "FROM doctor ";
             String where = generateWhere(search);
+            if(where == "WHERE "){
+                where = " "; 
+            }
             String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
                     "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  " +
                     "LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id " +
@@ -66,7 +69,7 @@ public class DoctorDaoImpl implements DoctorDao {
                     "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ";
             String groupBy = "GROUP BY doctor.id, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName";
 
-           final List<Doctor> list = jdbcTemplate.query(select + from+ leftJoins + where + groupBy, ROW_MAPPER);
+           final List<Doctor> list = jdbcTemplate.query(select + from + leftJoins + where + groupBy, ROW_MAPPER);
 
             if(list.isEmpty()){
                 //TODO
@@ -135,7 +138,6 @@ public class DoctorDaoImpl implements DoctorDao {
                 where+="insurance.insuranceName= '" + search.getInsurance() + "' " ;
 
             }
-
         return where;
     }
 
