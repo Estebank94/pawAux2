@@ -33,8 +33,10 @@
     <div class="input-group container">
         <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del médico" class="form-control" path="name"/>
         <form:input type="text" aria-label="Buscar por especialidad" placeholder="Buscar por especialidad" class="form-control" path="specialty"/>
-        <form:select class="custom-select" id="insurance" path="insurance" items="${insuranceList}" itemLabel="name" itemValue="id">
-            <form:option selected="Prepaga" value="Prepaga">Prepaga</form:option>
+        <form:select class="custom-select" id="insurance" path="insurance">
+            <form:option value=" " label="Prepaga" selected="Prepaga"/>
+            <form:options items="${insuranceList}" itemValue="name" itemLabel="name" />
+            <%--<form:option selected="Prepaga" value="Prepaga">Prepaga</form:option>--%>
         </form:select>
         <div class="input-group-append">
             <input type="submit" class="btn btn-outline-light" value="Buscar" path="submit"/>
