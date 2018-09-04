@@ -12,7 +12,6 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,7 +59,7 @@ public class DoctorDaoImpl implements DoctorDao {
             String from = "FROM doctor ";
             String where = generateWhere(search);
             if(where == "WHERE "){
-                where = " "; 
+                where = " ";
             }
             String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
                     "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  " +
@@ -102,7 +101,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
 
             if(!search.getName().isEmpty()) {
-                where+="firstName ~* '" + search.getName() + "' ";
+                where+="firstName ~* '" + search.getName() + "' OR lastName ~* '" + search.getName() + "'" ;
 
                 if(!search.getSpecialty().isEmpty()) {
                     where+="AND specialty.specialtyName ~* '" + search.getSpecialty() +"' ";
@@ -115,6 +114,7 @@ public class DoctorDaoImpl implements DoctorDao {
                 if(!search.getInsurance().matches("no")) {
                     where+="AND insurance.insuranceName ~* '" + search.getInsurance() +"' ";
                 }
+
 
             }
 
