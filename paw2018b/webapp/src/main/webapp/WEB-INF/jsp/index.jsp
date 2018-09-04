@@ -25,14 +25,13 @@
     <div class="container padding-top-big padding-bottom-big">
         <p class="jumbotron-subtitle">Sacá turnos con los mejores médicos, al instante.</p>
         <div class="navbar-search-home">
-            <form:form action="processForm" method="GET" modelAttribute="search" accept-charset="ISO-8859-1">
+            <form:form action="processForm" method="POST" modelAttribute="search" accept-charset="ISO-8859-1">
                 <div class="input-group container">
                     <form:input type="text" aria-label="Buscar por nombre del médico" placeholder="Nombre del médico" class="form-control" path="name"/>
                     <form:input type="text" aria-label="Buscar por especialidad" placeholder="Especialidad" class="form-control" path="specialty"/>
                     <form:select class="custom-select" id="insurance" path="insurance">
                         <form:option value="no" label="Prepaga" selected="Prepaga"/>
                         <form:options items="${insuranceList}" itemValue="name" itemLabel="name" />
-                        <%--<form:option selected="Prepaga" value="">Prepaga</form:option>--%>
                     </form:select>
                     <div class="input-group-append">
                         <input type="submit" class="btn btn-primary custom-btn" value="Buscar" path="submit"/>
