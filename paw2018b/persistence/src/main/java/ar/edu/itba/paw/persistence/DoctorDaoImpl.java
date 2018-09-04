@@ -57,10 +57,13 @@ public class DoctorDaoImpl implements DoctorDao {
 
             String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ";
             String from = "FROM doctor ";
-            String where = generateWhere(search);
-            if(where == "WHERE "){
+            String where;
+            if(search.getName().isEmpty() && search.getSpecialty().isEmpty() && search.getInsurance().matches("no")){
                 where = " ";
+            }else{
+                where = generateWhere(search);
             }
+
             String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
                     "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  " +
                     "LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id " +
@@ -97,11 +100,11 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     public String generateWhere(Search search) {
-            String where = "WHERE ";
+            String where = "WHERE (";
 
 
             if(!search.getName().isEmpty()) {
-                where+="firstName ~* '" + search.getName() + "' OR lastName ~* '" + search.getName() + "'" ;
+                where+="(firstName ~* '" + search.getName() + "' OR lastName ~* '" + search.getName() + "') " ;
 
                 if(!search.getSpecialty().isEmpty()) {
                     where+="AND specialty.specialtyName ~* '" + search.getSpecialty() +"' ";
@@ -122,6 +125,7 @@ public class DoctorDaoImpl implements DoctorDao {
             else if(!search.getSpecialty().isEmpty()) {
 
                 where+="specialty.specialtyName ~* '" + search.getSpecialty() + "' ";
+                System.out.println("search.getSpecialty.isEmpty()" + search.getSpecialty().isEmpty());
 
 //                if(!search.getLocation().isEmpty()) {
 //                    where+="AND location=";
@@ -134,10 +138,11 @@ public class DoctorDaoImpl implements DoctorDao {
             }
 
             else if(!search.getInsurance().matches("no")) {
-
                 where+="insurance.insuranceName= '" + search.getInsurance() + "' " ;
 
             }
+
+            where += ") ";
         return where;
     }
 
