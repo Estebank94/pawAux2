@@ -55,7 +55,11 @@
                     <div class="card-body">
                         <div class="card-text">
                             <h3>${doctorListItem.lastName}, ${doctorListItem.firstName}</h3>
-                            <p class="doctor-specialty">${doctorListItem.specialty}</p>
+                            <div class="row container">
+                                <c:forEach items="${doctorListItem.specialty}" var="doctorSpecialty">
+                                    <p class="doctor-specialty" style="padding-right: 2em">${doctorSpecialty}</p>
+                                </c:forEach>
+                            </div>
                             <br>
                             <div class="row container">
                                 <i class="fas fa-star star-yellow"></i>
