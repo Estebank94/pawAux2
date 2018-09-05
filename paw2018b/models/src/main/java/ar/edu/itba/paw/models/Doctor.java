@@ -2,6 +2,11 @@ package ar.edu.itba.paw.models;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
 /**
  * Created by estebankramer on 31/08/2018.
  */
@@ -12,27 +17,29 @@ public class Doctor {
     String sex;
     String address;
     String avatar;
-    String specialty;
+    Set<String> specialty;
+    Map<String, Set<String>> insurance;
     String workingHours;
     Integer id;
 
     @Autowired
-    public Doctor(String firstName, String lastName, String sex, String address, String avatar, String specialty, String workingHours, Integer id) {
+    public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, String workingHours, Integer id) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.sex = sex;
         this.address = address;
         this.avatar = avatar;
         this.specialty = specialty;
+        this.insurance = insurance;
         this.workingHours = workingHours;
         this.id = id;
     }
 
-    public String getSpecialty() {
+    public Set<String> getSpecialty() {
         return specialty;
     }
 
-    public void setSpecialty(String specialty) {
+    public void setSpecialty(Set<String> specialty) {
         this.specialty = specialty;
     }
 
@@ -90,6 +97,28 @@ public class Doctor {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Map<String, Set<String>> getInsurance() {
+        return insurance;
+    }
+
+    public void setInsurance(Map<String, Set<String>> insurance) {
+        this.insurance = insurance;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Doctor)) return false;
+        Doctor doctor = (Doctor) o;
+        return Objects.equals(getId(), doctor.getId());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getId());
     }
 }
 
