@@ -92,47 +92,8 @@ public class DoctorDaoImpl implements DoctorDao {
                 return Optional.empty();
             }
 
-            List<Integer> rta = new ArrayList<>();
-            List<Doctor> ans = new ArrayList<>();
+            List<Doctor> ans = compressDoctors(list);
 
-            for(int i = 0; i < list.size(); i++) {
-                boolean flag = true;
-
-                for (int j = 0; j < ans.size() && flag; j++) {
-                    Doctor lstDoc = list.get(i);
-                    Doctor ansDoc = ans.get(j);
-                    if (ansDoc.equals(lstDoc)) {
-                        flag = false;
-                        ansDoc.getSpecialty().addAll(lstDoc.getSpecialty());
-
-                        for(String lstKey : lstDoc.getInsurance().keySet()) {
-                            if (!ansDoc.getInsurance().containsKey(lstKey)) {
-                                ansDoc.getInsurance().put(lstKey,lstDoc.getInsurance().get(lstKey));
-                            } else {
-                                ansDoc.getInsurance().get(lstKey).addAll(lstDoc.getInsurance().get(lstKey));
-                            }
-                        }
-
-                    }
-
-
-                }
-
-                if (flag == true) {
-                    ans.add(list.get(i));
-                }
-            }
-
-                //if(!rta.contains(doctor.getId())){
-                //    rta.add(doctor.getId());
-                //    dct.add(doctor);
-                //}
-            //    for(Doctor doctorIt : dct){
-                    //TODO
-                    //Cuando veo que tengo el ID del doctor en mi lista de ya vistos, tendria que encontrar
-                    //la forma de que el doctor ahora tenga una lista, y en esa lista, le pongo las insurances y los planes
-                    //de las mismas + tener en cuenta un mapa, un algo de eso.
-              //  }
             return Optional.of(ans);
     }
 
@@ -183,6 +144,39 @@ public class DoctorDaoImpl implements DoctorDao {
         return where;
     }
 
+    private List<Doctor> compressDoctors(List<Doctor> list){
+        List<Doctor> ans = new ArrayList<>();
+
+        for(int i = 0; i < list.size(); i++) {
+            boolean flag = true;
+
+            for (int j = 0; j < ans.size() && flag; j++) {
+                Doctor lstDoc = list.get(i);
+                Doctor ansDoc = ans.get(j);
+                if (ansDoc.equals(lstDoc)) {
+                    flag = false;
+                    ansDoc.getSpecialty().addAll(lstDoc.getSpecialty());
+
+                    for(String lstKey : lstDoc.getInsurance().keySet()) {
+                        if (!ansDoc.getInsurance().containsKey(lstKey)) {
+                            ansDoc.getInsurance().put(lstKey,lstDoc.getInsurance().get(lstKey));
+                        } else {
+                            ansDoc.getInsurance().get(lstKey).addAll(lstDoc.getInsurance().get(lstKey));
+                        }
+                    }
+
+                }
+
+
+            }
+
+            if (flag == true) {
+                ans.add(list.get(i));
+            }
+        }
+        return ans;
+
+    }
 };
 
 
