@@ -11,9 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class DoctorDaoImpl implements DoctorDao {
@@ -24,8 +22,20 @@ public class DoctorDaoImpl implements DoctorDao {
 
         @Override
         public Doctor mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+            Set<String> specialty = new HashSet<>();
+
+            specialty.add(rs.getString("specialtyName"));
+
+            Set<String> insurancePlanSet = new HashSet<>();
+            insurancePlanSet.add(rs.getString("insurancePlanName"));
+
+            Map<String, Set<String>> insurancePlan = new HashMap<>();
+            insurancePlan.put(rs.getString("insuranceName"),insurancePlanSet);
+
+
             return new Doctor(rs.getString("firstName"), rs.getString("lastName"), rs.getString("sex"),
-                    rs.getString("address"), rs.getString("avatar"), rs.getString("specialtyName"), rs.getString("workingHours"), rs.getInt("id"));}
+                    rs.getString("address"), rs.getString("avatar"), specialty, insurancePlan, rs.getString("workingHours"), rs.getInt("id"));}
         };
 
         @Autowired
@@ -49,7 +59,8 @@ public class DoctorDaoImpl implements DoctorDao {
         if(list.isEmpty()){
             return Optional.empty();
         }
-            return Optional.of(list);
+
+        return Optional.of(list);
     }
 
     @Override
@@ -82,21 +93,47 @@ public class DoctorDaoImpl implements DoctorDao {
             }
 
             List<Integer> rta = new ArrayList<>();
-            List<Doctor> dct = new ArrayList<>();
+            List<Doctor> ans = new ArrayList<>();
 
-            for(Doctor doctor : list){
-                if(!rta.contains(doctor.getId())){
-                    rta.add(doctor.getId());
-                    dct.add(doctor);
+            for(int i = 0; i < list.size(); i++) {
+                boolean flag = true;
+
+                for (int j = 0; j < ans.size() && flag; j++) {
+                    Doctor lstDoc = list.get(i);
+                    Doctor ansDoc = ans.get(j);
+                    if (ansDoc.equals(lstDoc)) {
+                        flag = false;
+                        ansDoc.getSpecialty().addAll(lstDoc.getSpecialty());
+
+                        for(String lstKey : lstDoc.getInsurance().keySet()) {
+                            if (!ansDoc.getInsurance().containsKey(lstKey)) {
+                                ansDoc.getInsurance().put(lstKey,lstDoc.getInsurance().get(lstKey));
+                            } else {
+                                ansDoc.getInsurance().get(lstKey).addAll(lstDoc.getInsurance().get(lstKey));
+                            }
+                        }
+
+                    }
+
+
                 }
-                for(Doctor doctorIt : dct){
+
+                if (flag == true) {
+                    ans.add(list.get(i));
+                }
+            }
+
+                //if(!rta.contains(doctor.getId())){
+                //    rta.add(doctor.getId());
+                //    dct.add(doctor);
+                //}
+            //    for(Doctor doctorIt : dct){
                     //TODO
                     //Cuando veo que tengo el ID del doctor en mi lista de ya vistos, tendria que encontrar
                     //la forma de que el doctor ahora tenga una lista, y en esa lista, le pongo las insurances y los planes
                     //de las mismas + tener en cuenta un mapa, un algo de eso.
-                }
-            }
-            return Optional.of(dct);
+              //  }
+            return Optional.of(ans);
     }
 
     public String generateWhere(Search search) {
