@@ -60,29 +60,36 @@ public class DoctorDaoImpl implements DoctorDao {
             return Optional.empty();
         }
 
-        return Optional.of(list);
+        return Optional.of(compressDoctors(list));
     }
 
     @Override
     public Optional<List<Doctor>> findDoctors(Search search) {
 
-            String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ";
-            String from = "FROM doctor ";
-            String where;
-            if(search.getName().isEmpty() && search.getSpecialty().isEmpty() && search.getInsurance().matches("no")){
-                where = " ";
-            }else{
-                where = generateWhere(search);
-            }
+        String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ";
+        String from = "FROM doctor ";
+        String whereIn;
+        if(search.getName().isEmpty() && search.getSpecialty().isEmpty() && search.getInsurance().matches("no")){
+            return listDoctors();
+        }else{
+            whereIn = generateWhere(search);
+        }
 
-            String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
-                    "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  " +
-                    "LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id " +
-                    "LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID " +
-                    "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ";
-            String groupBy = "GROUP BY doctor.id, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName";
+        String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
+                "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  " +
+                "LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id " +
+                "LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID " +
+                "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ";
+        String whereOut = "WHERE doctor.id IN (SELECT doctor.id " + " FROM doctor " +
+                "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
+                "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id " +
+                "LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id " +
+                "LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID " +
+                "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ";
+        whereIn += ")";
 
-           final List<Doctor> list = jdbcTemplate.query(select + from + leftJoins + where + groupBy, ROW_MAPPER);
+
+        final List<Doctor> list = jdbcTemplate.query(select + from + leftJoins + whereOut + whereIn, ROW_MAPPER);
 
             if(list.isEmpty()){
                 //TODO
