@@ -1,10 +1,12 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.DoctorDao;
+import ar.edu.itba.paw.models.CompressedSearch;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -44,7 +46,7 @@ public class DoctorDaoImpl implements DoctorDao {
         }
 
     @Override
-    public Optional<List<Doctor>> listDoctors() {
+    public Optional<CompressedSearch> listDoctors() {
         String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ";
         String from = "FROM doctor ";
         String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
@@ -54,17 +56,17 @@ public class DoctorDaoImpl implements DoctorDao {
                 "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ";
         String groupBy = "GROUP BY doctor.id, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName";
 
-        final List<Doctor> list = jdbcTemplate.query(select + from + leftJoins + groupBy, ROW_MAPPER);
+        final CompressedSearch compressedSearch = jdbcTemplate.query(select + from + leftJoins + groupBy, new CompressedExtractor());
 
-        if(list.isEmpty()){
+        if(compressedSearch.getDoctors().isEmpty()){
             return Optional.empty();
         }
 
-        return Optional.of(compressDoctors(list));
+        return Optional.of(compressedSearch);
     }
 
     @Override
-    public Optional<List<Doctor>> findDoctors(Search search) {
+    public Optional<CompressedSearch> findDoctors(Search search) {
 
         String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ";
         String from = "FROM doctor ";
@@ -88,10 +90,9 @@ public class DoctorDaoImpl implements DoctorDao {
                 "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ";
         whereIn += ")";
 
+        final CompressedSearch compressedSearch = jdbcTemplate.query(select + from + leftJoins + whereOut + whereIn, new CompressedExtractor());
 
-        final List<Doctor> list = jdbcTemplate.query(select + from + leftJoins + whereOut + whereIn, ROW_MAPPER);
-
-            if(list.isEmpty()){
+            if(compressedSearch.getDoctors().isEmpty()){
                 //TODO
                 //Vamos a tener que reveer esto porque no siempre me tiene que dar
                 //todos si por ejemplo me dice che ... quiero cardiologo pero no tengo de esa obra social
@@ -99,9 +100,9 @@ public class DoctorDaoImpl implements DoctorDao {
                 return Optional.empty();
             }
 
-            List<Doctor> ans = compressDoctors(list);
+//            List<Doctor> ans = compressDoctors(compressedSearch.getDoctors());
 
-            return Optional.of(ans);
+            return Optional.of(compressedSearch);
     }
 
     public String generateWhere(Search search) {
@@ -173,8 +174,6 @@ public class DoctorDaoImpl implements DoctorDao {
                     }
 
                 }
-
-
             }
 
             if (flag == true) {
@@ -183,6 +182,62 @@ public class DoctorDaoImpl implements DoctorDao {
         }
         return ans;
 
+    }
+
+    private static final class CompressedExtractor implements ResultSetExtractor<CompressedSearch> {
+        @Override
+        public CompressedSearch extractData(ResultSet rs) throws SQLException {
+            CompressedSearch compressedSearch = new CompressedSearch();
+
+            while (rs.next()) {
+                System.out.println(rs.getString("firstName") + rs.getString("lastName"));
+                boolean containsDoctor = false;
+                boolean containsInsurance = false;
+                for(Doctor existingDoctor : compressedSearch.getDoctors()){
+                    if (existingDoctor.getId().equals(rs.getInt("id"))) {
+                        containsDoctor = true;
+                        existingDoctor.getSpecialty().add(rs.getString("specialtyName"));
+
+                        for(String insurance : existingDoctor.getInsurance().keySet()){
+                            if(insurance.equals(rs.getString("insuranceName"))){
+                                containsInsurance = true;
+                                existingDoctor.getInsurance().get(insurance).add(rs.getString("insurancePlanName"));
+                                compressedSearch.getInsurance().get(insurance).add(rs.getString("insurancePlanName"));
+                            }
+                        }
+                        if(!containsInsurance){
+                            Set<String> insurancePlans = new HashSet<>();
+                            insurancePlans.add(rs.getString("insurancePlanName"));
+                            existingDoctor.getInsurance().put(rs.getString("insuranceName"), insurancePlans);
+                            compressedSearch.getInsurance().put(rs.getString("insuranceName"), insurancePlans);
+                        }
+                    }
+                }
+                if(!containsDoctor){
+                    Set<String> specialty = new HashSet<>();
+
+                    specialty.add(rs.getString("specialtyName"));
+
+                    Set<String> insurancePlanSet = new HashSet<>();
+                    insurancePlanSet.add(rs.getString("insurancePlanName"));
+
+                    Map<String, Set<String>> insurancePlan = new HashMap<>();
+                    insurancePlan.put(rs.getString("insuranceName"),insurancePlanSet);
+
+                    Doctor doctor =  new Doctor(rs.getString("firstName"), rs.getString("lastName"), rs.getString("sex"),
+                            rs.getString("address"), rs.getString("avatar"), specialty, insurancePlan, rs.getString("workingHours"), rs.getInt("id"));
+
+                    compressedSearch.getDoctors().add(doctor);
+                    compressedSearch.getSex().add(rs.getString("sex"));
+                    compressedSearch.getInsurance().put(rs.getString("insuranceName"), insurancePlanSet);
+                }
+
+
+
+            }
+
+            return compressedSearch;
+        }
     }
 };
 
