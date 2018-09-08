@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.SearchService;
+import ar.edu.itba.paw.models.CompressedSearch;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Search;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,20 +42,21 @@ public class HelloWorldController {
 	@RequestMapping("/processForm")
 	public ModelAndView processForm(@ModelAttribute("search") Search theSearch) {
 		final ModelAndView mav = new ModelAndView("specialists");
-		Optional<List<Doctor>> doctors =  doctorService.findDoctors(theSearch);
+		Optional<CompressedSearch> compressedSearch =  doctorService.findDoctors(theSearch);
 		List<Doctor> doctorsList = null;
-		if(doctors.isPresent()) {
-			doctorsList = doctors.get();
+		if(compressedSearch.isPresent()) {
+			doctorsList = compressedSearch.get().getDoctors();
 		}
 		else {
-			doctors = doctorService.listDoctors();
-			if(doctors.isPresent()) {
-				doctorsList = doctors.get();
+			compressedSearch = doctorService.listDoctors();
+			if(compressedSearch.isPresent()) {
+				doctorsList = compressedSearch.get().getDoctors();
 			}
 		}
 
 		mav.addObject("doctorList", doctorsList);
 		mav.addObject("insuranceList", searchService.listInsurances().get());
+		mav.addObject("previousSearch", theSearch);
 		return mav;
 	}
 }
