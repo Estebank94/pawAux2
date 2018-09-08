@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces;
 
+import ar.edu.itba.paw.models.CompressedSearch;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Search;
 
@@ -8,7 +9,7 @@ import java.util.Optional;
 
 public interface DoctorDao {
 
-    Optional<List<Doctor>> listDoctors();
+    Optional<CompressedSearch> listDoctors();
 
-    Optional<List<Doctor>> findDoctors(Search search);
+    Optional<CompressedSearch> findDoctors(Search search);
 }
