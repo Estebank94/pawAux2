@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.models;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Search {
@@ -9,6 +8,8 @@ public class Search {
     private String specialty;
     private String location;
     private String insurance;
+    private String sex;
+    private List<String> insurancePlan;
 
     public String getName() {
         return name;
@@ -48,4 +49,19 @@ public class Search {
         return answer;
     }
 
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public List<String> getInsurancePlan() {
+        return insurancePlan;
+    }
+
+    public void setInsurancePlan(List<String> insurancePlan) {
+        this.insurancePlan = insurancePlan;
+    }
 }
