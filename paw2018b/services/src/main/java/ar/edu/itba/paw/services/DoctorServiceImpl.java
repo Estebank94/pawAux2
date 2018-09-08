@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.DoctorDao;
 import ar.edu.itba.paw.interfaces.DoctorService;
+import ar.edu.itba.paw.models.CompressedSearch;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Search;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,12 @@ public class DoctorServiceImpl implements DoctorService {
     private DoctorDao doctorDao;
 
     @Override
-    public Optional<List<Doctor>> listDoctors() {
+    public Optional<CompressedSearch> listDoctors() {
         return doctorDao.listDoctors();
     }
 
     @Override
-    public Optional<List<Doctor>> findDoctors(Search search) {
+    public Optional<CompressedSearch> findDoctors(Search search) {
         return doctorDao.findDoctors(search);
     }
 
