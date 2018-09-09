@@ -14,8 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.UserService;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class HelloWorldController {
@@ -56,7 +55,8 @@ public class HelloWorldController {
 
 		mav.addObject("doctorList", doctorsList);
 		mav.addObject("insuranceList", searchService.listInsurances().get());
-		mav.addObject("sexList", compressedSearch.get().getSex()); 
+		mav.addObject("sexList", compressedSearch.get().getSex());
+		mav.addObject("insuranceNameList", compressedSearch.get().getInsurance());
 		mav.addObject("previousSearch", theSearch);
 		return mav;
 	}
