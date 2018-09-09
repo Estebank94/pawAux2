@@ -8,7 +8,7 @@ public class Search {
     private String specialty;
     private String location;
     private String insurance;
-    private String sex;
+    private String sex = "ALL";
     private List<String> insurancePlan;
 
     public String getName() {
