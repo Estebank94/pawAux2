@@ -84,16 +84,18 @@
             <div>
                     <h4 class="sidebar-title">Plan Prepaga</h4>
                     <div class="form-check">
+                        <form:checkbox path="insurancePlan" value="ALL"/> Todos
+                        <br>
+                        <br> 
                         <c:forEach items="${insuranceNameList}" var="insuranceNameList">
                             <b> ${insuranceNameList.key} <br> </b>
                             <c:forEach items="${insuranceNameList.key}">
-                               <form:checkboxes path="insurancePlan" items="${insuranceNameList.value}" delimiter="<br>" cssStyle=""/>
+                              <form:checkboxes path="insurancePlan" items="${insuranceNameList.value}" delimiter="<br>" />
                                 <%--<c:forEach items="${insuranceNameList.value}" var="info">--%>
                                     <%----%>
                                     <%--${info}<br>--%>
                                 <%--</c:forEach>--%>
                             </c:forEach>
-                            <br>
                             <br>
                         </c:forEach>
                     </div>
