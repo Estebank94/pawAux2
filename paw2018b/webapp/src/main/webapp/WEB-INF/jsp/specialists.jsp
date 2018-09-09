@@ -78,114 +78,93 @@
             </c:forEach>
         </div>
         <div class="col-md-3">
-            <div class="sidebar-nav-fixed pull-right affix">
-                <h3 class="sidebar-title">Filtrar Resultados</h3>
-                <hr class="hr-header-sidebar">
+            <form:form class="sidebar-nav-fixed pull-right affix"  action="processForm" modelAttribute="search" method="GET">
+            <h3 class="sidebar-title">Filtrar Resultados</h3>
+            <hr class="hr-header-sidebar">
+            <div>
+                    <%--<h4 class="sidebar-title">Plan Prepaga</h4>--%>
+                    <%--<div class="form-check">--%>
+                    <%--&lt;%&ndash;<c:forEach items="${insurancePlan}" var="insurance">&ndash;%&gt;--%>
+                    <%--&lt;%&ndash;<form:checkbox path="insurance"/>&ndash;%&gt;--%>
+                    <%--&lt;%&ndash;&lt;%&ndash;&lt;%&ndash;<form:checkboxes path="insurancePlan" items="${insurancePlan} "/>&ndash;%&gt;&ndash;%&gt;&ndash;%&gt;--%>
+                    <%--&lt;%&ndash;</c:forEach>&ndash;%&gt;--%>
+                    <%--</div>--%>
+                    <%--<hr class="hr-sidebar">--%>
                 <div>
-                    <h4 class="sidebar-title">Plan Prepaga</h4>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" checked>
-                        <label class="form-check-label" for="defaultCheck1">
-                            Todas
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            210
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            310
-                        </label>
-                    </div>
+                    <c:if test="${sexList.size() != 1}">
+                        <h4 class="sidebar-title">Sexo</h4>
+                        <div class="form-check">
+                            <form:radiobutton path="sex" value="ALL"/> Todos <br>
+                            <c:forEach items="${sexList}" var="sex">
+                                <form:radiobutton path="sex"/>
+                                <c:if test="${sex.equals('M')}">Masculino<br></c:if>
+                                <c:if test="${sex.equals('F')}">Femenino<br></c:if>
+                            </c:forEach>
+                        </div>
+                    </c:if>
                 </div>
-                <hr class="hr-sidebar">
-                <div>
-                    <h4 class="sidebar-title">Sexo</h4>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-                        <label class="form-check-label" for="exampleRadios1">
-                            Todos
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
-                        <label class="form-check-label" for="exampleRadios1">
-                            Masculino
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
-                        <label class="form-check-label" for="exampleRadios1">
-                            Femenino
-                        </label>
-                    </div>
-                </div>
-                <hr class="hr-sidebar">
-                <div>
-                    <h4 class="sidebar-title">Estrellas</h4>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" checked>
-                        <label class="form-check-label" for="defaultCheck1">
-                            Todas
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            <div class="row star-container">
-                                <i class="fas fa-star star-yellow star-small"></i>
-                                <i class="fas fa-star star-yellow star-small"></i>
-                                <i class="fas fa-star star-yellow star-small"></i>
-                                <i class="fas fa-star star-yellow star-small"></i>
-                                <i class="fas fa-star star-yellow star-small"></i>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            <div class="row star-container">
-                                <i class="fas fa-star star-yellow star-small"></i>
-                                <i class="fas fa-star star-yellow star-small"></i>
-                                <i class="fas fa-star star-yellow star-small"></i>
-                                <i class="fas fa-star star-yellow star-small"></i>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            <div class="row star-container">
-                                <i class="fas fa-star star-yellow star-small"></i>
-                                <i class="fas fa-star star-yellow star-small"></i>
-                                <i class="fas fa-star star-yellow star-small"></i>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            <div class="row star-container">
-                                <i class="fas fa-star star-yellow star-small"></i>
-                                <i class="fas fa-star star-yellow star-small"></i>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            <div class="row star-container">
-                                <i class="fas fa-star star-yellow star-small"></i>
-                            </div>
-                        </label>
-                    </div>
-                </div>
+                    <%--<hr class="hr-sidebar">--%>
+                    <%--<div>--%>
+                    <%--<h4 class="sidebar-title">Estrellas</h4>--%>
+                    <%--<div class="form-check">--%>
+                    <%--<input class="form-check-input" type="checkbox" value="" id="defaultCheck1" checked>--%>
+                    <%--<label class="form-check-label" for="defaultCheck1">--%>
+                    <%--Todas--%>
+                    <%--</label>--%>
+                    <%--</div>--%>
+                    <%--<div class="form-check">--%>
+                    <%--<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">--%>
+                    <%--<label class="form-check-label" for="defaultCheck1">--%>
+                    <%--<div class="row star-container">--%>
+                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
+                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
+                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
+                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
+                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
+                    <%--</div>--%>
+                    <%--</label>--%>
+                    <%--</div>--%>
+                    <%--<div class="form-check">--%>
+                    <%--<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">--%>
+                    <%--<label class="form-check-label" for="defaultCheck1">--%>
+                    <%--<div class="row star-container">--%>
+                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
+                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
+                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
+                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
+                    <%--</div>--%>
+                    <%--</label>--%>
+                    <%--</div>--%>
+                    <%--<div class="form-check">--%>
+                    <%--<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">--%>
+                    <%--<label class="form-check-label" for="defaultCheck1">--%>
+                    <%--<div class="row star-container">--%>
+                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
+                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
+                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
+                    <%--</div>--%>
+                    <%--</label>--%>
+                    <%--</div>--%>
+                    <%--<div class="form-check">--%>
+                    <%--<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">--%>
+                    <%--<label class="form-check-label" for="defaultCheck1">--%>
+                    <%--<div class="row star-container">--%>
+                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
+                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
+                    <%--</div>--%>
+                    <%--</label>--%>
+                    <%--</div>--%>
+                    <%--<div class="form-check">--%>
+                    <%--<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">--%>
+                    <%--<label class="form-check-label" for="defaultCheck1">--%>
+                    <%--<div class="row star-container">--%>
+                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
+                    <%--</div>--%>
+                    <%--</label>--%>
+                    <%--</div>--%>
+                    <%--</div>--%>
+                </form:form>
             </div>
-        </div>
     </div>
 </div>
 
