@@ -56,6 +56,7 @@ public class HelloWorldController {
 
 		mav.addObject("doctorList", doctorsList);
 		mav.addObject("insuranceList", searchService.listInsurances().get());
+		mav.addObject("sexList", compressedSearch.get().getSex()); 
 		mav.addObject("previousSearch", theSearch);
 		return mav;
 	}
