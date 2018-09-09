@@ -84,9 +84,9 @@
             <div>
                     <h4 class="sidebar-title">Plan Prepaga</h4>
                     <div class="form-check">
-                        <form:checkbox path="insurancePlan" value="ALL"/> Todos
+                        <form:checkbox path="insurancePlan" value="ALL" checked="checked"/> Todos
                         <br>
-                        <br> 
+                        <br>
                         <c:forEach items="${insuranceNameList}" var="insuranceNameList">
                             <b> ${insuranceNameList.key} <br> </b>
                             <c:forEach items="${insuranceNameList.key}">
@@ -106,7 +106,7 @@
                         <div class="form-check">
                             <form:radiobutton path="sex" value="ALL"/> Todos <br>
                             <c:forEach items="${sexList}" var="sex">
-                                <form:radiobutton path="sex"/>
+                                <form:radiobutton path="sex" />
                                 <c:if test="${sex.equals('M')}">Masculino<br></c:if>
                                 <c:if test="${sex.equals('F')}">Femenino<br></c:if>
                             </c:forEach>
