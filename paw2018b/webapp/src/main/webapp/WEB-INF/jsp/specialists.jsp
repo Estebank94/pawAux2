@@ -78,17 +78,24 @@
             </c:forEach>
         </div>
         <div class="col-md-3">
-            <form:form class="sidebar-nav-fixed pull-right affix"  action="processForm" modelAttribute="search" method="GET">
+            <form:form class="sidebar-nav-fixed pull-right affix" action="processForm" modelAttribute="search" method="GET">
             <h3 class="sidebar-title">Filtrar Resultados</h3>
             <hr class="hr-header-sidebar">
             <div>
-                    <%--<h4 class="sidebar-title">Plan Prepaga</h4>--%>
-                    <%--<div class="form-check">--%>
-                    <%--&lt;%&ndash;<c:forEach items="${insurancePlan}" var="insurance">&ndash;%&gt;--%>
-                    <%--&lt;%&ndash;<form:checkbox path="insurance"/>&ndash;%&gt;--%>
-                    <%--&lt;%&ndash;&lt;%&ndash;&lt;%&ndash;<form:checkboxes path="insurancePlan" items="${insurancePlan} "/>&ndash;%&gt;&ndash;%&gt;&ndash;%&gt;--%>
-                    <%--&lt;%&ndash;</c:forEach>&ndash;%&gt;--%>
-                    <%--</div>--%>
+                    <h4 class="sidebar-title">Plan Prepaga</h4>
+                    <div class="form-check">
+                        <c:forEach items="${insuranceNameList}" var="insuranceNameList">
+                            <b> ${insuranceNameList.key} <br> </b>
+                            <c:forEach items="${insuranceNameList.key}">
+                                <form:checkboxes path="insurancePlan" items="${insuranceNameList.value}" />
+                                <br>
+                                <%--<c:forEach items="${insuranceNameList.value}" var="info">--%>
+                                    <%----%>
+                                    <%--${info}<br>--%>
+                                <%--</c:forEach>--%>
+                            </c:forEach>
+                        </c:forEach>
+                    </div>
                     <%--<hr class="hr-sidebar">--%>
                 <div>
                     <c:if test="${sexList.size() != 1}">
