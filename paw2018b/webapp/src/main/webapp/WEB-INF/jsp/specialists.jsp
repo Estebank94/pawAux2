@@ -50,7 +50,7 @@
     <div class="row">
         <div class="col-md-9">
             <c:forEach items="${doctorList}" var="doctorListItem">
-                <div class="card card-doctor d-flex flex-row">
+                <div class="card card-doctor d-flex flex-row"  onclick='window.location="<c:url value='/doctorDescription'/>"'>
                     <img src=${doctorListItem.avatar} class="avatar">
                     <div class="card-body">
                         <div class="card-text">
