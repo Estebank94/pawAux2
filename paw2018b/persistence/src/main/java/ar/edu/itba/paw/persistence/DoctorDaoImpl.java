@@ -256,6 +256,11 @@ import java.util.*;
             return Optional.of(compressedSearch);
         }
 
+        @Override
+        public Doctor findDoctorById(Integer id){
+            return null;
+        }
+
 //    public String generateWhere(Search search) {
 //            String where = "WHERE (";
 //
