@@ -50,7 +50,7 @@
     <div class="row">
         <div class="col-md-9">
             <c:forEach items="${doctorList}" var="doctorListItem">
-                <div class="card card-doctor d-flex flex-row"  onclick='window.location="<c:url value='/doctorDescription'/>"'>
+                <div class="card card-doctor d-flex flex-row"  onclick='window.location="<c:url value='/doctorDescription/${doctorListItem.firstName}'/>"'>
                     <img src=${doctorListItem.avatar} class="avatar">
                     <div class="card-body">
                         <div class="card-text">
@@ -89,6 +89,8 @@
                         <br>
                         <c:forEach items="${insuranceNameList}" var="insuranceNameList">
                             <b> ${insuranceNameList.key} <br> </b>
+                            <form:checkbox path="insurancePlan" value="ALL"/> Todos
+                            <br>
                             <c:forEach items="${insuranceNameList.key}">
                               <form:checkboxes path="insurancePlan" items="${insuranceNameList.value}" delimiter="<br>" />
                                 <%--<c:forEach items="${insuranceNameList.value}" var="info">--%>
