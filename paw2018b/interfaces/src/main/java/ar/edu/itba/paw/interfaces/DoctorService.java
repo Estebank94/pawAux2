@@ -13,4 +13,6 @@ public interface DoctorService {
 
    Optional<CompressedSearch> findDoctors(Search search);
 
+   Doctor findDoctorById(Integer id);
+
 }
