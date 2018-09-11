@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -59,12 +60,17 @@ public class HelloWorldController {
 		mav.addObject("sexList", compressedSearch.get().getSex());
 		mav.addObject("insuranceNameList", compressedSearch.get().getInsurance());
 		mav.addObject("previousSearch", theSearch);
+
 		return mav;
 	}
 
-	@RequestMapping("/doctorDescription")
-    public ModelAndView doctorDescription(){
+	@RequestMapping("/doctorDescription/{doctorFirstName}")
+    public ModelAndView doctorDescription(@PathVariable String doctorFirstName){
+
 	    final ModelAndView mav = new ModelAndView("doctorDescription");
+
+		mav.addObject("doctoFirstName", doctorFirstName);
+
 	    return mav;
     }
 }
