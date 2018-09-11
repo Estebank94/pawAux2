@@ -22,13 +22,16 @@ public class SearchDaoImpl implements SearchDao {
 
     private final JdbcTemplate jdbcTemplate;
 
-    private static final RowMapper<ListItem> ROW_MAPPER = new RowMapper<ListItem>(){
+    private static final RowMapper<ListItem> ROW_MAPPER = (rs, rowNum) -> new ListItem( rs.getString("insuranceName"),
+            rs.getInt("id"));
 
-        @Override
-        public ListItem mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new ListItem( rs.getString("insuranceName"), rs.getInt("id"));
-        }
-    };
+//    RowMapper<ListItem>(){
+//
+//        @Override
+//        public ListItem mapRow(ResultSet rs, int rowNum) throws SQLException {
+//            return new ListItem( rs.getString("insuranceName"), rs.getInt("id"));
+//        }
+//    };
 
     @Autowired
     public SearchDaoImpl(final DataSource ds) {
