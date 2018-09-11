@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -60,4 +61,10 @@ public class HelloWorldController {
 		mav.addObject("previousSearch", theSearch);
 		return mav;
 	}
+
+	@RequestMapping("/doctorDescription")
+    public ModelAndView doctorDescription(){
+	    final ModelAndView mav = new ModelAndView("doctorDescription");
+	    return mav;
+    }
 }
