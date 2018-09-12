@@ -16,8 +16,7 @@
     <title>Waldoc</title>
     <meta name="description" content="Roughly 155 characters">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <!-- Pongo mi stylesheet despues de la de Bootstrap para poder hacer override los estilos -->
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css" />">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 </head>
 <body class="body-background">
@@ -59,7 +58,7 @@
                         <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar big">
                         <div class="doctor-info-container">
                             <div>
-                                <h3 class="doctor-name">Dr. Andres Miller</h3>
+                                <h3 class="doctor-name">${doctorFirstName}</h3>
                                 <p class="doctor-specialty">Medico Clinico</p>
                                 <p class="doctor-text"><i class="fas fa-phone"></i>  4855-3333</p>
                                 <p class="doctor-text"><i class="far fa-clock"></i>  Lunes a Viernes de 8 a 16hs</p>
