@@ -42,7 +42,6 @@
             <input type="submit" class="btn btn-outline-light" value="Buscar" path="submit"/>
         </div>
     </div>
-    <%--</form:form>--%>
 </div>
 
 
@@ -78,45 +77,54 @@
             </c:forEach>
         </div>
         <div class="col-md-3">
-            <%--<form:form class="sidebar-nav-fixed pull-right affix" action="processForm" modelAttribute="search" method="GET">--%>
             <div class="sidebar-nav-fixed pull-right affix">
                 <h3 class="sidebar-title">Filtrar Resultados</h3>
-                <hr class="hr-header-sidebar">
-                <div>
-                    <h4 class="sidebar-title">Plan Prepaga</h4>
-                    <div class="form-check">
-                        <form:checkbox path="insurancePlan" value="ALL" checked="checked"/> Todos
-                        <br>
-                        <br>
-                        <c:forEach items="${insuranceNameList}" var="insuranceNameList">
-                            <b> ${insuranceNameList.key} <br> </b>
-                            <form:checkbox path="insurancePlan" value="ALL"/> Todos
-                            <br>
-                            <c:forEach items="${insuranceNameList.key}">
-                                <form:checkboxes path="insurancePlan" items="${insuranceNameList.value}" delimiter="<br>" />
-                                <%--<c:forEach items="${insuranceNameList.value}" var="info">--%>
-                                <%----%>
-                                <%--${info}<br>--%>
-                                <%--</c:forEach>--%>
-                            </c:forEach>
-                            <br>
-                        </c:forEach>
-                    </div>
-                        <%--<hr class="hr-sidebar">--%>
-                    <div>
-                        <c:if test="${sexList.size() != 1}">
-                            <h4 class="sidebar-title">Sexo</h4>
+                <%--<c:choose>--%>
+                    <%--<c:when test="${insuranceNameList.size() == 1 && sexList.size() != 1}">--%>
+                        <hr class="hr-header-sidebar">
+                        <div>
+                            <c:if test="${insuranceNameList.size() == 1 }">
+                            <h4 class="sidebar-title">Plan Prepaga</h4>
                             <div class="form-check">
-                                <form:radiobutton path="sex" value="ALL"/> Todos <br>
-                                <c:forEach items="${sexList}" var="sex">
-                                    <form:radiobutton path="sex" value="${sex}"/>
-                                    <c:if test="${sex.equals('M')}">Masculino<br></c:if>
-                                    <c:if test="${sex.equals('F')}">Femenino<br></c:if>
+                                <br>
+                                <c:forEach items="${insuranceNameList}" var="insuranceNameList">
+                                    <b> ${insuranceNameList.key} <br> </b>
+                                    <c:forEach items="${insuranceNameList.key}">
+                                        <form:checkboxes path="insurancePlan" items="${insuranceNameList.value}" delimiter="<br>" />
+                                        <%--<c:forEach items="${insuranceNameList.value}" var="info">--%>
+                                        <%----%>
+                                        <%--${info}<br>--%>
+                                        <%--</c:forEach>--%>
+                                    </c:forEach>
+                                    <br>
                                 </c:forEach>
+                                </c:if>
                             </div>
-                        </c:if>
-                    </div>
-            </div>
+                                <%--<hr class="hr-sidebar">--%>
+                            <div>
+                                <c:if test="${sexList.size() != 1}">
+                                    <h4 class="sidebar-title">Sexo</h4>
+                                    <div class="form-check">
+                                        <form:radiobutton path="sex" value="ALL"/> Todos <br>
+                                        <c:forEach items="${sexList}" var="sex">
+                                            <form:radiobutton path="sex" value="${sex}"/>
+                                            <c:if test="${sex.equals('M')}">Masculino<br></c:if>
+                                            <c:if test="${sex.equals('F')}">Femenino<br></c:if>
+                                        </c:forEach>
+                                    </div>
+                                </c:if>
+                            </div>
+                                <c:if test="${insuranceNameList.size() != 1 && sexList.size() == 1}">
+                                    <div class="center-horizontal">
+                                        <i class="fas fa-exclamation-triangle center-horizontal" style="color:#CECECE; font-size: 36px; margin-bottom: 16px; margin-top: 16px "></i>
+                                        <p>No hay filtros aplicables</p>
+                                    </div>
+                                </c:if>
+                        </div>
+                    <%--</c:when>--%>
+
+                <%--</c:choose>--%>
+
                     <%--<hr class="hr-sidebar">--%>
                     <%--<div>--%>
                     <%--<h4 class="sidebar-title">Estrellas</h4>--%>
