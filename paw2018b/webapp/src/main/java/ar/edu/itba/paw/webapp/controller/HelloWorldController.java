@@ -64,12 +64,12 @@ public class HelloWorldController {
 		return mav;
 	}
 
-	@RequestMapping("/doctorDescription/{doctorFirstName}")
+	@RequestMapping("/specialist/{doctorFirstName}")
     public ModelAndView doctorDescription(@PathVariable String doctorFirstName){
 
-	    final ModelAndView mav = new ModelAndView("doctorDescription");
+	    final ModelAndView mav = new ModelAndView("specialist");
 
-		mav.addObject("doctoFirstName", doctorFirstName);
+		mav.addObject("doctorFirstName", doctorFirstName);
 
 	    return mav;
     }
