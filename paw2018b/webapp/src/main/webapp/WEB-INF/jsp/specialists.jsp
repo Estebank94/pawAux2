@@ -42,7 +42,7 @@
             <input type="submit" class="btn btn-outline-light" value="Buscar" path="submit"/>
         </div>
     </div>
-    </form:form>
+    <%--</form:form>--%>
 </div>
 
 
@@ -78,10 +78,11 @@
             </c:forEach>
         </div>
         <div class="col-md-3">
-            <form:form class="sidebar-nav-fixed pull-right affix" action="processForm" modelAttribute="search" method="GET">
-            <h3 class="sidebar-title">Filtrar Resultados</h3>
-            <hr class="hr-header-sidebar">
-            <div>
+            <%--<form:form class="sidebar-nav-fixed pull-right affix" action="processForm" modelAttribute="search" method="GET">--%>
+            <div class="sidebar-nav-fixed pull-right affix">
+                <h3 class="sidebar-title">Filtrar Resultados</h3>
+                <hr class="hr-header-sidebar">
+                <div>
                     <h4 class="sidebar-title">Plan Prepaga</h4>
                     <div class="form-check">
                         <form:checkbox path="insurancePlan" value="ALL" checked="checked"/> Todos
@@ -92,29 +93,30 @@
                             <form:checkbox path="insurancePlan" value="ALL"/> Todos
                             <br>
                             <c:forEach items="${insuranceNameList.key}">
-                              <form:checkboxes path="insurancePlan" items="${insuranceNameList.value}" delimiter="<br>" />
+                                <form:checkboxes path="insurancePlan" items="${insuranceNameList.value}" delimiter="<br>" />
                                 <%--<c:forEach items="${insuranceNameList.value}" var="info">--%>
-                                    <%----%>
-                                    <%--${info}<br>--%>
+                                <%----%>
+                                <%--${info}<br>--%>
                                 <%--</c:forEach>--%>
                             </c:forEach>
                             <br>
                         </c:forEach>
                     </div>
-                    <%--<hr class="hr-sidebar">--%>
-                <div>
-                    <c:if test="${sexList.size() != 1}">
-                        <h4 class="sidebar-title">Sexo</h4>
-                        <div class="form-check">
-                            <form:radiobutton path="sex" value="ALL"/> Todos <br>
-                            <c:forEach items="${sexList}" var="sex">
-                                <form:radiobutton path="sex" />
-                                <c:if test="${sex.equals('M')}">Masculino<br></c:if>
-                                <c:if test="${sex.equals('F')}">Femenino<br></c:if>
-                            </c:forEach>
-                        </div>
-                    </c:if>
-                </div>
+                        <%--<hr class="hr-sidebar">--%>
+                    <div>
+                        <c:if test="${sexList.size() != 1}">
+                            <h4 class="sidebar-title">Sexo</h4>
+                            <div class="form-check">
+                                <form:radiobutton path="sex" value="ALL"/> Todos <br>
+                                <c:forEach items="${sexList}" var="sex">
+                                    <form:radiobutton path="sex" value="${sex}"/>
+                                    <c:if test="${sex.equals('M')}">Masculino<br></c:if>
+                                    <c:if test="${sex.equals('F')}">Femenino<br></c:if>
+                                </c:forEach>
+                            </div>
+                        </c:if>
+                    </div>
+            </div>
                     <%--<hr class="hr-sidebar">--%>
                     <%--<div>--%>
                     <%--<h4 class="sidebar-title">Estrellas</h4>--%>
