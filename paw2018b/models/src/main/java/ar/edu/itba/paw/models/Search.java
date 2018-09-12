@@ -64,4 +64,16 @@ public class Search {
     public void setInsurancePlan(List<String> insurancePlan) {
         this.insurancePlan = insurancePlan;
     }
+
+    public String getInsurancePlanAsString()
+    {
+       List<String> list = getInsurancePlan();
+       String ans = "";
+       for (int i = 0; i < list.size() - 1 ; i ++)
+       {
+           ans = ans  + list.get(i) + ",";
+       }
+       ans = "(" + ans + list.get(list.size() - 1) + ")";
+       return ans;
+    }
 }
