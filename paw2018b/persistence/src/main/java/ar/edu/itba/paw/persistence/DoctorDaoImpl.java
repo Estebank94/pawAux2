@@ -190,7 +190,6 @@ import java.util.*;
 
             else if(specialtyAvailable) {
                 whereIn+="specialty.specialtyName ~* ? ";
-                System.out.println("search.getSpecialty.isEmpty()" + search.getSpecialty().isEmpty());
 
 //                if(!search.getLocation().isEmpty()) {
 //                    where+="AND location=";
@@ -346,7 +345,6 @@ import java.util.*;
                 CompressedSearch compressedSearch = new CompressedSearch();
 
                 while (rs.next()) {
-                    System.out.println(rs.getString("firstName") + rs.getString("lastName"));
                     boolean containsDoctor = false;
                     boolean containsInsurance = false;
                     for(Doctor existingDoctor : compressedSearch.getDoctors()){
