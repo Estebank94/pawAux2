@@ -238,7 +238,7 @@ import java.util.*;
                         search.getSpecialty() );
             }
             if( !nameAvailable && !specialtyAvailable && !insuranceAvailable ) {
-                compressedSearch = jdbcTemplate.query(select + from + leftJoins + whereOut + whereIn, new CompressedExtractor());
+                compressedSearch = jdbcTemplate.query(select + from + leftJoins , new CompressedExtractor());
             }
 
 //        final CompressedSearch compressedSearch = jdbcTemplate.query(select + from + leftJoins + whereOut + whereIn, new CompressedExtractor());
