@@ -160,7 +160,8 @@ import java.util.*;
                     "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  " +
                     "LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id " +
                     "LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID " +
-                    "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ";
+                    "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID "+
+                    "LEFT JOIN information ON doctor.id = information.doctorId ";
 
             String whereOut = "WHERE doctor.id IN (SELECT doctor.id " + " FROM doctor " +
                     "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
@@ -257,7 +258,22 @@ import java.util.*;
 
         @Override
         public Doctor findDoctorById(Integer id){
-            return null;
+            String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ";
+            String from = "FROM doctor ";
+            String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
+                    "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  " +
+                    "LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id " +
+                    "LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID " +
+                    "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID "+
+                    "LEFT JOIN information ON doctor.id = information.doctorId ";
+            String where = "WHERE doctor.id = ?";
+            final CompressedSearch compressedSearch = jdbcTemplate.query(select + from + leftJoins + where, new CompressedExtractor(), id);
+
+            if(compressedSearch.getDoctors().isEmpty()){
+                return Optional.empty();
+            }
+
+            return Optional.of(compressedSearch);
         }
 
 //    public String generateWhere(Search search) {
