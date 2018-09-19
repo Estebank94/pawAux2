@@ -58,11 +58,15 @@
                         <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar big">
                         <div class="doctor-info-container">
                             <div>
-                                <h3 class="doctor-name">${doctorFirstName}</h3>
-                                <p class="doctor-specialty">Medico Clinico</p>
-                                <p class="doctor-text"><i class="fas fa-phone"></i>  4855-3333</p>
-                                <p class="doctor-text"><i class="far fa-clock"></i>  Lunes a Viernes de 8 a 16hs</p>
-                                <p class="doctor-text"><i class="fas fa-map-marker-alt"></i>  Av. Libertador 3000, Buenos Aires</p>
+                                <h3 class="doctor-name">${doctor.lastName}, ${doctor.firstName}</h3>
+                                <div class="row container">
+                                    <c:forEach items="${doctor.specialty}" var="doctorSpecialty">
+                                        <p class="doctor-specialty" style="padding-right: 2em">${doctorSpecialty}</p>
+                                    </c:forEach>
+                                </div>
+                                <p class="doctor-text"><i class="fas fa-phone" style="padding-right: 0.5em"></i>Falta agregar phone Number</p>
+                                <p class="doctor-text"><i class="far fa-clock" style="padding-right: 0.5em"></i>${doctor.workingHours}</p>
+                                <p class="doctor-text"><i class="fas fa-map-marker-alt" style="padding-right: 0.5em"></i>${doctor.address}</p>
                             </div>
                         </div>
                     </div>
