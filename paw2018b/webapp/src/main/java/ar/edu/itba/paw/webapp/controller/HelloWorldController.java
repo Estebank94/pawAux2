@@ -73,12 +73,16 @@ public class HelloWorldController {
 
 	    final ModelAndView mav = new ModelAndView("specialist");
 
+
 	    Doctor doctor = doctorService.findDoctorById(doctorId).get();
+		doctor.getDescription().getCertificate().remove(null);
+		doctor.getDescription().getLanguages().remove(null);
+		doctor.getDescription().getEducation().remove(null);
+
 
 		mav.addObject("doctor", doctor);
-		mav.addObject("insuranceNameList", doctor.getInsurance().keySet());
+		mav.addObject("insuranceNameList", doctor.getInsurance());
         mav.addObject("insuranceList", searchService.listInsurances().get());
-
 
 	    return mav;
     }
