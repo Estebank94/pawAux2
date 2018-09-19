@@ -49,9 +49,19 @@
     <div class="row">
         <div class="col-md-9">
             <c:if test="${notFound eq 'no'}">
-            <div>
-                No encontramos resultados para su busqueda, a continuacion le damos un listado completo de nuestros medicos disponibles
+            <div class="card card-doctor">
+                <div style="padding-top: 20px; padding-left: 20px; padding-right: 20px;">
+                    <div class="media">
+                        <div class="media-left">
+                            <i class="fas fa-exclamation-triangle" style="color:#CECECE; font-size: 24px; float: left; padding-right: 16px"></i>
+                        </div>
+                        <div class="media-body">
+                            <h3>No hay especialistas que coincidan con tu búsqueda. </h3>
+                            <p>A continuación le damos un listado completo de nuestros medicos disponibles.</p>
+                        </div>
+                    </div>
                 </div>
+            </div>
             </c:if>
             <c:forEach items="${doctorList}" var="doctorListItem">
                 <div class="card card-doctor d-flex flex-row box"  onclick='window.location="<c:url value='/specialist/${doctorListItem.id}'/>"'>
