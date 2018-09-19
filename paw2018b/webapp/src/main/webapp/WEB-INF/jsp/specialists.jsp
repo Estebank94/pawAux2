@@ -48,6 +48,11 @@
 <div class="main container">
     <div class="row">
         <div class="col-md-9">
+            <c:if test="${notFound eq 'no'}">
+            <div>
+                No encontramos resultados para su busqueda, a continuacion le damos un listado completo de nuestros medicos disponibles
+                </div>
+            </c:if>
             <c:forEach items="${doctorList}" var="doctorListItem">
                 <div class="card card-doctor d-flex flex-row box"  onclick='window.location="<c:url value='/specialist/${doctorListItem.id}'/>"'>
                     <img src=${doctorListItem.avatar} class="avatar">
