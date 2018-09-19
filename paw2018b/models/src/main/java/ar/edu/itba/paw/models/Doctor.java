@@ -22,9 +22,10 @@ public class Doctor {
     String workingHours;
     Integer id;
     Description description;
+    String phoneNumber;
 
     @Autowired
-    public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, String workingHours, Integer id, Description description) {
+    public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, String workingHours, Integer id, Description description, String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.sex = sex;
@@ -35,6 +36,15 @@ public class Doctor {
         this.workingHours = workingHours;
         this.id = id;
         this.description = description;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public Description getDescription() {
