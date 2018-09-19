@@ -50,7 +50,7 @@
             <div class="card-body">
                 <div class="card-text">
                     <div class="row">
-                        <img src=${doctor.avatar} class="avatar">
+                        <img class="avatar big" src=${doctor.avatar}>
                         <div class="doctor-info-container">
                             <div>
                                 <h3 class="doctor-name">${doctor.lastName}, ${doctor.firstName}</h3>
