@@ -65,7 +65,7 @@ public class HelloWorldController {
 	}
 
 	@RequestMapping("/specialist/{doctorId}")
-    public ModelAndView doctorDescription(@PathVariable Integer doctorId){
+    public ModelAndView doctorDescription(@PathVariable Integer doctorId, @ModelAttribute("search") Search search){
 
 	    final ModelAndView mav = new ModelAndView("specialist");
 	    Doctor doctor = doctorService.findDoctorById(doctorId).get();
