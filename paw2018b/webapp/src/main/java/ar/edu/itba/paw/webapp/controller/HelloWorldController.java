@@ -50,6 +50,7 @@ public class HelloWorldController {
 		}
 		else {
 			compressedSearch = doctorService.listDoctors();
+			mav.addObject("notFound", "no");
 			if(compressedSearch.isPresent()) {
 				doctorsList = compressedSearch.get().getDoctors();
 			}
