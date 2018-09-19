@@ -256,6 +256,10 @@ import java.util.*;
             final CompressedSearch compressedSearch = jdbcTemplate.query(select + from + leftJoins + whereOut + whereIn, new CompressedExtractor(),
                     parameters.toArray());
 
+            if(compressedSearch.getDoctors().isEmpty()){
+                return Optional.empty();
+            }
+
             return Optional.of(compressedSearch);
         }
 
