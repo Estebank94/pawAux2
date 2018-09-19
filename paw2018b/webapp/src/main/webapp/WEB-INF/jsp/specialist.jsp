@@ -61,7 +61,7 @@
                                 </div>
                                 <p class="doctor-text"><i class="fas fa-phone" style="padding-right: 0.5em"></i>Falta agregar phone Number</p>
                                 <p class="doctor-text"><i class="far fa-clock" style="padding-right: 0.5em"></i>${doctor.workingHours}</p>
-                                <p class="doctor-text"><i class="fas fa-map-marker-alt" style="padding-right: 0.5em"></i>${doctor.address}</p>
+                                <p class="doctor-text"><i class="fas fa-map-marker-alt" style="padding-right: 0.5em"></i>${doctor.address}, CABA</p>
                             </div>
                         </div>
                     </div>
