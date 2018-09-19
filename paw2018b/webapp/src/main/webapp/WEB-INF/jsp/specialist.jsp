@@ -12,7 +12,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <title>Waldoc</title>
     <meta name="description" content="Roughly 155 characters">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -22,32 +22,27 @@
 <body class="body-background">
 <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
     <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
             <h1><strong>Waldoc</strong></h1>
         </a>
     </div>
 </nav>
 
-<div class="navbar-search">
+<div class="navbar-search sticky-top">
+<%--action="${postPath}--%>
+<form:form action="/processForm" method="GET" modelAttribute="search" accept-charset="ISO-8859-1">
     <div class="input-group container">
-        <input type="text" aria-label="Buscar por especialista" placeholder="Buscar por especialista, sintoma o procedimiento..." class="form-control">
-        <select class="custom-select col-sm-3" id="ubicacion">
-            <option selected>Ubicación</option>
-            <option value="1">Palermo</option>
-            <option value="2">Belgrano</option>
-            <option value="3">Recoleta</option>
-        </select>
-        <select class="custom-select col-sm-3" id="prepaga">
-            <option selected>Prepaga y Plan</option>
-            <option value="1">OSDE</option>
-            <option value="2">Swiss Medical</option>
-            <option value="3">Omint</option>
-        </select>
-        <div class="input-group-append">
-            <button class="btn btn-outline-light" type="button"> <i class="fas fa-search"></i> Buscar</button>
-        </div>
+    <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del médico" class="form-control" path="name"/>
+    <form:input type="text" aria-label="Buscar por especialidad" placeholder="Buscar por especialidad" class="form-control" path="specialty"/>
+    <form:select class="custom-select" id="insurance" path="insurance">
+        <form:option value="no" label="Prepaga" selected="Prepaga"/>
+        <form:options items="${insuranceList}" itemValue="name" itemLabel="name" />
+    </form:select>
+    <div class="input-group-append">
+    <input type="submit" class="btn btn-outline-light" value="Buscar" path="submit"/> </div>
     </div>
-</div>
+</form:form>
+    </div>
 
 <div class="container">
     <div class="col-sm-12">
@@ -55,7 +50,7 @@
             <div class="card-body">
                 <div class="card-text">
                     <div class="row">
-                        <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar big">
+                        <img src=${doctor.avatar} class="avatar">
                         <div class="doctor-info-container">
                             <div>
                                 <h3 class="doctor-name">${doctor.lastName}, ${doctor.firstName}</h3>
