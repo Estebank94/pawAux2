@@ -71,9 +71,9 @@ public class Search {
        String ans = "";
        for (int i = 0; i < list.size() - 1 ; i ++)
        {
-           ans = ans  + list.get(i) + ",";
+           ans = ans  +"'"+ list.get(i)+"'" + ",";
        }
-       ans = "(" + ans + list.get(list.size() - 1) + ")";
+       ans = "(" + ans +"'" +list.get(list.size() - 1) + "')";
        return ans;
     }
 }

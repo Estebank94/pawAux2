@@ -221,17 +221,15 @@ import java.util.*;
                 {
                     sb.append(" AND insurance.insuranceName ~* ? ");
                 } else  {
-                    sb.append(" WHERE(insurance.insuranceName ~* ?");
+                    sb.append(" WHERE(insurance.insuranceName ~* ? ");
                     whereInStarts = true;
-                }
-
-                if (insurancePlan.isPresent())
-                {
-                    sb.append("AND insurancePlan.insurancePlanName IN ");
-                    sb.append(search.getInsurancePlanAsString());
                 }
                 parameters.add(search.getInsurance());
 
+                if (insurancePlan.isPresent()) {
+                    sb.append("AND insurancePlan.insurancePlanName IN ");
+                    sb.append(search.getInsurancePlanAsString());
+                }
             }
 
             if (sex.isPresent()){
@@ -239,7 +237,7 @@ import java.util.*;
                 {
                     sb.append(" AND sex ~* ? ");
                 } else  {
-                    sb.append(" WHERE(sex ~* ?");
+                    sb.append(" WHERE(sex ~* ? ");
                     whereInStarts = true;
                 }
                 parameters.add(search.getSex());
