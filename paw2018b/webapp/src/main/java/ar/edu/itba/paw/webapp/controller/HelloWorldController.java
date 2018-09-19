@@ -71,6 +71,7 @@ public class HelloWorldController {
 	    final ModelAndView mav = new ModelAndView("specialist");
 	    Doctor doctor = doctorService.findDoctorById(doctorId).get();
 		mav.addObject("doctor", doctor);
+        mav.addObject("insuranceList", searchService.listInsurances().get());
 
 
 	    return mav;
