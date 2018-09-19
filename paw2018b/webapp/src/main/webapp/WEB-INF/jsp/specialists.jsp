@@ -49,11 +49,11 @@
     <div class="row">
         <div class="col-md-9">
             <c:forEach items="${doctorList}" var="doctorListItem">
-                <div class="card card-doctor d-flex flex-row"  onclick='window.location="<c:url value='/specialist/${doctorListItem.id}'/>"'>
+                <div class="card card-doctor d-flex flex-row box"  onclick='window.location="<c:url value='/specialist/${doctorListItem.id}'/>"'>
                     <img src=${doctorListItem.avatar} class="avatar">
                     <div class="card-body">
                         <div class="card-text">
-                            <h3>${doctorListItem.lastName}, ${doctorListItem.firstName}</h3>
+                            <h3 class="doctor-name">${doctorListItem.lastName}, ${doctorListItem.firstName}</h3>
                             <div class="row container">
                                 <c:forEach items="${doctorListItem.specialty}" var="doctorSpecialty">
                                     <p class="doctor-specialty" style="padding-right: 2em">${doctorSpecialty}</p>
