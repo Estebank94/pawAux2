@@ -60,7 +60,7 @@
                                         <p class="doctor-specialty" style="padding-right: 2em">${doctorSpecialty}</p>
                                     </c:forEach>
                                 </div>
-                                <p class="doctor-text"><i class="fas fa-phone" style="padding-right: 0.5em"></i>Falta agregar phone Number</p>
+                                <p class="doctor-text"><i class="fas fa-phone" style="padding-right: 0.5em"></i>${doctor.phoneNumber}</p>
                                 <p class="doctor-text"><i class="far fa-clock" style="padding-right: 0.5em"></i>${doctor.workingHours}</p>
                                 <p class="doctor-text"><i class="fas fa-map-marker-alt" style="padding-right: 0.5em"></i>${doctor.address}, CABA</p>
                             </div>
@@ -79,6 +79,15 @@
                 </nav>
                 <div data-spy="scroll" data-target="#navbar-example2" data-offset="0">
                     <h3 id="information">Informacion Profesional</h3>
+                    <h4>Prepagas & Planes</h4>
+                    <c:forEach items="${insuranceNameList}" var="insuranceNameList">
+                        <%--<b> ${insuranceNameList.key} <br> </b>--%>
+                        <%--<c:forEach items="${insuranceNameList.key}">--%>
+                            <%--<form:checkboxes path="insurancePlan" items="${insuranceNameList.value}" delimiter="<br>" />--%>
+                        <%--</c:forEach>--%>
+                        <%--<br>--%>
+                    </c:forEach>
+
                     <p>${doctor.description.education}</p>
                     <p>El Dr. Andres Miller ha ejercido la medicina por más de 20 años y se especializa en Medicina Antienvejecimiento y Regenerativa, así como Medicina General Integrativa.</p>
                     <h3 id="reseviews">Reseñas</h3>
