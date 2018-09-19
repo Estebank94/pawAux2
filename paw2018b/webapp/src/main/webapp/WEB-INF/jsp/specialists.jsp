@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 
@@ -23,7 +24,7 @@
 <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <h1><strong>Waldoc</strong></h1>
+            <h1><strong><spring:message code="brand.name" /></strong></h1>
         </a>
     </div>
 </nav>
@@ -56,8 +57,8 @@
                             <i class="fas fa-exclamation-triangle" style="color:#CECECE; font-size: 24px; float: left; padding-right: 16px"></i>
                         </div>
                         <div class="media-body">
-                            <h3>No hay especialistas que coincidan con tu búsqueda. </h3>
-                            <p>A continuación le damos un listado completo de nuestros medicos disponibles.</p>
+                            <h3><spring:message code="search.noResultsTitle" /></h3>
+                            <p><spring:message code="search.noResultsSubtitle" /></p>
                         </div>
                     </div>
                 </div>
@@ -93,7 +94,7 @@
         </div>
         <div class="col-md-3">
             <div class="sidebar-nav-fixed pull-right affix">
-                <h3 class="sidebar-title">Filtrar Resultados</h3>
+                <h3 class="sidebar-title"><spring:message code="filter.title" /></h3>
                 <%--<c:choose>--%>
                     <%--<c:when test="${insuranceNameList.size() == 1 && sexList.size() != 1}">--%>
                         <hr class="hr-header-sidebar">
@@ -132,7 +133,7 @@
                                 <c:if test="${insuranceNameList.size() != 1 && sexList.size() == 1}">
                                     <div class="center-horizontal">
                                         <i class="fas fa-exclamation-triangle center-horizontal" style="color:#CECECE; font-size: 36px; margin-bottom: 16px; margin-top: 16px "></i>
-                                        <p>No hay filtros aplicables</p>
+                                        <p><spring:message code="filter.notApplicable" /></p>
                                     </div>
                                 </c:if>
                         </div>
