@@ -72,8 +72,11 @@ public class HelloWorldController {
     public ModelAndView doctorDescription(@PathVariable Integer doctorId, @ModelAttribute("search") Search search){
 
 	    final ModelAndView mav = new ModelAndView("specialist");
+
 	    Doctor doctor = doctorService.findDoctorById(doctorId).get();
+
 		mav.addObject("doctor", doctor);
+		mav.addObject("insuranceNameList", doctor.getInsurance().keySet());
         mav.addObject("insuranceList", searchService.listInsurances().get());
 
 
