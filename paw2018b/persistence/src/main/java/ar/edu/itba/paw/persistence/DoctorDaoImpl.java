@@ -257,7 +257,7 @@ import java.util.*;
         }
 
         @Override
-        public Doctor findDoctorById(Integer id){
+        public Optional<Doctor> findDoctorById(Integer id){
             String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ";
             String from = "FROM doctor ";
             String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
@@ -273,7 +273,7 @@ import java.util.*;
                 return Optional.empty();
             }
 
-            return Optional.of(compressedSearch);
+            return Optional.of(compressedSearch.getDoctors().get(0));
         }
 
 //    public String generateWhere(Search search) {
