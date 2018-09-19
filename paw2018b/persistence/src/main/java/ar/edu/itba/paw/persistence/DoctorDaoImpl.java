@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.DoctorDao;
 import ar.edu.itba.paw.models.CompressedSearch;
+import ar.edu.itba.paw.models.Description;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Search;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,16 +123,16 @@ import java.util.*;
 
         @Override
         public Optional<CompressedSearch> listDoctors() {
-            String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ";
+            String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName,information.languages, information.certificate, information.education ";
             String from = "FROM doctor ";
             String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
                     "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  " +
                     "LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id " +
                     "LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID " +
-                    "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ";
-            String groupBy = "GROUP BY doctor.id, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName";
+                    "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID " +
+                    "LEFT JOIN information ON doctor.id = information.doctorid";
 
-            final CompressedSearch compressedSearch = jdbcTemplate.query(select + from + leftJoins + groupBy, new CompressedExtractor());
+            final CompressedSearch compressedSearch = jdbcTemplate.query(select + from + leftJoins, new CompressedExtractor());
 
             if(compressedSearch.getDoctors().isEmpty()){
                 return Optional.empty();
@@ -263,7 +264,7 @@ import java.util.*;
 
         @Override
         public Optional<Doctor> findDoctorById(Integer id){
-            String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ";
+            String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName, information.languages, information.certificate, information.education ";
             String from = "FROM doctor ";
             String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
                     "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  " +
@@ -372,6 +373,9 @@ import java.util.*;
                         if (existingDoctor.getId().equals(rs.getInt("id"))) {
                             containsDoctor = true;
                             existingDoctor.getSpecialty().add(rs.getString("specialtyName"));
+                            existingDoctor.getDescription().getCertificate().add(rs.getString("certificate"));
+                            existingDoctor.getDescription().getLanguages().add(rs.getString("languages"));
+                            existingDoctor.getDescription().getEducation().add(rs.getString("education"));
 
                             for(String insurance : existingDoctor.getInsurance().keySet()){
                                 if(insurance.equals(rs.getString("insuranceName"))){
@@ -396,11 +400,19 @@ import java.util.*;
                         Set<String> insurancePlanSet = new HashSet<>();
                         insurancePlanSet.add(rs.getString("insurancePlanName"));
 
+                        Set<String> certificate = new HashSet<>();
+                        certificate.add(rs.getString("certificate"));
+                        Set<String> languages = new HashSet<>();
+                        languages.add(rs.getString("languages"));
+                        Set<String> education = new HashSet<>();
+                        education.add(rs.getString("education"));
+                        Description description = new Description(certificate, languages, education);
+
                         Map<String, Set<String>> insurancePlan = new HashMap<>();
                         insurancePlan.put(rs.getString("insuranceName"),insurancePlanSet);
 
                         Doctor doctor =  new Doctor(rs.getString("firstName"), rs.getString("lastName"), rs.getString("sex"),
-                                rs.getString("address"), rs.getString("avatar"), specialty, insurancePlan, rs.getString("workingHours"), rs.getInt("id"));
+                                rs.getString("address"), rs.getString("avatar"), specialty, insurancePlan, rs.getString("workingHours"), rs.getInt("id"), description);
 
                         compressedSearch.getDoctors().add(doctor);
                         compressedSearch.getSex().add(rs.getString("sex"));
