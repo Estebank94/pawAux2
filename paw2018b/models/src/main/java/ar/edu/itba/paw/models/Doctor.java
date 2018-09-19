@@ -21,9 +21,10 @@ public class Doctor {
     Map<String, Set<String>> insurance;
     String workingHours;
     Integer id;
+    Description description;
 
     @Autowired
-    public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, String workingHours, Integer id) {
+    public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, String workingHours, Integer id, Description description) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.sex = sex;
@@ -33,6 +34,15 @@ public class Doctor {
         this.insurance = insurance;
         this.workingHours = workingHours;
         this.id = id;
+        this.description = description;
+    }
+
+    public Description getDescription() {
+        return description;
+    }
+
+    public void setDescription(Description description) {
+        this.description = description;
     }
 
     public Set<String> getSpecialty() {
