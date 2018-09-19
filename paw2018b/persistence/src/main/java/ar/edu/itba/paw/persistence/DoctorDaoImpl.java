@@ -143,19 +143,39 @@ import java.util.*;
         @Override
         public Optional<CompressedSearch> findDoctors(Search search) {
 
-            String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ";
+            String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ,information.languages, information.certificate, information.education ";
             String from = "FROM doctor ";
             String whereIn;
-//        if(search.getName().isEmpty() && search.getSpecialty().isEmpty() && search.getInsurance().matches("no")){
-//            return listDoctors();
-//        }else{
-//            whereIn = generateWhere(search);
-//        }
 
-            Boolean nameAvailable = !search.getName().isEmpty();
-            Boolean specialtyAvailable = !search.getSpecialty().isEmpty();
-            Boolean insuranceAvailable = !search.getInsurance().matches("no");
+            Optional<String> name = search.getName().equals("")? Optional.ofNullable(null):Optional.ofNullable(search.getName());
 
+            Optional<String> specialty = search.getSpecialty().equals("")?Optional.ofNullable(null):Optional.ofNullable(search.getSpecialty());
+
+            Optional<String> insurance = search.getInsurance().matches("no")?Optional.ofNullable(null):Optional.ofNullable(search.getName());
+
+            Optional<String> sex = search.getSex().equals("ALL") || search.getSex().isEmpty() || search.getSex().equals("")?Optional.ofNullable(null): Optional.ofNullable(search.getSex());
+
+            Optional<List<String>> insurancePlan;
+
+            if (search.getInsurancePlan() != null)
+            {
+                boolean hasAll = false;
+                for (String insurancePlanIterator : search.getInsurancePlan()){
+                    if (insurancePlanIterator.equals("ALL")) {
+                        hasAll = true;
+                    }
+                }
+                if (hasAll || search.getInsurancePlan().size() == 0)
+                {
+                    insurancePlan = Optional.ofNullable(null);
+                } else {
+                    insurancePlan =Optional.ofNullable(search.getInsurancePlan());
+                }
+            } else
+            {
+                insurancePlan = Optional.ofNullable(null);
+            }
+            
             String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
                     "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  " +
                     "LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id " +
@@ -170,88 +190,71 @@ import java.util.*;
                     "LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID " +
                     "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ";
 
-            whereIn = "WHERE (";
+            StringBuilder sb = new StringBuilder();
+            boolean whereInStarts = false;
+            List<String> parameters = new ArrayList<>();
 
-            if(nameAvailable) {
-                whereIn+="( firstName ~* ? OR lastName ~* ? ) " ;
+            if (name.isPresent())
+            {
+                sb.append("WHERE( ( firstName ~* ? OR lastName ~* ? ) ");
+                whereInStarts = true;
+                parameters.add(search.getName());
+                parameters.add(search.getName());
 
-                if(specialtyAvailable) {
-                    whereIn+= "AND specialty.specialtyName ~* ? ";
+            }
+
+            if (specialty.isPresent())
+            {
+                if (whereInStarts)
+                {
+                    sb.append(" AND specialty.specialtyName ~* ? ");
+                } else {
+                    sb.append("WHERE(specialty.specialtyName ~* ? ");
+                    whereInStarts = true;
                 }
-//
-//                if(search.getLocation() != null) {
-//                    where+="AND location ~* '" + search.getLocation() +"' ";
-//                }
-//
-                if(insuranceAvailable) {
-                    whereIn+= "AND insurance.insuranceName ~* ? ";
+                parameters.add(search.getSpecialty());
+            }
+
+            if (insurance.isPresent())
+            {
+                if (whereInStarts)
+                {
+                    sb.append(" AND insurance.insuranceName ~* ? ");
+                } else  {
+                    sb.append(" WHERE(insurance.insuranceName ~* ?");
+                    whereInStarts = true;
                 }
-            }
 
-
-            else if(specialtyAvailable) {
-                whereIn+="specialty.specialtyName ~* ? ";
-
-//                if(!search.getLocation().isEmpty()) {
-//                    where+="AND location=";
-//                }
-
-                if(insuranceAvailable) {
-                    whereIn+="AND insurance.insuranceName= ? ";
+                if (insurancePlan.isPresent())
+                {
+                    sb.append("AND insurancePlan.insurancePlanName IN ");
+                    sb.append(search.getInsurancePlanAsString());
                 }
+                parameters.add(search.getInsurance());
+
             }
 
-            else if(insuranceAvailable) {
-                whereIn+="insurance.insuranceName= ? " ;
+            if (sex.isPresent()){
+                if (whereInStarts)
+                {
+                    sb.append(" AND sex ~* ? ");
+                } else  {
+                    sb.append(" WHERE(sex ~* ?");
+                    whereInStarts = true;
+                }
+                parameters.add(search.getSex());
+
             }
 
-            whereIn += ")) ";
+            if (whereInStarts == true)
+            {
+                sb.append(")");
+            }
+            sb.append(")");
+            whereIn = sb.toString();
 
-            CompressedSearch compressedSearch = null;
-
-            if( nameAvailable && specialtyAvailable && insuranceAvailable ) {
-                compressedSearch = jdbcTemplate.query(select + from + leftJoins + whereOut + whereIn, new CompressedExtractor(),
-                        search.getName(), search.getName(), search.getSpecialty(), search.getInsurance() );
-            }
-            if( nameAvailable && specialtyAvailable && !insuranceAvailable ) {
-                compressedSearch = jdbcTemplate.query(select + from + leftJoins + whereOut + whereIn, new CompressedExtractor(),
-                        search.getName(), search.getName(), search.getSpecialty() );
-            }
-            if( nameAvailable && !specialtyAvailable && insuranceAvailable ) {
-                compressedSearch = jdbcTemplate.query(select + from + leftJoins + whereOut + whereIn, new CompressedExtractor(),
-                        search.getName(), search.getName(), search.getInsurance() );
-            }
-            if( nameAvailable && !specialtyAvailable && !insuranceAvailable ) {
-                compressedSearch = jdbcTemplate.query(select + from + leftJoins + whereOut + whereIn, new CompressedExtractor(),
-                        search.getName(), search.getName() );
-            }
-            if( !nameAvailable && specialtyAvailable && insuranceAvailable ) {
-                compressedSearch = jdbcTemplate.query(select + from + leftJoins + whereOut + whereIn, new CompressedExtractor(),
-                        search.getSpecialty(), search.getInsurance() );
-            }
-            if( !nameAvailable && !specialtyAvailable && insuranceAvailable ) {
-                compressedSearch = jdbcTemplate.query(select + from + leftJoins + whereOut + whereIn, new CompressedExtractor(),
-                        search.getInsurance() );
-            }
-            if( !nameAvailable && specialtyAvailable && !insuranceAvailable ) {
-                compressedSearch = jdbcTemplate.query(select + from + leftJoins + whereOut + whereIn, new CompressedExtractor(),
-                        search.getSpecialty() );
-            }
-            if( !nameAvailable && !specialtyAvailable && !insuranceAvailable ) {
-                compressedSearch = jdbcTemplate.query(select + from + leftJoins , new CompressedExtractor());
-            }
-
-//        final CompressedSearch compressedSearch = jdbcTemplate.query(select + from + leftJoins + whereOut + whereIn, new CompressedExtractor());
-
-            if(compressedSearch.getDoctors().isEmpty()){
-                //TODO
-                //Vamos a tener que reveer esto porque no siempre me tiene que dar
-                //todos si por ejemplo me dice che ... quiero cardiologo pero no tengo de esa obra social
-                //listar cardiologos aunque no sean de su obra social, su urgencia es el cardiologo !!
-                return Optional.empty();
-            }
-
-//            List<Doctor> ans = compressDoctors(compressedSearch.getDoctors());
+            final CompressedSearch compressedSearch = jdbcTemplate.query(select + from + leftJoins + whereOut + whereIn, new CompressedExtractor(),
+                    parameters.toArray());
 
             return Optional.of(compressedSearch);
         }
