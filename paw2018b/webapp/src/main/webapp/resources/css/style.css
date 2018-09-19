@@ -26,6 +26,7 @@
 .card-doctor
 {
   margin-top: 30px;
+  cursor: pointer;
 }
 
 h3
