@@ -78,6 +78,7 @@
                 </nav>
                 <div data-spy="scroll" data-target="#navbar-example2" data-offset="0">
                     <h3 id="information">Informacion Profesional</h3>
+                    <p>${doctor.description.education}</p>
                     <p>El Dr. Andres Miller ha ejercido la medicina por más de 20 años y se especializa en Medicina Antienvejecimiento y Regenerativa, así como Medicina General Integrativa.</p>
                     <h3 id="reseviews">Reseñas</h3>
                     <p>Muy bueno</p>
