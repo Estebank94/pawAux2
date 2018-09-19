@@ -54,6 +54,9 @@ public class HelloWorldController {
 			if(compressedSearch.isPresent()) {
 				doctorsList = compressedSearch.get().getDoctors();
 			}
+			theSearch.setName("");
+			theSearch.setInsurance("no");
+			theSearch.setSpecialty("");
 		}
 
 		mav.addObject("doctorList", doctorsList);
