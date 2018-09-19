@@ -78,18 +78,46 @@
                     </ul>
                 </nav>
                 <div data-spy="scroll" data-target="#navbar-example2" data-offset="0">
-                    <h3 id="information">Informacion Profesional</h3>
+                    <h3 id="information">Información Profesional</h3>
+                    <br>
+                    <br>
                     <h4>Prepagas & Planes</h4>
                     <c:forEach items="${insuranceNameList}" var="insuranceNameList">
-                        <%--<b> ${insuranceNameList.key} <br> </b>--%>
-                        <%--<c:forEach items="${insuranceNameList.key}">--%>
-                            <%--<form:checkboxes path="insurancePlan" items="${insuranceNameList.value}" delimiter="<br>" />--%>
-                        <%--</c:forEach>--%>
-                        <%--<br>--%>
+                        <b>${insuranceNameList.key}</b>
+                        </br>
+                        <c:forEach items="${insuranceNameList.key}" var="insurance">
+                            <c:forEach items="${insuranceNameList.value}" var="insurancePlan">
+                                ${insurancePlan}
+                                </br>
+                            </c:forEach>
+                        </c:forEach>
+                        </br>
                     </c:forEach>
-
-                    <p>${doctor.description.education}</p>
-                    <p>El Dr. Andres Miller ha ejercido la medicina por más de 20 años y se especializa en Medicina Antienvejecimiento y Regenerativa, así como Medicina General Integrativa.</p>
+                    <c:if test="${doctor.description.education.size() != 0}">
+                        <h4>Educación</h4>
+                        <c:forEach items="${doctor.description.education}" var="education">
+                            ${education}
+                        </c:forEach>
+                        <br>
+                        <br>
+                    </c:if>
+                    <c:if test="${doctor.description.certificate.size() != 0}">
+                        <h4>Certificación</h4>
+                        <c:forEach items="${doctor.description.certificate}" var="certificate">
+                            ${certificate}
+                        </c:forEach>
+                        <br>
+                        <br>
+                    </c:if>
+                    <c:if test="${doctor.description.languages.size() != 0}">
+                        <h4>Ídiomas</h4>
+                        <c:forEach items="${doctor.description.languages}" var="languages">
+                            ${languages}
+                        </c:forEach>
+                        <br>
+                        <br>
+                    </c:if>
+                    <%--<p>El Dr. Andres Miller ha ejercido la medicina por más de 20 años y se especializa en Medicina Antienvejecimiento y Regenerativa, así como Medicina General Integrativa.</p>--%>
                     <h3 id="reseviews">Reseñas</h3>
                     <p>Muy bueno</p>
                 </div>
