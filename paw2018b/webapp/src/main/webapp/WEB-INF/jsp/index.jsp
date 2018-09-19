@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 
@@ -16,14 +17,14 @@
 <nav class="navbar navbar-dark" style="background-color: #FFFFFF; padding-bottom: 0px;">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <h1 class="navbar-brand-home"><strong>Waldoc</strong></h1>
+            <h1 class="navbar-brand-home"><strong><spring:message code="brand.name" /></strong></h1>
         </a>
     </div>
 </nav>
 
 <div class="jumbotron jumbotron-background">
     <div class="container padding-top-big padding-bottom-big">
-        <p class="jumbotron-subtitle">Sacá turnos con los mejores médicos, al instante.</p>
+        <p class="jumbotron-subtitle"><spring:message code="brand.slogan" /></p>
         <div class="navbar-search-home">
             <form:form action="processForm" method="POST" modelAttribute="search" accept-charset="ISO-8859-1">
                 <div class="input-group container">
@@ -44,16 +45,16 @@
 
 <div class="container">
     <div class="margin-big">
-        <p class="jumbotron-subtitle">Sacar un turno nunca fue tan fácil</p>
-        <p class="jumbotron-text">Seguí estos simples pasos</p>
+        <p class="jumbotron-subtitle"><spring:message code="explanation.title" /></p>
+        <p class="jumbotron-text"><spring:message code="explanation.subtitle" /></p>
     </div>
 
     <div class="d-flex flex-row margin-bottom-medium">
         <img src="/resources/images/1.jpg" class="image-rectangle">
         <div>
             <div class="list-home">
-                <h3>Buscá</h3>
-                <p class="doctor-text">Contamos con los mejores medicos.</p>
+                <h3><spring:message code="explanation.searchTitle" /></h3>
+                <p class="doctor-text"><spring:message code="explanation.searchSubtitle" /></p>
             </div>
         </div>
     </div>
@@ -62,8 +63,8 @@
         <img src="/resources/images/2.jpg" class="image-rectangle-right">
         <div>
             <div class="list-home-right">
-                <h3>Elegí</h3>
-                <p>Lee las especificaciones de los medicos y elegi el adecuado.</p>
+                <h3><spring:message code="explanation.chooseTitle" /></h3>
+                <p><spring:message code="explanation.chooseSubtitle" />.</p>
             </div>
         </div>
     </div>
@@ -72,8 +73,8 @@
         <img src="/resources/images/3.jpg" class="image-rectangle">
         <div>
             <div class="list-home">
-                <h3>Reservá</h3>
-                <p>Usa la informacion de contacto para reservar un turno.</p>
+                <h3><spring:message code="explanation.reserveTitle" /></h3>
+                <p><spring:message code="explanation.reserveSubtitle" /></p>
             </div>
         </div>
     </div>
