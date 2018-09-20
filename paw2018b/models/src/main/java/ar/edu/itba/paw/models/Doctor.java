@@ -19,23 +19,18 @@ public class Doctor {
     String avatar;
     Set<String> specialty;
     Map<String, Set<String>> insurance;
-    String workingHours;
+    List<workingHours> workingHours;
     Integer id;
     Description description;
     String phoneNumber;
 
-    @Autowired
-    public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, String workingHours, Integer id, Description description, String phoneNumber) {
+    public Doctor(String firstName, String lastName, String sex, String address, String avatar, Integer id, String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.sex = sex;
         this.address = address;
         this.avatar = avatar;
-        this.specialty = specialty;
-        this.insurance = insurance;
-        this.workingHours = workingHours;
         this.id = id;
-        this.description = description;
         this.phoneNumber = phoneNumber;
     }
 
@@ -63,11 +58,11 @@ public class Doctor {
         this.specialty = specialty;
     }
 
-    public String getWorkingHours() {
+    public List<workingHours> getWorkingHours() {
         return workingHours;
     }
 
-    public void setWorkingHours(String workingHours) {
+    public void setWorkingHours(List<workingHours> workingHours) {
         this.workingHours = workingHours;
     }
 

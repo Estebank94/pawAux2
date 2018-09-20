@@ -1,27 +1,55 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.DoctorDao;
-import ar.edu.itba.paw.models.CompressedSearch;
-import ar.edu.itba.paw.models.Description;
-import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.Search;
+import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.workingHours;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.*;
 
     @Repository
     public class DoctorDaoImpl implements DoctorDao {
 
         private final JdbcTemplate jdbcTemplate;
+        private SimpleJdbcInsert jdbcInsert;
 
-//            private static final RowMapper<Doctor> ROW_MAPPER = new RowMapper<Doctor>(){
+        @Autowired
+        public DoctorDaoImpl(final DataSource ds){
+            jdbcTemplate = new JdbcTemplate(ds);
+            jdbcInsert = new SimpleJdbcInsert(ds)
+                    .withTableName("doctor")
+                    .usingColumns("firstname","lastname","sex","phonenumber",
+                            "address","licence","avatar","district");
+        }
+
+        @Override>
+        public Doctor createDoctor(String firstName, String lastName, String phonenumber, String sex, String licence,
+                                             String avatar, List<WorkingHours> workingHours, String address){
+            final Map<String,Object> entry = new HashMap<>();
+
+            entry.put("firstname",firstName);
+            entry.put("lastname",lastName);
+            entry.put("phonenumber",phonenumber);
+            entry.put("sex",sex);
+            entry.put("licence",licence);
+            entry.put("avatar",avatar);
+            entry.put("address",address);
+
+            final Number doctorId = jdbcInsert.executeAndReturnKey(entry);
+
+            return new Doctor(firstName,lastName,sex,address,avatar,doctorId.intValue(),phonenumber);
+        }
+
+        //            private static final RowMapper<Doctor> ROW_MAPPER = new RowMapper<Doctor>(){
 //
 //                @Override
 //                public Doctor mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -176,7 +204,7 @@ import java.util.*;
             {
                 insurancePlan = Optional.ofNullable(null);
             }
-            
+
             String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
                     "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  " +
                     "LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id " +
@@ -282,6 +310,12 @@ import java.util.*;
             return Optional.of(compressedSearch.getDoctors().get(0));
         }
 
+        @Override
+        public Optional<Doctor> createDoctor(String firstName, String lastName, String phone, String mail, String sex,
+                                             String location, String avatar, List<String> specialty, String workingHours,
+                                             Map<String, Set<String>> insurance){
+
+        }
 //    public String generateWhere(Search search) {
 //            String where = "WHERE (";
 //
@@ -376,6 +410,8 @@ import java.util.*;
                             existingDoctor.getDescription().getCertificate().add(rs.getString("certificate"));
                             existingDoctor.getDescription().getLanguages().add(rs.getString("languages"));
                             existingDoctor.getDescription().getEducation().add(rs.getString("education"));
+                            WorkingHours workingHours = new WorkingHours(rs.getString("dayOfWeek"),rs.getString("startTime"),rs.getString("finishTime"));
+                            existingDoctor.getWorkingHours().add(workingHours);
 
                             for(String insurance : existingDoctor.getInsurance().keySet()){
                                 if(insurance.equals(rs.getString("insuranceName"))){
@@ -408,11 +444,18 @@ import java.util.*;
                         education.add(rs.getString("education"));
                         Description description = new Description(certificate, languages, education);
 
+                        WorkingHours workingHours = new WorkingHours(rs.getString("dayOfWeek"),rs.getString("startTime"),rs.getString("finishTime"));
+
+                        Set<workingHours> workingHoursSet = new HashSet<>();
+
+                        workingHoursSet.add(workingHours);
+
+
                         Map<String, Set<String>> insurancePlan = new HashMap<>();
                         insurancePlan.put(rs.getString("insuranceName"),insurancePlanSet);
 
                         Doctor doctor =  new Doctor(rs.getString("firstName"), rs.getString("lastName"), rs.getString("sex"),
-                                rs.getString("address"), rs.getString("avatar"), specialty, insurancePlan, rs.getString("workingHours"), rs.getInt("id"), description, rs.getString("phoneNumber"));
+                                rs.getString("address"), rs.getString("avatar"), specialty, insurancePlan, workingHoursSet, rs.getInt("id"), description, rs.getString("phoneNumber"));
 
                         compressedSearch.getDoctors().add(doctor);
                         compressedSearch.getSex().add(rs.getString("sex"));
@@ -426,4 +469,6 @@ import java.util.*;
                 return compressedSearch;
             }
         }
+
+
     };
