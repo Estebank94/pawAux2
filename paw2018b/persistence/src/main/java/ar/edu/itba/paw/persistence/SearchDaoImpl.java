@@ -22,7 +22,10 @@ public class SearchDaoImpl implements SearchDao {
 
     private final JdbcTemplate jdbcTemplate;
 
-    private static final RowMapper<ListItem> ROW_MAPPER = (rs, rowNum) -> new ListItem( rs.getString("insuranceName"),
+    private static final RowMapper<ListItem> ROW_MAPPER_INSURANCE = (rs, rowNum) -> new ListItem( rs.getString("insuranceName"),
+            rs.getInt("id"));
+
+    private static final RowMapper<ListItem> ROW_MAPPER_SPECIALTY = (rs, rowNum) -> new ListItem( rs.getString("specialtyName"),
             rs.getInt("id"));
 
 //    RowMapper<ListItem>(){
@@ -41,7 +44,7 @@ public class SearchDaoImpl implements SearchDao {
     @Override
     public Optional<List<ListItem>> listInsurances() {
 
-        final List<ListItem> list = jdbcTemplate.query("SELECT * FROM insurance", ROW_MAPPER);
+        final List<ListItem> list = jdbcTemplate.query("SELECT * FROM insurance", ROW_MAPPER_INSURANCE);
 
         if(list.isEmpty()){
             return Optional.empty();
@@ -52,5 +55,15 @@ public class SearchDaoImpl implements SearchDao {
     @Override
     public Optional<List<ListItem>> listZones() {
         return null;
+    }
+
+    @Override
+    public Optional<List<ListItem>> listSpecialties() {
+        final List<ListItem> list = jdbcTemplate.query("SELECT * FROM specialty", ROW_MAPPER_SPECIALTY);
+
+        if(list.isEmpty()){
+            return Optional.empty();
+        }
+        return Optional.of(list);
     }
 }
