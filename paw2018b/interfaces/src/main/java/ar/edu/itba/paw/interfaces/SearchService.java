@@ -13,4 +13,6 @@ public interface SearchService {
     Optional<List<ListItem>> listInsurances();
 
     Optional<List<ListItem>> listZones();
+
+    Optional<List<ListItem>> listSpecialties();
 }

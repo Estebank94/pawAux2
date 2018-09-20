@@ -29,4 +29,9 @@ public class SearchServiceImpl implements SearchService {
         return null;
     }
 
+    @Override
+    public Optional<List<ListItem>> listSpecialties() {
+        return searchDao.listSpecialties();
+    }
+
 }

@@ -14,4 +14,5 @@ public interface SearchDao {
 
     Optional<List<ListItem>> listZones();
 
+    Optional<List<ListItem>> listSpecialties();
 }
