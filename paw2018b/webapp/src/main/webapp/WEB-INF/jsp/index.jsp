@@ -29,7 +29,11 @@
             <form:form action="processForm" method="POST" modelAttribute="search" accept-charset="ISO-8859-1">
                 <div class="input-group container">
                     <form:input type="text" aria-label="Buscar por nombre del médico" placeholder="Nombre del médico" class="form-control" path="name"/>
-                    <form:input type="text" aria-label="Buscar por especialidad" placeholder="Especialidad" class="form-control" path="specialty"/>
+                    <form:select class="custom-select" id="insurance" path="specialty" cssStyle="cursor: pointer;">
+                        <form:option value="noSpecialty" label="Especialidad" selected="Especialidad"/>
+                        <form:options items="${specialtyList}" itemValue="name" itemLabel="name" />
+                    </form:select>
+                    <%--<form:input type="text" aria-label="Buscar por especialidad" placeholder="Especialidad" class="form-control" path="specialty"/>--%>
                     <form:select class="custom-select" id="insurance" path="insurance" cssStyle="cursor: pointer;">
                         <form:option value="no" label="Prepaga" selected="Prepaga"/>
                         <form:options items="${insuranceList}" itemValue="name" itemLabel="name" />
