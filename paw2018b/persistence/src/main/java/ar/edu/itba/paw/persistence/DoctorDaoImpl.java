@@ -150,7 +150,7 @@ import java.util.*;
 
             Optional<String> name = search.getName().equals("")? Optional.ofNullable(null):Optional.ofNullable(search.getName());
 
-            Optional<String> specialty = search.getSpecialty().equals("")?Optional.ofNullable(null):Optional.ofNullable(search.getSpecialty());
+            Optional<String> specialty = search.getSpecialty().equals("noSpecialty")?Optional.ofNullable(null):Optional.ofNullable(search.getSpecialty());
 
             Optional<String> insurance = search.getInsurance().matches("no")?Optional.ofNullable(null):Optional.ofNullable(search.getName());
 
