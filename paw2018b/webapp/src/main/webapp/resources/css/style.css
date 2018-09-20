@@ -26,6 +26,7 @@
 .card-doctor
 {
   margin-top: 30px;
+  cursor: pointer;
 }
 
 h3
@@ -233,13 +234,6 @@ p
   margin-right: auto;
 }
 
-.center-vertical
-{
-  display: flex;
-  justify-content: left; /* align horizontal */
-  align-items: center; /* align vertical */
-}
-
 hr
 {
   margin-top: 32px;
@@ -265,16 +259,16 @@ hr
   background-color: #FFFFFF;
 }
 
-h4
+h3
 {
-  font-size: 20px;
+  font-size: 24px;
   color: #0A2D44;
   font-weight: bold;
 }
 
-h2
+h4
 {
-  font-size: 32px;
+  font-size: 20px;
   color: #0A2D44;
   font-weight: bold;
 }
@@ -343,4 +337,41 @@ h2
 .active
 {
   border-radius: 5px;
+}
+
+.box {
+  position: relative;
+  display: inline-block;
+  background-color: #fff;
+  border-radius: 5px;
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.box::after {
+  content: "";
+  border-radius: 5px;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.box:hover {
+  -webkit-transform: scale(1.02, 1.02);
+  transform: scale(1.02, 1.02);
+}
+
+.box:hover::after {
+  opacity: 1;
+}
+
+.box:hover .doctor-name {
+  color: #257CBF;
 }
