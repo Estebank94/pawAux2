@@ -5,7 +5,10 @@
   Time: 18:09
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,29 +35,34 @@
     <p>Completa tus datos profesionales.</p>
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
-    <form>
+    <form:form modelAttribute="professional" method="POST" action="doctorProfile" accept-charset="ISO-8859-1">
         <div>
             <label for="exampleFormControlFile1">Foto de perfil</label>
-            <input type="file" class="form-control-file" id="exampleFormControlFile1">
+            <form:input type="file" class="form-control-file" id="exampleFormControlFile1" path="avatar"/>
+            <form:errors path="avatar" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
         <div>
             <label for="exampleFormControlTextarea1">Descripcion</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Describi tu completar..."></textarea>
+            <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Describi tu completar..." path="description"/>
+            <form:errors path="description" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
         <div>
             <label for="exampleFormControlTextarea1">Educacion</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Describi tu estudios academicos..."></textarea>
+            <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Describi tu estudios academicos..." path="education"/>
+            <form:errors path="education" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <hr style="border-top: 1px solid #D8D8D8 !important;">
         <div>
             <div>
                 <label for="inputState">Idiomas</label>
-                <select id="inputState" class="custom-select">
-                    <option selected>Idioma...</option>
-                    <option>Ingles</option>
-                </select>
+                <form:select id="inputState" class="custom-select" path="languages">
+                    <form:option value="no" label="Idioma" selected="Idioma"/>
+                    <form:option value="english" label="Ingles"/>
+                    <form:option value="italian" label="Italiano"/>
+                </form:select>
+                <form:errors path="languages" cssStyle="color: crimson"  element="p"></form:errors>
             </div>
             <br>
             <div>
@@ -75,28 +83,32 @@
         <div>
             <div>
                 <label for="inputState">Obra Social</label>
-                <select id="inputState" class="custom-select">
-                    <option selected>Obra Social</option>
-                    <option>OSDE</option>
-                </select>
+                <form:select id="inputState" class="custom-select" path="insurance" cssStyle="cursor: pointer;">
+                    <form:option value="no" label="Prepaga" selected="Prepaga"/>
+                    <form:options items="${insuranceList}" itemValue="name" itemLabel="name" />
+                </form:select>
+                <form:errors path="insurance" cssStyle="color: crimson"  element="p"></form:errors>
             </div>
             <br>
             <div>
                 <div>
                     <label for="inputState">Elegi los planes de la obra social</label>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                        <label class="form-check-label" for="inlineCheckbox1">210</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                        <label class="form-check-label" for="inlineCheckbox2">310</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                        <label class="form-check-label" for="inlineCheckbox2">410</label>
-                    </div>
-                    <br>
+                    <c:forEach items="">
+
+                    </c:forEach>
+                    <%--<div class="form-check">--%>
+                        <%--<input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">--%>
+                        <%--<label class="form-check-label" for="inlineCheckbox1">210</label>--%>
+                    <%--</div>--%>
+                    <%--<div class="form-check">--%>
+                        <%--<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">--%>
+                        <%--<label class="form-check-label" for="inlineCheckbox2">310</label>--%>
+                    <%--</div>--%>
+                    <%--<div class="form-check">--%>
+                        <%--<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">--%>
+                        <%--<label class="form-check-label" for="inlineCheckbox2">410</label>--%>
+                    <%--</div>--%>
+                    <%--<br>--%>
                     <button class="btn btn-secondary">Agregar Planes</button>
                 </div>
                 <br>
@@ -125,25 +137,27 @@
                 <label for="inputEmail3" class="col-sm-1 col-form-label">Lunes</label>
                 <div class="col-sm-4">
                     <div class="input-group">
-                        <select class="custom-select" id="ubicacion">
+                        <form:select class="custom-select" id="ubicacion" path="workingHoursStart">
                             <option selected>Inicio</option>
                             <option value="1">7</option>
                             <option value="2">8</option>
                             <option value="3">9</option>
-                        </select>
-                        <select class="custom-select" id="ubicacion">
+                        </form:select>
+                        <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
+                        <form:select class="custom-select" id="ubicacion" path="workingHoursEnd">
                             <option selected>Fin</option>
                             <option value="1">7</option>
                             <option value="2">8</option>
                             <option value="3">9</option>
-                        </select>
+                        </form:select>
+                        <form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>
                     </div>
                 </div>
             </div>
         </div>
         <br>
-        <button type="submit" class="btn btn-primary">Siguiente</button>
-    </form>
+        <input type="submit" class="btn btn-primary" value="Registrar" path="submit"/>
+    </form:form>
     <br>
 </div>
 

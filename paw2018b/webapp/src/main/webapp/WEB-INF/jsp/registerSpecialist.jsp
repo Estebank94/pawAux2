@@ -5,7 +5,11 @@
   Time: 18:07
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +23,7 @@
 <body class="body-background">
 <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
     <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
             <h1><strong>Waldoc</strong></h1>
         </a>
     </div>
@@ -32,62 +36,71 @@
     <p>Completa tus datos personales.</p>
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
-    <form>
+    <form:form modelAttribute="personal" method="POST" action="doctorRegistration" accept-charset="ISO-8859-1">
         <div class="row">
             <div class="col">
                 <label for="exampleInputEmail1">Nombre</label>
-                <input type="text" class="form-control" placeholder="Ingresá tu nombre">
+                <form:input type="text" class="form-control" placeholder="Ingresá tu nombre" path="firstName"/>
+                <form:errors path="firstName" cssStyle="color: crimson"  element="p"></form:errors>
             </div>
             <div class="col">
                 <label for="exampleInputEmail1">Apellido</label>
-                <input type="text" class="form-control" placeholder="Ingresá tu apellido">
+                <form:input type="text" class="form-control" placeholder="Ingresá tu apellido" path="lastName"/>
+                <form:errors path="lastName" cssStyle="color: crimson"  element="p"></form:errors>
             </div>
         </div>
         <br>
         <div>
             <label for="exampleInputEmail1">Email</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu mail">
+            <form:input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu mail" path="email"/>
+            <form:errors path="email" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
         <div class="row">
             <div class="col">
-                <label for="inputPassword5">Confirma Contraseña</label>
-                <input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" placeholder="Creá tu contraseña">
+                <label for="inputPassword5">Contraseña</label>
+                <form:input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" placeholder="Creá tu contraseña" path="password"/>
+                <form:errors path="password" cssStyle="color: crimson"  element="p"></form:errors>
                 <small id="passwordHelpBlock" class="form-text text-muted">
                     Tu contraseña debe tener al menos 6 caracteres.
                 </small>
             </div>
             <div class="col">
                 <label for="inputPassword5">Confirma Contraseña</label>
-                <input type="password" id="inputPassword5" class="form-control" placeholder="Confirmá tu contraseña">
+                <form:input type="password" id="inputPassword5" class="form-control" placeholder="Confirmá tu contraseña" path="passwordConfirmation"/>
+                <form:errors path="passwordConfirmation" cssStyle="color: crimson"  element="p"></form:errors>
             </div>
         </div>
         <br>
         <div>
             <label for="exampleInputEmail1">Teléfono</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu telefono">
+            <form:input class="form-control" id="exampleInputEmail1"  placeholder="Ingresá tu telefono" path="phoneNumber"/>
+            <form:errors path="phoneNumber" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
         <div>
             <label for="exampleInputEmail1">Dirección</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu dirección">
+            <form:input class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu dirección" path="address"/>
+            <form:errors path="address" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
         <div>
             <label for="exampleFormControlSelect1">Sexo</label>
-            <select class="custom-select" id="exampleFormControlSelect1">
+            <form:select class="custom-select" id="exampleFormControlSelect1" path="sex">
                 <option>Femenino</option>
                 <option>Masculino</option>
-            </select>
+            </form:select>
+            <form:errors path="sex" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
         <div>
             <label for="exampleInputEmail1">Matrícula</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu matrícula">
+            <form:input class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu matrícula" path="lala"/>
+            <form:errors path="lala" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
-        <button type="submit" class="btn btn-primary">Siguiente</button>
-    </form>
+        <input type="submit" class="btn btn-primary" value="Siguiente" path="submit" />
+    </form:form>
     <br>
 </div>
 
