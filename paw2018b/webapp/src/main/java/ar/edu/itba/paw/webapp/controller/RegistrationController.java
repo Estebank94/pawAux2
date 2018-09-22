@@ -24,7 +24,11 @@ public class RegistrationController {
     @RequestMapping(value="/doctorRegistration", method = { RequestMethod.POST })
     public ModelAndView doctorRegistration (@Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors){
 
-        if(errors.hasErrors()){
+
+        if(errors.hasErrors() || !personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())){
+            if(!personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())){
+                showDoctorRegistration(personalForm).addObject("noMatchingPassword", true);
+            }
             return showDoctorRegistration(personalForm);
         }else{
             //create Doctor
@@ -59,7 +63,6 @@ public class RegistrationController {
         if(errors.hasErrors()){
             return showDoctorProfile(professionalForm);
         }
-        System.out.println(professionalForm.getLanguages());
         final ModelAndView mav = new ModelAndView("finalStep");
         return mav;
     }
