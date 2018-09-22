@@ -14,7 +14,7 @@ public class ProfessionalForm {
     private String education;
 
     private List<String> languages;
-    private String insurance;
+    private List<String> insurance;
     private String insurancePlan;
     @NotEmpty
     private String workingHoursStart;
@@ -69,11 +69,11 @@ public class ProfessionalForm {
         this.languages = languages;
     }
 
-    public String getInsurance() {
+    public List<String> getInsurance() {
         return insurance;
     }
 
-    public void setInsurance(String insurance) {
+    public void setInsurance(List<String> insurance) {
         this.insurance = insurance;
     }
 
