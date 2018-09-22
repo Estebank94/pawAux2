@@ -8,14 +8,4 @@
 //     $("#speciality").addClass('wrong');
 // });
 
-// $('#insurance').select2({
-//     theme: 'bootstrap4'
-// });
-
-// $('#specialty').select2({
-//     theme: 'bootstrap4'
-// });
-
-$(document).ready(function() {
-    $('.custom-select').select2({theme: 'bootstrap4'});
-});
+$('.custom-select').select2({theme: 'bootstrap4'});
