@@ -57,7 +57,7 @@
         <div>
             <div>
                 <label for="inputState">Idiomas</label>
-                <form:select id="inputState" class="custom-select" path="languages">
+                <form:select id="inputState" class="custom-select" path="languages" multiple="">
                     <form:option value="no" label="Idioma" selected="Idioma"/>
                     <form:option value="english" label="Ingles"/>
                     <form:option value="italian" label="Italiano"/>
@@ -83,35 +83,33 @@
         <div>
             <div>
                 <label for="inputState">Obra Social</label>
-                <form:select id="inputState" class="custom-select" path="insurance" cssStyle="cursor: pointer;">
+                <form:select id="inputState" class="custom-select" path="insurance" cssStyle="cursor: pointer;" onchange="myFunc(value)" multiple="">
                     <form:option value="no" label="Prepaga" selected="Prepaga"/>
-                    <form:options items="${insuranceList}" itemValue="name" itemLabel="name" />
+                    <c:forEach items="${insuranceList}" var="insuranceName">
+                        <form:option value="${insuranceName.name}" label="${insuranceName.name}"/>
+                    </c:forEach>
+                    <%--<form:options items="${insuranceList}" var="insuranceMatch" itemValue="name" itemLabel="name" value="${insuranceList}"/>--%>
                 </form:select>
                 <form:errors path="insurance" cssStyle="color: crimson"  element="p"></form:errors>
             </div>
             <br>
             <div>
                 <div>
-                    <label for="inputState">Elegi los planes de la obra social</label>
-                    <c:forEach items="">
-
-                    </c:forEach>
-                    <%--<div class="form-check">--%>
-                        <%--<input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">--%>
-                        <%--<label class="form-check-label" for="inlineCheckbox1">210</label>--%>
-                    <%--</div>--%>
-                    <%--<div class="form-check">--%>
-                        <%--<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">--%>
-                        <%--<label class="form-check-label" for="inlineCheckbox2">310</label>--%>
-                    <%--</div>--%>
-                    <%--<div class="form-check">--%>
-                        <%--<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">--%>
-                        <%--<label class="form-check-label" for="inlineCheckbox2">410</label>--%>
-                    <%--</div>--%>
-                    <%--<br>--%>
-                    <button class="btn btn-secondary">Agregar Planes</button>
+                    <div id="insuranceContainer">
+                        <c:forEach items="${insurancePlan}" var="insurancePlanList">
+                            <c:forEach items="${insurancePlanList.key}" var="insurancePlansName">
+                                <div class="${insurancePlanList.key}" style="display: none">
+                                    <c:forEach  items="${insurancePlanList.value}" var="insurancePlanValue">
+                                        <form:checkbox path="insurancePlan" id="insurancePlan" value="${insurancePlanValue}" label="${insurancePlanValue}"/>
+                                        </br>
+                                    </c:forEach>
+                                </div>
+                            </c:forEach>
+                        </c:forEach>
+                        <button class="btn btn-secondary">Agregar Planes</button>
+                    </div>
+                    <br>
                 </div>
-                <br>
                 <div>
                     <label>Estas son las obras sociales que agregaste por ahora:</label>
                     <div class="row container">
@@ -165,5 +163,15 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script>
+    function myFunc(val) {
+        var index = val.indexOf(" ");
+        if(index >= 0){
+            val = val.slice(0,index);
+        }
+        $("#insuranceContainer").children().hide();
+        $("." + val).show();
+    }
+</script>
 </body>
 </html>
