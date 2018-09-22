@@ -119,5 +119,9 @@ public class PersonalForm {
     public void setSex(String sex) {
         this.sex = sex;
     }
+
+    public boolean matchingPasswords(String password, String passwordConfirmation){
+        return password.equals(passwordConfirmation);
+    }
 }
 
