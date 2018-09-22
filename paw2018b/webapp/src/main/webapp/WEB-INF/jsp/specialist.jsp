@@ -28,6 +28,22 @@
         <a class="navbar-brand" href="/">
             <h1><strong>Waldoc</strong></h1>
         </a>
+        <a>
+            <div class="row">
+                <div class="dropdown" style="z-index: 1000000 !important;>
+                    <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:white; color:white !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Registrate
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                        <button class="dropdown-item" type="button">Registrate como paciente</button>
+                        <button class="dropdown-item" type="button">Registrate como especialista</button>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" style="background-color:transparent; border-color:transparent;" type="button">
+                    Iniciá Sesión
+                </button>
+            </div>
+        </a>
     </div>
 </nav>
 

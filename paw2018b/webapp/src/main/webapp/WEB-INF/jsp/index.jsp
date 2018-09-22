@@ -21,6 +21,22 @@
         <a class="navbar-brand" href="/">
             <h1 class="navbar-brand-home"><strong><spring:message code="brand.name" /></strong></h1>
         </a>
+        <a>
+            <div class="row">
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Registrate
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                        <button class="dropdown-item" type="button">Registrate como paciente</button>
+                        <button class="dropdown-item" type="button">Registrate como especialista</button>
+                    </div>
+                </div>
+                <button class="btn btn-light" style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="button">
+                    Iniciá Sesión
+                </button>
+            </div>
+        </a>
     </div>
 </nav>
 
