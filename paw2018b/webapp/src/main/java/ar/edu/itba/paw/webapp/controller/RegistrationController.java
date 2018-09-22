@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-
+import java.util.List;
 
 
 @Controller
@@ -31,6 +31,7 @@ public class RegistrationController {
             final ModelAndView mav = new ModelAndView("registerSpecialist2");
             mav.addObject("professional", new ProfessionalForm());
             mav.addObject("insuranceList", searchService.listInsurances().get());
+            mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
             return mav;
         }
 
@@ -48,6 +49,7 @@ public class RegistrationController {
 
         final ModelAndView mav = new ModelAndView("registerSpecialist2");
         mav.addObject("insuranceList", searchService.listInsurances().get());
+        mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
         return mav;
     }
 
