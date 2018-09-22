@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -33,5 +34,11 @@ public class SearchServiceImpl implements SearchService {
     public Optional<List<ListItem>> listSpecialties() {
         return searchDao.listSpecialties();
     }
+
+    @Override
+    public Optional<Map<String, List<String>>> listInsurancePlan() {
+        return searchDao.listInsurancePlan();
+    }
+
 
 }

@@ -3,6 +3,7 @@ package ar.edu.itba.paw.interfaces;
 import ar.edu.itba.paw.models.ListItem;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -15,4 +16,6 @@ public interface SearchService {
     Optional<List<ListItem>> listZones();
 
     Optional<List<ListItem>> listSpecialties();
+
+    Optional<Map<String, List<String>>> listInsurancePlan();
 }

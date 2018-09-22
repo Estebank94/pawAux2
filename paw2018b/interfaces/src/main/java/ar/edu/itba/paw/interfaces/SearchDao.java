@@ -15,4 +15,6 @@ public interface SearchDao {
     Optional<List<ListItem>> listZones();
 
     Optional<List<ListItem>> listSpecialties();
+
+    Optional<Map<String, List<String>>> listInsurancePlan();
 }
