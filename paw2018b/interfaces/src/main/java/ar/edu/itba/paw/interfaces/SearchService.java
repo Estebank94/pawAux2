@@ -12,5 +12,7 @@ import java.util.Optional;
 public interface SearchService {
     Optional<List<ListItem>> listInsurances();
 
+    Optional<List<String>> listInsurancesWithDoctors();
+
     Optional<List<ListItem>> listZones();
 }

@@ -31,9 +31,9 @@ import java.util.*;
                             "address","licence","avatar","district");
         }
 
-        @Override>
+        @Override
         public Doctor createDoctor(String firstName, String lastName, String phonenumber, String sex, String licence,
-                                             String avatar, List<WorkingHours> workingHours, String address){
+                                             String avatar, String address){
             final Map<String,Object> entry = new HashMap<>();
 
             entry.put("firstname",firstName);
@@ -310,12 +310,6 @@ import java.util.*;
             return Optional.of(compressedSearch.getDoctors().get(0));
         }
 
-        @Override
-        public Optional<Doctor> createDoctor(String firstName, String lastName, String phone, String mail, String sex,
-                                             String location, String avatar, List<String> specialty, String workingHours,
-                                             Map<String, Set<String>> insurance){
-
-        }
 //    public String generateWhere(Search search) {
 //            String where = "WHERE (";
 //

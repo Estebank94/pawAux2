@@ -1,12 +1,12 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.DoctorDao;
-import ar.edu.itba.paw.interfaces.DoctorService;
+import ar.edu.itba.paw.interfaces.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.workingHours;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -17,6 +17,24 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     private DoctorDao doctorDao;
+
+    @Autowired
+    private SpecialtyDao specialtyDao;
+
+    @Autowired
+    private MedicalCareDao medicalcareDao;
+
+    @Autowired
+    private DoctorSpecialtyDao doctorSpecialtyDao;
+
+    @Autowired
+    private InsurancePlanDao insurancePlanDao;
+
+    @Autowired
+    private DescriptionDao descriptionDao;
+
+    @Autowired
+    private WorkingHoursDao workingHoursDao;
 
     @Override
     public Optional<CompressedSearch> listDoctors() {
@@ -37,13 +55,51 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public Doctor createDoctor(String firstName, String lastName, String sex, String address, String address,
                                 String avatar, Set<String> specialty, Map<String, Set<String>> insurance,
-                               List<WorkingHours> workingHours, Description description, String phonenumber){
+                               List<WorkingHours> workingHours, Description description, String phonenumber, String licence){
         //TODO: ACA VA TODO A AGREGAR A LA BASE DE DATOS
         Doctor doctor = doctorDao.createDoctor(firstName, lastName, phonenumber, sex, licence, avatar, workingHours, address);
+        doctor.setSpecialty(specialty);
 
+
+        doctor.setWorkingHours(workingHours);
+        doctor.setInsurance(insurance);
+        doctor.setDescription(description);
+
+        Optional<List<Integer>> specialtysId = specialtyDao.findSpecialtysId(specialty);
+        if (specialtysId.isPresent()){
+            doctorSpecialtyDao.addDoctorSpecialtyList(doctor.getId(),specialtysId.get());
+        }
+
+        Optional<List<Integer>> insurancesPlanIds = insurancePlanDao.getInsurancesPlanIds(insurance);
+        if (insurancesPlanIds.isPresent()){
+            medicalcareDao.addMedicalCare(doctor.getId(), insurancesPlanIds.get());
+        }
+
+        descriptionDao.addDescription(doctor.getId(), description);
+        workingHoursDao.addWorkingHour(doctor.getId(), workingHours);
+
+
+
+
+
+        /*
+         * Del set de Specialtys Obtengo un List de Integers de specialtysId
+         * Y agrego una tupla a doctorSpecialty con el id de Doctor y el id de Specialty
+         *
+         * Del list de working Hours agrego tuplas a la tabla working hours con el Id del medico
+         *
+         * Agrego tupla a la tabla Information con el Id de Doctor
+         *
+         * Del map <String, Set<String>> insurance, consigo un List<Integers> con los id de Insurances Plans
+         * Por cada Integer agrego una tupla a medicalCare con el doctorId y el insurancePlanId,
+         *
+         *
+         */
 
         return doctor;
     }
+
+
 
 }
 

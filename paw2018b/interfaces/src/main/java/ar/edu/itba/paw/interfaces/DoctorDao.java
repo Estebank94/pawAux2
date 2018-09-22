@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.interfaces;
 
-import ar.edu.itba.paw.models.CompressedSearch;
-import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.Search;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.workingHours;
 
 import javax.swing.text.html.Option;
@@ -19,6 +17,7 @@ public interface DoctorDao {
 
     Optional<Doctor> findDoctorById(Integer id);
 
-    Optional<Doctor> createDoctor(String firstName, String lastName, String phonenumber, String sex, String licence,
-                                  String avatar, List<workingHours> workingHours, String address);
+    Optional<Doctor> createDoctor(String firstName, String lastName, String sex, String address, String address,
+                                  String avatar, Set<String> specialty, Map<String, Set<String>> insurance,
+                                  List<WorkingHours> workingHours, Description description, String phonenumber, String licence);
 }

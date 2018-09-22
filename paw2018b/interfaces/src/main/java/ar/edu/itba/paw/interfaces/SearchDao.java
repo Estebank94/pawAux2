@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces;
 
 import ar.edu.itba.paw.models.ListItem;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -11,6 +12,8 @@ import java.util.Optional;
  */
 public interface SearchDao {
     Optional<List<ListItem>> listInsurances();
+
+    Optional<List<String>> listInsurancesWithDoctors();
 
     Optional<List<ListItem>> listZones();
 

@@ -25,7 +25,10 @@ public class SearchDaoImpl implements SearchDao {
     private static final RowMapper<ListItem> ROW_MAPPER = (rs, rowNum) -> new ListItem( rs.getString("insuranceName"),
             rs.getInt("id"));
 
-//    RowMapper<ListItem>(){
+    private static final RowMapper<String> ROW_MAPPER2 = (rs, rowNum) -> new String( rs.getString("insuranceName"));
+
+
+//   RowMapper<ListItem>(){
 //
 //        @Override
 //        public ListItem mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -42,6 +45,21 @@ public class SearchDaoImpl implements SearchDao {
     public Optional<List<ListItem>> listInsurances() {
 
         final List<ListItem> list = jdbcTemplate.query("SELECT * FROM insurance", ROW_MAPPER);
+
+        if(list.isEmpty()){
+            return Optional.empty();
+        }
+        return Optional.of(list);
+    }
+
+    @Override
+    public Optional<List<String>> listInsurancesWithDoctors(){
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT DISTINCT insurancename ");
+        query.append("FROM medicalCare ");
+        query.append("JOIN insuranceplan ON medicalcare.insuranceplanid = insuranceplan.id " );
+        query.append("JOIN insurance ON insurance.id = insuranceplan.insuranceid");
+        final List<String> list = jdbcTemplate.query(query.toString(),ROW_MAPPER );
 
         if(list.isEmpty()){
             return Optional.empty();
