@@ -35,9 +35,13 @@
             <div class="div-center">
                 <h2>Iniciar Sesión</h2>
                 <br>
-                <form:form action="${pageContext.request.contextPath}/authenticateUser" method="POST">
+                <%--<c:url value="/showLogIn" var="loginUrl"/>--%>
+                <form:form action="${pageContext.request.contextPath}/authenticateUser" method="POST" enctype="application/x-www-form-urlencoded">
                     <c:if test="${param.error != null}">
                         <b style="color: #dc3545">Lo siento! Usuario y constraseña invalida. Probar nuevamente!</b>
+                    </c:if>
+                    <c:if test="${param.logout != null}">
+                        <b style="color: #dc3545">Te loggeaste out</b>
                     </c:if>
                     <div>
                         <label for="exampleInputEmail1">Email</label>
@@ -50,6 +54,7 @@
                     </div>
                     <br>
                     <input type="submit" class="btn btn-primary" value="Iniciar Sesión"/>
+                    <%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
                     <%--<button type="submit" class="btn btn-primary">Iniciar Sesión</button>--%>
                 </form:form>
             </div>
