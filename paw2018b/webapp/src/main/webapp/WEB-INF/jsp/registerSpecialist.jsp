@@ -57,6 +57,9 @@
         </div>
         <br>
         <div class="row">
+            <c:if test="${noMatchingPassword eq true}">
+                <b style="color: #dc3545">Lo siento! Sus contraseñas no coinciden, por favor, reinterntarlo</b>
+            </c:if>
             <div class="col">
                 <label for="inputPassword5">Contraseña</label>
                 <form:input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" placeholder="Creá tu contraseña" path="password"/>
