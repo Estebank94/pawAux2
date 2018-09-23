@@ -28,6 +28,22 @@
         <a class="navbar-brand" href="/">
             <h1><strong>Waldoc</strong></h1>
         </a>
+        <a>
+            <div class="row">
+                <div class="dropdown" style="z-index: 1000000 !important;>
+                    <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:white; color:white !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Registrate
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                        <button class="dropdown-item" type="button">Registrate como paciente</button>
+                        <button class="dropdown-item" type="button">Registrate como especialista</button>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" style="background-color:transparent; border-color:transparent;" type="button">
+                    Iniciá Sesión
+                </button>
+            </div>
+        </a>
     </div>
 </nav>
 
@@ -41,7 +57,7 @@
             <form:options items="${specialtyList}" itemValue="name" itemLabel="name" />
         </form:select>
             <%--<form:input type="text" aria-label="Buscar por especialidad" placeholder="Buscar por especialidad" class="form-control" path="specialty"/>--%>
-        <form:select class="custom-select" id="insurance" path="insurance" cssStyle="cursor: pointer; color: red !important;">
+        <form:select class="custom-select" id="insurance" path="insurance" cssStyle="cursor: pointer;">
             <form:option value="no" label="Prepaga" selected="Prepaga"/>
             <form:options items="${insuranceList}" itemValue="name" itemLabel="name" />
         </form:select>
