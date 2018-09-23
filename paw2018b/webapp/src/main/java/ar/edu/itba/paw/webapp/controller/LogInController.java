@@ -9,7 +9,8 @@ public class LogInController {
 
     @RequestMapping("/showLogIn")
     public ModelAndView logIn(){
-        ModelAndView mav = new ModelAndView("login");
-        return mav;
+        return new ModelAndView("login");
     }
+
+
 }
