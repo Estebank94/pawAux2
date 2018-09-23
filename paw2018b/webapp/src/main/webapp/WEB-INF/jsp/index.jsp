@@ -28,11 +28,11 @@
                         Registrate
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <button class="dropdown-item" type="button">Registrate como paciente</button>
-                        <button class="dropdown-item" type="button">Registrate como especialista</button>
+                        <button class="dropdown-item" type="button" onclick="window.location='/showDoctorRegistration'">Registrate como paciente</button>
+                        <button class="dropdown-item" type="button" onclick="window.location='/showDoctorRegistration'">Registrate como especialista</button>
                     </div>
                 </div>
-                <button class="btn btn-light" style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="button">
+                <button class="btn btn-light" style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="button" onclick="window.location='/showLogIn'">
                     Iniciá Sesión
                 </button>
             </div>
