@@ -1,7 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,11 +20,14 @@
 <nav class="navbar navbar-dark" style="background-color: #FFFFFF; padding-bottom: 0px;">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <h1 class="navbar-brand-home"><strong><spring:message code="brand.name" /></strong></h1>
+            <h1 class="navbar-brand-home"><strong><spring:message code="brand.name"/></strong></h1>
         </a>
         <a>
             <div class="row">
                 <div class="dropdown">
+                    <form:form action="${pageContext.request.contextPath}/logout" method="post">
+                        <input type="submit" value="Logout"/>
+                    </form:form>
                     <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Registrate
                     </button>
@@ -35,6 +39,12 @@
                 <button class="btn btn-light" style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="button" onclick="window.location='/showLogIn'">
                     Iniciá Sesión
                 </button>
+                <hr>
+                    <p>
+                       <a href="${pageContext.request.contextPath}/doctorPanel/">Doctor Panel</a>
+                        <a href="${pageContext.request.contextPath}/patientPanel/">Patient Panel</a>
+                    </p>
+                <hr>
             </div>
         </a>
     </div>
