@@ -10,19 +10,19 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 
 
+
 @Configuration
 @EnableWebSecurity
 @ComponentScan("ar.edu.itba.paw.webapp")
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-       //add our users for in memory authentication
-       auth.inMemoryAuthentication().withUser("martina").password("martina").roles("ADMIN");
-       auth.inMemoryAuthentication().withUser("esteban").password("esteban").roles("ADMIN");
-       auth.inMemoryAuthentication().withUser("oliver").password("oliver").roles("EMPLOYEE");
+        //add our users for in memory authentication
+        auth.inMemoryAuthentication().withUser("martina").password("martina").roles("DOCTOR");
+        auth.inMemoryAuthentication().withUser("esteban").password("esteban").roles("DOCTOR");
+        auth.inMemoryAuthentication().withUser("oliver").password("oliver").roles("PACIENTE");
     }
 
     @Override
@@ -30,9 +30,19 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/resources/css/**", "resources/javascript/**", "resources/images/**", "/favicon.ico", "/403");
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().authenticated().and().formLogin().
-                loginPage("/showLogIn").loginProcessingUrl("/authenticateUser").permitAll();
+        http.authorizeRequests().antMatchers("/").hasAnyRole("DOCTOR", "PACIENTE")
+                .antMatchers("/doctorPanel/**").hasRole("DOCTOR")
+                .antMatchers("/patientPanel/**").hasRole("PACIENTE").and().formLogin().loginPage("/showLogIn")
+                .loginProcessingUrl("/authenticateUser").permitAll().and().logout().permitAll().and().exceptionHandling()
+        .accessDeniedPage("/403");
     }
+//        http.authorizeRequests()
+//                .antMatchers("/doctorPanel/**").hasRole("DOCTOR")
+//                .antMatchers("/patientPanel/**").hasRole("PACIENTE")
+//                .and().formLogin().loginPage("/showLogIn").loginProcessingUrl("/authenticateUser").permitAll();
+//    }
+
 }
