@@ -2,6 +2,8 @@ package ar.edu.itba.paw.webapp.forms;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.List;
+
 public class ProfessionalForm {
 
 
@@ -11,7 +13,7 @@ public class ProfessionalForm {
     @NotEmpty
     private String education;
 
-    private String languages;
+    private List<String> languages;
     private String insurance;
     private String insurancePlan;
     @NotEmpty
@@ -59,11 +61,11 @@ public class ProfessionalForm {
         this.education = education;
     }
 
-    public String getLanguages() {
+    public List<String> getLanguages() {
         return languages;
     }
 
-    public void setLanguages(String languages) {
+    public void setLanguages(List<String> languages) {
         this.languages = languages;
     }
 
