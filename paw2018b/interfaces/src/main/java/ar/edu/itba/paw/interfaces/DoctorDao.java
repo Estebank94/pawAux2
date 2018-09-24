@@ -15,4 +15,7 @@ public interface DoctorDao {
     Optional<CompressedSearch> findDoctors(Search search);
 
     Optional<Doctor> findDoctorById(Integer id);
+
+    Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, String licence,
+                               String avatar, String address);
 }

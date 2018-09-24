@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -20,6 +21,36 @@ import java.util.*;
     public class DoctorDaoImpl implements DoctorDao {
 
         private final JdbcTemplate jdbcTemplate;
+        private SimpleJdbcInsert jdbcInsert;
+
+        @Autowired
+        public DoctorDaoImpl(final DataSource ds){
+            jdbcTemplate = new JdbcTemplate(ds);
+            jdbcInsert = new SimpleJdbcInsert(ds)
+                    .withTableName("doctor")
+                    .usingColumns("firstname","lastname","sex","phonenumber",
+                            "address","licence","avatar","district")
+                    .usingGeneratedKeyColumns("id");
+        }
+
+        @Override
+        public Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, String licence,
+                                   String avatar, String address){
+            final Map<String,Object> entry = new HashMap<>();
+
+            entry.put("firstname",firstName);
+            entry.put("lastname",lastName);
+            entry.put("phoneNumber",phoneNumber);
+            entry.put("sex",sex);
+            entry.put("licence",licence);
+            entry.put("avatar",avatar);
+            entry.put("address",address);
+
+            final Number doctorId = jdbcInsert.executeAndReturnKey(entry);
+
+            return new Doctor(firstName,lastName,sex,address,avatar, doctorId.intValue(),phoneNumber);
+        }
+
 
 //            private static final RowMapper<Doctor> ROW_MAPPER = new RowMapper<Doctor>(){
 //
@@ -116,10 +147,10 @@ import java.util.*;
 //                    rs.getString("address"), rs.getString("avatar"), specialty, insurancePlan, rs.getString("workingHours"), rs.getInt("id"));}
 //        };
 
-        @Autowired
-        public DoctorDaoImpl(final DataSource ds) {
-            jdbcTemplate = new JdbcTemplate(ds);
-        }
+//        @Autowired
+//        public DoctorDaoImpl(final DataSource ds) {
+//            jdbcTemplate = new JdbcTemplate(ds);
+//        }
 
         @Override
         public Optional<CompressedSearch> listDoctors() {
