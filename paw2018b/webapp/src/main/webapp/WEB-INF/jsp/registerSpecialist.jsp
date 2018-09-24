@@ -90,8 +90,8 @@
         <div>
             <label for="exampleFormControlSelect1">Sexo</label>
             <form:select class="custom-select" id="exampleFormControlSelect1" path="sex">
-                <option>Femenino</option>
-                <option>Masculino</option>
+                <option value="F">Femenino</option>
+                <option value="M">Masculino</option>
             </form:select>
             <form:errors path="sex" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
