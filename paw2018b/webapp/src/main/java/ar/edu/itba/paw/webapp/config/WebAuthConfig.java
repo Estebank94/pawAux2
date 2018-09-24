@@ -39,10 +39,5 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/authenticateUser").permitAll().and().logout().permitAll().and().exceptionHandling()
         .accessDeniedPage("/403");
     }
-//        http.authorizeRequests()
-//                .antMatchers("/doctorPanel/**").hasRole("DOCTOR")
-//                .antMatchers("/patientPanel/**").hasRole("PACIENTE")
-//                .and().formLogin().loginPage("/showLogIn").loginProcessingUrl("/authenticateUser").permitAll();
-//    }
 
 }

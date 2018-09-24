@@ -43,7 +43,7 @@ public class RegistrationController {
             mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
 
             doctorService.createDoctor(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(),
-                     personalForm.getSex(), personalForm.getLala(), "jajaja", personalForm.getAddress());
+                     personalForm.getSex(), personalForm.getLala(), "null", personalForm.getAddress());
 
             return mav;
         }
