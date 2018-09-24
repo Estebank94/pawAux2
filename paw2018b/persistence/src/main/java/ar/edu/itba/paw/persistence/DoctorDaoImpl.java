@@ -228,10 +228,10 @@ import java.util.*;
 
             if (name.isPresent())
             {
-                sb.append("WHERE( ( firstName ~* ? OR lastName ~* ? ) ");
+                sb.append("WHERE ( ( LOWER(firstName) LIKE ?  OR  LOWER(lastName) LIKE ? ) ");
                 whereInStarts = true;
-                parameters.add(search.getName());
-                parameters.add(search.getName());
+                parameters.add(search.getSimilarToName());
+                parameters.add(search.getSimilarToName());
 
             }
 
@@ -239,9 +239,9 @@ import java.util.*;
             {
                 if (whereInStarts)
                 {
-                    sb.append(" AND specialty.specialtyName ~* ? ");
+                    sb.append(" AND specialty.specialtyName = ? ");
                 } else {
-                    sb.append("WHERE(specialty.specialtyName ~* ? ");
+                    sb.append("WHERE(specialty.specialtyName = ? ");
                     whereInStarts = true;
                 }
                 parameters.add(search.getSpecialty());
@@ -251,9 +251,9 @@ import java.util.*;
             {
                 if (whereInStarts)
                 {
-                    sb.append(" AND insurance.insuranceName ~* ? ");
+                    sb.append(" AND insurance.insuranceName = ? ");
                 } else  {
-                    sb.append(" WHERE(insurance.insuranceName ~* ? ");
+                    sb.append(" WHERE(insurance.insuranceName = ? ");
                     whereInStarts = true;
                 }
                 parameters.add(search.getInsurance());
@@ -267,9 +267,9 @@ import java.util.*;
             if (sex.isPresent()){
                 if (whereInStarts)
                 {
-                    sb.append(" AND sex ~* ? ");
+                    sb.append(" AND sex = ? ");
                 } else  {
-                    sb.append(" WHERE(sex ~* ? ");
+                    sb.append(" WHERE(sex = ? ");
                     whereInStarts = true;
                 }
                 parameters.add(search.getSex());

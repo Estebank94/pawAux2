@@ -4,15 +4,33 @@ import java.util.List;
 
 public class Search {
 
-    private String name;
-    private String specialty;
-    private String location;
-    private String insurance;
+    private String name = "";
+    private String specialty = "noSpecialty";
+    private String location = "";
+    private String insurance = "no";
     private String sex = "ALL";
-    private List<String> insurancePlan;
+    private List<String> insurancePlan = null;
+
+//    public Search(String name, String specialty, String insurance, String sex, List<String> insurancePlan) {
+//        this.name = name;
+//        this.specialty = specialty;
+//        this.insurance = insurance;
+//        this.sex = sex;
+//        this.insurancePlan = insurancePlan;
+//    }
 
     public String getName() {
-        return name;
+            return name;
+    }
+
+    public String getSimilarToName() {
+
+        StringBuilder nameBuilder = new StringBuilder();
+        nameBuilder.append("%");
+        nameBuilder.append(name.toLowerCase());
+        nameBuilder.append("%");
+
+        return nameBuilder.toString();
     }
 
     public void setName(String name) {
