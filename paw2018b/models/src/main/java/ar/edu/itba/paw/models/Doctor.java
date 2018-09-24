@@ -39,6 +39,16 @@ public class Doctor {
         this.phoneNumber = phoneNumber;
     }
 
+    public Doctor(String firstName, String lastName, String sex, String avatar, String address, Integer id, String phoneNumber){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.sex = sex;
+        this.address = address;
+        this.avatar = avatar;
+        this.id = id;
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
