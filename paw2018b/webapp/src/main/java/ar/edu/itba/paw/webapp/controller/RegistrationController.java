@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.SearchService;
+import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class RegistrationController {
     @Autowired
     private SearchService searchService;
 
+    @Autowired
+    private DoctorService doctorService;
+
     @RequestMapping(value="/doctorRegistration", method = { RequestMethod.POST })
     public ModelAndView doctorRegistration (@Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors){
 
@@ -31,11 +36,15 @@ public class RegistrationController {
             }
             return showDoctorRegistration(personalForm);
         }else{
-            //create Doctor
+
             final ModelAndView mav = new ModelAndView("registerSpecialist2");
             mav.addObject("professional", new ProfessionalForm());
             mav.addObject("insuranceList", searchService.listInsurances().get());
             mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
+
+            doctorService.createDoctor(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(),
+                     personalForm.getSex(), personalForm.getLala(), "jajaja", personalForm.getAddress());
+
             return mav;
         }
 
