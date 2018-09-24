@@ -35,7 +35,7 @@
     <p>Completa tus datos profesionales.</p>
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
-    <form:form modelAttribute="professional" method="POST" action="doctorProfile" accept-charset="ISO-8859-1">
+    <form:form modelAttribute="professional" method="POST" action="doctorProfile" accept-charset="ISO-8859-1" id="profile">
         <div>
             <label for="exampleFormControlFile1">Foto de perfil</label>
             <form:input type="file" class="form-control-file" id="exampleFormControlFile1" path="avatar"/>
@@ -57,11 +57,14 @@
         <div>
             <div>
                 <label for="inputState">Idiomas</label>
-                <form:select id="inputState" class="custom-select" path="languages" multiple="">
-                    <form:option value="no" label="Idioma" selected="Idioma"/>
-                    <form:option value="english" label="Ingles"/>
-                    <form:option value="italian" label="Italiano"/>
-                </form:select>
+                <select class="custom-select" name="languages" id="languages" onchange="addInput(value)">
+                    <option value="no" label="Idioma" selected="Idioma"/>
+                    <option value="Ingles" label="Ingles" />
+                    <option value="Italiano" label="Italiano" />
+                    <option value="Aleman" label="Aleman" />
+                    <option value="Frances" label="Frances" />
+                    <option value="Chino" label="Chino"/>
+                </select>
                 <form:errors path="languages" cssStyle="color: crimson"  element="p"></form:errors>
             </div>
             <br>
@@ -88,7 +91,6 @@
                     <c:forEach items="${insuranceList}" var="insuranceName">
                         <form:option value="${insuranceName.name}" label="${insuranceName.name}"/>
                     </c:forEach>
-                    <%--<form:options items="${insuranceList}" var="insuranceMatch" itemValue="name" itemLabel="name" value="${insuranceList}"/>--%>
                 </form:select>
                 <form:errors path="insurance" cssStyle="color: crimson"  element="p"></form:errors>
             </div>
@@ -106,8 +108,9 @@
                                 </div>
                             </c:forEach>
                         </c:forEach>
-                        <button class="btn btn-secondary">Agregar Planes</button>
                     </div>
+                        <%--Hay que arreglar este boton--%>
+                    <button class="btn btn-secondary">Agregar Planes</button>
                     <br>
                 </div>
                 <div>
@@ -172,6 +175,14 @@
         $("#insuranceContainer").children().hide();
         $("." + val).show();
     }
+    function addInput(val){
+        /*TODO: si ya existe el input con dicho valor, no volver a hacerlo*/
+        $('#profile').append('<input type="hidden" name="languages" value="'+val+'" id="languages"/>');
+    }
+
+
+
+
 </script>
 </body>
 </html>
