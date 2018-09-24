@@ -102,7 +102,7 @@
                             <c:forEach items="${insurancePlanList.key}" var="insurancePlansName">
                                 <div class="${insurancePlanList.key}" style="display: none">
                                     <c:forEach  items="${insurancePlanList.value}" var="insurancePlanValue">
-                                        <form:checkbox path="insurancePlan" id="insurancePlan" value="${insurancePlanValue}" label="${insurancePlanValue}"/>
+                                        <checkbox path="insurancePlan" id="insurancePlan" value="${insurancePlanValue}" label="${insurancePlanValue}"/>
                                         </br>
                                     </c:forEach>
                                 </div>
@@ -110,7 +110,7 @@
                         </c:forEach>
                     </div>
                         <%--Hay que arreglar este boton--%>
-                    <button class="btn btn-secondary">Agregar Planes</button>
+                    <button class="btn btn-secondary" onclick="addMultipleInputs()">Agregar Planes</button>
                     <br>
                 </div>
                 <div>
