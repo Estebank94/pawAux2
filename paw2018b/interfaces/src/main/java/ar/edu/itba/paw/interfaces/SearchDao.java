@@ -12,9 +12,13 @@ import java.util.Optional;
 public interface SearchDao {
     Optional<List<ListItem>> listInsurances();
 
+    Optional<List<ListItem>> listInsurancesWithDoctors();
+
     Optional<List<ListItem>> listZones();
 
     Optional<List<ListItem>> listSpecialties();
+
+    Optional<List<ListItem>> listSpecialtiesWithDoctors();
 
     Optional<Map<String, List<String>>> listInsurancePlan();
 }
