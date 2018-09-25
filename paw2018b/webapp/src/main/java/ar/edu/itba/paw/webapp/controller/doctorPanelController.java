@@ -6,7 +6,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @RequestMapping("/doctorPanel")
 @Controller
-public class doctorPanelController {
+public class DoctorPanelController {
 
     @RequestMapping("/")
     public ModelAndView doctorPanel(){
