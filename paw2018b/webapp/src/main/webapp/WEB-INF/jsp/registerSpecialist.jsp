@@ -98,8 +98,8 @@
         <br>
         <div>
             <label for="exampleInputEmail1">Matrícula</label>
-            <form:input class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu matrícula" path="lala"/>
-            <form:errors path="lala" cssStyle="color: crimson"  element="p"></form:errors>
+            <form:input class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu matrícula" path="licence"/>
+            <form:errors path="licence" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
         <input type="submit" class="btn btn-primary" value="Siguiente" path="submit" />

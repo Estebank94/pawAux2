@@ -3,6 +3,8 @@ package ar.edu.itba.paw.webapp.forms;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ProfessionalForm {
 
@@ -13,9 +15,9 @@ public class ProfessionalForm {
     @NotEmpty
     private String education;
 
-    private List<String> languages;
-    private String insurance;
-    private String insurancePlan;
+    private Set<String> languages;
+    private Set<String> insurance;
+    private List<String> insurancePlan;
     @NotEmpty
     private String workingHoursStart;
     @NotEmpty
@@ -61,27 +63,27 @@ public class ProfessionalForm {
         this.education = education;
     }
 
-    public List<String> getLanguages() {
+    public Set<String> getLanguages() {
         return languages;
     }
 
-    public void setLanguages(List<String> languages) {
+    public void setLanguages(Set<String> languages) {
         this.languages = languages;
     }
 
-    public String getInsurance() {
+    public Set<String> getInsurance() {
         return insurance;
     }
 
-    public void setInsurance(String insurance) {
+    public void setInsurance(Set<String> insurance) {
         this.insurance = insurance;
     }
 
-    public String getInsurancePlan() {
+    public List<String>  getInsurancePlan() {
         return insurancePlan;
     }
 
-    public void setInsurancePlan(String insurancePlan) {
+    public void setInsurancePlan(List<String>  insurancePlan) {
         this.insurancePlan = insurancePlan;
     }
 

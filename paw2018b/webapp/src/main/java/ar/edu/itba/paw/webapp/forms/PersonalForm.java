@@ -10,50 +10,50 @@ import javax.validation.constraints.Pattern;
 public class PersonalForm {
 
 
-    @Length(min=3, max=45, message = "Cantidad de caracteres incorrecto. Su nombre debe contener entre 3 y 45 caracteres")
-    @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su nombre")
+//    @Length(min=3, max=45, message = "Cantidad de caracteres incorrecto. Su nombre debe contener entre 3 y 45 caracteres")
+//    @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su nombre")
     private String firstName;
 
-    @Length(min=2, max=45, message = "Cantidad de caracteres incorrecto. Su apellido debe contener entre 2 y 45 caracteres")
-    @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su apellido")
+//    @Length(min=2, max=45, message = "Cantidad de caracteres incorrecto. Su apellido debe contener entre 2 y 45 caracteres")
+//    @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su apellido")
     private String lastName;
 
-    @Email(message = "El email ingresado es invalido. Por favor, ingrese un email valido")
-    @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su email")
+//    @Email(message = "El email ingresado es invalido. Por favor, ingrese un email valido")
+//    @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su email")
     private String email;
-
-    @Length(min=6, max=10, message = "Cantidad de caracteres incorrecto. Su contraseña debe contener entre 6 y 10 caracteres")
-    @NotEmpty(message = "Este campo es obligatorio.Por favor, ingrese una contraseña")
-    @NotNull(message = "Este campo es obligatorio. Por favor, ingrese una contraseña")
-    @Pattern(regexp = "[a-zA-Z0-9]+", message = "Su contraseña debe contener al menos un número. Por favor, reingrese una contraseña valida")
+//
+//    @Length(min=6, max=10, message = "Cantidad de caracteres incorrecto. Su contraseña debe contener entre 6 y 10 caracteres")
+//    @NotEmpty(message = "Este campo es obligatorio.Por favor, ingrese una contraseña")
+//    @NotNull(message = "Este campo es obligatorio. Por favor, ingrese una contraseña")
+//    @Pattern(regexp = "[a-zA-Z0-9]+", message = "Su contraseña debe contener al menos un número. Por favor, reingrese una contraseña valida")
     private String password;
 
-    @Length(min=6, max=10, message = "Cantidad de caracteres incorrecto. Su contraseña debe contener entre 6 y 10 caracteres")
-    @NotEmpty(message = "Este campo es obligatorio.Por favor, ingrese una contraseña")
-    @Pattern(regexp = "[a-zA-Z0-9]+", message = "Su contraseña debe contener al menos un número. Por favor, reingrese una contraseña valida")
+//    @Length(min=6, max=10, message = "Cantidad de caracteres incorrecto. Su contraseña debe contener entre 6 y 10 caracteres")
+//    @NotEmpty(message = "Este campo es obligatorio.Por favor, ingrese una contraseña")
+//    @Pattern(regexp = "[a-zA-Z0-9]+", message = "Su contraseña debe contener al menos un número. Por favor, reingrese una contraseña valida")
     private String passwordConfirmation;
 
 
-    @Pattern(regexp = "^((\\(|)(011)(\\)|)(|\\s)(\\d{8}|\\d{4}\\s\\d{4}))$", message = "Su numero de telefono es incorrecto. Recuerde que el formato es : (Codigo de Area) Numero de Telefono ")
-    @NotNull(message = "Este campo es obligatorio. Por favor, ingrese su número de teléfono")
-    @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su número de teléfono")
+//    @Pattern(regexp = "^((\\(|)(011)(\\)|)(|\\s)(\\d{8}|\\d{4}\\s\\d{4}))$", message = "Su numero de telefono es incorrecto. Recuerde que el formato es : (Codigo de Area) Numero de Telefono ")
+//    @NotNull(message = "Este campo es obligatorio. Por favor, ingrese su número de teléfono")
+//    @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su número de teléfono")
     private String phoneNumber;
 
-    @NotEmpty(message = "Este campo es obligatorio.Por favor, ingrese una direccion")
+//    @NotEmpty(message = "Este campo es obligatorio.Por favor, ingrese una direccion")
     //falta ver como vamos a validar exactamente que sea una direccion real.
     private String address;
 
-    @NotEmpty(message = "Este campo es obligatorio. Por favor, elija una opcion")
+//    @NotEmpty(message = "Este campo es obligatorio. Por favor, elija una opcion")
     private String sex;
 
-    private String lala;
+    private String licence;
 
-    public String getLala() {
-        return lala;
+    public String getLicence() {
+        return licence;
     }
 
-    public void setLala(String lala) {
-        this.lala = lala;
+    public void setLicence(String licence) {
+        this.licence = licence;
     }
 
     public String getFirstName() {
