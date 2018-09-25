@@ -29,6 +29,16 @@ import static org.junit.Assert.assertTrue;
 @ContextConfiguration(classes = TestConfig.class)
 public class DoctorDaoImplTest {
 
+    private static final String NEW_DOC_NAME = "Marlon";
+    private static final String NEW_DOC_LASTNAME = "Brando";
+    private static final String NEW_DOC_PHONE = "47771234";
+    private static final String NEW_DOC_SEX = "M";
+    private static final String NEW_DOC_LICENSE = "2020";
+    private static final String NEW_DOC_AVATAR = "https://d1cesmq0xhh7we.cloudfront.net/cb5ddc05-1d68-48ca-a8ff-baba8239be85circle_medium__v1__.png";
+    private static final String NEW_DOC_ADDRESS = "Cabildo 650";
+
+    private static final Integer DOCTOR_QUANTITY_BEFORE = 3;
+
     private static final int DOCTOR_ID = 1;
 //    private List mockedList = mock(List.class);
     private List<String> insurancePlan = new ArrayList<>();
@@ -68,7 +78,7 @@ public class DoctorDaoImplTest {
     }
 
     @Test
-    public void testCreate() {
+    public void testFind() {
 
 //        Search search = new Search("Roberto","NUTRICION","101", "M", insurancePlan);
 //        insurancePlan.add("Accord Salud");
@@ -90,6 +100,20 @@ public class DoctorDaoImplTest {
 
         assertTrue( expected.getDoctors().containsAll(filteredSearch.get().getDoctors()));
 
+    }
+
+    @Test
+    public void testCreate() {
+        final Doctor doctor = doctorDao.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, NEW_DOC_ADDRESS, NEW_DOC_AVATAR);
+
+        assertNotNull(doctor);
+        assertEquals(NEW_DOC_NAME, doctor.getFirstName());
+        assertEquals(NEW_DOC_LASTNAME, doctor.getLastName());
+        assertEquals(NEW_DOC_PHONE, doctor.getPhoneNumber());
+        assertEquals(NEW_DOC_SEX, doctor.getSex());
+        assertEquals(NEW_DOC_AVATAR, doctor.getAvatar());
+        assertEquals(NEW_DOC_ADDRESS, doctor.getAddress());
+        assertEquals(DOCTOR_QUANTITY_BEFORE + 1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "doctor"));
     }
 
 }
