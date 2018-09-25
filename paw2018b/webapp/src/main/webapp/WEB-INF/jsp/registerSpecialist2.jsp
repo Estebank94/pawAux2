@@ -35,7 +35,7 @@
     <p>Completa tus datos profesionales.</p>
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
-    <form:form modelAttribute="professional" method="POST" action="doctorProfile" accept-charset="ISO-8859-1" id="profile">
+    <form:form modelAttribute="professional" method="POST" action="doctorProfile/${doctor.id}" accept-charset="ISO-8859-1" id="profile">
         <div>
             <label for="exampleFormControlFile1">Foto de perfil</label>
             <form:input type="file" class="form-control-file" id="exampleFormControlFile1" path="avatar"/>

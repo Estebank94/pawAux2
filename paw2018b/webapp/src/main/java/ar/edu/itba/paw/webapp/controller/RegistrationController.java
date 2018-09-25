@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -47,9 +48,9 @@ public class RegistrationController {
             /*TODO: habria que agregarle un campo a este create doctor que se settee en profileNotCompleted*/
             /*TODO: pasar el id de doctor por parametro URL asi despues en profile agarro el doctor de ese ID y hago sets de toda la info del profile*/
 
-            doctorService.createDoctor(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(),
-                     personalForm.getSex(), personalForm.getLala(), "null", personalForm.getAddress());
-
+            Doctor doctor = doctorService.createDoctor(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(),
+                     personalForm.getSex(), personalForm.getLala(), "null2", personalForm.getAddress());
+            mav.addObject("doctor", doctor);
             return mav;
         }
 
@@ -62,8 +63,8 @@ public class RegistrationController {
         return mav;
     }
 
-    @RequestMapping(value = "/showDoctorProfile", method = {RequestMethod.GET})
-    public ModelAndView showDoctorProfile(@ModelAttribute("professional")ProfessionalForm professionalForm){
+    @RequestMapping(value = "/showDoctorProfile/{doctorId}", method = {RequestMethod.GET})
+    public ModelAndView showDoctorProfile(@PathVariable Integer doctorId, @ModelAttribute("professional")ProfessionalForm professionalForm){
 
         final ModelAndView mav = new ModelAndView("registerSpecialist2");
         mav.addObject("insuranceList", searchService.listInsurances().get());
@@ -71,15 +72,17 @@ public class RegistrationController {
         return mav;
     }
 
-    @RequestMapping(value = "/doctorProfile", method = {RequestMethod.POST})
-    public ModelAndView doctorProfile (@Valid @ModelAttribute("professional") ProfessionalForm professionalForm, final BindingResult errors){
+    @RequestMapping(value = "/doctorProfile/{doctorId}", method = {RequestMethod.POST})
+    public ModelAndView doctorProfile (@PathVariable Integer doctorId,@Valid @ModelAttribute("professional") ProfessionalForm professionalForm, final BindingResult errors){
 
         if(errors.hasErrors()){
-            return showDoctorProfile(professionalForm);
+            return showDoctorProfile(doctorId, professionalForm);
         }
-        System.out.println(professionalForm.getLanguages());
 
-        /*TODO: aca tenemos que llamar a una funcion de professionalForm que lo que haga es pasar ese String de Languages a una lista, easy peasy, para despues poder pasarselo bien al doctor.*/
+        Doctor doctor = doctorService.findDoctorById(doctorId).get();
+        System.out.println(doctor.getFirstName());
+        System.out.println(doctor.getId());
+
         /*TODO: recibir el id del doctor creado recientemente, o que este loggeado para poder hacer los sets de toda la info nueva*/
         /*TODO: poner el valor de profileCompleted en true, asi ya se puede mostrar en la pantalla*/
 
