@@ -29,7 +29,7 @@ public class MedicalCareDaoImpl implements MedicalCareDao {
         entry.put("doctorID",doctorId);
         entry.put("insurancePlanID",insurancePlanId);
 
-        jdbcInsert.executeAndReturnKey(entry);
+        jdbcInsert.execute(entry);
     }
 
     @Override
