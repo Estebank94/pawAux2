@@ -17,17 +17,17 @@ public class DoctorServiceImpl implements DoctorService {
     @Autowired
     private DoctorDao doctorDao;
     
-//    @Autowired
-//    private SpecialtyDao specialtyDao;
-//
+    @Autowired
+    private SpecialtyDao specialtyDao;
+
     @Autowired
     private MedicalCareDao medicalcareDao;
-//
-//    @Autowired
-//    private DoctorSpecialtyDao doctorSpecialtyDao;
-//
-//    @Autowired
-//    private InsurancePlanDao insurancePlanDao;
+
+    @Autowired
+    private DoctorSpecialtyDao doctorSpecialtyDao;
+
+    @Autowired
+    private InsurancePlanDao insurancePlanDao;
 
 //    @Autowired
 //    private DescriptionDao descriptionDao;
@@ -106,33 +106,33 @@ public class DoctorServiceImpl implements DoctorService {
 //        return doctor;
 //    }
 
+
+    @Override
+    public Optional<Doctor> setDoctorInfo(Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance, List<WorkingHours> workingHours, Description description) {
+        Optional<Doctor> doctorOptional = doctorDao.findDoctorById(doctorId);
+        if (!doctorOptional.isPresent()){
+            return doctorOptional;
+        }
+        Doctor doctor = doctorOptional.get();
+        doctor.setSpecialty(specialty);
 //
-//    @Override
-//    public Optional<Doctor> setDoctorInfo(Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance, List<WorkingHours> workingHours, Description description) {
-//        Optional<Doctor> doctorOptional = doctorDao.findDoctorById(doctorId);
-//        if (!doctorOptional.isPresent()){
-//            return doctorOptional;
-//        }
-//        Doctor doctor = doctorOptional.get();
-//        doctor.setSpecialty(specialty);
-////
-////
-//////        doctor.setWorkingHours(workingHours);
-//        doctor.setInsurance(insurance);
-//        doctor.setDescription(description);
-//        Optional<List<Integer>> specialtysId = specialtyDao.findSpecialtysId(specialty);
-//        if (specialtysId.isPresent()){
-//            doctorSpecialtyDao.addDoctorSpecialtyList(doctor.getId(),specialtysId.get());
-//        }
-////
-//       Optional<List<Integer>> insurancesPlanIds = insurancePlanDao.getInsurancesPlanIds(insurance);
-//        if (insurancesPlanIds.isPresent()){
-//            medicalcareDao.addMedicalCare(doctor.getId(), insurancesPlanIds.get());
-//        }
-////
-////        descriptionDao.addDescription(doctor.getId(), description);
-////        workingHoursDao.addWorkingHour(doctor.getId(), workingHours);
-//        return null;
-//    }
+//
+////        doctor.setWorkingHours(workingHours);
+        doctor.setInsurance(insurance);
+        doctor.setDescription(description);
+        Optional<List<Integer>> specialtysId = specialtyDao.findSpecialtysId(specialty);
+        if (specialtysId.isPresent()){
+            doctorSpecialtyDao.addDoctorSpecialtyList(doctor.getId(),specialtysId.get());
+        }
+//
+       Optional<List<Integer>> insurancesPlanIds = insurancePlanDao.getInsurancesPlanIds(insurance);
+        if (insurancesPlanIds.isPresent()){
+            medicalcareDao.addMedicalCare(doctor.getId(), insurancesPlanIds.get());
+        }
+//
+//        descriptionDao.addDescription(doctor.getId(), description);
+//        workingHoursDao.addWorkingHour(doctor.getId(), workingHours);
+        return null;
+    }
 }
 
