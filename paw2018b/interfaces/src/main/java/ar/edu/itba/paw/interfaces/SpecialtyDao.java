@@ -7,4 +7,5 @@ import java.util.Set;
 public interface SpecialtyDao {
 
     Optional<List<Integer>> findSpecialtysId(Set<String> specialtySet);
+
 }
