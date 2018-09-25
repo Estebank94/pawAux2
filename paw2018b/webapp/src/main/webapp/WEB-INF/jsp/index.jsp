@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%--<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>--%>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 
 <!DOCTYPE html>
@@ -25,9 +25,8 @@
         <a>
             <div class="row">
                 <div class="dropdown">
-                    <form:form action="${pageContext.request.contextPath}/logout" method="post">
-                        <input type="submit" value="Logout"/>
-                    </form:form>
+                    <%--<c:if test="${loggedInName != null}">--%>
+                    <%--</c:if>--%>
                     <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Registrate
                     </button>
@@ -36,14 +35,24 @@
                         <button class="dropdown-item" type="button" onclick="window.location='/showDoctorRegistration'">Registrate como especialista</button>
                     </div>
                 </div>
-                <button class="btn btn-light" style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="button" onclick="window.location='/showLogIn'">
-                    Iniciá Sesión
-                </button>
+                <div>
+                    <security:authorize access="!isAuthenticated()">
+                        <button class="btn btn-light" style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="button" onclick="window.location='/showLogIn'">
+                            Iniciá Sesión
+                        </button>
+                    </security:authorize>
+                    <security:authorize access="isAuthenticated()">
+                        <form:form action="${pageContext.request.contextPath}/logout" method="post">
+                            <security:authentication property="principal.username" var="userName"/>
+                            <button class="btn btn-light" style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="submit">Logout <b>${userName}</b></button>
+                        </form:form>
+                    </security:authorize>
+                </div>
                 <hr>
-                    <p>
-                       <a href="${pageContext.request.contextPath}/doctorPanel/">Doctor Panel</a>
-                        <a href="${pageContext.request.contextPath}/patientPanel/">Patient Panel</a>
-                    </p>
+                    <%--<p>--%>
+                       <%--<a href="${pageContext.request.contextPath}/doctorPanel/">Doctor Panel</a>--%>
+                        <%--<a href="${pageContext.request.contextPath}/patientPanel/">Patient Panel</a>--%>
+                    <%--</p>--%>
                 <hr>
             </div>
         </a>
