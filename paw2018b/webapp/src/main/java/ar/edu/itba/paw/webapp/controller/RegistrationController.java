@@ -2,7 +2,9 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.SearchService;
+import ar.edu.itba.paw.models.Description;
 import ar.edu.itba.paw.models.Doctor;
+import ar.edu.itba.paw.models.WorkingHours;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
 import com.sun.xml.internal.bind.v2.TODO;
@@ -90,7 +92,11 @@ public class RegistrationController {
         System.out.println(doctor.getFirstName());
         System.out.println(doctor.getId());
 
-        /*TODO: poner el valor de profileCompleted en true, asi ya se puede mostrar en la lista*/
+//        doctorService.setDoctorInfo(doctorId,"" ,professionalForm.getInsurance(),"" ,professionalForm.getDescription());
+//
+//        Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance,
+//                List<WorkingHours > workingHours, Description description
+
         /*TODO: agregar setters a la informacion total del doctor*/
         /*TODO: daos y binding de data a las tablas sobre la informacion puesta aca*/
         /*TODO: agregar boton de cancelar y volver al incio y mostrar mensaje en pantalla que esta registrado como profesional pero que todavia
