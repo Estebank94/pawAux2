@@ -18,19 +18,20 @@ public class WorkingHoursDaoImpl implements WorkingHoursDao {
     public WorkingHoursDaoImpl(final DataSource ds){
         jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("workinghours")
-                .usingColumns("doctorId","dayweek","starttime","finistime");
+                .usingColumns("doctorId","dayweek","starttime","finistime")
+        .usingGeneratedKeyColumns("id");
     }
 
 
     @Override
     public void addWorkingHour(Integer doctorId, WorkingHours workingHours) {
         final Map<String,Object> entry = new HashMap<>();
-        entry.put("doctoId",doctorId);
+        entry.put("doctorId",doctorId);
         entry.put("dayweek",workingHours.getDayOfWeek().toString());
         entry.put("starttime",workingHours.getStartTime().toString());
         entry.put("finishtime",workingHours.getFinishTime().toString());
 
-        jdbcInsert.executeAndReturnKey(entry);
+        jdbcInsert.execute(entry);
     }
 
     @Override

@@ -28,7 +28,7 @@ public class DoctorSpecialtyDaoImpl implements DoctorSpecialtyDao {
         final Map<String,Object> entry = new HashMap<>();
         entry.put("doctorID",doctorId);
         entry.put("specialtyID",specialtyId);
-        jdbcInsert.executeAndReturnKey(entry);
+        jdbcInsert.execute(entry);
     }
 
     @Override

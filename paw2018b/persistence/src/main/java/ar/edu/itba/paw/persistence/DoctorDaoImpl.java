@@ -154,16 +154,10 @@ import java.util.*;
 
         @Override
         public Optional<CompressedSearch> listDoctors() {
-            String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName,information.languages, information.certificate, information.education, phoneNumber ";
-            String from = "FROM doctor ";
-            String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
-                    "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  " +
-                    "LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id " +
-                    "LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID " +
-                    "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID " +
-                    "LEFT JOIN information ON doctor.id = information.doctorid";
 
-            final CompressedSearch compressedSearch = jdbcTemplate.query(select + from + leftJoins, new CompressedExtractor());
+            String select =  "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName,information.languages, information.certificate, information.education, phoneNumber FROM doctor LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID LEFT JOIN information ON doctor.id = information.doctorid";
+
+            final CompressedSearch compressedSearch = jdbcTemplate.query(select, new CompressedExtractor());
 
             if(compressedSearch.getDoctors().isEmpty()){
                 return Optional.empty();
@@ -175,18 +169,15 @@ import java.util.*;
         @Override
         public Optional<CompressedSearch> findDoctors(Search search) {
 
-            String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ,information.languages, information.certificate, information.education, phoneNumber ";
-            String from = "FROM doctor ";
-            String whereIn;
+            StringBuilder select = new StringBuilder();
+            select.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ,information.languages, information.certificate, information.education, phoneNumber ");
+            select.append("FROM doctor ");
+
 
             Optional<String> name = search.getName().equals("")? Optional.ofNullable(null):Optional.ofNullable(search.getName());
-
             Optional<String> specialty = search.getSpecialty().equals("noSpecialty")?Optional.ofNullable(null):Optional.ofNullable(search.getSpecialty());
-
             Optional<String> insurance = search.getInsurance().matches("no")?Optional.ofNullable(null):Optional.ofNullable(search.getName());
-
             Optional<String> sex = search.getSex().equals("ALL") || search.getSex().isEmpty() || search.getSex().equals("")?Optional.ofNullable(null): Optional.ofNullable(search.getSex());
-
             Optional<List<String>> insurancePlan;
 
             if (search.getInsurancePlan() != null)
@@ -207,28 +198,28 @@ import java.util.*;
             {
                 insurancePlan = Optional.ofNullable(null);
             }
-            
-            String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
-                    "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  " +
-                    "LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id " +
-                    "LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID " +
-                    "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID "+
-                    "LEFT JOIN information ON doctor.id = information.doctorId ";
 
-            String whereOut = "WHERE doctor.id IN (SELECT doctor.id " + " FROM doctor " +
-                    "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
-                    "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id " +
-                    "LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id " +
-                    "LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID " +
-                    "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ";
+            select.append("LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID ");
+            select.append("LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  ");
+            select.append("LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id ");
+            select.append("LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID ");
+            select.append("LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ");
+            select.append("LEFT JOIN information ON doctor.id = information.doctorId ");
 
-            StringBuilder sb = new StringBuilder();
+
+            select.append("WHERE doctor.id IN (SELECT doctor.id " + " FROM doctor ");
+            select.append("LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID ");
+            select.append("LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id ");
+            select.append("LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id ");
+            select.append("LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID ");
+            select.append("LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ");
+
             boolean whereInStarts = false;
             List<String> parameters = new ArrayList<>();
 
             if (name.isPresent())
             {
-                sb.append("WHERE ( ( LOWER(firstName) LIKE ?  OR  LOWER(lastName) LIKE ? ) ");
+                select.append("WHERE ( ( LOWER(firstName) LIKE ?  OR  LOWER(lastName) LIKE ? ) ");
                 whereInStarts = true;
                 parameters.add(search.getSimilarToName());
                 parameters.add(search.getSimilarToName());
@@ -239,9 +230,9 @@ import java.util.*;
             {
                 if (whereInStarts)
                 {
-                    sb.append(" AND specialty.specialtyName = ? ");
+                    select.append(" AND specialty.specialtyName = ? ");
                 } else {
-                    sb.append("WHERE(specialty.specialtyName = ? ");
+                    select.append("WHERE(specialty.specialtyName = ? ");
                     whereInStarts = true;
                 }
                 parameters.add(search.getSpecialty());
@@ -251,25 +242,25 @@ import java.util.*;
             {
                 if (whereInStarts)
                 {
-                    sb.append(" AND insurance.insuranceName = ? ");
+                    select.append(" AND insurance.insuranceName = ? ");
                 } else  {
-                    sb.append(" WHERE(insurance.insuranceName = ? ");
+                    select.append(" WHERE(insurance.insuranceName = ? ");
                     whereInStarts = true;
                 }
                 parameters.add(search.getInsurance());
 
                 if (insurancePlan.isPresent()) {
-                    sb.append("AND insurancePlan.insurancePlanName IN ");
-                    sb.append(search.getInsurancePlanAsString());
+                    select.append("AND insurancePlan.insurancePlanName IN ");
+                    select.append(search.getInsurancePlanAsString());
                 }
             }
 
             if (sex.isPresent()){
                 if (whereInStarts)
                 {
-                    sb.append(" AND sex = ? ");
+                    select.append(" AND sex = ? ");
                 } else  {
-                    sb.append(" WHERE(sex = ? ");
+                    select.append(" WHERE(sex = ? ");
                     whereInStarts = true;
                 }
                 parameters.add(search.getSex());
@@ -278,12 +269,11 @@ import java.util.*;
 
             if (whereInStarts == true)
             {
-                sb.append(")");
+                select.append(")");
             }
-            sb.append(")");
-            whereIn = sb.toString();
+            select.append(")");
 
-            final CompressedSearch compressedSearch = jdbcTemplate.query(select + from + leftJoins + whereOut + whereIn, new CompressedExtractor(),
+            final CompressedSearch compressedSearch = jdbcTemplate.query(select.toString() , new CompressedExtractor(),
                     parameters.toArray());
 
             if(compressedSearch.getDoctors().isEmpty()){
@@ -295,16 +285,19 @@ import java.util.*;
 
         @Override
         public Optional<Doctor> findDoctorById(Integer id){
-            String select = "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName, information.languages, information.certificate, information.education, phoneNumber ";
-            String from = "FROM doctor ";
-            String leftJoins = "LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID " +
-                    "LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  " +
-                    "LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id " +
-                    "LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID " +
-                    "LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID "+
-                    "LEFT JOIN information ON doctor.id = information.doctorId ";
-            String where = "WHERE doctor.id = ?";
-            final CompressedSearch compressedSearch = jdbcTemplate.query(select + from + leftJoins + where, new CompressedExtractor(), id);
+
+            StringBuilder select = new StringBuilder();
+            select.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName, information.languages, information.certificate, information.education, phoneNumber ");
+            select.append("FROM doctor ");
+            select.append("LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID ");
+            select.append("LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  ");
+            select.append("LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id ");
+            select.append("LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID ");
+            select.append("LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ");
+            select.append("LEFT JOIN information ON doctor.id = information.doctorId ");
+            select.append("WHERE doctor.id = ?");
+
+            final CompressedSearch compressedSearch = jdbcTemplate.query(select.toString() , new CompressedExtractor(), id);
 
             if(compressedSearch.getDoctors().isEmpty()){
                 return Optional.empty();

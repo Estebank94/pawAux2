@@ -20,7 +20,8 @@ public class DescriptionDaoImpl implements DescriptionDao {
     public DescriptionDaoImpl(final DataSource ds){
         jdbcInsert = new SimpleJdbcInsert((JdbcTemplate) ds)
                 .withTableName("information")
-                .usingColumns("doctorID","certificate","languages","education");
+                .usingColumns("doctorID","certificate","languages","education")
+                .usingGeneratedKeyColumns("id");
     }
 
     @Override
@@ -55,8 +56,7 @@ public class DescriptionDaoImpl implements DescriptionDao {
         entry.put("education",educationString);
         entry.put("doctorId",doctorId);
 
-        final Number descriptionId = jdbcInsert.executeAndReturnKey(entry);
-        return;
+        final Number descriptionId = jdbcInsert.execute(entry);
     }
 
     private String setToString(Set<String> setToString){

@@ -109,11 +109,12 @@ public class SearchDaoImpl implements SearchDao {
 
     @Override
     public Optional<Map<String, List<String>>> listInsurancePlan() {
-        String select = "SELECT insurancePlan.insurancePlanName, insurance.insuranceName ";
-        String from = "FROM insurancePlan ";
-        String join = "JOIN insurance ON insurance.id = insurancePlan.insuranceID";
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT insurancePlan.insurancePlanName, insurance.insuranceName ")
+                .append("FROM insurancePlan ")
+                .append("JOIN insurance ON insurance.id = insurancePlan.insuranceID");
 
-        final Map<String, List<String>> insurancesPlans = jdbcTemplate.query(select + from + join, new SearchDaoImpl.CompressedExtractor());
+        final Map<String, List<String>> insurancesPlans = jdbcTemplate.query(query.toString(), new SearchDaoImpl.CompressedExtractor());
 
         if(insurancesPlans.isEmpty()){
             return Optional.empty();

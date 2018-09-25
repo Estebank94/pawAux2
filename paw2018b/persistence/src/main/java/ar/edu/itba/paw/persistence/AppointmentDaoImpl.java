@@ -18,12 +18,12 @@ public class AppointmentDaoImpl implements AppointmentDao {
     @Autowired
     public AppointmentDaoImpl(final DataSource ds){
         jdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName("apploiment")
-                .usingColumns("","","","",
-                        "","","","");
+                .withTableName("appointment")
+                .usingColumns("doctorId")
+        .usingGeneratedKeyColumns("id");
     }
     @Override
-    public Optional<Appointment> createAppointment(Integer doctorId, LocalDate appointmentDay, LocalTime appointmentTime) {
+    public Optional<Appointment> createAppointment(Integer doctorId, Integer clientId, LocalDate appointmentDay, LocalTime appointmentTime) {
         return Optional.empty();
     }
 }
