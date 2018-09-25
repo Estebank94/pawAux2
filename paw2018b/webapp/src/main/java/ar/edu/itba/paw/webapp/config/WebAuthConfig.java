@@ -16,6 +16,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @ComponentScan("ar.edu.itba.paw.webapp")
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
+    /*TODO: security so as to not put info on the url*/
+    /*TODO: CHECK from the tables, have to decide between user, doctor, regular user*/
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
@@ -37,7 +40,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/doctorPanel/**").hasRole("DOCTOR")
                 .antMatchers("/patientPanel/**").hasRole("PACIENTE").and().formLogin().loginPage("/showLogIn")
                 .loginProcessingUrl("/authenticateUser").permitAll().and().logout().permitAll().and().exceptionHandling()
-        .accessDeniedPage("/403");
+                .accessDeniedPage("/403");
     }
+    /*TODO: aca con los .accesDenied se puede usar para todo? Con eso manejamos los stack traces?*/
 
 }

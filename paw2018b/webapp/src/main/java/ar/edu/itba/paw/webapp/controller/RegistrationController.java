@@ -46,7 +46,7 @@ public class RegistrationController {
             mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
 
             /*TODO: habria que agregarle un campo a este create doctor que se settee en profileNotCompleted*/
-            /*TODO: pasar el id de doctor por parametro URL asi despues en profile agarro el doctor de ese ID y hago sets de toda la info del profile*/
+            /*TODO: manejar errores 500*/
 
             Doctor doctor = doctorService.createDoctor(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(),
                      personalForm.getSex(), personalForm.getLala(), "null2", personalForm.getAddress());
@@ -66,6 +66,9 @@ public class RegistrationController {
     @RequestMapping(value = "/showDoctorProfile/{doctorId}", method = {RequestMethod.GET})
     public ModelAndView showDoctorProfile(@PathVariable Integer doctorId, @ModelAttribute("professional")ProfessionalForm professionalForm){
 
+        /*TODO: agregar specialty al view*/
+        /*TODO: agregar info en los lists de insurances y planes*/
+
         final ModelAndView mav = new ModelAndView("registerSpecialist2");
         mav.addObject("insuranceList", searchService.listInsurances().get());
         mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
@@ -73,7 +76,7 @@ public class RegistrationController {
     }
 
     @RequestMapping(value = "/doctorProfile/{doctorId}", method = {RequestMethod.POST})
-    public ModelAndView doctorProfile (@PathVariable Integer doctorId,@Valid @ModelAttribute("professional") ProfessionalForm professionalForm, final BindingResult errors){
+    public ModelAndView doctorProfile (@PathVariable Integer doctorId, @Valid @ModelAttribute("professional") ProfessionalForm professionalForm, final BindingResult errors){
 
         if(errors.hasErrors()){
             return showDoctorProfile(doctorId, professionalForm);
@@ -83,8 +86,9 @@ public class RegistrationController {
         System.out.println(doctor.getFirstName());
         System.out.println(doctor.getId());
 
-        /*TODO: recibir el id del doctor creado recientemente, o que este loggeado para poder hacer los sets de toda la info nueva*/
-        /*TODO: poner el valor de profileCompleted en true, asi ya se puede mostrar en la pantalla*/
+        /*TODO: poner el valor de profileCompleted en true, asi ya se puede mostrar en la lista*/
+        /*TODO: agregar setters a la informacion total del doctor*/
+        /*TODO: daos y binding de data a las tablas sobre la informacion puesta aca*/
 
         final ModelAndView mav = new ModelAndView("finalStep");
         return mav;
