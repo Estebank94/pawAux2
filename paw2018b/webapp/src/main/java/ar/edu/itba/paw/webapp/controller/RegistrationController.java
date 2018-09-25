@@ -47,6 +47,7 @@ public class RegistrationController {
 
             /*TODO: habria que agregarle un campo a este create doctor que se settee en profileNotCompleted*/
             /*TODO: manejar errores 500*/
+            /*TODO: agregar boton de cancelar y volver al incio*/
 
             Doctor doctor = doctorService.createDoctor(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(),
                      personalForm.getSex(), personalForm.getLala(), "null2", personalForm.getAddress());
@@ -60,6 +61,7 @@ public class RegistrationController {
     public ModelAndView showDoctorRegistration (@ModelAttribute("personal") PersonalForm personalForm){
 
         final ModelAndView mav = new ModelAndView("registerSpecialist");
+        /*TODO: agregar boton de cancelar y volver al incio*/
         return mav;
     }
 
@@ -68,6 +70,8 @@ public class RegistrationController {
 
         /*TODO: agregar specialty al view*/
         /*TODO: agregar info en los lists de insurances y planes*/
+        /*TODO: agregar boton de cancelar y volver al incio y mostrar mensaje en pantalla que esta registrado como profesional pero que todavia
+        * no va a figurar en la lista de doctores porque no completo su perfil*/
 
         final ModelAndView mav = new ModelAndView("registerSpecialist2");
         mav.addObject("insuranceList", searchService.listInsurances().get());
@@ -89,6 +93,8 @@ public class RegistrationController {
         /*TODO: poner el valor de profileCompleted en true, asi ya se puede mostrar en la lista*/
         /*TODO: agregar setters a la informacion total del doctor*/
         /*TODO: daos y binding de data a las tablas sobre la informacion puesta aca*/
+        /*TODO: agregar boton de cancelar y volver al incio y mostrar mensaje en pantalla que esta registrado como profesional pero que todavia
+         * no va a figurar en la lista de doctores porque no completo su perfil*/
 
         final ModelAndView mav = new ModelAndView("finalStep");
         return mav;
