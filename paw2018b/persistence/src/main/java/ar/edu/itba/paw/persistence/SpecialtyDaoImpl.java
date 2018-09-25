@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.SpecialtyDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 //import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 import javax.sql.DataSource;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@Repository
 public class SpecialtyDaoImpl implements SpecialtyDao {
 
     private final JdbcTemplate jdbcTemplate;
@@ -20,7 +22,6 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
 
     @Autowired
     public SpecialtyDaoImpl(final DataSource ds) {
-
         jdbcTemplate = new JdbcTemplate(ds);
     }
 
