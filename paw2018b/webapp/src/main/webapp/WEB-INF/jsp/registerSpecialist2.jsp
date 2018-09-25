@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: estebankramer
-  Date: 20/09/2018
-  Time: 18:09
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -102,7 +96,7 @@
                             <c:forEach items="${insurancePlanList.key}" var="insurancePlansName">
                                 <div class="${insurancePlanList.key}" style="display: none">
                                     <c:forEach  items="${insurancePlanList.value}" var="insurancePlanValue">
-                                        <checkbox path="insurancePlan" id="insurancePlan" value="${insurancePlanValue}" label="${insurancePlanValue}"/>
+                                        <form:checkbox path="insurancePlan" id="insurancePlan" value="${insurancePlanValue}" label="${insurancePlanValue}"/>
                                         </br>
                                     </c:forEach>
                                 </div>
