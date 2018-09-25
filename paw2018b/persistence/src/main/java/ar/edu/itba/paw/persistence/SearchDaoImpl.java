@@ -57,10 +57,10 @@ public class SearchDaoImpl implements SearchDao {
     @Override
     public Optional<List<ListItem>> listInsurancesWithDoctors(){
         StringBuilder query = new StringBuilder();
-        query.append("SELECT DISTINCT insurancename ");
+        query.append("SELECT DISTINCT insuranceName ");
         query.append("FROM medicalCare ");
-        query.append("JOIN insuranceplan ON medicalcare.insuranceplanid = insuranceplan.id " );
-        query.append("JOIN insurance ON insurance.id = insuranceplan.insuranceid");
+        query.append("JOIN insurancePlan ON medicalCare.insurancePlanId = insurancePlan.id " );
+        query.append("JOIN insurance ON insurance.id = insurancePlan.insuranceId");
         final List<ListItem> list = jdbcTemplate.query(query.toString(),ROW_MAPPER_INSURANCE );
 
         if(list.isEmpty()){
@@ -79,9 +79,9 @@ public class SearchDaoImpl implements SearchDao {
     @Override
     public Optional<List<ListItem>> listSpecialtiesWithDoctors() {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT DISTINCT insurancename ");
+        query.append("SELECT DISTINCT insuranceName ");
         query.append("FROM specialty ");
-        query.append("JOIN doctorspecialty ON doctorspecialty.specialtyid = specialty.id;");
+        query.append("JOIN doctorSpecialty ON doctorSpecialty.specialtyId = specialty.id;");
 
         final List<ListItem> list = jdbcTemplate.query(query.toString(), ROW_MAPPER_SPECIALTY);
 
