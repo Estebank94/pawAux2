@@ -7,6 +7,6 @@ import java.time.LocalTime;
 import java.util.Optional;
 
 public interface AppointmentDao {
-    Optional<Appointment> createAppointment(Integer doctorId, LocalDate appointmentDay, LocalTime appointmentTime);
+    Optional<Appointment> createAppointment(Integer doctorId, Integer clientId, LocalDate appointmentDay, LocalTime appointmentTime);
 
 }
