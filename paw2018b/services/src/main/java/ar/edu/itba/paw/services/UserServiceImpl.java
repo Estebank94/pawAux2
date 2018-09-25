@@ -10,7 +10,7 @@ public class UserServiceImpl implements UserService {
 
 	public User findById(String id) {
 		// TODO Auto-generated method stub
-		return new User();
+		return null;
 	}
 
 }

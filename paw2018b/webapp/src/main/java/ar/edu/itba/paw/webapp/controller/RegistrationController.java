@@ -52,7 +52,7 @@ public class RegistrationController {
             /*TODO: agregar boton de cancelar y volver al incio*/
 
             Doctor doctor = doctorService.createDoctor(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(),
-                     personalForm.getSex(), personalForm.getLala(), "null2", personalForm.getAddress());
+                     personalForm.getSex(), personalForm.getLicence(), "null2", personalForm.getAddress());
             mav.addObject("doctor", doctor);
             return mav;
         }
@@ -85,6 +85,7 @@ public class RegistrationController {
     public ModelAndView doctorProfile (@PathVariable Integer doctorId, @Valid @ModelAttribute("professional") ProfessionalForm professionalForm, final BindingResult errors){
 
         if(errors.hasErrors()){
+            System.out.println("error");
             return showDoctorProfile(doctorId, professionalForm);
         }
 
@@ -96,6 +97,14 @@ public class RegistrationController {
 //
 //        Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance,
 //                List<WorkingHours > workingHours, Description description
+
+        for(String string : professionalForm.getInsurance()){
+            System.out.println(string);
+        }
+
+        for(String string2 : professionalForm.getInsurancePlan()){
+            System.out.println(string2);
+        }
 
         /*TODO: agregar setters a la informacion total del doctor*/
         /*TODO: daos y binding de data a las tablas sobre la informacion puesta aca*/
