@@ -6,10 +6,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import javax.activation.DataSource;
+import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @Repository
 public class DoctorSpecialtyDaoImpl implements DoctorSpecialtyDao {
 
@@ -17,7 +18,7 @@ public class DoctorSpecialtyDaoImpl implements DoctorSpecialtyDao {
 
     @Autowired
     public DoctorSpecialtyDaoImpl(final DataSource ds){
-        jdbcInsert = new SimpleJdbcInsert((JdbcTemplate) ds)
+        jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("doctorSpecialty")
                 .usingColumns("doctorID","specialtyID");
     }

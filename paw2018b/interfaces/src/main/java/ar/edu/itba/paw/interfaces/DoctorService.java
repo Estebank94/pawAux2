@@ -22,7 +22,7 @@ public interface DoctorService {
 
    Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, String licence,
                               String avatar, String address);
-
-   Optional<Doctor> setDoctorInfo(Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance,
-                      List<WorkingHours> workingHours, Description description);
+//
+//   Optional<Doctor> setDoctorInfo(Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance,
+//                      List<WorkingHours> workingHours, Description description);
 }
