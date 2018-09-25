@@ -8,6 +8,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 
 <!DOCTYPE html>
@@ -40,9 +41,22 @@
                         <button class="dropdown-item" type="button">Registrate como especialista</button>
                     </div>
                 </div>
-                <button class="btn btn-secondary" style="background-color:transparent; border-color:transparent;" type="button">
-                    Iniciá Sesión
-                </button>
+                <div>
+                    <security:authorize access="!isAuthenticated()">
+                        <button class="btn btn-secondary" style="background-color:transparent; border-color:transparent;" type="button" onclick="window.location='/showLogIn'">
+                            Iniciá Sesión
+                        </button>
+                    </security:authorize>
+                    <security:authorize access="isAuthenticated()">
+                        <form:form action="${pageContext.request.contextPath}/logout" method="post">
+                            <security:authentication property="principal.username" var="userName"/>
+                            <button class="btn btn-secondary" style="background-color:transparent; border-color:transparent;" type="submit">Logout <b>${userName}</b></button>
+                        </form:form>
+                    </security:authorize>
+                </div>
+                <%--<button class="btn btn-secondary" style="background-color:transparent; border-color:transparent;" type="button">--%>
+                    <%--Iniciá Sesión--%>
+                <%--</button>--%>
             </div>
         </a>
     </div>
