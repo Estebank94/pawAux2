@@ -13,9 +13,9 @@ public class ReviewDaoImpl implements ReviewDao {
     private SimpleJdbcInsert jdbcInsert;
 
     @Autowired
-    public AppointmentDaoImpl(final DataSource ds){
+    public ReviewDaoImpl(final DataSource ds){
         jdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName("apploiment")
+                .withTableName("review")
                 .usingColumns("doctorid","reviewerId","datetime", "stars",
                         "review")
                 .usingGeneratedKeyColumns("id");
