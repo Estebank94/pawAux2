@@ -65,13 +65,7 @@
             <div>
                 <div>
                     <label>Estos son los idiomas que agregaste por ahora:</label>
-                    <div class="row container">
-                        <button type="button" class="btn btn-primary" style="margin-right: 8px">
-                            Ingles <span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle"></i></span>
-                        </button>
-                        <button type="button" class="btn btn-primary">
-                            Frances <span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle"></i></span>
-                        </button>
+                    <div class="row container" id="languageContainer">
                     </div>
                 </div>
             </div>
@@ -161,23 +155,50 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 <script>
-    function myFunc(val) {
+
+    function classConcatenator(val){
         var index = val.indexOf(" ");
-        if(index >= 0){
-            val = val.slice(0,index);
+        var val2 = "";
+        if(index > 0){
+            var aux;
+            aux = val.slice(0,index);
+            val2 = "."+val.slice(index+1, val.length);
+            val = aux;
+            val=val+val2;
         }
-        $("#insuranceContainer").children().hide();
-        $("." + val).show();
+        return val;
     }
+    function myFunc(val) {
+        var container = classConcatenator(val);
+        $("#insuranceContainer").children().hide();
+        $("."+container).show();
+    }
+
+    // function addInput(val){
+    //     $('#profile').append('<input type="hidden" name="languages" value="'+val+'" id="languages"/>');
+    // }
+
     function addInput(val){
-        $('#profile').append('<input type="hidden" name="languages" value="'+val+'" id="languages"/>');
+        if(val!== "no" &&  $("#" + val).length === 0){
+            $('#profile').append('<input type="hidden" name="languages" value="'+val+'" id="languages"/>');
+            $('#languageContainer').append('<button type="button" class="btn btn-primary"  id="'+val+'" style="margin-right: 8px">'+
+                val + '<span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle">'+'</i></span></button>');
+
+        }
     }
 
     function addInputSelect(){
         var insurance = $("#insurance").val();
-        var insurancePlan = $("#insurancePlan").val();
+        insurance = classConcatenator(insurance);
+        // var insurancePlan = $("#insurancePlan").val();
         alert(insurance);
         $('#profile').append('<input type="hidden" name="insurance" value="'+insurance+'" id="insurance"/>');
+
+        var selected = [];
+        $('.'+insurance+' input:checked').each(function() {
+            selected.push($(this).attr('value'));
+        });
+        alert(selected);
         // $('#profile').append('<input type="hidden" name="insurancePlan" value="'+insurancePlan+'" id="insurancePlan"/>');
     }
 
