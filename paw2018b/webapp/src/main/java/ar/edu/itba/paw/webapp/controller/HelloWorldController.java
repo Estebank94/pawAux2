@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,17 @@ public class HelloWorldController {
 
 		mav.addObject("insuranceList", searchService.listInsurances().get());
 		mav.addObject("specialtyList", searchService.listSpecialties().get());
+
+		String name = SecurityContextHolder.getContext().getAuthentication().getName();
+		if(name != "anonymousUser"){
+			/*TODO: TOASK: Si chequeamos con el taglib de spring security es necesario un double check?*/
+			//ver como resulto esto ..........
+
+			mav.addObject("loggedInName", name);
+			System.out.println(name);
+			System.out.println("hay alguien loggeado ");
+		}
+
 		return mav;
 	}
 
