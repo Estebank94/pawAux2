@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS information (
  );
 
 INSERT INTO doctor (firstName, lastName, sex, phoneNumber, address, licence, avatar, id, workingHours, district)
-VALUES ('Roberto', 'Rosa', 'M', '47777777', 'Arce 211', '1234', 'https://d1cesmq0xhh7we.cloudfront.net/724f4a59-0f34-4cbc-980f-766f4df17d9bcircle_medium__v1__.png', '1', 'lunes 9am', 'Palermo');
+VALUES ('Roberto Nicolas Agustin', 'Rosa', 'M', '47777777', 'Arce 211', '1234', 'https://d1cesmq0xhh7we.cloudfront.net/724f4a59-0f34-4cbc-980f-766f4df17d9bcircle_medium__v1__.png', '1', 'lunes 9am', 'Palermo');
 
 INSERT INTO doctor (firstName, lastName, sex, phoneNumber, address, licence, avatar, id, workingHours, district)
 VALUES ('Ramiro', 'Roca', 'M', '47777778', 'Maure 211', '4567',
@@ -84,10 +84,12 @@ INSERT INTO specialty (specialtyName, id) VALUES('ONCOLOGÍA', 555);
 INSERT INTO insurancePlan (insurancePlanName, id, insuranceid) VALUES ('Accord Salud', 124, 206);
 INSERT INTO insurancePlan (insurancePlanName, id, insuranceid) VALUES ('210', 125, 210);
 INSERT INTO insurancePlan (insurancePlanName, id, insuranceid) VALUES ('310', 126, 216);
+INSERT INTO insurancePlan (insurancePlanName, id, insuranceid) VALUES ('410', 127, 206);
 
 INSERT INTO medicalCare(doctorID, insurancePlanID) VALUES (1, 124);
 INSERT INTO medicalCare(doctorID, insurancePlanID) VALUES (2, 125);
 INSERT INTO medicalCare(doctorID, insurancePlanID) VALUES (3, 126);
+INSERT INTO medicalCare(doctorID, insurancePlanID) VALUES (3, 127);
 
 INSERT INTO information (doctorId, languages, education, certificate) VALUES (1, 'Ingles', 'UBA', 'Master');
 INSERT INTO information (doctorId, languages, education, certificate) VALUES (2, 'Ingles', 'UBA', 'Master');
