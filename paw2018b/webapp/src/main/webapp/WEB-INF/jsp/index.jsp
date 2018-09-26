@@ -46,15 +46,21 @@
                     <security:authorize access="isAuthenticated()">
                         <form:form action="${pageContext.request.contextPath}/logout" method="post">
                             <security:authentication property="principal.username" var="userName"/>
-                            <button class="btn btn-light" style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="submit">Logout <b>${userName}</b></button>
+                            <button class="btn btn-light" style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="submit">Cerrar Sesion <b>${userName}</b></button>
                         </form:form>
                     </security:authorize>
                 </div>
                 <hr>
-                    <%--<p>--%>
-                       <%--<a href="${pageContext.request.contextPath}/doctorPanel/">Doctor Panel</a>--%>
-                        <%--<a href="${pageContext.request.contextPath}/patientPanel/">Patient Panel</a>--%>
-                    <%--</p>--%>
+                    <security:authorize access="hasRole('DOCTOR')">
+                        <button class="btn btn-light btn-primary custom-btn" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/doctorPanel/'">
+                           Perfil Doctor
+                        </button>
+                    </security:authorize>
+                    <security:authorize access="hasRole('PACIENTE')">
+                        <button class="btn btn-light" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/patientPanel/'">
+                            Perfil Paciente
+                        </button>
+                    </security:authorize>
                 <hr>
             </div>
         </a>
