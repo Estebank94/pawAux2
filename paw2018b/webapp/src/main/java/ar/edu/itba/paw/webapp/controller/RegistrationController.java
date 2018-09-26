@@ -107,7 +107,7 @@ public class RegistrationController {
         Map<String, Set<String>> map = professionalForm.createMap(professionalForm.getInsurance(), professionalForm.getInsurancePlan());
 
         System.out.println(professionalForm.getEducation());
-        System.out.println(professionalForm.getCertificate());
+        System.out.println(professionalForm.getDescription());
         System.out.println("languages");
         for(String string : professionalForm.getLanguages()){
             System.out.println(string);

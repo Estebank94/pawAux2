@@ -39,8 +39,8 @@
         <br>
         <div>
             <label for="exampleFormControlTextarea1">Descripcion</label>
-            <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Describi tu completar..." path="certificate"/>
-            <form:errors path="certificate" cssStyle="color: crimson"  element="p"></form:errors>
+            <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Describi tu completar..." path="description"/>
+            <form:errors path="description" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
         <div>
