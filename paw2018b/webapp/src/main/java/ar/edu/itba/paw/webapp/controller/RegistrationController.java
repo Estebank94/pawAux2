@@ -47,6 +47,7 @@ public class RegistrationController {
             mav.addObject("professional", new ProfessionalForm());
             mav.addObject("insuranceList", searchService.listInsurances().get());
             mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
+            mav.addObject("specialtyList", searchService.listSpecialties().get());
 
             /*TODO: habria que agregarle un campo a este create doctor que se settee en profileNotCompleted*/
             /*TODO: manejar errores 500*/
