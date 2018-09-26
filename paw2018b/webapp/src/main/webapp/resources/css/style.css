@@ -95,6 +95,16 @@ p
   margin-right: 16px;
 }
 
+.avatar.medium
+{
+  width: 64px;
+  height: 64px;
+  margin-right: 16px;
+  margin-top: 0px;
+  margin-left: 16px;
+  margin-bottom: 0px;
+}
+
 .doctor-info-container
 {
   height: 180px;
@@ -403,4 +413,35 @@ h4
 .wrong {
   border-color: red;
 }
+
+.center-vertical
+{
+  display: flex;
+  justify-content: left; /* align horizontal */
+  align-items: center; /* align vertical */
+}
+
+h2
+{
+  font-size: 32px;
+  color: #0A2D44;
+  font-weight: bold;
+}
+
+.div-center {
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  display: table;
+}
+
+
 
