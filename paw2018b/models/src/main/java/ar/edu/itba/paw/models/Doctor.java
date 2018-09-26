@@ -2,10 +2,10 @@ package ar.edu.itba.paw.models;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * Created by estebankramer on 31/08/2018.
@@ -23,6 +23,8 @@ public class Doctor {
     Integer id;
     Description description;
     String phoneNumber;
+    //Map< DayOfWeek, List<WorkingHours>> workingHoursMap;
+    //Set<Appointment> appointments;
 
     @Autowired
     public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, String workingHours, Integer id, Description description, String phoneNumber) {
@@ -150,6 +152,41 @@ public class Doctor {
 
         return Objects.hash(getId());
     }
+
+    /*
+    public Map<LocalDate, List<Appointment>>getAvaiableAppointments(){
+        Map<LocalDate, List<Appointment>> map =new HashMap<>();
+        LocalDate today = LocalDate.now();
+
+        for (int i = 0; i<15; i++){
+            map.put(today.plusDays(i),generateAppointments(today.plusDays(i)));
+        }
+        return map;
+    }
+
+    private List<Appointment> generateAppointments(LocalDate date) {
+        List<WorkingHours> workingHours = workingHoursMap.get(date.getDayOfWeek());
+        List<Appointment> list = new ArrayList<>();
+        boolean flag;
+        int i;
+        for (WorkingHours workingHoursIterator: workingHours){
+            flag = true;
+            for (i = 0; flag; i++){
+                if (workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME*i).isAfter(workingHoursIterator.getFinishTime())){
+                    flag = false;
+                } else{
+                    Appointment dateAppointment = new Appointment(date,workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME*i));
+                    if (!appointments.contains(dateAppointment)){
+                        list.add(dateAppointment);
+                    }
+                }
+            }
+        }
+        Collections.sort(list);
+        return list;
+    }
+    */
+
 }
 
 
