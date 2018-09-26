@@ -13,5 +13,6 @@
 </head>
 <body>
 <h1>${errorMsg}</h1>
+<a href="/">Back to HomePage</a>
 </body>
 </html>
