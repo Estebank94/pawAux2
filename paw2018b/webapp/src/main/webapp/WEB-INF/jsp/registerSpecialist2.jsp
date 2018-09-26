@@ -208,7 +208,7 @@
         var insurance = $("#insurance").val();
         insurance = classConcatenator(insurance);
 
-        $('#profile').append('<input type="hidden" name="insurance" value="'+insurance+'" id="insurance"/>');
+        // $('#profile').append('<input type="hidden" name="insurance" value="'+insurance+'" id="insurance"/>');
 
         var selected = [];
         $('.'+insurance+' input:checked').each(function() {
@@ -218,7 +218,7 @@
         $('#profile').append('<input type="hidden" name="insurancePlan" value="'+selected+'" id="insurancePlan"/>');
 
         if(insurance!== "no" && $("#" + insurance).length === 0 && selected.length > 0){
-            $('#profile').append('<input type="hidden" name="languages" value="'+insurance+'" id="languages"/>');
+            $('#profile').append('<input type="hidden" name="insurance" value="'+insurance+'" id="insurance"/>');
             $('#addedInsurances').append('<button type="button" class="btn btn-primary"  id="'+insurance+'" style="margin-right: 8px; margin-bottom: 8px;" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">'+
                 $("#insurance").val() + '<span class="badge badge-light" style="margin-left: 8px; margin-right: 4px;">'+ selected.length +'</span><span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle">'+'</i></span></button>');
 

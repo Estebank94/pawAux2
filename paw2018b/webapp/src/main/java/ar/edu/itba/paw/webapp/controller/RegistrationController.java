@@ -96,14 +96,7 @@ public class RegistrationController {
             return showDoctorProfile(doctorId, professionalForm);
         }
 
-        Doctor doctor = doctorService.findDoctorById(doctorId).get();
-        System.out.println(doctor.getFirstName());
-        System.out.println(doctor.getId());
-
-//        doctorService.setDoctorInfo(doctorId,"" ,professionalForm.getInsurance(),"" ,professionalForm.getDescription());
-//
-//        Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance,
-//                List<WorkingHours > workingHours, Description description
+        Doctor doctorById = doctorService.findDoctorById(doctorId).get();
 
         Map<String, Set<String>> insurance = professionalForm.createMap(professionalForm.getInsurance(), professionalForm.getInsurancePlan());
 
@@ -111,13 +104,10 @@ public class RegistrationController {
 
         List<WorkingHours> workingHours = new ArrayList<>();
 
-        Doctor doctor2 = doctorService.setDoctorInfo(doctorId, professionalForm.getSpecialty(), insurance,workingHours ,description).get();
-        for(String string : professionalForm.getLanguages()){
-            System.out.println(string);
-        }
 
-        /*TODO: agregar setters a la informacion total del doctor*/
-        /*TODO: daos y binding de data a las tablas sobre la informacion puesta aca*/
+        Doctor doctorProfessional = doctorService.setDoctorInfo(doctorId, professionalForm.getSpecialty(), insurance,workingHours ,description).get();
+
+
         /*TODO: agregar boton de cancelar y volver al incio y mostrar mensaje en pantalla que esta registrado como profesional pero que todavia
          * no va a figurar en la lista de doctores porque no completo su perfil*/
 
