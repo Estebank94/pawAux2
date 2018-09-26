@@ -10,7 +10,7 @@
     <title>Waldoc</title>
     <meta name="description" content="Roughly 155 characters">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css"/>">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
@@ -39,8 +39,8 @@
         <br>
         <div>
             <label for="exampleFormControlTextarea1">Descripcion</label>
-            <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Describi tu completar..." path="description"/>
-            <form:errors path="description" cssStyle="color: crimson"  element="p"></form:errors>
+            <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Describi tu completar..." path="certificate"/>
+            <form:errors path="certificate" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
         <div>
@@ -52,7 +52,7 @@
         <div>
             <div>
                 <label for="languages">Idiomas</label>
-                <select class="custom-select" name="languages" id="languages" onchange="addInput(value, 'languageContainer')">
+                <select class="custom-select" name="languages" id="languages" onchange="addInput(value, 'languageContainer', 'languages')">
                     <option value="no" label="Idioma" selected="Idioma"/>
                     <option value="Ingles" label="Ingles" />
                     <option value="Italiano" label="Italiano" />
@@ -76,10 +76,10 @@
         <div>
             <div>
                 <label for="specialty">Especialidad</label>
-                <select id="specialty" class="custom-select" cssStyle="cursor: pointer;" onchange="addInput(value, 'addedSpecialties')">
-                    <option value="no" label="Prepaga" selected="Prepaga"/>
-                    <c:forEach items="${specialtyList}" var="specialtyName">
-                        <option value="${specialtyName.name}" label="${specialtyName.name}"/>
+                <select id="specialty" class="custom-select" cssStyle="cursor: pointer;" onchange="addInput(value, 'addedSpecialties', 'specialty')">
+                    <option value="noSpecialty" label="Especialidades" selected="Especialidades"/>
+                    <c:forEach items="${specialtyList}" var="specialty">
+                        <option value="${specialty.name}" label="${specialty.name}">
                     </c:forEach>
                 </select>
                 <%--FALTA AGREGAR VALIDACION--%>
@@ -185,6 +185,15 @@
         }
         return val;
     }
+
+    function idSlicer(val){
+        var index = val.indexOf(" ");
+        if(index > 0){
+            val = val.slice(index+1, val.length);
+        }
+        return val;
+    }
+
     function myFunc(val) {
         var container = classConcatenator(val);
         $("#insuranceContainer").children().hide();
@@ -195,10 +204,10 @@
     //     $('#profile').append('<input type="hidden" name="languages" value="'+val+'" id="languages"/>');
     // }
 
-    function addInput(val, container){
+    function addInput(val, container, name){
         if(val!== "no" &&  $("#" + val).length === 0){
-            $('#profile').append('<input type="hidden" name="languages" value="'+val+'" id="languages"/>');
-            $('#'+ container).append('<button type="button" class="btn btn-primary"  id="'+val+'" style="margin-right: 8px">'+
+            $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
+            $('#'+ container).append('<button type="button" class="btn btn-primary"  id="'+val+'" style="margin-right: 8px; margin-bottom: 8px">'+
                 val + '<span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle">'+'</i></span></button>');
 
         }
@@ -206,21 +215,20 @@
 
     function addInputSelect(){
         var insurance = $("#insurance").val();
+        var id = idSlicer(insurance);
         insurance = classConcatenator(insurance);
-
-        $('#profile').append('<input type="hidden" name="insurance" value="'+insurance+'" id="insurance"/>');
+        id+="badge";
 
         var selected = [];
         $('.'+insurance+' input:checked').each(function() {
             selected.push($(this).attr('value'));
         });
 
-        $('#profile').append('<input type="hidden" name="insurancePlan" value="'+selected+'" id="insurancePlan"/>');
-
-        if(insurance!== "no" && $("#" + insurance).length === 0 && selected.length > 0){
-            $('#profile').append('<input type="hidden" name="languages" value="'+insurance+'" id="languages"/>');
-            $('#addedInsurances').append('<button type="button" class="btn btn-primary"  id="'+insurance+'" style="margin-right: 8px; margin-bottom: 8px;" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">'+
-                $("#insurance").val() + '<span class="badge badge-light" style="margin-left: 8px; margin-right: 4px;">'+ selected.length +'</span><span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle">'+'</i></span></button>');
+        if(insurance!== "no" && $("#" + id).length === 0 ){
+            $('#profile').append('<input type="hidden" name="insurancePlan"  value="' + selected + '" id="insurancePlan"/>');
+            $('#profile').append('<input type="hidden" name="insurance" value="'+insurance+'" id="insurance"/>');
+            $('#addedInsurances').append('<button type="button" class="btn btn-primary" id="'+id+'" style="margin-right: 8px; margin-bottom: 8px;" onClick=>'+
+                insurance + '<span class="badge badge-light" style="margin-left: 8px; margin-right: 4px;">'+ selected.length +'</span><span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle">'+'</i></span></button>');
 
         }
     }

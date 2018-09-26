@@ -8,23 +8,23 @@ import java.util.Set;
 
 public class Description {
 
-    private Set<String> certificate;
+    private String certificate;
     private Set<String> languages;
-    private Set<String> education;
+    private String education;
     private Integer id;
 
     @Autowired
-    public Description(Set<String> certificate, Set<String> languages, Set <String> education){
+    public Description(String certificate, Set<String> languages, String education){
         this.certificate = certificate;
         this.languages = languages;
         this.education = education;
     }
 
-    public Set<String> getCertificate() {
+    public String getCertificate() {
         return certificate;
     }
 
-    public void setCertificate(Set<String> certificate) {
+    public void setCertificate(String certificate) {
         this.certificate = certificate;
     }
 
@@ -36,11 +36,11 @@ public class Description {
         this.languages = languages;
     }
 
-    public Set<String> getEducation() {
+    public String getEducation() {
         return education;
     }
 
-    public void setEducation(Set<String> education) {
+    public void setEducation(String education) {
         this.education = education;
     }
 

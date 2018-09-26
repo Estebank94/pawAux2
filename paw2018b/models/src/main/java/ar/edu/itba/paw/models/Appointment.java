@@ -7,11 +7,12 @@ public class Appointment implements Comparable<Appointment>{
     private Integer id;
     private LocalDate appointmentDay;
     private LocalTime appointmentTime;
+    private Integer clientId;
+    private Integer clientrole;
 
-    public Appointment(LocalDate appointmentDay, LocalTime appointmentTime, Integer id) {
+    public Appointment(LocalDate appointmentDay, LocalTime appointmentTime) {
         this.appointmentDay = appointmentDay;
         this.appointmentTime = appointmentTime;
-        this.id = id;
     }
 
     public Integer getId() {
@@ -63,6 +64,22 @@ public class Appointment implements Comparable<Appointment>{
             return -1;
         }
         return 0;
+    }
+
+    public Integer getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Integer clientId) {
+        this.clientId = clientId;
+    }
+
+    public Integer getClientrole() {
+        return clientrole;
+    }
+
+    public void setClientrole(Integer clientrole) {
+        this.clientrole = clientrole;
     }
 }
 

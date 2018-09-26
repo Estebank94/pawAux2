@@ -23,12 +23,16 @@ public class InsurancePlanDaoImpl implements InsurancePlanDao {
     @Override
     public Optional<List<Integer>> getInsurancesPlanIds(Map<String, Set<String>> insurance){
         Set<String> keySet = insurance.keySet();
+
         List<Integer> list = new ArrayList<>();
         for (String insuranceIterator: keySet){
             if (insurance.get(insuranceIterator).size() > 0){
-                list = getInsurancePlanId(insuranceIterator, insurance.get(insuranceIterator));
+                list.addAll(getInsurancePlanId(insuranceIterator, insurance.get(insuranceIterator)));
             }
         }
+
+
+
         if (list.isEmpty()){
             return Optional.empty();
         }
@@ -53,6 +57,7 @@ public class InsurancePlanDaoImpl implements InsurancePlanDao {
         for (String stringIterator: setToString) {
             if (isFirst){
                 sb.append("('");
+                isFirst = false;
             } else {
                 sb.append(",'");
             }

@@ -48,6 +48,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
         for (String stringIterator: setToString) {
             if (isFirst){
                 sb.append("('");
+                isFirst = false;
             } else {
                 sb.append(",'");
             }

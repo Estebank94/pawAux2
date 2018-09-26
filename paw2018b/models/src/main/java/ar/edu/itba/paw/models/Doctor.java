@@ -23,8 +23,8 @@ public class Doctor {
     Integer id;
     Description description;
     String phoneNumber;
-    //Map< DayOfWeek, List<WorkingHours>> workingHoursMap;
-    //Set<Appointment> appointments;
+    Map< DayOfWeek, List<WorkingHours>> workingHoursMap;
+    Set<Appointment> appointments;
 
     @Autowired
     public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, String workingHours, Integer id, Description description, String phoneNumber) {
@@ -153,8 +153,8 @@ public class Doctor {
         return Objects.hash(getId());
     }
 
-    /*
-    public Map<LocalDate, List<Appointment>>getAvaiableAppointments(){
+
+    public Map<LocalDate, List<Appointment>>getAvailableAppointments(){
         Map<LocalDate, List<Appointment>> map =new HashMap<>();
         LocalDate today = LocalDate.now();
 
@@ -175,7 +175,7 @@ public class Doctor {
                 if (workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME*i).isAfter(workingHoursIterator.getFinishTime())){
                     flag = false;
                 } else{
-                    Appointment dateAppointment = new Appointment(date,workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME*i));
+                    Appointment dateAppointment = new Appointment(date,workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i));
                     if (!appointments.contains(dateAppointment)){
                         list.add(dateAppointment);
                     }
@@ -185,7 +185,6 @@ public class Doctor {
         Collections.sort(list);
         return list;
     }
-    */
 
 }
 

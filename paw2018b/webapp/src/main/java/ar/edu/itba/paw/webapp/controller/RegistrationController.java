@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -79,8 +80,11 @@ public class RegistrationController {
         * no va a figurar en la lista de doctores porque no completo su perfil*/
 
         final ModelAndView mav = new ModelAndView("registerSpecialist2");
+
         mav.addObject("insuranceList", searchService.listInsurances().get());
         mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
+
+        mav.addObject("specialtyList", searchService.listSpecialties().get());
         return mav;
     }
 
@@ -92,21 +96,18 @@ public class RegistrationController {
             return showDoctorProfile(doctorId, professionalForm);
         }
 
-        Doctor doctor = doctorService.findDoctorById(doctorId).get();
-        System.out.println(doctor.getFirstName());
-        System.out.println(doctor.getId());
+        Doctor doctorById = doctorService.findDoctorById(doctorId).get();
 
-//        doctorService.setDoctorInfo(doctorId,"" ,professionalForm.getInsurance(),"" ,professionalForm.getDescription());
-//
-//        Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance,
-//                List<WorkingHours > workingHours, Description description
+        Map<String, Set<String>> insurance = professionalForm.createMap(professionalForm.getInsurance(), professionalForm.getInsurancePlan());
 
-        Map<String, Set<String>> map = professionalForm.createMap(professionalForm.getInsurance(), professionalForm.getInsurancePlan());
+        Description description = new Description(professionalForm.getCertificate(), professionalForm.getLanguages(), professionalForm.getEducation());
+
+        List<WorkingHours> workingHours = new ArrayList<>();
 
 
+        Doctor doctorProfessional = doctorService.setDoctorInfo(doctorId, professionalForm.getSpecialty(), insurance,workingHours ,description).get();
 
-        /*TODO: agregar setters a la informacion total del doctor*/
-        /*TODO: daos y binding de data a las tablas sobre la informacion puesta aca*/
+
         /*TODO: agregar boton de cancelar y volver al incio y mostrar mensaje en pantalla que esta registrado como profesional pero que todavia
          * no va a figurar en la lista de doctores porque no completo su perfil*/
 

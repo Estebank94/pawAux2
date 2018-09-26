@@ -154,10 +154,17 @@ import java.util.*;
 
         @Override
         public Optional<CompressedSearch> listDoctors() {
+            StringBuilder query = new StringBuilder();
+            query.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName,information.languages, information.certificate, information.education, phoneNumber ")
+                    .append("FROM doctor ")
+                    .append("LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID ")
+                    .append("LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  ")
+                    .append("LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id ")
+                    .append("LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID ")
+                    .append("LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ")
+                    .append("LEFT JOIN information ON doctor.id = information.doctorid");
 
-            String select =  "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName,information.languages, information.certificate, information.education, phoneNumber FROM doctor LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID LEFT JOIN information ON doctor.id = information.doctorid";
-
-            final CompressedSearch compressedSearch = jdbcTemplate.query(select, new CompressedExtractor());
+            final CompressedSearch compressedSearch = jdbcTemplate.query(query.toString(), new CompressedExtractor());
 
             if(compressedSearch.getDoctors().isEmpty()){
                 return Optional.empty();
@@ -389,18 +396,19 @@ import java.util.*;
             @Override
             public CompressedSearch extractData(ResultSet rs) throws SQLException {
                 CompressedSearch compressedSearch = new CompressedSearch();
-
+                int i = 0;
                 while (rs.next()) {
+                    i++;
                     boolean containsDoctor = false;
                     boolean containsInsurance = false;
                     for(Doctor existingDoctor : compressedSearch.getDoctors()){
                         if (existingDoctor.getId().equals(rs.getInt("id"))) {
                             containsDoctor = true;
                             existingDoctor.getSpecialty().add(rs.getString("specialtyName"));
-                            existingDoctor.getDescription().getCertificate().add(rs.getString("certificate"));
+//                            existingDoctor.getDescription().getCertificate().add(rs.getString("certificate"));
                             existingDoctor.getDescription().getLanguages().add(rs.getString("languages"));
-                            existingDoctor.getDescription().getEducation().add(rs.getString("education"));
-
+//                            existingDoctor.getDescription().getEducation().add(rs.getString("education"));
+                            existingDoctor.getInsurance().keySet().remove(null);
                             for(String insurance : existingDoctor.getInsurance().keySet()){
                                 if(insurance.equals(rs.getString("insuranceName"))){
                                     containsInsurance = true;
@@ -416,7 +424,7 @@ import java.util.*;
                             }
                         }
                     }
-                    if(!containsDoctor){
+                    if(!containsDoctor) {
                         Set<String> specialty = new HashSet<>();
 
                         specialty.add(rs.getString("specialtyName"));
@@ -424,26 +432,24 @@ import java.util.*;
                         Set<String> insurancePlanSet = new HashSet<>();
                         insurancePlanSet.add(rs.getString("insurancePlanName"));
 
-                        Set<String> certificate = new HashSet<>();
-                        certificate.add(rs.getString("certificate"));
+//                        Set<String> certificate = new HashSet<>();
+//                        certificate.add(rs.getString("certificate"));
                         Set<String> languages = new HashSet<>();
                         languages.add(rs.getString("languages"));
-                        Set<String> education = new HashSet<>();
-                        education.add(rs.getString("education"));
-                        Description description = new Description(certificate, languages, education);
+//                        Set<String> education = new HashSet<>();
+//                        education.add(rs.getString("education"));
+                        Description description = new Description(rs.getString("certificate"), languages, rs.getString("education"));
 
                         Map<String, Set<String>> insurancePlan = new HashMap<>();
-                        insurancePlan.put(rs.getString("insuranceName"),insurancePlanSet);
+                        insurancePlan.put(rs.getString("insuranceName"), insurancePlanSet);
 
-                        Doctor doctor =  new Doctor(rs.getString("firstName"), rs.getString("lastName"), rs.getString("sex"),
+                        Doctor doctor = new Doctor(rs.getString("firstName"), rs.getString("lastName"), rs.getString("sex"),
                                 rs.getString("address"), rs.getString("avatar"), specialty, insurancePlan, rs.getString("workingHours"), rs.getInt("id"), description, rs.getString("phoneNumber"));
 
                         compressedSearch.getDoctors().add(doctor);
                         compressedSearch.getSex().add(rs.getString("sex"));
                         compressedSearch.getInsurance().put(rs.getString("insuranceName"), insurancePlanSet);
                     }
-
-
 
                 }
 
