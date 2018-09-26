@@ -397,9 +397,9 @@ import java.util.*;
                         if (existingDoctor.getId().equals(rs.getInt("id"))) {
                             containsDoctor = true;
                             existingDoctor.getSpecialty().add(rs.getString("specialtyName"));
-                            existingDoctor.getDescription().getCertificate().add(rs.getString("certificate"));
+//                            existingDoctor.getDescription().getCertificate().add(rs.getString("certificate"));
                             existingDoctor.getDescription().getLanguages().add(rs.getString("languages"));
-                            existingDoctor.getDescription().getEducation().add(rs.getString("education"));
+//                            existingDoctor.getDescription().getEducation().add(rs.getString("education"));
 
                             for(String insurance : existingDoctor.getInsurance().keySet()){
                                 if(insurance.equals(rs.getString("insuranceName"))){
@@ -424,13 +424,13 @@ import java.util.*;
                         Set<String> insurancePlanSet = new HashSet<>();
                         insurancePlanSet.add(rs.getString("insurancePlanName"));
 
-                        Set<String> certificate = new HashSet<>();
-                        certificate.add(rs.getString("certificate"));
+//                        Set<String> certificate = new HashSet<>();
+//                        certificate.add(rs.getString("certificate"));
                         Set<String> languages = new HashSet<>();
                         languages.add(rs.getString("languages"));
-                        Set<String> education = new HashSet<>();
-                        education.add(rs.getString("education"));
-                        Description description = new Description(certificate, languages, education);
+//                        Set<String> education = new HashSet<>();
+//                        education.add(rs.getString("education"));
+                        Description description = new Description(rs.getString("certificate"), languages, rs.getString("education"));
 
                         Map<String, Set<String>> insurancePlan = new HashMap<>();
                         insurancePlan.put(rs.getString("insuranceName"),insurancePlanSet);

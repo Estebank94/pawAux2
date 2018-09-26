@@ -29,8 +29,8 @@ public class DoctorServiceImpl implements DoctorService {
     @Autowired
     private InsurancePlanDao insurancePlanDao;
 
-//    @Autowired
-//    private DescriptionDao descriptionDao;
+    @Autowired
+    private DescriptionDao descriptionDao;
 //
 //    @Autowired
 //    private WorkingHoursDao workingHoursDao;
@@ -127,12 +127,15 @@ public class DoctorServiceImpl implements DoctorService {
 //
        Optional<List<Integer>> insurancesPlanIds = insurancePlanDao.getInsurancesPlanIds(insurance);
         if (insurancesPlanIds.isPresent()){
+            for(Integer integer : insurancesPlanIds.get()){
+                System.out.println("insurancePlan "+integer);
+            }
             medicalcareDao.addMedicalCare(doctor.getId(), insurancesPlanIds.get());
         }
 //
-//        descriptionDao.addDescription(doctor.getId(), description);
+        descriptionDao.addDescription(doctor.getId(), description);
 //        workingHoursDao.addWorkingHour(doctor.getId(), workingHours);
-        return null;
+        return Optional.ofNullable(doctor);
     }
 }
 

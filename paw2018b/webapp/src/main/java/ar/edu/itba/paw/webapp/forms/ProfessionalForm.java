@@ -9,7 +9,7 @@ public class ProfessionalForm {
 
     private String avatar;
     @NotEmpty
-    private String description;
+    private String certificate;
     @NotEmpty
     private String education;
 
@@ -55,12 +55,12 @@ public class ProfessionalForm {
         this.avatar = avatar;
     }
 
-    public String getDescription() {
-        return description;
+    public String getCertificate() {
+        return certificate;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setCertificate(String certificate) {
+        this.certificate = certificate;
     }
 
     public String getEducation() {

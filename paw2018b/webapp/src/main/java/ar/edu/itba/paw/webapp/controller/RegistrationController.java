@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -104,19 +105,16 @@ public class RegistrationController {
 //        Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance,
 //                List<WorkingHours > workingHours, Description description
 
-        Map<String, Set<String>> map = professionalForm.createMap(professionalForm.getInsurance(), professionalForm.getInsurancePlan());
+        Map<String, Set<String>> insurance = professionalForm.createMap(professionalForm.getInsurance(), professionalForm.getInsurancePlan());
 
-        System.out.println(professionalForm.getEducation());
-        System.out.println(professionalForm.getDescription());
-        System.out.println("languages");
+        Description description = new Description(professionalForm.getCertificate(), professionalForm.getLanguages(), professionalForm.getEducation());
+
+        List<WorkingHours> workingHours = new ArrayList<>();
+
+        Doctor doctor2 = doctorService.setDoctorInfo(doctorId, professionalForm.getSpecialty(), insurance,workingHours ,description).get();
         for(String string : professionalForm.getLanguages()){
             System.out.println(string);
         }
-        System.out.println("specialty");
-        for(String string : professionalForm.getSpecialty()){
-            System.out.println(string);
-        }
-
 
         /*TODO: agregar setters a la informacion total del doctor*/
         /*TODO: daos y binding de data a las tablas sobre la informacion puesta aca*/
