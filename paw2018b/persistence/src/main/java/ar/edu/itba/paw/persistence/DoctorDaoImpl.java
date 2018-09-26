@@ -154,10 +154,17 @@ import java.util.*;
 
         @Override
         public Optional<CompressedSearch> listDoctors() {
+            StringBuilder query = new StringBuilder();
+            query.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName,information.languages, information.certificate, information.education, phoneNumber ")
+                    .append("FROM doctor ")
+                    .append("LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID ")
+                    .append("LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  ")
+                    .append("LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id ")
+                    .append("LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID ")
+                    .append("LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ")
+                    .append("LEFT JOIN information ON doctor.id = information.doctorid");
 
-            String select =  "SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName,information.languages, information.certificate, information.education, phoneNumber FROM doctor LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID LEFT JOIN information ON doctor.id = information.doctorid";
-
-            final CompressedSearch compressedSearch = jdbcTemplate.query(select, new CompressedExtractor());
+            final CompressedSearch compressedSearch = jdbcTemplate.query(query.toString(), new CompressedExtractor());
 
             if(compressedSearch.getDoctors().isEmpty()){
                 return Optional.empty();
