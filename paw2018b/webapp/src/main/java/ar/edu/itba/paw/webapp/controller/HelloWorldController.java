@@ -7,11 +7,10 @@ import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.UserService;
@@ -83,7 +82,7 @@ public class HelloWorldController {
 	@RequestMapping("/specialist/{doctorId}")
     public ModelAndView doctorDescription(@PathVariable Integer doctorId, @ModelAttribute("search") Search search){
 
-	    final ModelAndView mav = new ModelAndView("specialist");
+		final ModelAndView mav = new ModelAndView("specialist");
 
 
 	    Doctor doctor = doctorService.findDoctorById(doctorId).get();
