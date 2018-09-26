@@ -25,11 +25,11 @@ public class DescriptionDaoImpl implements DescriptionDao {
     }
 
     @Override
-    public Description createDescription(Integer doctorId, Set<String> certificate, Set<String> languages, Set<String> education){
+    public Description createDescription(Integer doctorId, String certificate, Set<String> languages, String education){
 
-        String certificateString = setToString(certificate);
-        String languagesString = setToString(certificate);
-        String educationString = setToString(certificate);
+        String certificateString = certificate;
+        String languagesString = setToString(languages);
+        String educationString = education;
 
         final Map<String,Object> entry = new HashMap<>();
         entry.put("certificate",certificateString);
@@ -46,14 +46,12 @@ public class DescriptionDaoImpl implements DescriptionDao {
 
     @Override
     public void addDescription(Integer doctorId, Description description) {
-        String certificateString = setToString(description.getCertificate());
         String languagesString = setToString(description.getLanguages());
-        String educationString = setToString(description.getEducation());
 
         final Map<String,Object> entry = new HashMap<>();
-        entry.put("certificate",certificateString);
+        entry.put("certificate",description.getCertificate());
         entry.put("languages",languagesString);
-        entry.put("education",educationString);
+        entry.put("education",description.getEducation());
         entry.put("doctorId",doctorId);
 
         final Number descriptionId = jdbcInsert.execute(entry);

@@ -87,9 +87,9 @@ public class HelloWorldController {
 
 
 	    Doctor doctor = doctorService.findDoctorById(doctorId).get();
-		doctor.getDescription().getCertificate().remove(null);
+//		doctor.getDescription().getCertificate().remove(null);
 		doctor.getDescription().getLanguages().remove(null);
-		doctor.getDescription().getEducation().remove(null);
+//		doctor.getDescription().getEducation().remove(null);
 
 
 		mav.addObject("doctor", doctor);
