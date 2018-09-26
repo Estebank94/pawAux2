@@ -39,8 +39,8 @@
         <br>
         <div>
             <label for="exampleFormControlTextarea1">Descripcion</label>
-            <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Describi tu completar..." path="description"/>
-            <form:errors path="description" cssStyle="color: crimson"  element="p"></form:errors>
+            <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Describi tu completar..." path="certificate"/>
+            <form:errors path="certificate" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
         <div>
@@ -52,7 +52,7 @@
         <div>
             <div>
                 <label for="languages">Idiomas</label>
-                <select class="custom-select" name="languages" id="languages" onchange="addInput(value, 'languageContainer')">
+                <select class="custom-select" name="languages" id="languages" onchange="addInput(value, 'languageContainer', 'languages')">
                     <option value="no" label="Idioma" selected="Idioma"/>
                     <option value="Ingles" label="Ingles" />
                     <option value="Italiano" label="Italiano" />
@@ -76,10 +76,10 @@
         <div>
             <div>
                 <label for="specialty">Especialidad</label>
-                <select id="specialty" class="custom-select" cssStyle="cursor: pointer;" onchange="addInput(value, 'addedSpecialties')">
-                    <option value="no" label="Prepaga" selected="Prepaga"/>
-                    <c:forEach items="${specialtyList}" var="specialtyName">
-                        <option value="${specialtyName.name}" label="${specialtyName.name}"/>
+                <select id="specialty" class="custom-select" cssStyle="cursor: pointer;" onchange="addInput(value, 'addedSpecialties', 'specialty')">
+                    <option value="noSpecialty" label="Especialidades" selected="Especialidades"/>
+                    <c:forEach items="${specialtyList}" var="specialty">
+                        <option value="${specialty.name}" label="${specialty.name}">
                     </c:forEach>
                 </select>
                 <%--FALTA AGREGAR VALIDACION--%>
@@ -195,9 +195,9 @@
     //     $('#profile').append('<input type="hidden" name="languages" value="'+val+'" id="languages"/>');
     // }
 
-    function addInput(val, container){
+    function addInput(val, container, name){
         if(val!== "no" &&  $("#" + val).length === 0){
-            $('#profile').append('<input type="hidden" name="languages" value="'+val+'" id="languages"/>');
+            $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
             $('#'+ container).append('<button type="button" class="btn btn-primary"  id="'+val+'" style="margin-right: 8px">'+
                 val + '<span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle">'+'</i></span></button>');
 

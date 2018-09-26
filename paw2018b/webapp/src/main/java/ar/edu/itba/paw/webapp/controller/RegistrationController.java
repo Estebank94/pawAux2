@@ -79,8 +79,11 @@ public class RegistrationController {
         * no va a figurar en la lista de doctores porque no completo su perfil*/
 
         final ModelAndView mav = new ModelAndView("registerSpecialist2");
+
         mav.addObject("insuranceList", searchService.listInsurances().get());
         mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
+
+        mav.addObject("specialtyList", searchService.listSpecialties().get());
         return mav;
     }
 
@@ -103,6 +106,16 @@ public class RegistrationController {
 
         Map<String, Set<String>> map = professionalForm.createMap(professionalForm.getInsurance(), professionalForm.getInsurancePlan());
 
+        System.out.println(professionalForm.getEducation());
+        System.out.println(professionalForm.getCertificate());
+        System.out.println("languages");
+        for(String string : professionalForm.getLanguages()){
+            System.out.println(string);
+        }
+        System.out.println("specialty");
+        for(String string : professionalForm.getSpecialty()){
+            System.out.println(string);
+        }
 
 
         /*TODO: agregar setters a la informacion total del doctor*/

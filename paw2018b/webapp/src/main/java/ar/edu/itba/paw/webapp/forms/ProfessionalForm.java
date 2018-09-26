@@ -9,13 +9,23 @@ public class ProfessionalForm {
 
     private String avatar;
     @NotEmpty
-    private String description;
+    private String certificate;
     @NotEmpty
     private String education;
 
     private Set<String> languages;
     private List<String> insurance;
     private List<Set<String>> insurancePlan;
+    private Set<String> specialty;
+
+    public Set<String> getSpecialty() {
+        return specialty;
+    }
+
+    public void setSpecialty(Set<String> specialty) {
+        this.specialty = specialty;
+    }
+
     @NotEmpty
     private String workingHoursStart;
     @NotEmpty
