@@ -47,7 +47,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findUserById(Integer id) {
-        final List<User> list = jdbcTemplate.query("SELEC T * FROM user WHERE id = ?", ROW_MAPPER, id);
+        final List<User> list = jdbcTemplate.query("SELECT * FROM user WHERE id = ?", ROW_MAPPER, id);
 
         if (list.isEmpty()) {
             return Optional.empty();
@@ -55,4 +55,17 @@ public class UserDaoImpl implements UserDao {
 
         return Optional.of(list.get(0));
     }
+
+    @Override
+    public Optional<User> findUserByEmail(String email) {
+
+        final List<User> list = jdbcTemplate.query("SELECT * FROM user WHERE email = ?", ROW_MAPPER, email);
+
+        if (list.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(list.get(0));
+    }
+
 }
