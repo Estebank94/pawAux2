@@ -76,6 +76,7 @@ CREATE TABLE IF NOT EXISTS workingHour(
 CREATE TABLE IF NOT EXISTS appointment(
     doctorId integer,
     clientId integer,
+    clientRole varchar(10),
     appointmentDay varchar(20),
     appointmentTime varchar(20),
     id SERIAL PRIMARY KEY
