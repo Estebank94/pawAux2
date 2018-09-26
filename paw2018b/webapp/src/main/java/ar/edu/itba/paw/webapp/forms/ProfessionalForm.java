@@ -9,7 +9,7 @@ public class ProfessionalForm {
 
     private String avatar;
     @NotEmpty
-    private String certificate;
+    private String description;
     @NotEmpty
     private String education;
 
