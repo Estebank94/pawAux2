@@ -103,17 +103,36 @@
                         </div>
                     </div>
                 </div>
-                <nav id="navbar-example2" class="navbar scroll-spy navbar-light bg-white">
-                    <ul class="nav nav-pills center-text-horizontaly">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#information">Informacion</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#reviews">Reseñas</a>
-                        </li>
-                    </ul>
-                </nav>
-                <div data-spy="scroll" data-target="#navbar-example2" data-offset="0">
+                <div>
+                    <div style="background-color: #F3F3F4; border-radius: 5px; padding: 16px; padding-bottom: 0px; margin-top: 32px; margin-bottom:32px">
+                        <h3 class="doctor-name">Reservá un Turno</h3>
+                        <form>
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <label for="exampleInputEmail1">Día</label>
+                                    <select class="custom-select" id="ubicacion">
+                                        <option selected>Elegí el Dia</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-5">
+                                    <label for="exampleInputEmail1">Hora</label>
+                                    <select class="custom-select" id="ubicacion">
+                                        <option selected>Elegí el Horario</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="submit" class="btn btn-primary" style="position: absolute; bottom: 0;">Reservar Turno</button>
+                                </div>
+                            </div>
+                            <br>
+                        </form>
+                    </div>
                     <h3 id="information">Información Profesional</h3>
                     <br>
                     <br>
