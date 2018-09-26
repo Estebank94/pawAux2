@@ -8,9 +8,8 @@ import ar.edu.itba.paw.models.User;
 @Service
 public class AnotherUserServiceImpl implements UserService {
 
-	public User findById(String id) {
-		// TODO Auto-generated method stub
+	@Override
+	public User findById(Integer id) {
 		return null;
 	}
-
 }
