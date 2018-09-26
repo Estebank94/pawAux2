@@ -38,6 +38,6 @@ public class AppointmentDaoImpl implements AppointmentDao {
         entry.put("clientrole",clientrole);
 
         final Number appointmentId = jdbcInsert.executeAndReturnKey(entry);
-        return Optional.ofNullable(new Appointment(appointmentDay, appointmentTime, new Integer(appointmentId.intValue())));
+        return Optional.ofNullable(new Appointment(appointmentDay, appointmentTime));
     }
 }

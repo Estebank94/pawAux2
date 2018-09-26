@@ -175,7 +175,7 @@ public class Doctor {
                 if (workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME*i).isAfter(workingHoursIterator.getFinishTime())){
                     flag = false;
                 } else{
-                    Appointment dateAppointment = new Appointment(date,workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME*i));
+                    Appointment dateAppointment = new Appointment(date,workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i));
                     if (!appointments.contains(dateAppointment)){
                         list.add(dateAppointment);
                     }
