@@ -389,8 +389,9 @@ import java.util.*;
             @Override
             public CompressedSearch extractData(ResultSet rs) throws SQLException {
                 CompressedSearch compressedSearch = new CompressedSearch();
-
+                int i = 0;
                 while (rs.next()) {
+                    i++;
                     boolean containsDoctor = false;
                     boolean containsInsurance = false;
                     for(Doctor existingDoctor : compressedSearch.getDoctors()){
@@ -400,7 +401,7 @@ import java.util.*;
 //                            existingDoctor.getDescription().getCertificate().add(rs.getString("certificate"));
                             existingDoctor.getDescription().getLanguages().add(rs.getString("languages"));
 //                            existingDoctor.getDescription().getEducation().add(rs.getString("education"));
-
+                            existingDoctor.getInsurance().keySet().remove(null);
                             for(String insurance : existingDoctor.getInsurance().keySet()){
                                 if(insurance.equals(rs.getString("insuranceName"))){
                                     containsInsurance = true;
@@ -416,7 +417,7 @@ import java.util.*;
                             }
                         }
                     }
-                    if(!containsDoctor){
+                    if(!containsDoctor) {
                         Set<String> specialty = new HashSet<>();
 
                         specialty.add(rs.getString("specialtyName"));
@@ -433,17 +434,15 @@ import java.util.*;
                         Description description = new Description(rs.getString("certificate"), languages, rs.getString("education"));
 
                         Map<String, Set<String>> insurancePlan = new HashMap<>();
-                        insurancePlan.put(rs.getString("insuranceName"),insurancePlanSet);
+                        insurancePlan.put(rs.getString("insuranceName"), insurancePlanSet);
 
-                        Doctor doctor =  new Doctor(rs.getString("firstName"), rs.getString("lastName"), rs.getString("sex"),
+                        Doctor doctor = new Doctor(rs.getString("firstName"), rs.getString("lastName"), rs.getString("sex"),
                                 rs.getString("address"), rs.getString("avatar"), specialty, insurancePlan, rs.getString("workingHours"), rs.getInt("id"), description, rs.getString("phoneNumber"));
 
                         compressedSearch.getDoctors().add(doctor);
                         compressedSearch.getSex().add(rs.getString("sex"));
                         compressedSearch.getInsurance().put(rs.getString("insuranceName"), insurancePlanSet);
                     }
-
-
 
                 }
 
