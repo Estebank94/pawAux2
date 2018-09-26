@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.UserService;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.*;
 
