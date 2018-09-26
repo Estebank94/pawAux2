@@ -154,6 +154,7 @@
                             <option value="1">7</option>
                             <option value="2">8</option>
                             <option value="3">9</option>
+                            <option value="3">10</option>
                         </form:select>
                         <form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>
                     </div>
