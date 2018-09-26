@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 @Controller
@@ -100,7 +101,7 @@ public class RegistrationController {
 //        Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance,
 //                List<WorkingHours > workingHours, Description description
 
-        Map<String, List<String>> map = professionalForm.createMap(professionalForm.getInsurance(), professionalForm.getInsurancePlan());
+        Map<String, Set<String>> map = professionalForm.createMap(professionalForm.getInsurance(), professionalForm.getInsurancePlan());
 
 
 
