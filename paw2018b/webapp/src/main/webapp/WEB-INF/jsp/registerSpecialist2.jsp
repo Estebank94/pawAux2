@@ -199,7 +199,7 @@
             selected.push($(this).attr('value'));
         });
         alert(selected);
-        // $('#profile').append('<input type="hidden" name="insurancePlan" value="'+insurancePlan+'" id="insurancePlan"/>');
+        $('#profile').append('<input type="hidden" name="insurancePlan" value="'+selected+'" id="insurancePlan"/>');
     }
 
 </script>

@@ -27,6 +27,7 @@
                 <div class="dropdown">
                     <%--<c:if test="${loggedInName != null}">--%>
                     <%--</c:if>--%>
+                    <security:authorize access="!isAuthenticated()">
                     <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Registrate
                     </button>
@@ -34,6 +35,7 @@
                         <button class="dropdown-item" type="button" onclick="window.location='/showDoctorRegistration'">Registrate como paciente</button>
                         <button class="dropdown-item" type="button" onclick="window.location='/showDoctorRegistration'">Registrate como especialista</button>
                     </div>
+                    </security:authorize>
                 </div>
                 <div>
                     <security:authorize access="!isAuthenticated()">

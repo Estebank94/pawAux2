@@ -4,7 +4,9 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Objects;
 
-public class WorkingHours {
+
+public class WorkingHours{
+    public static final int APPOINTMENTTIME_TIME = 30;
     private DayOfWeek dayOfWeek;
     private LocalTime startTime;
     private LocalTime finishTime;
@@ -39,6 +41,7 @@ public class WorkingHours {
         this.finishTime = finishTime;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -53,4 +56,5 @@ public class WorkingHours {
     public int hashCode() {
         return Objects.hash(dayOfWeek, startTime, finishTime);
     }
+
 }
