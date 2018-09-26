@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.forms;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,8 +17,8 @@ public class ProfessionalForm {
     private String education;
 
     private Set<String> languages;
-    private Set<String> insurance;
-    private List<String> insurancePlan;
+    private List<String> insurance;
+    private List<List<String>> insurancePlan;
     @NotEmpty
     private String workingHoursStart;
     @NotEmpty
@@ -71,21 +72,31 @@ public class ProfessionalForm {
         this.languages = languages;
     }
 
-    public Set<String> getInsurance() {
+    public List<String> getInsurance() {
         return insurance;
     }
 
-    public void setInsurance(Set<String> insurance) {
+    public void setInsurance(List<String> insurance) {
         this.insurance = insurance;
     }
 
-    public List<String>  getInsurancePlan() {
+    public List<List<String>>  getInsurancePlan() {
         return insurancePlan;
     }
 
-    public void setInsurancePlan(List<String>  insurancePlan) {
+    public void setInsurancePlan(List<List<String>>  insurancePlan) {
         this.insurancePlan = insurancePlan;
     }
 
+    public Map<String, List<String>> createMap(List<String> insurance, List<List<String>> insurancePlan) {
+
+        Map<String, List<String>> map = new HashMap<>();
+
+        for(int i = 0; i<insurance.size(); i++){
+            map.put(insurance.get(i), insurancePlan.get(i));
+        }
+
+        return map;
+    }
 }
 

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -98,13 +99,9 @@ public class RegistrationController {
 //        Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance,
 //                List<WorkingHours > workingHours, Description description
 
-        for(String string : professionalForm.getInsurance()){
-            System.out.println(string);
-        }
+        Map<String, List<String>> map = professionalForm.createMap(professionalForm.getInsurance(), professionalForm.getInsurancePlan());
 
-        for(String string2 : professionalForm.getInsurancePlan()){
-            System.out.println(string2);
-        }
+
 
         /*TODO: agregar setters a la informacion total del doctor*/
         /*TODO: daos y binding de data a las tablas sobre la informacion puesta aca*/
