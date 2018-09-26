@@ -5,20 +5,21 @@ import ar.edu.itba.paw.models.Description;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+@Repository
 public class DescriptionDaoImpl implements DescriptionDao {
 
     private SimpleJdbcInsert jdbcInsert;
 
-
     @Autowired
     public DescriptionDaoImpl(final DataSource ds){
-        jdbcInsert = new SimpleJdbcInsert((JdbcTemplate) ds)
+        jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("information")
                 .usingColumns("doctorID","certificate","languages","education")
                 .usingGeneratedKeyColumns("id");
