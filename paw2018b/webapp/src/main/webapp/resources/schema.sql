@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS review(
     stars integer,
     doctorID integer,
     userID integer,
+    userrole varchar (10),
     daytime varchar (20),
     id SERIAL PRIMARY KEY,
     FOREIGN KEY (doctorID) REFERENCES doctor(id)
@@ -62,29 +63,22 @@ CREATE TABLE IF NOT EXISTS information (
     FOREIGN KEY (doctorID) REFERENCES doctor(id)
 );
 
-/*
 
 CREATE TABLE IF NOT EXISTS workingHour(
     doctorId integer,
     starttime varchar(10),
     finishtime varchar(10),
-    dayweek varchar(20),
-    id SERIAL PRIMARY KEY
+    dayweek integer,
+    id SERIAL PRIMARY KEY,
     FOREIGN KEY (doctorId) REFERENCES doctor(id)
 );
 
 CREATE TABLE IF NOT EXISTS appointment(
     doctorId integer,
     clientId integer,
-    clientRole varchar(10),
-    appointmentDay varchar(20),
-    appointmentTime varchar(20),
-    id SERIAL PRIMARY KEY
+    clientrole varchar(10),
+    appointmentDay varchar(10),
+    appointmentTime varchar(10),
+    id SERIAL PRIMARY KEY,
     FOREIGN KEY (doctorId) REFERENCES doctor(id)
-    FOREIGN KEY (clientId) REFERENCES doctor(id)
-
 );
-
-CREATE TABLE IF NOT EXISTS
-
-*/

@@ -28,7 +28,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
         .usingGeneratedKeyColumns("id");
     }
     @Override
-    public Appointment createAppointment(Integer doctorId, Integer clientId, LocalDate appointmentDay, LocalTime appointmentTime, String clientrole) {
+    public Optional<Appointment> createAppointment(Integer doctorId, Integer clientId, LocalDate appointmentDay, LocalTime appointmentTime, String clientrole) {
         final Map<String,Object> entry = new HashMap<>();
 
         entry.put("doctorId",doctorId);
@@ -38,7 +38,6 @@ public class AppointmentDaoImpl implements AppointmentDao {
         entry.put("clientrole",clientrole);
 
         final Number appointmentId = jdbcInsert.executeAndReturnKey(entry);
-
-        return new Appointment(appointmentDay, appointmentTime, new Integer(appointmentId.intValue()));
+        return Optional.ofNullable(new Appointment(appointmentDay, appointmentTime, new Integer(appointmentId.intValue())));
     }
 }

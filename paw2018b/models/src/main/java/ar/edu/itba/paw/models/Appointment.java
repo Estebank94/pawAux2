@@ -8,9 +8,10 @@ public class Appointment implements Comparable<Appointment>{
     private LocalDate appointmentDay;
     private LocalTime appointmentTime;
 
-    public Appointment(LocalDate appointmentDay, LocalTime appointmentTime) {
+    public Appointment(LocalDate appointmentDay, LocalTime appointmentTime, Integer id) {
         this.appointmentDay = appointmentDay;
         this.appointmentTime = appointmentTime;
+        this.id = id;
     }
 
     public Integer getId() {
