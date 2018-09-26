@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body class="body-background">
 <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
@@ -51,7 +52,7 @@
         <div>
             <div>
                 <label for="languages">Idiomas</label>
-                <select class="custom-select" name="languages" id="languages" onchange="addInput(value)">
+                <select class="custom-select" name="languages" id="languages" onchange="addInput(value, 'languageContainer')">
                     <option value="no" label="Idioma" selected="Idioma"/>
                     <option value="Ingles" label="Ingles" />
                     <option value="Italiano" label="Italiano" />
@@ -64,9 +65,31 @@
             <br>
             <div>
                 <div>
+                    <br>
                     <label>Estos son los idiomas que agregaste por ahora:</label>
                     <div class="row container" id="languageContainer">
                     </div>
+                </div>
+            </div>
+        </div>
+        <hr style="border-top: 1px solid #D8D8D8 !important;">
+        <div>
+            <div>
+                <label for="specialty">Especialidad</label>
+                <select id="specialty" class="custom-select" cssStyle="cursor: pointer;" onchange="addInput(value, 'addedSpecialties')">
+                    <option value="no" label="Prepaga" selected="Prepaga"/>
+                    <c:forEach items="${specialtyList}" var="specialtyName">
+                        <option value="${specialtyName.name}" label="${specialtyName.name}"/>
+                    </c:forEach>
+                </select>
+                <%--FALTA AGREGAR VALIDACION--%>
+                <%--<form:errors path="" cssStyle="color: crimson"  element="p"></form:errors>--%>
+            </div>
+            <br>
+            <div>
+                <br>
+                <label>Estas son las especialidades que agregaste por ahora:</label>
+                <div id="addedSpecialties" class="row container">
                 </div>
             </div>
         </div>
@@ -102,16 +125,9 @@
                     <br>
                 </div>
                 <div>
+                    <br>
                     <label>Estas son las obras sociales que agregaste por ahora:</label>
-                    <div class="row container">
-                        <button type="button" class="btn btn-primary" style="margin-right: 8px">
-                            OSDE <span class="badge badge-light" style="margin-right: 8px">3</span> <span><i class="fas fa-times-circle"></i></span>
-                            <span class="sr-only">unread messages</span>
-                        </button>
-                        <button type="button" class="btn btn-primary">
-                            Swiss Medical <span class="badge badge-light" style="margin-right: 8px">5</span> <span><i class="fas fa-times-circle"></i></span>
-                            <span class="sr-only">unread messages</span>
-                        </button>
+                    <div id="addedInsurances" class="row container">
                     </div>
                 </div>
             </div>
@@ -138,6 +154,7 @@
                             <option value="1">7</option>
                             <option value="2">8</option>
                             <option value="3">9</option>
+                            <option value="3">10</option>
                         </form:select>
                         <form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>
                     </div>
@@ -153,7 +170,7 @@
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
 
     function classConcatenator(val){
@@ -178,10 +195,10 @@
     //     $('#profile').append('<input type="hidden" name="languages" value="'+val+'" id="languages"/>');
     // }
 
-    function addInput(val){
+    function addInput(val, container){
         if(val!== "no" &&  $("#" + val).length === 0){
             $('#profile').append('<input type="hidden" name="languages" value="'+val+'" id="languages"/>');
-            $('#languageContainer').append('<button type="button" class="btn btn-primary"  id="'+val+'" style="margin-right: 8px">'+
+            $('#'+ container).append('<button type="button" class="btn btn-primary"  id="'+val+'" style="margin-right: 8px">'+
                 val + '<span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle">'+'</i></span></button>');
 
         }
@@ -190,18 +207,25 @@
     function addInputSelect(){
         var insurance = $("#insurance").val();
         insurance = classConcatenator(insurance);
-        // var insurancePlan = $("#insurancePlan").val();
-        alert(insurance);
+
         $('#profile').append('<input type="hidden" name="insurance" value="'+insurance+'" id="insurance"/>');
 
         var selected = [];
         $('.'+insurance+' input:checked').each(function() {
             selected.push($(this).attr('value'));
         });
-        alert(selected);
+
         $('#profile').append('<input type="hidden" name="insurancePlan" value="'+selected+'" id="insurancePlan"/>');
+
+        if(insurance!== "no" && $("#" + insurance).length === 0 && selected.length > 0){
+            $('#profile').append('<input type="hidden" name="languages" value="'+insurance+'" id="languages"/>');
+            $('#addedInsurances').append('<button type="button" class="btn btn-primary"  id="'+insurance+'" style="margin-right: 8px; margin-bottom: 8px;" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">'+
+                $("#insurance").val() + '<span class="badge badge-light" style="margin-left: 8px; margin-right: 4px;">'+ selected.length +'</span><span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle">'+'</i></span></button>');
+
+        }
     }
 
 </script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>
 </html>
