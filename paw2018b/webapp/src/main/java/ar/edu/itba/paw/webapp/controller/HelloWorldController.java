@@ -35,9 +35,8 @@ public class HelloWorldController {
 	public ModelAndView helloWorld() {
 		final ModelAndView mav = new ModelAndView("index");
 		mav.addObject("search", new Search());
-
-		mav.addObject("insuranceList", searchService.listInsurances().get());
-		mav.addObject("specialtyList", searchService.listSpecialties().get());
+		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
+		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
 
 		String name = SecurityContextHolder.getContext().getAuthentication().getName();
 		if(name != "anonymousUser"){
@@ -72,8 +71,8 @@ public class HelloWorldController {
 		}
 
 		mav.addObject("doctorList", doctorsList);
-		mav.addObject("insuranceList", searchService.listInsurances().get());
-		mav.addObject("specialtyList", searchService.listSpecialties().get());
+		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
+		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
 		mav.addObject("sexList", compressedSearch.get().getSex());
 		mav.addObject("insuranceNameList", compressedSearch.get().getInsurance());
 		mav.addObject("previousSearch", theSearch);
@@ -95,7 +94,7 @@ public class HelloWorldController {
 
 		mav.addObject("doctor", doctor);
 		mav.addObject("insuranceNameList", doctor.getInsurance());
-        mav.addObject("insuranceList", searchService.listInsurances().get());
+        mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 
 	    return mav;
     }

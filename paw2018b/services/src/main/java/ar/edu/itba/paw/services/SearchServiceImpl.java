@@ -26,6 +26,16 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    public Optional<List<ListItem>> listInsurancesWithDoctors() {
+        return searchDao.listInsurancesWithDoctors();
+    }
+
+    @Override
+    public Optional<List<ListItem>> listSpecialtiesWithDoctors() {
+        return searchDao.listSpecialtiesWithDoctors();
+    }
+
+    @Override
     public Optional<List<ListItem>> listZones() {
         return null;
     }
