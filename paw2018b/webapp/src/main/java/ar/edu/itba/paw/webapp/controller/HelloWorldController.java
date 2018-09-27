@@ -5,6 +5,8 @@ import ar.edu.itba.paw.interfaces.SearchService;
 import ar.edu.itba.paw.models.CompressedSearch;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Search;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,8 @@ import java.util.*;
 
 @Controller
 public class HelloWorldController {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldController.class);
 	
 	 @Autowired
 	 @Qualifier("userServiceImpl")

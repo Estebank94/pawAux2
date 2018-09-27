@@ -10,6 +10,8 @@ import ar.edu.itba.paw.models.WorkingHours;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
 import com.sun.xml.internal.bind.v2.TODO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -28,6 +30,8 @@ import java.util.Set;
 
 @Controller
 public class RegistrationController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationController.class);
 
     @Autowired
     private SearchService searchService;
