@@ -185,6 +185,15 @@
         }
         return val;
     }
+
+    function idSlicer(val){
+        var index = val.indexOf(" ");
+        if(index > 0){
+            val = val.slice(index+1, val.length);
+        }
+        return val;
+    }
+
     function myFunc(val) {
         var container = classConcatenator(val);
         $("#insuranceContainer").children().hide();
@@ -198,7 +207,7 @@
     function addInput(val, container, name){
         if(val!== "no" &&  $("#" + val).length === 0){
             $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
-            $('#'+ container).append('<button type="button" class="btn btn-primary"  id="'+val+'" style="margin-right: 8px">'+
+            $('#'+ container).append('<button type="button" class="btn btn-primary"  id="'+val+'" style="margin-right: 8px; margin-bottom: 8px">'+
                 val + '<span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle">'+'</i></span></button>');
 
         }
@@ -206,21 +215,20 @@
 
     function addInputSelect(){
         var insurance = $("#insurance").val();
+        var id = idSlicer(insurance);
         insurance = classConcatenator(insurance);
-
-        // $('#profile').append('<input type="hidden" name="insurance" value="'+insurance+'" id="insurance"/>');
+        id+="badge";
 
         var selected = [];
         $('.'+insurance+' input:checked').each(function() {
             selected.push($(this).attr('value'));
         });
 
-        $('#profile').append('<input type="hidden" name="insurancePlan" value="'+selected+'" id="insurancePlan"/>');
-
-        if(insurance!== "no" && $("#" + insurance).length === 0 && selected.length > 0){
+        if(insurance!== "no" && $("#" + id).length === 0 ){
+            $('#profile').append('<input type="hidden" name="insurancePlan"  value="' + selected + '" id="insurancePlan"/>');
             $('#profile').append('<input type="hidden" name="insurance" value="'+insurance+'" id="insurance"/>');
-            $('#addedInsurances').append('<button type="button" class="btn btn-primary"  id="'+insurance+'" style="margin-right: 8px; margin-bottom: 8px;" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom">'+
-                $("#insurance").val() + '<span class="badge badge-light" style="margin-left: 8px; margin-right: 4px;">'+ selected.length +'</span><span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle">'+'</i></span></button>');
+            $('#addedInsurances').append('<button type="button" class="btn btn-primary" id="'+id+'" style="margin-right: 8px; margin-bottom: 8px;" onClick=>'+
+                insurance + '<span class="badge badge-light" style="margin-left: 8px; margin-right: 4px;">'+ selected.length +'</span><span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle">'+'</i></span></button>');
 
         }
     }
