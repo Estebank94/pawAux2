@@ -22,8 +22,9 @@ public class ErrorController {
     public ModelAndView error404(){
         return new ModelAndView("404");
     }
+    //TODO: Filtro para manejar exepciones un internal server
 
-//    https://www.baeldung.com/custom-error-page-spring-mvc
+////    https://www.baeldung.com/custom-error-page-spring-mvc
 //    @RequestMapping(value = "errors", method = RequestMethod.GET)
 //    public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
 //
