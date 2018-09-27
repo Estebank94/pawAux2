@@ -311,9 +311,21 @@ import java.util.*;
             if(compressedSearch.getDoctors().isEmpty()){
                 return Optional.empty();
             }
-
+           // compressedSearch.getDoctors().get(0).setAppointments(findDoctorAppointmentsById(id));
             return Optional.of(compressedSearch.getDoctors().get(0));
         }
+
+        /*
+        private Set<Appointment> findDoctorAppointmentsById(Integer id){
+            Set<Appointment> appointmentSet = new HashSet<>();
+            StringBuilder query = new StringBuilder();
+            query.append("SELECT doctorid, userid, userrole, stars, description, daytime ")
+                    .append("FROM doctor")
+                    .append("JOIN review");
+            return null;
+        }
+        */
+
 
 //    public String generateWhere(Search search) {
 //            String where = "WHERE (";
@@ -425,7 +437,7 @@ import java.util.*;
                                 compressedSearch.getInsurance().put(rs.getString("insuranceName"), insurancePlans);
                             }
 
-                            Map<DayOfWeek,List<WorkingHours>> whmap = existingDoctor.getWorkingHoursMap();
+                            Map<DayOfWeek,List<WorkingHours>> whmap = existingDoctor.getWorkingHours();
                             if (rs.getInt("dayweek")!= 0) {
                                 DayOfWeek dayOfWeek = DayOfWeek.of(rs.getInt("dayweek"));
                                 LocalTime st = LocalTime.parse(rs.getString("starttime"));
@@ -434,7 +446,7 @@ import java.util.*;
                                 if (!whmap.containsKey(dayOfWeek)) {
                                     List<WorkingHours> workingHours = new ArrayList<>();
                                     workingHours.add(wh);
-                                    existingDoctor.getWorkingHoursMap().put(dayOfWeek, workingHours);
+                                    existingDoctor.getWorkingHours().put(dayOfWeek, workingHours);
                                 } else if (whmap.get(dayOfWeek).contains(wh)) {
                                     whmap.get(dayOfWeek).add(wh);
                                 }
@@ -448,6 +460,9 @@ import java.util.*;
 
                         Set<String> insurancePlanSet = new HashSet<>();
                         insurancePlanSet.add(rs.getString("insurancePlanName"));
+
+
+
 
 //                        Set<String> certificate = new HashSet<>();
 //                        certificate.add(rs.getString("certificate"));

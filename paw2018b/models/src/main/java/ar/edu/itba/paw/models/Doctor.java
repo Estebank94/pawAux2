@@ -25,6 +25,7 @@ public class Doctor {
     String phoneNumber;
     Map< DayOfWeek, List<WorkingHours>> workingHours;
     Set<Appointment> appointments;
+    List<Review> reviews;
 
 
 
@@ -175,7 +176,7 @@ public class Doctor {
     }
 
     private List<Appointment> generateAppointments(LocalDate date) {
-        List<WorkingHours> workingHours = getWorkingHoursMap().get(date.getDayOfWeek());
+        List<WorkingHours> workingHours = getWorkingHours().get(date.getDayOfWeek());
         List<Appointment> list = new ArrayList<>();
         boolean flag;
         int i;
@@ -197,7 +198,7 @@ public class Doctor {
     }
 
 
-    public Map<DayOfWeek, List<WorkingHours>> getWorkingHoursMap() {
+    public Map<DayOfWeek, List<WorkingHours>> getWorkingHours() {
         return workingHours;
     }
 
@@ -205,6 +206,21 @@ public class Doctor {
         this.workingHours = workingHoursMap;
     }
 
+    public Set<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(Set<Appointment> appointments) {
+        this.appointments = appointments;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
 }
 
 
