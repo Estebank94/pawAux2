@@ -1,11 +1,9 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.DoctorDao;
-import ar.edu.itba.paw.models.CompressedSearch;
-import ar.edu.itba.paw.models.Description;
-import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.Search;
+import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,6 +13,8 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.*;
 
     @Repository
@@ -155,14 +155,15 @@ import java.util.*;
         @Override
         public Optional<CompressedSearch> listDoctors() {
             StringBuilder query = new StringBuilder();
-            query.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName,information.languages, information.certificate, information.education, phoneNumber ")
+            query.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName,information.languages, information.certificate, information.education, phoneNumber,dayweek, starttime, finishtime ")
                     .append("FROM doctor ")
                     .append("LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID ")
                     .append("LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  ")
                     .append("LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id ")
                     .append("LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID ")
                     .append("LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ")
-                    .append("LEFT JOIN information ON doctor.id = information.doctorid");
+                    .append("LEFT JOIN information ON doctor.id = information.doctorid ")
+                    .append("LEFT JOIN workinghour ON doctor.id = workinghour.doctorid");
 
             final CompressedSearch compressedSearch = jdbcTemplate.query(query.toString(), new CompressedExtractor());
 
@@ -177,7 +178,7 @@ import java.util.*;
         public Optional<CompressedSearch> findDoctors(Search search) {
 
             StringBuilder select = new StringBuilder();
-            select.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ,information.languages, information.certificate, information.education, phoneNumber ");
+            select.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ,information.languages, information.certificate, information.education, phoneNumber,dayweek, starttime, finishtime ");
             select.append("FROM doctor ");
 
 
@@ -201,17 +202,17 @@ import java.util.*;
                 } else {
                     insurancePlan =Optional.ofNullable(search.getInsurancePlan());
                 }
-            } else
-            {
+            } else {
                 insurancePlan = Optional.ofNullable(null);
             }
 
-            select.append("LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID ");
-            select.append("LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  ");
-            select.append("LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id ");
-            select.append("LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID ");
-            select.append("LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ");
-            select.append("LEFT JOIN information ON doctor.id = information.doctorId ");
+            select.append("LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID ")
+                    .append("LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  ")
+                    .append("LEFT JOIN insurance ON insurancePlan.insuranceid = insurance.id ")
+                    .append("LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID ")
+                    .append("LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ")
+                    .append("LEFT JOIN information ON doctor.id = information.doctorId ")
+                    .append("LEFT JOIN workinghour ON doctor.id = workinghour.doctorid ");
 
 
             select.append("WHERE doctor.id IN (SELECT doctor.id " + " FROM doctor ");
@@ -294,7 +295,7 @@ import java.util.*;
         public Optional<Doctor> findDoctorById(Integer id){
 
             StringBuilder select = new StringBuilder();
-            select.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, workingHours, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName, information.languages, information.certificate, information.education, phoneNumber ");
+            select.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName, information.languages, information.certificate, information.education, phoneNumber,dayweek, starttime, finishtime ");
             select.append("FROM doctor ");
             select.append("LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID ");
             select.append("LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  ");
@@ -302,6 +303,7 @@ import java.util.*;
             select.append("LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID ");
             select.append("LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ");
             select.append("LEFT JOIN information ON doctor.id = information.doctorId ");
+            select.append("LEFT JOIN workinghour ON doctor.id = workinghour.doctorid" );
             select.append("WHERE doctor.id = ?");
 
             final CompressedSearch compressedSearch = jdbcTemplate.query(select.toString() , new CompressedExtractor(), id);
@@ -422,6 +424,21 @@ import java.util.*;
                                 existingDoctor.getInsurance().put(rs.getString("insuranceName"), insurancePlans);
                                 compressedSearch.getInsurance().put(rs.getString("insuranceName"), insurancePlans);
                             }
+
+                            Map<DayOfWeek,List<WorkingHours>> whmap = existingDoctor.getWorkingHoursMap();
+                            if (rs.getInt("dayweek")!= 0) {
+                                DayOfWeek dayOfWeek = DayOfWeek.of(rs.getInt("dayweek"));
+                                LocalTime st = LocalTime.parse(rs.getString("starttime"));
+                                LocalTime ft = LocalTime.parse(rs.getString("finishtime"));
+                                WorkingHours wh = new WorkingHours(dayOfWeek, st, ft);
+                                if (!whmap.containsKey(dayOfWeek)) {
+                                    List<WorkingHours> workingHours = new ArrayList<>();
+                                    workingHours.add(wh);
+                                    existingDoctor.getWorkingHoursMap().put(dayOfWeek, workingHours);
+                                } else if (whmap.get(dayOfWeek).contains(wh)) {
+                                    whmap.get(dayOfWeek).add(wh);
+                                }
+                            }
                         }
                     }
                     if(!containsDoctor) {
@@ -443,8 +460,19 @@ import java.util.*;
                         Map<String, Set<String>> insurancePlan = new HashMap<>();
                         insurancePlan.put(rs.getString("insuranceName"), insurancePlanSet);
 
+                        Map<DayOfWeek, List<WorkingHours>> workingHours = new HashMap<>();
+                        if (rs.getInt("dayweek")!= 0) {
+                            DayOfWeek dayOfWeek = DayOfWeek.of(rs.getInt("dayweek"));
+                            LocalTime st = LocalTime.parse(rs.getString("starttime"));
+                            LocalTime ft = LocalTime.parse(rs.getString("finishtime"));
+                            WorkingHours wh = new WorkingHours(dayOfWeek, st, ft);
+                            List<WorkingHours> workingHoursList = new ArrayList<>();
+                            workingHoursList.add(wh);
+                            workingHours.put(dayOfWeek, workingHoursList);
+                        }
+
                         Doctor doctor = new Doctor(rs.getString("firstName"), rs.getString("lastName"), rs.getString("sex"),
-                                rs.getString("address"), rs.getString("avatar"), specialty, insurancePlan, rs.getString("workingHours"), rs.getInt("id"), description, rs.getString("phoneNumber"));
+                                rs.getString("address"), rs.getString("avatar"), specialty, insurancePlan, rs.getInt("id"), description, rs.getString("phoneNumber"),workingHours);
 
                         compressedSearch.getDoctors().add(doctor);
                         compressedSearch.getSex().add(rs.getString("sex"));
