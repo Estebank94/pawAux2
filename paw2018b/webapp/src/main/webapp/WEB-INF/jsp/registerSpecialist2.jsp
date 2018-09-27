@@ -194,6 +194,19 @@
         return val;
     }
 
+    function removeSpaces(val){
+        var index = val.indexOf(" ");
+        var val2 = "";
+        if(index > 0){
+            var aux;
+            aux = val.slice(0,index);
+            val2 = val.slice(index+1, val.length);
+            val = aux;
+            val=val+val2;
+        }
+        return val;
+    }
+
     function myFunc(val) {
         var container = classConcatenator(val);
         $("#insuranceContainer").children().hide();
@@ -206,7 +219,7 @@
 
     function addInput(val, container, name){
         if(val!== "no" &&  $("#" + val).length === 0){
-            $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
+            $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" class="'+val+'" id="'+name+'"/>');
             $('#'+ container).append('<button type="button" class="btn btn-primary"  id="'+val+'" style="margin-right: 8px; margin-bottom: 8px">'+
                 val + '<span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle">'+'</i></span></button>');
 
@@ -235,6 +248,19 @@
     }
 
     $("#addedInsurances").on("click", ".btn", function(button){
+        var id = button.target.id;
+        $('#'+id).remove();
+        $('#profile').children('.'+id).remove();
+    });
+
+    $("#insuranceContainer").on("click", ".btn", function(button){
+        var id = button.target.id;
+        id = idSlicer(insurance);
+        $('#'+id).remove();
+        $('#profile').children('.'+id).remove();
+    });
+
+    $("#languageContainer").on("click", ".btn", function(button){
         var id = button.target.id;
         $('#'+id).remove();
         $('#profile').children('.'+id).remove();
