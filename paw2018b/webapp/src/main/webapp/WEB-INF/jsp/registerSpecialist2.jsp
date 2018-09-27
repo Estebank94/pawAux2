@@ -217,21 +217,29 @@
         var insurance = $("#insurance").val();
         var id = idSlicer(insurance);
         insurance = classConcatenator(insurance);
-        id+="badge";
+//        id+="badge";
+
+
 
         var selected = [];
         $('.'+insurance+' input:checked').each(function() {
             selected.push($(this).attr('value'));
         });
 
-        if(insurance!== "no" && $("#" + id).length === 0 ){
-            $('#profile').append('<input type="hidden" name="insurancePlan"  value="' + selected + '" id="insurancePlan"/>');
-            $('#profile').append('<input type="hidden" name="insurance" value="'+insurance+'" id="insurance"/>');
-            $('#addedInsurances').append('<button type="button" class="btn btn-primary" id="'+id+'" style="margin-right: 8px; margin-bottom: 8px;" onClick=>'+
-                insurance + '<span class="badge badge-light" style="margin-left: 8px; margin-right: 4px;">'+ selected.length +'</span><span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle">'+'</i></span></button>');
-
+        if(insurance!== "no" && $("#" + id).length === 0 && selected.length > 0 ){
+            $('#profile').append('<input type="hidden" name="insurancePlan"  class="'+id+'" value="' + selected + '" id="insurancePlan"/>');
+            $('#profile').append('<input type="hidden" name="insurance" value="'+insurance+'" class="'+id+'" id="insurance"/>');
+            $('#addedInsurances').append('<button type="button" class="btn btn-primary" id="'+id+'" style="margin-right: 8px; margin-bottom: 8px;">'+
+                $("#insurance").val() + '<span class="badge badge-light" style="margin-left: 8px; margin-right: 4px;">'+ selected.length +'</span><span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle">'+'</i></span></button>');
         }
     }
+
+    $("#addedInsurances").on("click", ".btn", function(button){
+        var id = button.target.id;
+        $('#'+id).remove();
+        $('#profile').children('.'+id).remove();
+    });
+
 
 </script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
