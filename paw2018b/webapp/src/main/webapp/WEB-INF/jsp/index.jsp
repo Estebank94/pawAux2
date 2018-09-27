@@ -32,8 +32,8 @@
                         Registrate
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <button class="dropdown-item" type="button" onclick="window.location='/showDoctorRegistration'">Registrate como paciente</button>
-                        <button class="dropdown-item" type="button" onclick="window.location='/DoctorRegistration'">Registrate como especialista</button>
+                        <button class="dropdown-item" type="button" onclick="window.location='/doctorRegistration'">Registrate como paciente</button>
+                        <button class="dropdown-item" type="button" onclick="window.location='/doctorRegistration'">Registrate como especialista</button>
                     </div>
                     </security:authorize>
                 </div>

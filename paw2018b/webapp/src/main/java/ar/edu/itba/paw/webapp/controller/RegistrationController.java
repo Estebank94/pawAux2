@@ -2,8 +2,10 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.SearchService;
+import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Description;
 import ar.edu.itba.paw.models.Doctor;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.WorkingHours;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
@@ -33,6 +35,9 @@ public class RegistrationController {
     @Autowired
     private DoctorService doctorService;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(value="/doctorRegistration", method = { RequestMethod.POST })
     public ModelAndView doctorRegistration (@Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors){
 
@@ -57,13 +62,15 @@ public class RegistrationController {
 
             Doctor doctor = doctorService.createDoctor(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(),
                      personalForm.getSex(), personalForm.getLicence(), "null2", personalForm.getAddress());
+//            User user = userService.createUser()
+
             mav.addObject("doctor", doctor);
             return mav;
         }
 
     }
 
-    @RequestMapping(value="/showDoctorRegistration", method = { RequestMethod.GET })
+    @RequestMapping(value="/doctorRegistration", method = { RequestMethod.GET })
     public ModelAndView showDoctorRegistration (@ModelAttribute("personal") PersonalForm personalForm){
 
         final ModelAndView mav = new ModelAndView("registerSpecialist");
@@ -71,7 +78,7 @@ public class RegistrationController {
         return mav;
     }
 
-    @RequestMapping(value = "/showDoctorProfile/{doctorId}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/doctorProfile/{doctorId}", method = {RequestMethod.GET})
     public ModelAndView showDoctorProfile(@PathVariable Integer doctorId, @ModelAttribute("professional")ProfessionalForm professionalForm){
 
         /*TODO: agregar specialty al view*/
@@ -83,7 +90,6 @@ public class RegistrationController {
 
         mav.addObject("insuranceList", searchService.listInsurances().get());
         mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
-
         mav.addObject("specialtyList", searchService.listSpecialties().get());
         return mav;
     }
@@ -104,10 +110,8 @@ public class RegistrationController {
 
         List<WorkingHours> workingHours = new ArrayList<>();
 
-
         Doctor doctorProfessional = doctorService.setDoctorInfo(doctorId, professionalForm.getSpecialty(), insurance,workingHours ,description).get();
-
-
+        
         /*TODO: agregar boton de cancelar y volver al incio y mostrar mensaje en pantalla que esta registrado como profesional pero que todavia
          * no va a figurar en la lista de doctores porque no completo su perfil*/
 
