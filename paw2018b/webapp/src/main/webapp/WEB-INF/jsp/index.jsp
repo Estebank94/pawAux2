@@ -32,8 +32,8 @@
                         Registrate
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <button class="dropdown-item" type="button" onclick="window.location='/showDoctorRegistration'">Registrate como paciente</button>
-                        <button class="dropdown-item" type="button" onclick="window.location='/DoctorRegistration'">Registrate como especialista</button>
+                        <button class="dropdown-item" type="button" onclick="window.location='/doctorRegistration'">Registrate como paciente</button>
+                        <button class="dropdown-item" type="button" onclick="window.location='/doctorRegistration'">Registrate como especialista</button>
                     </div>
                     </security:authorize>
                 </div>
@@ -46,21 +46,38 @@
                     <security:authorize access="isAuthenticated()">
                         <form:form action="${pageContext.request.contextPath}/logout" method="post">
                             <security:authentication property="principal.username" var="userName"/>
-                            <button class="btn btn-light" style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="submit">Cerrar Sesion <b>${userName}</b></button>
+                            <div class="dropdown">
+                                <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:#257CBF !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b>${userName}</b></button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                    <button class="dropdown-item" type="submit">Cerrar Sesion</button>
+                                    <security:authorize access="hasRole('DOCTOR')">
+                                        <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/doctorPanel/'">
+                                            Ver Perfil
+                                        </button>
+                                    </security:authorize>
+                                    <security:authorize access="hasRole('PACIENTE')">
+                                        <button class="btn btn-light dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/patientPanel/'">
+                                            Ver Perfil
+                                        </button>
+                                    </security:authorize>
+
+                                    <%--<button class="dropdown-item" type="button" onclick="window.location='/doctorPanel'">Ver perfil</button>--%>
+                                </div>
+                            </div>
                         </form:form>
                     </security:authorize>
                 </div>
                 <hr>
-                    <security:authorize access="hasRole('DOCTOR')">
-                        <button class="btn btn-light btn-primary custom-btn" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/doctorPanel/'">
-                           Perfil Doctor
-                        </button>
-                    </security:authorize>
-                    <security:authorize access="hasRole('PACIENTE')">
-                        <button class="btn btn-light" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/patientPanel/'">
-                            Perfil Paciente
-                        </button>
-                    </security:authorize>
+                    <%--<security:authorize access="hasRole('DOCTOR')">--%>
+                        <%--<button class="btn btn-light btn-primary custom-btn" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/doctorPanel/'">--%>
+                           <%--Perfil Doctor--%>
+                        <%--</button>--%>
+                    <%--</security:authorize>--%>
+                    <%--<security:authorize access="hasRole('PACIENTE')">--%>
+                        <%--<button class="btn btn-light" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/patientPanel/'">--%>
+                            <%--Perfil Paciente--%>
+                        <%--</button>--%>
+                    <%--</security:authorize>--%>
                 <hr>
             </div>
         </a>

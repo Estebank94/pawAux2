@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
@@ -18,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-import javax.annotation.Resource;
+
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
 
@@ -27,8 +28,8 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-//	@Value("classpath:schema.sql")
-//	private Resource schemaSQL;
+	@Value("classpath:schema.sql")
+	private Resource schemaSQL;
 
 	@Bean
 	public ViewResolver viewResolver() {
@@ -56,7 +57,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		ds.setPassword("67wFYxljg");
 		return ds;
 	}
-
+//
 //	@Bean
 //	public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
 //		final DataSourceInitializer dsi = new DataSourceInitializer();
@@ -67,7 +68,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 //
 //	private DatabasePopulator databasePopulator(){
 //		final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-////		dbp.addScript(schemaSQL);
+//		dbp.addScript(schemaSQL);
 //		return dbp;
 //	}
 

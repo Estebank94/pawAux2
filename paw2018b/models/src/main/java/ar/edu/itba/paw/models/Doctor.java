@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -19,22 +20,12 @@ public class Doctor {
     String avatar;
     Set<String> specialty;
     Map<String, Set<String>> insurance;
-    //String workingHours;
     Integer id;
     Description description;
     String phoneNumber;
     Map< DayOfWeek, List<WorkingHours>> workingHours;
     Set<Appointment> appointments;
-
-
-
-    public Set<Appointment> getAppointments() {
-        return appointments;
-    }
-
-    public void setAppointments(Set<Appointment> appointments) {
-        this.appointments = appointments;
-    }
+    List<Review> reviews;
 
     @Autowired
     public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, Integer id, Description description, String phoneNumber, Map<DayOfWeek,List<WorkingHours>> workingHours) {
@@ -84,14 +75,6 @@ public class Doctor {
     public void setSpecialty(Set<String> specialty) {
         this.specialty = specialty;
     }
-
- //   public String getWorkingHours() {
-  //      return workingHours;
-   // }
-
-   // public void setWorkingHours(String workingHours) {
-   //    this.workingHours = workingHours;
-   // }
 
     public String getFirstName() {
         return firstName;
@@ -175,8 +158,9 @@ public class Doctor {
     }
 
     private List<Appointment> generateAppointments(LocalDate date) {
-        List<WorkingHours> workingHours = getWorkingHoursMap().get(date.getDayOfWeek());
+        List<WorkingHours> workingHours = getWorkingHours().get(date.getDayOfWeek());
         List<Appointment> list = new ArrayList<>();
+        Set<Appointment> futureAppointments = getFutureAppointments();
         boolean flag;
         int i;
         for (WorkingHours workingHoursIterator: workingHours){
@@ -186,7 +170,7 @@ public class Doctor {
                     flag = false;
                 } else{
                     Appointment dateAppointment = new Appointment(date,workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i));
-                    if (!appointments.contains(dateAppointment)){
+                    if (!futureAppointments.contains(dateAppointment)){
                         list.add(dateAppointment);
                     }
                 }
@@ -197,7 +181,7 @@ public class Doctor {
     }
 
 
-    public Map<DayOfWeek, List<WorkingHours>> getWorkingHoursMap() {
+    public Map<DayOfWeek, List<WorkingHours>> getWorkingHours() {
         return workingHours;
     }
 
@@ -205,6 +189,42 @@ public class Doctor {
         this.workingHours = workingHoursMap;
     }
 
+    public void setWorkingHours(Map<DayOfWeek, List<WorkingHours>> workingHours) {
+        this.workingHours = workingHours;
+    }
+
+
+    public Set<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(Set<Appointment> appointments) {
+        this.appointments = appointments;
+    }
+
+    public Set<Appointment> getFutureAppointments(){
+        Set<Appointment> returnSet = new HashSet<>();
+        Set<Appointment> appointments = getAppointments();
+        LocalDate today =LocalDate.now();
+        LocalTime now = LocalTime.now();
+
+        for (Appointment appointmentIterator: appointments){
+            if (appointmentIterator.getAppointmentDay().isAfter(today)){
+                returnSet.add(appointmentIterator);
+            } else if (appointmentIterator.getAppointmentDay().isEqual(today) && appointmentIterator.getAppointmentTime().isAfter(now)){
+                returnSet.add(appointmentIterator);
+            }
+        }
+        return returnSet;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
 }
 
 

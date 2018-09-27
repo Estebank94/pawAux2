@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -9,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ErrorController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ErrorController.class);
 
     @RequestMapping("/403")
     public ModelAndView forbidden(){
@@ -22,8 +26,9 @@ public class ErrorController {
     public ModelAndView error404(){
         return new ModelAndView("404");
     }
+    //TODO: Filtro para manejar exepciones un internal server
 
-//    https://www.baeldung.com/custom-error-page-spring-mvc
+////    https://www.baeldung.com/custom-error-page-spring-mvc
 //    @RequestMapping(value = "errors", method = RequestMethod.GET)
 //    public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
 //

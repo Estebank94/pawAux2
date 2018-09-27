@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: estebankramer
-  Date: 20/09/2018
-  Time: 18:07
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -41,7 +35,7 @@
                         <b style="color: #dc3545">Lo siento! Usuario y constraseña invalida. Probar nuevamente!</b>
                     </c:if>
                     <c:if test="${param.logout != null}">
-                        <b style="color: #dc3545">Te loggeaste out</b>
+                        <c:redirect url="/"/>
                     </c:if>
                     <div>
                         <label for="exampleInputEmail1">Email</label>
@@ -55,7 +49,6 @@
                     <br>
                     <input type="submit" class="btn btn-primary" value="Iniciar Sesión"/>
                     <%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
-                    <%--<button type="submit" class="btn btn-primary">Iniciar Sesión</button>--%>
                 </form:form>
             </div>
         </div>

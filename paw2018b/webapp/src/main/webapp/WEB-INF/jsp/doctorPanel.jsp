@@ -33,7 +33,7 @@
                 <form:form action="${pageContext.request.contextPath}/logout" method="post">
                     <security:authentication property="principal.username" var="userName"/>
                     <div class="dropdown">
-                        <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:white; color:white !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b>${userName}</b></button>
+                        <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:white !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b>${userName}</b></button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                             <button class="dropdown-item" type="submit">Cerrar Sesion</button>
                         <%--<button class="dropdown-item" type="button">Registrate como especialista</button>--%>

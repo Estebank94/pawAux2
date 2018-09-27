@@ -20,8 +20,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserService us;
 
-
-
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
 
