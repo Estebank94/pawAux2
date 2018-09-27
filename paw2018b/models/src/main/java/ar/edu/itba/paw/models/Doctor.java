@@ -19,15 +19,15 @@ public class Doctor {
     String avatar;
     Set<String> specialty;
     Map<String, Set<String>> insurance;
-    String workingHours;
+    //String workingHours;
     Integer id;
     Description description;
     String phoneNumber;
-    Map< DayOfWeek, List<WorkingHours>> workingHoursMap;
+    Map< DayOfWeek, List<WorkingHours>> workingHours;
     Set<Appointment> appointments;
 
     @Autowired
-    public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, String workingHours, Integer id, Description description, String phoneNumber) {
+    public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, Integer id, Description description, String phoneNumber, Map<DayOfWeek,List<WorkingHours>> workingHours) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.sex = sex;
@@ -35,10 +35,10 @@ public class Doctor {
         this.avatar = avatar;
         this.specialty = specialty;
         this.insurance = insurance;
-        this.workingHours = workingHours;
         this.id = id;
         this.description = description;
         this.phoneNumber = phoneNumber;
+        this.workingHours = workingHours;
     }
 
     public Doctor(String firstName, String lastName, String sex, String avatar, String address, Integer id, String phoneNumber){
@@ -75,13 +75,13 @@ public class Doctor {
         this.specialty = specialty;
     }
 
-    public String getWorkingHours() {
-        return workingHours;
-    }
+ //   public String getWorkingHours() {
+  //      return workingHours;
+   // }
 
-    public void setWorkingHours(String workingHours) {
-        this.workingHours = workingHours;
-    }
+   // public void setWorkingHours(String workingHours) {
+   //    this.workingHours = workingHours;
+   // }
 
     public String getFirstName() {
         return firstName;
@@ -165,7 +165,7 @@ public class Doctor {
     }
 
     private List<Appointment> generateAppointments(LocalDate date) {
-        List<WorkingHours> workingHours = workingHoursMap.get(date.getDayOfWeek());
+        List<WorkingHours> workingHours = getWorkingHoursMap().get(date.getDayOfWeek());
         List<Appointment> list = new ArrayList<>();
         boolean flag;
         int i;
@@ -186,6 +186,22 @@ public class Doctor {
         return list;
     }
 
+
+    public Map<DayOfWeek, List<WorkingHours>> getWorkingHoursMap() {
+        return workingHours;
+    }
+
+    public void setWorkingHoursMap(Map<DayOfWeek, List<WorkingHours>> workingHoursMap) {
+        this.workingHours = workingHoursMap;
+    }
+
+    public Set<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(Set<Appointment> appointments) {
+        this.appointments = appointments;
+    }
 }
 
 

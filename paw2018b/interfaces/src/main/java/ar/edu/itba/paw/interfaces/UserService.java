@@ -6,5 +6,7 @@ public interface UserService {
 
 	public User findById(Integer id);
 
+	public User findByEmail(String username);
+
 	public User createUser(Integer id, String password, String email, String role);
 }
