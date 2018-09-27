@@ -47,12 +47,19 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.userDetailsService(userDetailsService).authorizeRequests()
+        http./*userDetailsService(userDetailsService).*/authorizeRequests()
                 .antMatchers("/doctorPanel/**").hasRole("DOCTOR")
                 .antMatchers("/patientPanel/**").hasRole("PACIENTE").and().formLogin().loginPage("/showLogIn")
                 .loginProcessingUrl("/authenticateUser").permitAll().and().logout().permitAll().and().exceptionHandling()
                 .accessDeniedPage("/403");
     }
     /*TODO: aca con los .accesDenied se puede usar para todo? Con eso manejamos los stack traces?*/
+    /*TODO AUTOLOGIN:
+    * https://www.baeldung.com/spring-security-auto-login-user-after-registration
+    * https://stackoverflow.com/questions/3813028/auto-login-after-successful-registration
+    * https://stackoverflow.com/questions/46221515/spring-security-auto-login-not-working-after-registering-user
+    * https://coderanch.com/t/627731/frameworks/Autologin-site-registering-spring-security
+    * http://forum.spring.io/forum/spring-projects/security/19216-automatic-login-after-user-registration*/
+
 
 }
