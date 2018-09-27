@@ -2,6 +2,7 @@ package ar.edu.itba.paw.models;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 
 public class Appointment implements Comparable<Appointment>{
     private Integer id;
@@ -80,6 +81,20 @@ public class Appointment implements Comparable<Appointment>{
 
     public void setClientrole(Integer clientrole) {
         this.clientrole = clientrole;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Appointment that = (Appointment) o;
+        return Objects.equals(appointmentDay, that.appointmentDay) &&
+                Objects.equals(appointmentTime, that.appointmentTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(appointmentDay, appointmentTime);
     }
 }
 
