@@ -42,16 +42,6 @@ public class HelloWorldController {
 		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
 
-		String name = SecurityContextHolder.getContext().getAuthentication().getName();
-		if(name != "anonymousUser"){
-			/*TODO: TOASK: Si chequeamos con el taglib de spring security es necesario un double check?*/
-			//ver como resulto esto ..........
-
-			mav.addObject("loggedInName", name);
-			System.out.println(name);
-			System.out.println("hay alguien loggeado ");
-		}
-
 		return mav;
 	}
 
