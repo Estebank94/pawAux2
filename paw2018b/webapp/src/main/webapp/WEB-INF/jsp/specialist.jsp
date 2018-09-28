@@ -109,8 +109,8 @@
                         <form>
                             <div class="row">
                                 <div class="col-sm-5">
-                                    <label for="exampleInputEmail1">Día</label>
-                                    <select class="custom-select" id="ubicacion">
+                                    <label for="day">Día</label>
+                                    <select class="custom-select" id="day">
                                         <option selected>Elegí el Dia</option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -118,8 +118,8 @@
                                     </select>
                                 </div>
                                 <div class="col-sm-5">
-                                    <label for="exampleInputEmail1">Hora</label>
-                                    <select class="custom-select" id="ubicacion">
+                                    <label for="time">Hora</label>
+                                    <select class="custom-select" id="time">
                                         <option selected>Elegí el Horario</option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
@@ -148,7 +148,7 @@
                         </c:forEach>
                         </br>
                     </c:forEach>
-                    <c:if test="${doctor.description.education.size() != 0}">
+                    <c:if test="${doctor.description.education != null}">
                         <h4>Educación</h4>
                         <c:forEach items="${doctor.description.education}" var="education">
                             ${education}
@@ -156,7 +156,7 @@
                         <br>
                         <br>
                     </c:if>
-                    <c:if test="${doctor.description.certificate.size() != 0}">
+                    <c:if test="${doctor.description.certificate.size() != null}">
                         <h4>Certificación</h4>
                         <c:forEach items="${doctor.description.certificate}" var="certificate">
                             ${certificate}
@@ -173,7 +173,7 @@
                         <br>
                     </c:if>
                     <%--<p>El Dr. Andres Miller ha ejercido la medicina por más de 20 años y se especializa en Medicina Antienvejecimiento y Regenerativa, así como Medicina General Integrativa.</p>--%>
-                    <h3 id="reseviews">Reseñas</h3>
+                    <h3 id="reviews">Reseñas</h3>
                     <p>Muy bueno</p>
                 </div>
             </div>
