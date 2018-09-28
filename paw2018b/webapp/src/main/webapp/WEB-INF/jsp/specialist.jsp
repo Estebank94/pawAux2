@@ -30,6 +30,7 @@
             <h1><strong>Waldoc</strong></h1>
         </a>
         <div class="row">
+            <security:authorize access="!isAuthenticated()">
             <div class="dropdown" style="z-index: 1000000 !important;">
                 <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:white; color:white !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Registrate
@@ -39,6 +40,7 @@
                     <button class="dropdown-item" type="button">Registrate como especialista</button>
                 </div>
             </div>
+            </security:authorize>
             <div>
                 <security:authorize access="!isAuthenticated()">
                     <button class="btn btn-secondary" style="background-color:transparent; border-color:transparent;" type="button" onclick="window.location='/showLogIn'">
@@ -126,13 +128,21 @@
                                         <option value="3">3</option>
                                     </select>
                                 </div>
+                                <security:authorize access="!isAuthenticated()">
                                 <div class="col-sm-2">
-                                    <button type="submit" class="btn btn-primary" style="position: absolute; bottom: 0;">Reservar Turno</button>
+                                    <button type="button" class="btn btn-primary" style="position: absolute; bottom: 0;" onclick="window.location='/showLogIn'">Reservar Turno</button>
                                 </div>
+                                </security:authorize>
+                                <security:authorize access="isAuthenticated()">
+                                    <div class="col-sm-2">
+                                        <button type="submit" class="btn btn-primary" style="position: absolute; bottom: 0;">Reservar Turno</button>
+                                    </div>
+                                </security:authorize>
                             </div>
                             <br>
                         </form>
                     </div>
+
                     <h3 id="information">Información Profesional</h3>
                     <br>
                     <br>

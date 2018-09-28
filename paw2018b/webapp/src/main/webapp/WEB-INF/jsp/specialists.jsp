@@ -32,6 +32,7 @@
         </a>
         <a>
             <div class="row">
+                <security:authorize access="!isAuthenticated()">
                 <div class="dropdown" style="z-index: 1000000 !important;">
                     <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:white; color:white !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Registrate
@@ -41,6 +42,7 @@
                         <button class="dropdown-item" type="button">Registrate como especialista</button>
                     </div>
                 </div>
+                </security:authorize>
                 <div>
                     <security:authorize access="!isAuthenticated()">
                         <button class="btn btn-secondary" style="background-color:transparent; border-color:transparent;" type="button" onclick="window.location='/showLogIn'">
