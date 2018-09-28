@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -49,8 +50,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http./*userDetailsService(userDetailsService).*/authorizeRequests()
                 .antMatchers("/doctorPanel/**").hasRole("DOCTOR")
-                .antMatchers("/patientPanel/**").hasRole("PACIENTE").and().formLogin().loginPage("/showLogIn")
-                .loginProcessingUrl("/authenticateUser").permitAll().and().logout().permitAll().and().exceptionHandling()
+                .antMatchers("/patientPanel/**").hasRole("PACIENTE").and().formLogin()
+                .loginPage("/showLogIn").successHandler(successHandler())
+                .permitAll().and().logout().permitAll().and().exceptionHandling()
                 .accessDeniedPage("/403");
     }
     /*TODO: aca con los .accesDenied se puede usar para todo? Con eso manejamos los stack traces?*/
@@ -61,5 +63,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     * https://coderanch.com/t/627731/frameworks/Autologin-site-registering-spring-security
     * http://forum.spring.io/forum/spring-projects/security/19216-automatic-login-after-user-registration*/
 
+    @Bean
+    public AuthenticationSuccessHandler successHandler() {
+        return new CustomLogInSuccessHandler("/");
+    }
 
 }
