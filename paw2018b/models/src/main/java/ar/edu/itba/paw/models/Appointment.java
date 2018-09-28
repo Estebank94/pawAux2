@@ -9,11 +9,22 @@ public class Appointment implements Comparable<Appointment>{
     private LocalDate appointmentDay;
     private LocalTime appointmentTime;
     private Integer clientId;
-    private Integer clientrole;
+    private String clientrole;
 
     public Appointment(LocalDate appointmentDay, LocalTime appointmentTime) {
         this.appointmentDay = appointmentDay;
         this.appointmentTime = appointmentTime;
+        this.id = null;
+        this.clientId = null;
+        this.clientrole = null;
+    }
+
+    public Appointment(Integer id, LocalDate appointmentDay, LocalTime appointmentTime, Integer clientId, String clientrole) {
+        this.id = id;
+        this.appointmentDay = appointmentDay;
+        this.appointmentTime = appointmentTime;
+        this.clientId = clientId;
+        this.clientrole = clientrole;
     }
 
     public Integer getId() {
@@ -73,14 +84,6 @@ public class Appointment implements Comparable<Appointment>{
 
     public void setClientId(Integer clientId) {
         this.clientId = clientId;
-    }
-
-    public Integer getClientrole() {
-        return clientrole;
-    }
-
-    public void setClientrole(Integer clientrole) {
-        this.clientrole = clientrole;
     }
 
     @Override

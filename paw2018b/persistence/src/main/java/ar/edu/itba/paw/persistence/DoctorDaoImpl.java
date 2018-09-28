@@ -14,6 +14,8 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -311,20 +313,51 @@ import java.util.*;
             if(compressedSearch.getDoctors().isEmpty()){
                 return Optional.empty();
             }
-           // compressedSearch.getDoctors().get(0).setAppointments(findDoctorAppointmentsById(id));
+            compressedSearch.getDoctors().get(0).setAppointments(findDoctorAppointmentsById(id));
+            compressedSearch.getDoctors().get(0).setReviews(findDoctorReviewsById(id));
             return Optional.of(compressedSearch.getDoctors().get(0));
         }
 
-        /*
+        private static final RowMapper<Appointment> ROW_MAPPER_APPOINTMENT = (rs, rowNum) -> new Appointment(Integer.valueOf(rs.getString("appointment.id"))
+                , LocalDate.parse(rs.getString("appointmentDay"))
+                , LocalTime.parse(rs.getString("appointmentTime"))
+                ,Integer.valueOf(rs.getInt("clientId"))
+                ,new String(rs.getString("clientrole")));
+
         private Set<Appointment> findDoctorAppointmentsById(Integer id){
-            Set<Appointment> appointmentSet = new HashSet<>();
+            Set<Appointment> appointments = new HashSet<>();
             StringBuilder query = new StringBuilder();
-            query.append("SELECT doctorid, userid, userrole, stars, description, daytime ")
+            query.append("SELECT doctorId, clientId, clientrole, appointmentDay, appointmentTime, daytime, appointment.id ")
                     .append("FROM doctor")
-                    .append("JOIN review");
-            return null;
+                    .append("JOIN appointment ON doctor.id = appointment.doctorId")
+                    .append("WHERE doctor.id = ?");
+
+            List<Appointment> appointmentsList = jdbcTemplate.query(query.toString(), ROW_MAPPER_APPOINTMENT,id);
+            for (Appointment appointmentIterator: appointmentsList){
+                appointments.add(appointmentIterator);
+            }
+            return appointments;
         }
-        */
+
+        private static final RowMapper<Review> ROW_MAPPER_REVIEWS = (rs, rowNum) -> new Review(
+                rs.getInt("stars")
+                ,LocalDateTime.parse(rs.getString("dateTime"))
+                ,rs.getString("description")
+                ,new Integer (rs.getInt("id")));
+
+        private List<Review> findDoctorReviewsById(Integer id){
+            List<Review> reviews = new ArrayList<>();
+            StringBuilder query = new StringBuilder();
+            query.append("SELECT doctorId,stars, daytime, id, description ")
+                    .append("FROM doctor")
+                    .append("JOIN review ON doctor.id = review.doctorId")
+                    .append("WHERE doctor.id = ?");
+
+            reviews = jdbcTemplate.query(query.toString(), ROW_MAPPER_REVIEWS,id);
+
+            return reviews;
+        }
+
 
 
 //    public String generateWhere(Search search) {
