@@ -303,7 +303,7 @@ import java.util.*;
             select.append("LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID ");
             select.append("LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ");
             select.append("LEFT JOIN information ON doctor.id = information.doctorId ");
-            select.append("LEFT JOIN workinghour ON doctor.id = workinghour.doctorid" );
+            select.append("LEFT JOIN workinghour ON doctor.id = workinghour.doctorid " );
             select.append("WHERE doctor.id = ?");
 
             final CompressedSearch compressedSearch = jdbcTemplate.query(select.toString() , new CompressedExtractor(), id);
