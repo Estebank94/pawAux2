@@ -29,8 +29,8 @@
             <div class="div-center">
                 <h2>Iniciar Sesión</h2>
                 <br>
-                <%--<c:url value="/showLogIn" var="loginUrl"/>--%>
-                <form:form action="${pageContext.request.contextPath}/authenticateUser" method="POST" enctype="application/x-www-form-urlencoded">
+                <c:url value="/showLogIn" var="loginUrl"/>
+                <form:form action="${loginUrl}" method="POST" enctype="application/x-www-form-urlencoded">
                     <c:if test="${param.error != null}">
                         <b style="color: #dc3545">Lo siento! Usuario y constraseña invalida. Probar nuevamente!</b>
                     </c:if>
