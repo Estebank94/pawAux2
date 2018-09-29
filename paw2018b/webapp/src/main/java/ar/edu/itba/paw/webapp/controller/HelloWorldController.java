@@ -2,9 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.SearchService;
-import ar.edu.itba.paw.models.CompressedSearch;
-import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.Search;
+import ar.edu.itba.paw.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +16,10 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.UserService;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 @Controller
@@ -88,6 +90,17 @@ public class HelloWorldController {
 
 		mav.addObject("doctor", doctor);
 		mav.addObject("insuranceNameList", doctor.getInsurance());
+//		System.out.println(doctor.getAvailableAppointments().keySet().isEmpty());
+//		mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
+
+
+		for(DayOfWeek time : doctor.getWorkingHours().keySet()){
+			for(WorkingHours wh : doctor.getWorkingHours().get(time)){
+				System.out.println("Day of week "+ wh.getDayOfWeek());
+				System.out.println("time start " + wh.getStartTime());
+				System.out.println("time end " + wh.getFinishTime());
+			}
+		}
         mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 
 	    return mav;
