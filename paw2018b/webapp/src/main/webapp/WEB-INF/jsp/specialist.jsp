@@ -124,8 +124,8 @@
                                     <select class="custom-select" id="time">
                                         <option selected>Elegí el Horario</option>
                                     <c:forEach items="${appointmentsAvailable}" var="date">
-                                        <c:forEach items="${date.value}">
-                                            <option value="${date.value}" label="${date.value}">${date.value}</option>
+                                        <c:forEach items="${date.value}" var="listItem">
+                                            <option value="${listItem.appointmentTime}" label="${listItem.appointmentTime}">${listItem.appointmentTime}</option>
                                         </c:forEach>
                                     </c:forEach>
                                     </select>
