@@ -31,10 +31,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         final Collection<? extends GrantedAuthority> authorities = Arrays.asList(
                 new SimpleGrantedAuthority("ROLE_USER")
-                //, new SimpleGrantedAuthority("ROLE_ADMIN")
+         //       , new SimpleGrantedAuthority("ROLE_ADMIN")
         );
 
-        return new org.springframework.security.core.userdetails.User(email, new BCryptPasswordEncoder().encode(user.getPassword()), authorities);
+        return new org.springframework.security.core.userdetails.User(email, user.getPassword(), authorities);
     }
 
 }
