@@ -481,7 +481,7 @@ import java.util.*;
                                     List<WorkingHours> workingHours = new ArrayList<>();
                                     workingHours.add(wh);
                                     existingDoctor.getWorkingHours().put(dayOfWeek, workingHours);
-                                } else if (whmap.get(dayOfWeek).contains(wh)) {
+                                } else if (!whmap.get(dayOfWeek).contains(wh)) {
                                     whmap.get(dayOfWeek).add(wh);
                                 }
                             }
