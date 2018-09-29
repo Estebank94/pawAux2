@@ -38,13 +38,13 @@
                         <c:redirect url="/"/>
                     </c:if>
                     <div>
-                        <label for="exampleInputEmail1">Email</label>
-                        <input name="username" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu mail">
+                        <label for="username">Email</label>
+                        <input name="j_username" type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Ingresá tu mail">
                     </div>
                     <br>
                     <div>
-                        <label for="exampleInputEmail2">Contraseña</label>
-                        <input name="password" type="password" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Ingresá tu contraseña">
+                        <label for="password">Contraseña</label>
+                        <input name="j_password" type="password" class="form-control" id="password" aria-describedby="emailHelp" placeholder="Ingresá tu contraseña">
                     </div>
                     <br>
                     <input type="submit" class="btn btn-primary" value="Iniciar Sesión"/>
