@@ -91,8 +91,9 @@ public class HelloWorldController {
 		mav.addObject("doctor", doctor);
 		mav.addObject("insuranceNameList", doctor.getInsurance());
 //		System.out.println(doctor.getAvailableAppointments().keySet().isEmpty());
-//		mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
+		mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
 
+//		System.out.println(doctor.getWorkingHours().get(1).size());
 
 		for(DayOfWeek time : doctor.getWorkingHours().keySet()){
 			for(WorkingHours wh : doctor.getWorkingHours().get(time)){

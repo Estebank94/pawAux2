@@ -123,9 +123,11 @@
                                     <label for="time">Hora</label>
                                     <select class="custom-select" id="time">
                                         <option selected>Elegí el Horario</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
+                                    <c:forEach items="${appointmentsAvailable}" var="date">
+                                        <c:forEach items="${date.value}">
+                                            <option value="${date.value}" label="${date.value}">${date.value}</option>
+                                        </c:forEach>
+                                    </c:forEach>
                                     </select>
                                 </div>
                                 <security:authorize access="!isAuthenticated()">
