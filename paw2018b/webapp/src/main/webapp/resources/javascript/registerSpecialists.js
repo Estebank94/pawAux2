@@ -54,6 +54,29 @@ function addInputSelect(){
     }
 }
 
+function addStartWorkingHour(val, day){
+    const name = day+"start";
+    $('#profile').children('#'+name).remove();
+    if(val=="no"){
+        $('#'+day+'EndWorkingHour').prop('disabled', true);
+    }
+    if(val!== "no"){
+        $('#'+day+'EndWorkingHour').prop('disabled', false);
+        $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
+    }
+}
+
+function addEndWorkingHour(val, day){
+    const name = day+"end";
+
+    $('#profile').children('#'+name).remove();
+    if(val!== "no"){
+        $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
+    }
+}
+
+
+
 $("#addedInsurances").on("click", ".btn", function(button){
     var id = button.target.id;
     $('#'+id).remove();
