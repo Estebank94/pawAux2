@@ -85,8 +85,7 @@ public class RegistrationController {
     @RequestMapping(value = "/doctorProfile/{doctorId}", method = {RequestMethod.GET})
     public ModelAndView showDoctorProfile(@PathVariable Integer doctorId, @ModelAttribute("professional")ProfessionalForm professionalForm){
 
-        /*TODO: agregar specialty al view*/
-        /*TODO: agregar info en los lists de insurances y planes*/
+
         /*TODO: agregar boton de cancelar y volver al incio y mostrar mensaje en pantalla que esta registrado como profesional pero que todavia
         * no va a figurar en la lista de doctores porque no completo su perfil*/
 
@@ -112,7 +111,9 @@ public class RegistrationController {
 
         Description description = new Description(professionalForm.getCertificate(), professionalForm.getLanguages(), professionalForm.getEducation());
 
-        List<WorkingHours> workingHours = new ArrayList<>();
+        List<WorkingHours> workingHours = professionalForm.workingHoursList();
+
+        /*TODO agregar workingHours al doctorInfo */
 
         Doctor doctorProfessional = doctorService.setDoctorInfo(doctorId, professionalForm.getSpecialty(), insurance,workingHours ,description).get();
         
