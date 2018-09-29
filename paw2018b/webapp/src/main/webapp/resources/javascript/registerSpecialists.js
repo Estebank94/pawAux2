@@ -55,13 +55,13 @@ function addInputSelect(){
 }
 
 function addStartWorkingHour(val, day){
-    const name = day+"start";
+    const name = day+"Start";
     $('#profile').children('#'+name).remove();
     $('#'+day+'Container').children('p').remove();
     $('#'+day+'Container .input-group').removeClass('animated shake');
     if(val=="no"){
         $('#'+day+'EndWorkingHour').prop('disabled', true);
-        $('#profile').children('#'+val+"end").remove();
+        $('#profile').children('#'+val+"End").remove();
         $('#'+day+'EndWorkingHour').val('no');
     }
     if(val!== "no"){
@@ -82,8 +82,8 @@ function addStartWorkingHour(val, day){
 }
 
 function addEndWorkingHour(val, day){
-    const name = day+"end";
-    const nameStart = day+"start";
+    const name = day+"End";
+    const nameStart = day+"Start";
 
     $('#profile').children('#'+name).remove();
     $('#profile').children('#'+nameStart).remove();
