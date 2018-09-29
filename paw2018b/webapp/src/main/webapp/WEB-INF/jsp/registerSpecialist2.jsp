@@ -148,14 +148,14 @@
                             <option value="${workingHour}" label="${workingHour}">
                                 </c:forEach>
                         </select>
-                        <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
+                        <%--<form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>--%>
                         <select class="custom-select" id="monEndWorkingHour" disabled="true" onchange="addEndWorkingHour(value, 'mon')">
                             <option value="no" label="Fin" selected="Fin"/>
                             <c:forEach items="${professional.workingHours}" var="workingHour">
                                 <option value="${workingHour}" label="${workingHour}">
                             </c:forEach>
                         </select>
-                        <form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>
+                        <%--<form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>--%>
                     </div>
                 </div>
             </div>
@@ -169,14 +169,14 @@
                                 <option value="${workingHour}" label="${workingHour}">
                             </c:forEach>
                             </select>
-                                <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
+                                <%--<form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>--%>
                             <select class="custom-select" id="tueEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'tue')">
                             <option value="no" label="Fin" selected="Fin"/>
                             <c:forEach items="${professional.workingHours}" var="workingHour">
                         <option value="${workingHour}" label="${workingHour}">
                             </c:forEach>
                             </select>
-                                    <form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>
+                                    <%--<form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>--%>
                     </div>
                 </div>
             </div>
@@ -190,14 +190,14 @@
                                 <option value="${workingHour}" label="${workingHour}">
                             </c:forEach>
                             </select>
-                                <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
+                                <%--<form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>--%>
                             <select class="custom-select" id="wedEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'wed')">
                                     <option value="no" label="Fin" selected="Fin"/>
                                 <c:forEach items="${professional.workingHours}" var="workingHour">
                                 <option value="${workingHour}" label="${workingHour}">
                             </c:forEach>
                             </select>
-                                <form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>
+                                <%--<form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>--%>
                     </div>
                 </div>
             </div>
@@ -211,14 +211,14 @@
                                 <option value="${workingHour}" label="${workingHour}">
                                     </c:forEach>
                                     </select>
-                                <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
+                                <%--<form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>--%>
                             <select class="custom-select" id="thuEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'thu')">
                             <option value="no" label="Fin" selected="Fin"/>
                             <c:forEach items="${professional.workingHours}" var="workingHour">
                         <option value="${workingHour}" label="${workingHour}">
                             </c:forEach>
                             </select>
-                                    <form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>
+                                    <%--<form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>--%>
                     </div>
                 </div>
             </div>
@@ -232,14 +232,14 @@
                                 <option value="${workingHour}" label="${workingHour}">
                             </c:forEach>
                             </select>
-                                <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
+                                <%--<form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>--%>
                             <select class="custom-select" id="friEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'fri')">
                                 <option value="no" label="Fin" selected="Fin"/>
                                 <c:forEach items="${professional.workingHours}" var="workingHour">
                                     <option value="${workingHour}" label="${workingHour}">
                                  </c:forEach>
                             </select>
-                                <form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>
+                                <%--<form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>--%>
                     </div>
                 </div>
             </div>
@@ -253,14 +253,14 @@
                                 <option value="${workingHour}" label="${workingHour}">
                             </c:forEach>
                             </select>
-                                <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
+                                <%--<form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>--%>
                             <select class="custom-select" id="satEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'sat')">
                             <option value="no" label="Fin" selected="Fin"/>
                                 <c:forEach items="${professional.workingHours}" var="workingHour">
                                     <option value="${workingHour}" label="${workingHour}">
                                 </c:forEach>
                             </select>
-                                <form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>
+                                <%--<form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>--%>
                     </div>
                 </div>
             </div>
