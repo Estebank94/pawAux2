@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.models;
 
+import ar.edu.itba.paw.App;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.DayOfWeek;
@@ -224,6 +225,54 @@ public class Doctor {
 
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    public Map<LocalDate, List<LocalTime>> appointmentsToMap (){
+
+        Map<LocalDate, List<LocalTime>> appointments = new HashMap<>();
+        Set<Appointment> all = getFutureAppointments();
+        for(Appointment appoint : all){
+            if(appointments.containsKey(appoint.getAppointmentDay())){
+                appointments.get(appoint.getAppointmentDay()).add(appoint.getAppointmentTime());
+            }else{
+                List<LocalTime> list = new ArrayList<>();
+                list.add(appoint.getAppointmentTime());
+                appointments.put(appoint.getAppointmentDay(),list);
+            }
+        }
+        return  appointments;
+    }
+
+    public String getMonth(Integer monthVal){
+        String month = "";
+
+        switch (monthVal){
+            case 1: month = "Enero";
+                break;
+            case 2: month = "Febrero";
+                break;
+            case 3: month = "Marzo";
+                break;
+            case 4: month = "Abril";
+                break;
+            case 5: month = "Mayo";
+                break;
+            case 6: month = "Junio";
+                break;
+            case 7: month = "Julio";
+                break;
+            case 8: month = "Agosto";
+                break;
+            case 9: month = "Septiembre";
+                break;
+            case 10: month = "Octubre";
+                break;
+            case 11: month = "Noviembre";
+                break;
+            case 12: month = "Diciembre";
+                break;
+        }
+        return month;
     }
 }
 
