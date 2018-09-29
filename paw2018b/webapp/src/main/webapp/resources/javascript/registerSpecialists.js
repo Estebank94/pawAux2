@@ -64,23 +64,51 @@ function addStartWorkingHour(val, day){
     }
     if(val!== "no"){
         $('#'+day+'EndWorkingHour').prop('disabled', false);
-        $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
+        const valEnd = $('#'+day+'EndWorkingHour').val();
+        if(valEnd!= "no"){
+            if(getHours(val) > getHours(valEnd)){
+                $('#'+day+'StartWorkingHour').val('no');
+                $('#'+day+'EndWorkingHour').val('no');
+            } else{
+                $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
+            }
+        }
     }
 }
 
 function addEndWorkingHour(val, day){
     const name = day+"end";
+    const nameStart = day+"start";
 
     $('#profile').children('#'+name).remove();
+    $('#profile').children('#'+nameStart).remove();
+
     if(val=="no"){
         $('#profile').children('#'+val+"start").remove();
         $('#'+day+'StartWorkingHour').val('no');
     }
     if(val!== "no"){
-        $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
+        const valStart = $('#'+day+'StartWorkingHour').val();
+        alert(getHours(val) + " " + getHours(valStart));
+        alert(getHours(val) < getHours(valStart));
+        if(getHours(val) < getHours(valStart)){
+            $('#'+day+'StartWorkingHour').val('no');
+            $('#'+day+'EndWorkingHour').val('no');
+        }
+        else{
+            $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
+            $('#profile').append('<input type="hidden" name="'+nameStart+'" value="'+valStart+'" id="'+nameStart+'"/>');
+        }
     }
 }
 
+function getHours(val){
+    var index = val.indexOf(":");
+    if(index > 0){
+        val = val.slice(0,index);
+    }
+    return val;
+}
 
 $("#addedInsurances").on("click", ".btn", function(button){
     var id = button.target.id;
