@@ -55,7 +55,7 @@ function addInputSelect(){
 }
 
 function addStartWorkingHour(val, day){
-    const name = day+"Start";
+    var name = day+"Start";
     $('#profile').children('#'+name).remove();
     $('#'+day+'Container').children('p').remove();
     $('#'+day+'Container .input-group').removeClass('animated shake');
@@ -66,7 +66,7 @@ function addStartWorkingHour(val, day){
     }
     if(val!== "no"){
         $('#'+day+'EndWorkingHour').prop('disabled', false);
-        const valEnd = $('#'+day+'EndWorkingHour').val();
+        var valEnd = $('#'+day+'EndWorkingHour').val();
         if(valEnd!= "no"){
             if(getHours(val) >= getHours(valEnd)){
                 $('#'+day+'Container .input-group').addClass('animated shake');
