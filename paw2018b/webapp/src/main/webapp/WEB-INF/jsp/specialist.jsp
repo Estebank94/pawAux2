@@ -113,19 +113,19 @@
                                     <div class="col-sm-5">
                                         <label for="day">Día</label>
                                         <select class="custom-select" id="day">
-                                            <option selected>Elegí el Dia</option>
+                                            <option value="no" selected>Elegí el Día</option>
                                             <c:forEach items="${appointmentsAvailable}" var="date">
                                                 <option value="${date.key}" label="${date.key}">${date.key}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
                                 <div class="col-sm-5">
-                                    <label for="time">Hora</label>
-                                    <select class="custom-select" id="time">
-                                        <option selected>Elegí el Horario</option>
+                                    <label for="time">Horario</label>
+                                    <select class="custom-select" disabled="true" id="time">
+                                        <option value="no" selected>Elegí el Horario</option>
                                     <c:forEach items="${appointmentsAvailable}" var="date">
                                         <c:forEach items="${date.value}" var="listItem">
-                                            <option value="${listItem.appointmentTime}" label="${listItem.appointmentTime}">${listItem.appointmentTime}</option>
+                                            <option value="${listItem.appointmentDay}_${listItem.appointmentTime}" label="${listItem.appointmentTime}">${listItem.appointmentTime}</option>
                                         </c:forEach>
                                     </c:forEach>
                                     </select>
@@ -196,11 +196,30 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
 <%--select2 dropdown--%>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-<script src="<c:url value="/resources/javascript/dropdowns.js"/>"></script>
+<%--<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>--%>
+<%--<script src="<c:url value="/resources/javascript/dropdowns.js"/>"></script>--%>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script>
+
+    $(function() {
+        $('#day').on('change', function() {
+            var val = this.value;
+            if(val == "no"){
+                $('#time').prop('disabled', true);
+                $('#time').val('no');
+            }
+            else{
+                $('#time').prop('disabled', false);
+                $('#time option').hide().filter(function() {
+                return this.value.indexOf( val + '_' ) === 0;
+            })
+                .show();
+            }})
+            .change();
+    });
+
+</script>
 </body>
 </html>
 
