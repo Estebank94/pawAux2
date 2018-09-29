@@ -27,7 +27,7 @@
     <br>
     <br>
     <h2>Completá tu perfil profesional.</h2>
-    <p>Para aparecer en las búsquedas, vas a necesitar completar tu información.</p>
+    <p>Para aparecer en las búsquedas, vas a necesitar completar tu información profesional.</p>
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
     <form:form modelAttribute="professional" method="POST" action="/doctorProfile/${doctor.id}" accept-charset="ISO-8859-1" id="profile">
@@ -163,14 +163,14 @@
                 <label for="Tue" class="col-sm-1 col-form-label">Martes</label>
                 <div class="col-sm-4">
                     <div class="input-group">
-                        <select class="custom-select" id="tueStartWorkingHour" path="workingHoursStart">
+                        <select class="custom-select" id="tueStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'tue')">
                             <option value="no" label="Inicio" selected="Inicio"/>
                             <c:forEach items="${professional.workingHours}" var="workingHour">
                                 <option value="${workingHour}" label="${workingHour}">
                             </c:forEach>
                             </select>
                                 <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
-                            <select class="custom-select" id="tueEndWorkingHour" disabled="true" path="workingHoursEnd">
+                            <select class="custom-select" id="tueEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'tue')">
                             <option value="no" label="Fin" selected="Fin"/>
                             <c:forEach items="${professional.workingHours}" var="workingHour">
                         <option value="${workingHour}" label="${workingHour}">
@@ -184,14 +184,14 @@
                 <label for="Wed" class="col-sm-1 col-form-label">Miercoles</label>
                 <div class="col-sm-4">
                     <div class="input-group">
-                        <select class="custom-select" id="wedStartWorkingHour" path="workingHoursStart">
+                        <select class="custom-select" id="wedStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'wed')">
                             <option value="no" label="Inicio" selected="Inicio"/>
                             <c:forEach items="${professional.workingHours}" var="workingHour">
                                 <option value="${workingHour}" label="${workingHour}">
                             </c:forEach>
                             </select>
                                 <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
-                            <select class="custom-select" id="wedEndWorkingHour" disabled="true" path="workingHoursEnd">
+                            <select class="custom-select" id="wedEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'wed')">
                                     <option value="no" label="Fin" selected="Fin"/>
                                 <c:forEach items="${professional.workingHours}" var="workingHour">
                                 <option value="${workingHour}" label="${workingHour}">
@@ -205,14 +205,14 @@
                 <label for="Thu" class="col-sm-1 col-form-label">Jueves</label>
                 <div class="col-sm-4">
                     <div class="input-group">
-                        <select class="custom-select" id="thuStartWorkingHour" path="workingHoursStart">
+                        <select class="custom-select" id="thuStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'thu')">
                             <option value="no" label="Inicio" selected="Inicio"/>
                             <c:forEach items="${professional.workingHours}" var="workingHour">
                                 <option value="${workingHour}" label="${workingHour}">
                                     </c:forEach>
                                     </select>
                                 <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
-                            <select class="custom-select" id="thuEndWorkingHour" disabled="true" path="workingHoursEnd">
+                            <select class="custom-select" id="thuEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'thu')">
                             <option value="no" label="Fin" selected="Fin"/>
                             <c:forEach items="${professional.workingHours}" var="workingHour">
                         <option value="${workingHour}" label="${workingHour}">
@@ -226,14 +226,14 @@
                 <label for="Fri" class="col-sm-1 col-form-label">Viernes</label>
                 <div class="col-sm-4">
                     <div class="input-group">
-                        <select class="custom-select" id="friStartWorkingHour" path="workingHoursStart">
+                        <select class="custom-select" id="friStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'fri')">
                             <option value="no" label="Inicio" selected="Inicio"/>
                             <c:forEach items="${professional.workingHours}" var="workingHour">
                                 <option value="${workingHour}" label="${workingHour}">
                             </c:forEach>
                             </select>
                                 <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
-                            <select class="custom-select" id="friEndWorkingHour" disabled="true" path="workingHoursEnd">
+                            <select class="custom-select" id="friEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'fri')">
                                 <option value="no" label="Fin" selected="Fin"/>
                                 <c:forEach items="${professional.workingHours}" var="workingHour">
                                     <option value="${workingHour}" label="${workingHour}">
@@ -247,14 +247,14 @@
                 <label for="Sat" class="col-sm-1 col-form-label">Sabado</label>
                 <div class="col-sm-4">
                     <div class="input-group">
-                        <select class="custom-select" id="satStartWorkingHour" path="workingHoursStart">
+                        <select class="custom-select" id="satStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'sat')">
                             <option value="no" label="Inicio" selected="Inicio"/>
                             <c:forEach items="${professional.workingHours}" var="workingHour">
                                 <option value="${workingHour}" label="${workingHour}">
                             </c:forEach>
                             </select>
                                 <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
-                            <select class="custom-select" id="satEndWorkingHour" disabled="true" path="workingHoursEnd">
+                            <select class="custom-select" id="satEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'sat')">
                             <option value="no" label="Fin" selected="Fin"/>
                                 <c:forEach items="${professional.workingHours}" var="workingHour">
                                     <option value="${workingHour}" label="${workingHour}">
