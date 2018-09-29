@@ -110,15 +110,15 @@
                         <h3 class="doctor-name">Reservá un Turno</h3>
                         <form>
                             <div class="row">
-                                <div class="col-sm-5">
-                                    <label for="day">Día</label>
-                                    <select class="custom-select" id="day">
-                                        <option selected>Elegí el Dia</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                    </select>
-                                </div>
+                                    <div class="col-sm-5">
+                                        <label for="day">Día</label>
+                                        <select class="custom-select" id="day">
+                                            <option selected>Elegí el Dia</option>
+                                            <c:forEach items="${appointmentsAvailable}" var="date">
+                                                <option value="${date.key}" label="${date.key}">${date.key}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
                                 <div class="col-sm-5">
                                     <label for="time">Hora</label>
                                     <select class="custom-select" id="time">
