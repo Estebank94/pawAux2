@@ -140,7 +140,7 @@
             <br>
             <div class="form-group row">
                 <label for="monStartWorkingHour" class="col-sm-1 col-form-label">Lunes</label>
-                <div class="col-sm-4">
+                <div id="monContainer" class="col-sm-4">
                     <div class="input-group">
                         <select class="custom-select" id="monStartWorkingHour" onchange="addStartWorkingHour(value, 'mon')">
                             <option value="no" label="Inicio" selected="Inicio"/>
@@ -161,7 +161,7 @@
             </div>
             <div class="form-group row">
                 <label for="Tue" class="col-sm-1 col-form-label">Martes</label>
-                <div class="col-sm-4">
+                <div id="tueContainer" class="col-sm-4">
                     <div class="input-group">
                         <select class="custom-select" id="tueStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'tue')">
                             <option value="no" label="Inicio" selected="Inicio"/>
@@ -182,7 +182,7 @@
             </div>
             <div class="form-group row">
                 <label for="Wed" class="col-sm-1 col-form-label">Miercoles</label>
-                <div class="col-sm-4">
+                <div id="wedContainer" class="col-sm-4">
                     <div class="input-group">
                         <select class="custom-select" id="wedStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'wed')">
                             <option value="no" label="Inicio" selected="Inicio"/>
@@ -204,7 +204,7 @@
             <div class="form-group row">
                 <label for="Thu" class="col-sm-1 col-form-label">Jueves</label>
                 <div class="col-sm-4">
-                    <div class="input-group">
+                    <div id="thuContainer" class="input-group">
                         <select class="custom-select" id="thuStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'thu')">
                             <option value="no" label="Inicio" selected="Inicio"/>
                             <c:forEach items="${professional.workingHours}" var="workingHour">
@@ -224,7 +224,7 @@
             </div>
             <div class="form-group row">
                 <label for="Fri" class="col-sm-1 col-form-label">Viernes</label>
-                <div class="col-sm-4">
+                <div id="friContainer" class="col-sm-4">
                     <div class="input-group">
                         <select class="custom-select" id="friStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'fri')">
                             <option value="no" label="Inicio" selected="Inicio"/>
@@ -245,7 +245,7 @@
             </div>
             <div class="form-group row">
                 <label for="Sat" class="col-sm-1 col-form-label">Sabado</label>
-                <div class="col-sm-4">
+                <div id="satContainer" class="col-sm-4">
                     <div class="input-group">
                         <select class="custom-select" id="satStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'sat')">
                             <option value="no" label="Inicio" selected="Inicio"/>
