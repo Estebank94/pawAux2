@@ -160,7 +160,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="Tue" class="col-sm-1 col-form-label">Martes</label>
+                <label class="col-sm-1 col-form-label">Martes</label>
                 <div id="tueContainer" class="col-sm-4">
                     <div class="input-group">
                         <select class="custom-select" id="tueStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'tue')">
@@ -181,7 +181,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="Wed" class="col-sm-1 col-form-label">Miercoles</label>
+                <label class="col-sm-1 col-form-label">Miercoles</label>
                 <div id="wedContainer" class="col-sm-4">
                     <div class="input-group">
                         <select class="custom-select" id="wedStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'wed')">
@@ -202,7 +202,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="Thu" class="col-sm-1 col-form-label">Jueves</label>
+                <label class="col-sm-1 col-form-label">Jueves</label>
                 <div class="col-sm-4">
                     <div id="thuContainer" class="input-group">
                         <select class="custom-select" id="thuStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'thu')">
@@ -223,7 +223,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="Fri" class="col-sm-1 col-form-label">Viernes</label>
+                <label class="col-sm-1 col-form-label">Viernes</label>
                 <div id="friContainer" class="col-sm-4">
                     <div class="input-group">
                         <select class="custom-select" id="friStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'fri')">
@@ -244,7 +244,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="Sat" class="col-sm-1 col-form-label">Sabado</label>
+                <label class="col-sm-1 col-form-label">Sabado</label>
                 <div id="satContainer" class="col-sm-4">
                     <div class="input-group">
                         <select class="custom-select" id="satStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'sat')">
