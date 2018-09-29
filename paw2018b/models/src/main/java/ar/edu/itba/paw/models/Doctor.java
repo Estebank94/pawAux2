@@ -153,10 +153,6 @@ public class Doctor {
         LocalDate today = LocalDate.now();
 
         for (int i = 0; i<15; i++){
-            System.out.println("dia"+ i);
-            if(i==1){
-                System.out.println("hola");
-            }
             List<Appointment> aux = generateAppointments(today.plusDays(i));
             if(aux != null){
                 map.put(today.plusDays(i),generateAppointments(today.plusDays(i)));
@@ -166,26 +162,16 @@ public class Doctor {
     }
 
     private List<Appointment> generateAppointments(LocalDate date) {
-//        System.out.println("el dia es" + date.getDayOfWeek());
         List<WorkingHours> workingHours = getWorkingHours().get(date.getDayOfWeek());
 
         List<Appointment> list = new ArrayList<>();
         Set<Appointment> futureAppointments = getFutureAppointments();
         boolean flag;
         int i;
-        int j, x = 0;
         if(workingHours != null){
             for (WorkingHours workingHoursIterator: workingHours){
                 flag = true;
-                System.out.println("contador x " +x);
-                x++;
-                j=0;
                 for (i = 0; flag; i++){
-                if(j==14 && x==6){
-                    System.out.println("hola");
-                }
-                    System.out.println("contador j " +j);
-                    j++;
                     if (workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME*i).isAfter(workingHoursIterator.getFinishTime())){
                         flag = false;
                     } else{
@@ -227,7 +213,7 @@ public class Doctor {
     public Set<Appointment> getFutureAppointments(){
         Set<Appointment> returnSet = new HashSet<>();
         Set<Appointment> appointments = getAppointments();
-        LocalDate today =LocalDate.now();
+        LocalDate today = LocalDate.now();
         LocalTime now = LocalTime.now();
 
         for (Appointment appointmentIterator: appointments){
