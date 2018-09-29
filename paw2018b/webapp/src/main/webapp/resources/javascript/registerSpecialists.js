@@ -55,32 +55,69 @@ function addInputSelect(){
 }
 
 function addStartWorkingHour(val, day){
-    const name = day+"start";
+    const name = day+"Start";
     $('#profile').children('#'+name).remove();
+    $('#'+day+'Container').children('p').remove();
+    $('#'+day+'Container .input-group').removeClass('animated shake');
     if(val=="no"){
         $('#'+day+'EndWorkingHour').prop('disabled', true);
-        $('#profile').children('#'+val+"end").remove();
+        $('#profile').children('#'+val+"End").remove();
         $('#'+day+'EndWorkingHour').val('no');
     }
     if(val!== "no"){
         $('#'+day+'EndWorkingHour').prop('disabled', false);
-        $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
+        const valEnd = $('#'+day+'EndWorkingHour').val();
+        if(valEnd!= "no"){
+            if(getHours(val) >= getHours(valEnd)){
+                $('#'+day+'Container .input-group').addClass('animated shake');
+                $('#'+day+'Container').append('<p style="color: red; font-size: 12px; margin-top: 8px">La hora de inicio no puede ser mayor o igual que la de fin.</p>');
+                $('#'+day+'StartWorkingHour').val('no');
+                $('#'+day+'EndWorkingHour').val('no');
+                $('#'+day+'EndWorkingHour').prop('disabled', true);
+            } else{
+                $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
+            }
+        }
     }
 }
 
 function addEndWorkingHour(val, day){
-    const name = day+"end";
+    const name = day+"End";
+    const nameStart = day+"Start";
 
     $('#profile').children('#'+name).remove();
+    $('#profile').children('#'+nameStart).remove();
+    $('#'+day+'Container').children('p').remove();
+    $('#'+day+'Container .input-group').removeClass('animated shake');
+
     if(val=="no"){
         $('#profile').children('#'+val+"start").remove();
         $('#'+day+'StartWorkingHour').val('no');
+        $('#'+day+'EndWorkingHour').prop('disabled', true);
     }
     if(val!== "no"){
-        $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
+        const valStart = $('#'+day+'StartWorkingHour').val();
+        if(getHours(val) <= getHours(valStart)){
+            $('#'+day+'StartWorkingHour').val('no');
+            $('#'+day+'EndWorkingHour').val('no');
+            $('#'+day+'EndWorkingHour').prop('disabled', true);
+            $('#'+day+'Container .input-group').addClass('animated shake');
+            $('#'+day+'Container').append('<p style="color: red; font-size: 12px; margin-top: 8px">La hora de inicio no puede ser mayor o igual que la de fin.</p>');
+        }
+        else{
+            $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
+            $('#profile').append('<input type="hidden" name="'+nameStart+'" value="'+valStart+'" id="'+nameStart+'"/>');
+        }
     }
 }
 
+function getHours(val){
+    var index = val.indexOf(":");
+    if(index > 0){
+        val = val.slice(0,index);
+    }
+    return val;
+}
 
 $("#addedInsurances").on("click", ".btn", function(button){
     var id = button.target.id;
