@@ -32,12 +32,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-//      auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+      auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
 
         //add our users for in memory authentication
-        auth.inMemoryAuthentication().withUser("martina").password("martina").roles("DOCTOR");
-        auth.inMemoryAuthentication().withUser("esteban").password("esteban").roles("DOCTOR");
-        auth.inMemoryAuthentication().withUser("oliver").password("oliver").roles("PACIENTE");
+//        auth.inMemoryAuthentication().withUser("martina").password("martina").roles("DOCTOR");
+//        auth.inMemoryAuthentication().withUser("esteban").password("esteban").roles("DOCTOR");
+//        auth.inMemoryAuthentication().withUser("oliver").password("oliver").roles("PACIENTE");
     }
 
     @Override
@@ -48,9 +48,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http./*userDetailsService(userDetailsService).*/authorizeRequests()
+        http.userDetailsService(userDetailsService).authorizeRequests()
                 .antMatchers("/doctorPanel/**").hasRole("DOCTOR")
                 .antMatchers("/patientPanel/**").hasRole("PACIENTE").and().formLogin()
+                .usernameParameter("j_username")
+                .passwordParameter("j_password")
                 .loginPage("/showLogIn").successHandler(successHandler())
                 .permitAll().and().logout().permitAll().and().exceptionHandling()
                 .accessDeniedPage("/403");
