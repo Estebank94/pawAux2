@@ -318,7 +318,7 @@ import java.util.*;
             return Optional.of(compressedSearch.getDoctors().get(0));
         }
 
-        private static final RowMapper<Appointment> ROW_MAPPER_APPOINTMENT = (rs, rowNum) -> new Appointment(Integer.valueOf(rs.getString("appointment.id"))
+        private static final RowMapper<Appointment> ROW_MAPPER_APPOINTMENT = (rs, rowNum) -> new Appointment(rs.getInt("id")
                 , LocalDate.parse(rs.getString("appointmentday"))
                 , LocalTime.parse(rs.getString("appointmenttime"))
                 ,Integer.valueOf(rs.getInt("clientid"))
