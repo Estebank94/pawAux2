@@ -26,32 +26,32 @@
 <div class="container">
     <br>
     <br>
-    <h2>¡Registrate como especialista!</h2>
-    <p>Completa tus datos profesionales.</p>
+    <h2>Completá tu perfil profesional.</h2>
+    <p>Para aparecer en las búsquedas, vas a necesitar completar tu información profesional.</p>
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
     <form:form modelAttribute="professional" method="POST" action="/doctorProfile/${doctor.id}" accept-charset="ISO-8859-1" id="profile">
         <div>
-            <label for="exampleFormControlFile1">Foto de perfil</label>
+            <label for="exampleFormControlFile1"><strong>Foto de perfil</strong></label>
             <form:input type="file" class="form-control-file" id="exampleFormControlFile1" path="avatar"/>
             <form:errors path="avatar" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
         <div>
-            <label for="exampleFormControlTextarea1">Descripcion</label>
+            <label for="exampleFormControlTextarea1"><strong>Descripción</strong></label>
             <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Describi tu completar..." path="certificate"/>
             <form:errors path="certificate" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
         <div>
-            <label for="exampleFormControlTextarea1">Educacion</label>
+            <label for="exampleFormControlTextarea1"><strong>Educación</strong></label>
             <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Describi tu estudios academicos..." path="education"/>
             <form:errors path="education" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <hr style="border-top: 1px solid #D8D8D8 !important;">
         <div>
             <div>
-                <label for="languages">Idiomas</label>
+                <label for="languages"><strong>Idiomas</strong></label>
                 <select class="custom-select" name="languages" id="languages" onchange="addInput(value, 'languageContainer', 'languages')">
                     <option value="no" label="Idioma" selected="Idioma"/>
                     <option value="Ingles" label="Ingles" />
@@ -75,7 +75,7 @@
         <hr style="border-top: 1px solid #D8D8D8 !important;">
         <div>
             <div>
-                <label for="specialty">Especialidad</label>
+                <label for="specialty"><strong>Especialidad</strong></label>
                 <select id="specialty" class="custom-select" cssStyle="cursor: pointer;" onchange="addInput(value, 'addedSpecialties', 'specialty')">
                     <option value="noSpecialty" label="Especialidades" selected="Especialidades"/>
                     <c:forEach items="${specialtyList}" var="specialty">
@@ -96,7 +96,7 @@
         <hr style="border-top: 1px solid #D8D8D8 !important;">
         <div>
             <div>
-                <label for="insurance">Obra Social</label>
+                <label for="insurance"><strong>Obra Social</strong></label>
                 <select id="insurance" class="custom-select" cssStyle="cursor: pointer;" onchange="myFunc(value)">
                     <option value="no" label="Prepaga" selected="Prepaga"/>
                     <c:forEach items="${insuranceList}" var="insuranceName">
@@ -135,40 +135,148 @@
         <hr style="border-top: 1px solid #D8D8D8 !important;">
         <div>
             <div>
-                <label>Horario de trabajo</label>
+                <label><strong>Horario de Trabajo</strong></label>
             </div>
             <br>
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-1 col-form-label">Lunes</label>
+                <label for="monStartWorkingHour" class="col-sm-1 col-form-label">Lunes</label>
                 <div class="col-sm-4">
                     <div class="input-group">
-                        <form:select class="custom-select" id="ubicacion" path="workingHoursStart">
-                            <option selected>Inicio</option>
-                            <option value="1">7</option>
-                            <option value="2">8</option>
-                            <option value="3">9</option>
-                        </form:select>
+                        <select class="custom-select" id="monStartWorkingHour" onchange="addStartWorkingHour(value, 'mon')">
+                            <option value="no" label="Inicio" selected="Inicio"/>
+                            <c:forEach items="${professional.workingHours}" var="workingHour">
+                            <option value="${workingHour}" label="${workingHour}">
+                                </c:forEach>
+                        </select>
                         <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
-                        <form:select class="custom-select" id="ubicacion" path="workingHoursEnd">
-                            <option selected>Fin</option>
-                            <option value="1">7</option>
-                            <option value="2">8</option>
-                            <option value="3">9</option>
-                            <option value="3">10</option>
-                        </form:select>
+                        <select class="custom-select" id="monEndWorkingHour" disabled="true" onchange="addEndWorkingHour(value, 'mon')">
+                            <option value="no" label="Fin" selected="Fin"/>
+                            <c:forEach items="${professional.workingHours}" var="workingHour">
+                                <option value="${workingHour}" label="${workingHour}">
+                            </c:forEach>
+                        </select>
                         <form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Tue" class="col-sm-1 col-form-label">Martes</label>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <select class="custom-select" id="tueStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'tue')">
+                            <option value="no" label="Inicio" selected="Inicio"/>
+                            <c:forEach items="${professional.workingHours}" var="workingHour">
+                                <option value="${workingHour}" label="${workingHour}">
+                            </c:forEach>
+                            </select>
+                                <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
+                            <select class="custom-select" id="tueEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'tue')">
+                            <option value="no" label="Fin" selected="Fin"/>
+                            <c:forEach items="${professional.workingHours}" var="workingHour">
+                        <option value="${workingHour}" label="${workingHour}">
+                            </c:forEach>
+                            </select>
+                                    <form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Wed" class="col-sm-1 col-form-label">Miercoles</label>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <select class="custom-select" id="wedStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'wed')">
+                            <option value="no" label="Inicio" selected="Inicio"/>
+                            <c:forEach items="${professional.workingHours}" var="workingHour">
+                                <option value="${workingHour}" label="${workingHour}">
+                            </c:forEach>
+                            </select>
+                                <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
+                            <select class="custom-select" id="wedEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'wed')">
+                                    <option value="no" label="Fin" selected="Fin"/>
+                                <c:forEach items="${professional.workingHours}" var="workingHour">
+                                <option value="${workingHour}" label="${workingHour}">
+                            </c:forEach>
+                            </select>
+                                <form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Thu" class="col-sm-1 col-form-label">Jueves</label>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <select class="custom-select" id="thuStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'thu')">
+                            <option value="no" label="Inicio" selected="Inicio"/>
+                            <c:forEach items="${professional.workingHours}" var="workingHour">
+                                <option value="${workingHour}" label="${workingHour}">
+                                    </c:forEach>
+                                    </select>
+                                <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
+                            <select class="custom-select" id="thuEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'thu')">
+                            <option value="no" label="Fin" selected="Fin"/>
+                            <c:forEach items="${professional.workingHours}" var="workingHour">
+                        <option value="${workingHour}" label="${workingHour}">
+                            </c:forEach>
+                            </select>
+                                    <form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Fri" class="col-sm-1 col-form-label">Viernes</label>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <select class="custom-select" id="friStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'fri')">
+                            <option value="no" label="Inicio" selected="Inicio"/>
+                            <c:forEach items="${professional.workingHours}" var="workingHour">
+                                <option value="${workingHour}" label="${workingHour}">
+                            </c:forEach>
+                            </select>
+                                <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
+                            <select class="custom-select" id="friEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'fri')">
+                                <option value="no" label="Fin" selected="Fin"/>
+                                <c:forEach items="${professional.workingHours}" var="workingHour">
+                                    <option value="${workingHour}" label="${workingHour}">
+                                 </c:forEach>
+                            </select>
+                                <form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Sat" class="col-sm-1 col-form-label">Sabado</label>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <select class="custom-select" id="satStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'sat')">
+                            <option value="no" label="Inicio" selected="Inicio"/>
+                            <c:forEach items="${professional.workingHours}" var="workingHour">
+                                <option value="${workingHour}" label="${workingHour}">
+                            </c:forEach>
+                            </select>
+                                <form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>
+                            <select class="custom-select" id="satEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'sat')">
+                            <option value="no" label="Fin" selected="Fin"/>
+                                <c:forEach items="${professional.workingHours}" var="workingHour">
+                                    <option value="${workingHour}" label="${workingHour}">
+                                </c:forEach>
+                            </select>
+                                <form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>
                     </div>
                 </div>
             </div>
         </div>
         <br>
-        <input type="submit" class="btn btn-primary" value="Registrar" path="submit"/>
+        <div class="container row">
+            <input type="submit" class="btn btn-primary" value="Registrar" path="submit"/>
+            <span style="margin-left: 8px;"></span>
+            <input type="submit" class="btn btn-secondary" value="Cancelar" path="submit"/>
+        </div>
+
     </form:form>
     <br>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="<c:url value="/resources/javascript/registerSpecialists.js"/>"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>
