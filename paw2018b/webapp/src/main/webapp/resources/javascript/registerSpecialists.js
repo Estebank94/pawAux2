@@ -57,6 +57,8 @@ function addInputSelect(){
 function addStartWorkingHour(val, day){
     const name = day+"start";
     $('#profile').children('#'+name).remove();
+    $('#'+day+'Container').children('p').remove();
+    $('#'+day+'Container .input-group').removeClass('animated shake');
     if(val=="no"){
         $('#'+day+'EndWorkingHour').prop('disabled', true);
         $('#profile').children('#'+val+"end").remove();
@@ -67,8 +69,11 @@ function addStartWorkingHour(val, day){
         const valEnd = $('#'+day+'EndWorkingHour').val();
         if(valEnd!= "no"){
             if(getHours(val) > getHours(valEnd)){
+                $('#'+day+'Container .input-group').addClass('animated shake');
+                $('#'+day+'Container').append('<p style="color: red; font-size: 12px; margin-top: 8px">La hora de inicio no puede ser mayor que la de fin.</p>');
                 $('#'+day+'StartWorkingHour').val('no');
                 $('#'+day+'EndWorkingHour').val('no');
+                $('#'+day+'EndWorkingHour').prop('disabled', true);
             } else{
                 $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
             }
@@ -82,18 +87,22 @@ function addEndWorkingHour(val, day){
 
     $('#profile').children('#'+name).remove();
     $('#profile').children('#'+nameStart).remove();
+    $('#'+day+'Container').children('p').remove();
+    $('#'+day+'Container .input-group').removeClass('animated shake');
 
     if(val=="no"){
         $('#profile').children('#'+val+"start").remove();
         $('#'+day+'StartWorkingHour').val('no');
+        $('#'+day+'EndWorkingHour').prop('disabled', true);
     }
     if(val!== "no"){
         const valStart = $('#'+day+'StartWorkingHour').val();
-        alert(getHours(val) + " " + getHours(valStart));
-        alert(getHours(val) < getHours(valStart));
         if(getHours(val) < getHours(valStart)){
             $('#'+day+'StartWorkingHour').val('no');
             $('#'+day+'EndWorkingHour').val('no');
+            $('#'+day+'EndWorkingHour').prop('disabled', true);
+            $('#'+day+'Container .input-group').addClass('animated shake');
+            $('#'+day+'Container').append('<p style="color: red; font-size: 12px; margin-top: 8px">La hora de inicio no puede ser mayor que la de fin.</p>');
         }
         else{
             $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
