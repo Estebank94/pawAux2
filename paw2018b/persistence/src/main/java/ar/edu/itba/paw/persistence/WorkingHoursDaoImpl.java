@@ -18,7 +18,7 @@ public class WorkingHoursDaoImpl implements WorkingHoursDao {
     public WorkingHoursDaoImpl(final DataSource ds){
         jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("workinghours")
-                .usingColumns("doctorId","dayweek","starttime","finistime")
+                .usingColumns("doctorId","dayweek","starttime","finishtime")
         .usingGeneratedKeyColumns("id");
     }
 
