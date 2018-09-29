@@ -68,9 +68,9 @@ function addStartWorkingHour(val, day){
         $('#'+day+'EndWorkingHour').prop('disabled', false);
         const valEnd = $('#'+day+'EndWorkingHour').val();
         if(valEnd!= "no"){
-            if(getHours(val) > getHours(valEnd)){
+            if(getHours(val) => getHours(valEnd)){
                 $('#'+day+'Container .input-group').addClass('animated shake');
-                $('#'+day+'Container').append('<p style="color: red; font-size: 12px; margin-top: 8px">La hora de inicio no puede ser mayor que la de fin.</p>');
+                $('#'+day+'Container').append('<p style="color: red; font-size: 12px; margin-top: 8px">La hora de inicio no puede ser mayor o igual que la de fin.</p>');
                 $('#'+day+'StartWorkingHour').val('no');
                 $('#'+day+'EndWorkingHour').val('no');
                 $('#'+day+'EndWorkingHour').prop('disabled', true);
@@ -97,12 +97,12 @@ function addEndWorkingHour(val, day){
     }
     if(val!== "no"){
         const valStart = $('#'+day+'StartWorkingHour').val();
-        if(getHours(val) < getHours(valStart)){
+        if(getHours(val) <= getHours(valStart)){
             $('#'+day+'StartWorkingHour').val('no');
             $('#'+day+'EndWorkingHour').val('no');
             $('#'+day+'EndWorkingHour').prop('disabled', true);
             $('#'+day+'Container .input-group').addClass('animated shake');
-            $('#'+day+'Container').append('<p style="color: red; font-size: 12px; margin-top: 8px">La hora de inicio no puede ser mayor que la de fin.</p>');
+            $('#'+day+'Container').append('<p style="color: red; font-size: 12px; margin-top: 8px">La hora de inicio no puede ser mayor o igual que la de fin.</p>');
         }
         else{
             $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
