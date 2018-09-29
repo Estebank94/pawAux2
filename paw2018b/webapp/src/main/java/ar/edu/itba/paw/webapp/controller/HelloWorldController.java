@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.SearchService;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.webapp.forms.AppointmentForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +78,8 @@ public class HelloWorldController {
 	}
 
 	@RequestMapping("/specialist/{doctorId}")
-    public ModelAndView doctorDescription(@PathVariable Integer doctorId, @ModelAttribute("search") Search search){
+    public ModelAndView doctorDescription(@PathVariable Integer doctorId, @ModelAttribute("search") Search search,
+										  @ModelAttribute("appointment")AppointmentForm appointmentForm){
 
 		final ModelAndView mav = new ModelAndView("specialist");
 
@@ -90,18 +92,11 @@ public class HelloWorldController {
 
 		mav.addObject("doctor", doctor);
 		mav.addObject("insuranceNameList", doctor.getInsurance());
-//		System.out.println(doctor.getAvailableAppointments().keySet().isEmpty());
 		mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
 
-//		System.out.println(doctor.getWorkingHours().get(1).size());
 
-		for(DayOfWeek time : doctor.getWorkingHours().keySet()){
-			for(WorkingHours wh : doctor.getWorkingHours().get(time)){
-				System.out.println("Day of week "+ wh.getDayOfWeek());
-				System.out.println("time start " + wh.getStartTime());
-				System.out.println("time end " + wh.getFinishTime());
-			}
-		}
+
+
         mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 
 	    return mav;
