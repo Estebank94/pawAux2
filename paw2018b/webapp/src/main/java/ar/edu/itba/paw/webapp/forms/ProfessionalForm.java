@@ -10,9 +10,9 @@ public class ProfessionalForm {
             "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00",
             "21:00", "22:00"};
     private String avatar;
-    @NotEmpty
+
     private String certificate;
-    @NotEmpty
+
     private String education;
 
     private Set<String> languages;
@@ -151,9 +151,8 @@ public class ProfessionalForm {
         this.specialty = specialty;
     }
 
-    @NotEmpty
     private String workingHoursStart;
-    @NotEmpty
+
     private String workingHoursEnd;
 
     public String getWorkingHoursStart() {
