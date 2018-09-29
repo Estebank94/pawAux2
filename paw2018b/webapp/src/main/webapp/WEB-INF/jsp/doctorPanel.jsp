@@ -51,11 +51,11 @@
             <div class="card-body">
                 <div class="card-text">
                     <div class="row">
-                        <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar big">
+                        <img class="avatar big" src=${doctor.avatar}>
                         <div class="doctor-info-container">
                             <div>
                                 <p class="doctor-specialty">Bienvenido</p>
-                                <h3 class="doctor-name">Dr. Andres Miller</h3>
+                                <h3 class="doctor-name">Dr. ${doctor.lastName}, ${doctor.firstName}</h3>
                                 <br>
                                 <button type="button" class="btn btn-outline-secondary"><i class="fas fa-cog"></i> Editar Perfil</button>
                             </div>
@@ -75,50 +75,29 @@
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                             <br>
-                            <div style="margin-left: 16px; margin-right: 16px;">
-                                <h3>26 de Septiembre de 2018</h3>
-                                <br>
-                                <div>
-                                    <div class="row">
-                                        <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">
-                                        <div class="center-vertical">
+                            <c:forEach items="${appointments}" var="appointment">
+                                    <div style="margin-left: 16px; margin-right: 16px;">
+                                        <h3>
+                                            ${appointment.key.dayOfMonth} de ${appointment.key.month} de ${appointment.key.year}
+                                        </h3>
+                                        <br>
+                                        <c:forEach items="${appointment.value}" var="listItems">
                                             <div>
-                                                <p style="margin-bottom: 0px">18:00hs</p>
-                                                <h5>Palito</h5>
+                                                <div class="row">
+                                                    <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">
+                                                    <div class="center-vertical">
+                                                        <div>
+                                                                <p style="margin-bottom: 0px">${listItems}</p>
+                                                            <h5>Palito</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr class="hr-header-sidebar">
                                             </div>
-                                        </div>
+                                            <br>
+                                        </c:forEach>
                                     </div>
-                                    <hr class="hr-header-sidebar">
-                                </div>
-
-                                <div>
-                                    <div class="row">
-                                        <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">
-                                        <div class="center-vertical">
-                                            <div>
-                                                <p style="margin-bottom: 0px">18:00hs</p>
-                                                <h5>Palito</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr class="hr-header-sidebar">
-                                </div>
-
-                                <div>
-                                    <div class="row">
-                                        <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">
-                                        <div class="center-vertical">
-                                            <div>
-                                                <p style="margin-bottom: 0px">18:00hs</p>
-                                                <h5>Palito</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr class="hr-header-sidebar">
-                                </div>
-                                <br>
-                            </div>
-
+                            </c:forEach>
                         </div>
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
                         <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
