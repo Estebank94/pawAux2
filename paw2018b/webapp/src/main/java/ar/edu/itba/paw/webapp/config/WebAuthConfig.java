@@ -56,7 +56,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().formLogin()
                 .usernameParameter("j_username")
                 .passwordParameter("j_password")
-                .loginPage("/showLogIn")/*.successHandler(successHandler())*/
+                .loginPage("/showLogIn").successHandler(successHandler())
                 .permitAll().and().logout().permitAll().and().exceptionHandling()
                 .accessDeniedPage("/403")
                 .and().csrf().disable();
