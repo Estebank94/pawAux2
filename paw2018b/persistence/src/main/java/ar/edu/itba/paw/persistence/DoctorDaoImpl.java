@@ -329,10 +329,10 @@ import java.util.*;
         private Set<Appointment> findDoctorAppointmentsById(Integer id){
             Set<Appointment> appointments = new HashSet<>();
             StringBuilder query = new StringBuilder();
-            query.append("SELECT doctorId, clientId, appointmentDay, appointmentTime, patient.firstname , patient.lastname")
+            query.append("SELECT appointment.doctorId, appointment.clientId, appointmentDay, appointmentTime, patient.firstname , patient.lastname ")
                     .append("FROM doctor ")
                     .append("JOIN appointment ON doctor.id = appointment.doctorId ")
-                    .append("JOIN patient ON clientId = patient.id ")
+                    .append("JOIN patient ON appointment.clientid = patient.id ")
                     .append("WHERE doctor.id = ?");
 
             List<Appointment> appointmentsList = jdbcTemplate.query(query.toString(), ROW_MAPPER_APPOINTMENT,id);
@@ -353,10 +353,10 @@ import java.util.*;
         private List<Review> findDoctorReviewsById(Integer id){
             List<Review> reviews = new ArrayList<>();
             StringBuilder query = new StringBuilder();
-            query.append("SELECT doctorId,stars, daytime, review.id, description,firstname,lastname ")
+            query.append("SELECT doctor.Id, stars, daytime, review.id, description, patient.firstname , patient.lastname ")
                     .append("FROM doctor ")
                     .append("JOIN review ON doctor.id = review.doctorId ")
-                    .append("JOIN patient ON clientId = patient.id ")
+                    .append("JOIN patient ON userId = patient.id ")
                     .append("WHERE doctor.id = ?");
 
             reviews = jdbcTemplate.query(query.toString(), ROW_MAPPER_REVIEWS,id);
