@@ -21,10 +21,12 @@ public class Appointment implements Comparable<Appointment>{
         this.doctorId = null;
     }
 
-    public Appointment(LocalDate appointmentDay, LocalTime appointmentTime, Integer clientId) {
+    public Appointment(LocalDate appointmentDay, LocalTime appointmentTime, Integer clientId, String clientFirstName, String clientLastName) {
         this.appointmentDay = appointmentDay;
         this.appointmentTime = appointmentTime;
         this.clientId = clientId;
+        this.clientFirstName = clientFirstName;
+        this.clientLastName = clientLastName;
     }
 
     public LocalDate getAppointmentDay() {
