@@ -6,22 +6,22 @@ import java.time.LocalTime;
 
 public class AppointmentForm {
 
-    LocalDate day;
-    LocalTime time;
+    String day;
+    String time;
 
-    public LocalDate getDay() {
+    public String getDay() {
         return day;
     }
 
-    public void setDay(LocalDate day) {
+    public void setDay(String day) {
         this.day = day;
     }
 
-    public LocalTime getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(LocalTime time) {
+    public void setTime(String time) {
         this.time = time;
     }
 }

@@ -115,8 +115,6 @@ public class DoctorServiceImpl implements DoctorService {
         }
         Doctor doctor = doctorOptional.get();
         doctor.setSpecialty(specialty);
-//
-//
         doctor.setWorkingHours(workingHours);
         doctor.setInsurance(insurance);
         doctor.setDescription(description);
@@ -124,15 +122,10 @@ public class DoctorServiceImpl implements DoctorService {
         if (specialtysId.isPresent()){
             doctorSpecialtyDao.addDoctorSpecialtyList(doctor.getId(),specialtysId.get());
         }
-//
        Optional<List<Integer>> insurancesPlanIds = insurancePlanDao.getInsurancesPlanIds(insurance);
         if (insurancesPlanIds.isPresent()){
-            for(Integer integer : insurancesPlanIds.get()){
-                System.out.println("insurancePlan "+integer);
-            }
             medicalcareDao.addMedicalCare(doctor.getId(), insurancesPlanIds.get());
         }
-//
         descriptionDao.addDescription(doctor.getId(), description);
         workingHoursDao.addWorkingHour(doctor.getId(), workingHours);
         return Optional.ofNullable(doctor);

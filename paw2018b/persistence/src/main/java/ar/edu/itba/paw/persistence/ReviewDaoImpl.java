@@ -22,21 +22,19 @@ public class ReviewDaoImpl implements ReviewDao {
         jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("review")
                 .usingColumns("description","stars","doctorid"
-                        ,"userId","userrole","daytime")
+                        ,"userId","daytime")
                 .usingGeneratedKeyColumns("id");
     }
 
     @Override
     public Optional<Review> createReview(String description,Integer stars,
-                               Integer doctorId, Integer userId,
-                               String userrole) {
+                               Integer doctorId, Integer userId) {
         final Map<String,Object> entry = new HashMap<>();
         LocalDateTime nowDateTime = LocalDateTime.now();
         entry.put("description",description);
         entry.put("stars",stars);
         entry.put("doctorId",doctorId);
         entry.put("userId",userId);
-        entry.put("userrole",userrole);
         entry.put("daytime",LocalDateTime.now().toString());
         final Number reviewId = jdbcInsert.executeAndReturnKey(entry);
         Review review  = new Review(stars, nowDateTime, description,new Integer(reviewId.intValue()));

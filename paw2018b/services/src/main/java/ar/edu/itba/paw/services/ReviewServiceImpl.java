@@ -15,7 +15,7 @@ public class ReviewServiceImpl implements ReviewService {
     private ReviewDao reviewDao;
 
     @Override
-    public Optional<Review> createReview(String description, Integer stars, Integer doctorId, Integer userId, String userrole) {
-        return reviewDao.createReview(description, stars, doctorId, userId, userrole);
+    public Optional<Review> createReview(String description, Integer stars, Integer doctorId, Integer userId) {
+        return reviewDao.createReview(description, stars, doctorId, userId);
     }
 }
