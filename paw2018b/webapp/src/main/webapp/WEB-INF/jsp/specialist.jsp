@@ -84,8 +84,8 @@
     </div>
 
 <div class="container">
-    <div class="col-sm-12">
-        <div class="card card-doctor flex-row">
+    <div>
+        <div class="card flex-row" style="margin-top: 30px; margin-left: 0px !important; margin-right: 0px !important; ">
             <div class="card-body">
                 <div class="card-text">
                     <div class="row">
@@ -108,28 +108,28 @@
                 <div>
                     <div style="background-color: #F3F3F4; border-radius: 5px; padding: 16px; padding-bottom: 0px; margin-top: 32px; margin-bottom:32px">
                         <h3 class="doctor-name">Reservá un Turno</h3>
-                        <form:form modelAttribute="appointment" method="post" action="/specialist/${doctor.id}" id="appointment">
+                        <form:form modelAttribute="appointment" method="POST" action="/specialist/${doctor.id}" id="appointment">
                             <div class="row">
                                     <div class="col-sm-5">
                                         <label for="day">Día</label>
-                                        <form:select class="custom-select" id="day" path="day">
+                                        <select class="custom-select" id="day" path="day" cssStyle="cursor: pointer;">
                                             <option value="no" selected>Elegí el Día</option>
                                             <c:forEach items="${appointmentsAvailable}" var="date">
-                                                <form:option value="${date.key}" label="${date.key}">${date.key}</form:option>
+                                                <option value="${date.key}" label="${date.key}">${date.key}</option>
                                             </c:forEach>
-                                        </form:select>
+                                        </select>
                                     </div>
                                 <div class="col-sm-5">
                                     <label for="time">Horario</label>
-                                    <form:select class="custom-select" disabled="false" id="time" path="time">
-                                        <option value="no" selected>Elegí el Horario</option>
+                                    <select class="custom-select" disabled="false" id="time" path="time" cssStyle="cursor: pointer;">
+                                        <option value="no" label="Elegi el Horario" selected>Elegí el Horario</option>
                                     <c:forEach items="${appointmentsAvailable}" var="date">
                                         <c:forEach items="${date.value}" var="listItem">
-                                            <form:option value="${listItem.appointmentTime}" label="pepito${listItem.appointmentTime}">${listItem.appointmentTime}</form:option>
+                                            <option value="${listItem.appointmentDay}_${listItem.appointmentTime}" day="${listItem.appointmentDay}" time="${listItem.appointmentTime}">${listItem.appointmentTime}</option>
                                             <%--<input type="hidden" id="time" name="time" value="${listItem.appointmentTime}">--%>
                                         </c:forEach>
                                     </c:forEach>
-                                    </form:select>
+                                    </select>
                                 </div>
                                 <security:authorize access="!isAuthenticated()">
                                 <div class="col-sm-2">
@@ -138,7 +138,7 @@
                                 </security:authorize>
                                 <security:authorize access="isAuthenticated()">
                                     <div class="col-sm-2">
-                                        <button type="submit" class="btn btn-primary" style="position: absolute; bottom: 0;">Reservar Turno</button>
+                                        <button type="submit" class="btn btn-primary" path="submit" style="position: absolute; bottom: 0;">Reservar Turno</button>
                                     </div>
                                 </security:authorize>
                             </div>
@@ -195,38 +195,8 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-
-<%--select2 dropdown--%>
-<%--<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>--%>
-<%--<script src="<c:url value="/resources/javascript/dropdowns.js"/>"></script>--%>
-
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-<script>
-
-    // $(function() {
-    //     $('#day').on('change', function() {
-    //         var val = this.value;
-    //         if(val == "no"){
-    //             $('#time').prop('disabled', true);
-    //             $('#time').val('no');
-    //         }
-    //         else{
-    //             $('#time').prop('disabled', false);
-    //             $('#time option').hide().filter(function() {
-    //             return this.value.indexOf( val + '_' ) === 0;
-    //         })
-    //             .show();
-    //         }})
-    //         .change();
-    // });
-
-    function addInput(name) {
-        var val = $('#time').val();
-        alert(val);
-        $('#appointment').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
-    }
-
-</script>
+<script src="<c:url value="/resources/javascript/specialist.js"/>"></script>
 </body>
 </html>
 
