@@ -16,7 +16,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private AppointmentDao appointmentDao;
 
     @Override
-    public Optional<Appointment> createAppointment(Integer doctorId, Integer clientId, LocalDate appointmentDay, LocalTime appointmentTime, String clientrole) {
-        return appointmentDao.createAppointment(doctorId, clientId, appointmentDay, appointmentTime, clientrole);
+    public Optional<Appointment> createAppointment(Integer doctorId, Integer clientId, LocalDate appointmentDay, LocalTime appointmentTime) {
+        return appointmentDao.createAppointment(doctorId, clientId, appointmentDay, appointmentTime);
     }
 }

@@ -76,9 +76,18 @@ CREATE TABLE IF NOT EXISTS workingHour(
 CREATE TABLE IF NOT EXISTS appointment(
     doctorId integer,
     clientId integer,
-    clientrole varchar(10),
     appointmentDay varchar(10),
-    appointmentTime varchar(10),
+    appointmentTime VARCHAR (10),
     id SERIAL PRIMARY KEY,
     FOREIGN KEY (doctorId) REFERENCES doctor(id)
 );
+
+CREATE TABLE IF NOT EXISTS patient{
+    id SERIAL PRIMARY KEY,
+    doctorId INTEGER ,
+    firstname VARCHAR (50),
+    lastname VARCHAR (50),
+    phonenumber VARCHAR (20),
+    email VARCHAR (90),
+    password VARCHAR (72),
+};

@@ -24,18 +24,17 @@ public class AppointmentDaoImpl implements AppointmentDao {
     public AppointmentDaoImpl(final DataSource ds){
         jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("appointment")
-                .usingColumns("doctorId","clientid","appointmentDay", "appointmentTime","clientrole" )
+                .usingColumns("doctorId","clientid","appointmentDay", "appointmentTime")
         .usingGeneratedKeyColumns("id");
     }
     @Override
-    public Optional<Appointment> createAppointment(Integer doctorId, Integer clientId, LocalDate appointmentDay, LocalTime appointmentTime, String clientrole) {
+    public Optional<Appointment> createAppointment(Integer doctorId, Integer clientId, LocalDate appointmentDay, LocalTime appointmentTime) {
         final Map<String,Object> entry = new HashMap<>();
 
         entry.put("doctorId",doctorId);
         entry.put("clientId",clientId);
         entry.put("appointmentDay",appointmentDay);
         entry.put("appointmentTime",appointmentTime);
-        entry.put("clientrole",clientrole);
 
         final Number appointmentId = jdbcInsert.executeAndReturnKey(entry);
         return Optional.ofNullable(new Appointment(appointmentDay, appointmentTime));

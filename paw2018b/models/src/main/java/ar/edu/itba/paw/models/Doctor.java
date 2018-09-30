@@ -149,7 +149,7 @@ public class Doctor {
 
 
     public Map<LocalDate, List<Appointment>>getAvailableAppointments(){
-        Map<LocalDate, List<Appointment>> map =new HashMap<>();
+        Map<LocalDate, List<Appointment>> map = new HashMap<>();
         LocalDate today = LocalDate.now();
 
         for (int i = 0; i<15; i++){
@@ -172,7 +172,7 @@ public class Doctor {
             for (WorkingHours workingHoursIterator: workingHours){
                 flag = true;
                 for (i = 0; flag; i++){
-                    if (workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME*i).isAfter(workingHoursIterator.getFinishTime())){
+                    if (workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).isAfter(workingHoursIterator.getFinishTime()) || (workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).compareTo(workingHoursIterator.getFinishTime()) == 0)){
                         flag = false;
                     } else{
                         Appointment dateAppointment = new Appointment(date,workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i));

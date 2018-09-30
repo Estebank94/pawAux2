@@ -139,41 +139,44 @@
                 <%--<c:choose>--%>
                     <%--<c:when test="${insuranceNameList.size() == 1 && sexList.size() != 1}">--%>
                         <hr class="hr-header-sidebar">
-                        <div>
-                            <c:if test="${insuranceNameList.size() == 1 }">
-                            <h4 class="sidebar-title">Plan Prepaga</h4>
-                            <div class="form-check">
-                                <br>
-                                <c:forEach items="${insuranceNameList}" var="insuranceNameList">
-                                    <b> ${insuranceNameList.key} <br> </b>
-                                    <c:forEach items="${insuranceNameList.key}">
-                                        <form:checkboxes path="insurancePlan" items="${insuranceNameList.value}" delimiter="<br>" />
-                                    </c:forEach>
-                                    <br>
-                                </c:forEach>
-                                </c:if>
-                            </div>
-                                <%--<hr class="hr-sidebar">--%>
-                            <div>
-                                <c:if test="${sexList.size() != 1}">
-                                    <h4 class="sidebar-title">Sexo</h4>
-                                    <div class="form-check">
-                                        <form:radiobutton path="sex" value="ALL"/> Todos <br>
-                                        <c:forEach items="${sexList}" var="sex">
-                                            <form:radiobutton path="sex" value="${sex}"/>
-                                            <c:if test="${sex.equals('M')}">Masculino<br></c:if>
-                                            <c:if test="${sex.equals('F')}">Femenino<br></c:if>
+                        <c:choose>
+                            <c:when test="${insuranceNameList.size() >= 1 && sexList.size() != 1}">
+                                <div>
+                                        <c:forEach items="${insuranceNameList}" var="insuranceNameList">
+                                            <c:if test="${insuranceNameList.key.equals(search.insurance) }">
+                                                <h4 class="sidebar-title">Plan Prepaga</h4>
+                                                    <div class="form-check">
+                                                        <b> ${insuranceNameList.key} <br> </b>
+                                                        <c:forEach items="${insuranceNameList.key}">
+                                                            <form:checkboxes path="insurancePlan" items="${insuranceNameList.value}" delimiter="<br>" />
+                                                        </c:forEach>
+                                                        <br>
+                                                    </div>
+                                            </c:if>
                                         </c:forEach>
+                                        <%--<hr class="hr-sidebar">--%>
+                                    <div>
+                                        <c:if test="${sexList.size() != 1}">
+                                            <h4 class="sidebar-title">Sexo</h4>
+                                            <div class="form-check">
+                                                <form:radiobutton path="sex" value="ALL"/> Todos <br>
+                                                <c:forEach items="${sexList}" var="sex">
+                                                    <form:radiobutton path="sex" value="${sex}"/>
+                                                    <c:if test="${sex.equals('M')}">Masculino<br></c:if>
+                                                    <c:if test="${sex.equals('F')}">Femenino<br></c:if>
+                                                </c:forEach>
+                                            </div>
+                                        </c:if>
                                     </div>
-                                </c:if>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                            <div class="center-horizontal">
+                                <i class="fas fa-exclamation-triangle center-horizontal" style="color:#CECECE; font-size: 36px; margin-bottom: 16px; margin-top: 16px "></i>
+                                <p><spring:message code="filter.notApplicable" /></p>
                             </div>
-                                <c:if test="${insuranceNameList.size() != 1 && sexList.size() == 1}">
-                                    <div class="center-horizontal">
-                                        <i class="fas fa-exclamation-triangle center-horizontal" style="color:#CECECE; font-size: 36px; margin-bottom: 16px; margin-top: 16px "></i>
-                                        <p><spring:message code="filter.notApplicable" /></p>
-                                    </div>
-                                </c:if>
-                        </div>
+                            </c:otherwise>
+                        </c:choose>
                     <%--</c:when>--%>
 
                 <%--</c:choose>--%>

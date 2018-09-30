@@ -318,17 +318,13 @@ import java.util.*;
             return Optional.of(compressedSearch.getDoctors().get(0));
         }
 
-        private static final RowMapper<Appointment> ROW_MAPPER_APPOINTMENT = (rs, rowNum) -> new Appointment(rs.getInt("id")
-                , LocalDate.parse(rs.getString("appointmentday"))
-                , LocalTime.parse(rs.getString("appointmenttime"))
-                ,Integer.valueOf(rs.getInt("clientid"))
-                ,new String(rs.getString("clientrole")));
+        private static final RowMapper<Appointment> ROW_MAPPER_APPOINTMENT = (rs, rowNum) -> new Appointment(LocalDate.parse(rs.getString("appointmentday")) ,LocalTime.parse(rs.getString("appointmenttime")),Integer.valueOf(rs.getInt("clientid")));
 
 
         private Set<Appointment> findDoctorAppointmentsById(Integer id){
             Set<Appointment> appointments = new HashSet<>();
             StringBuilder query = new StringBuilder();
-            query.append("SELECT doctorId, clientId, clientrole, appointmentDay, appointmentTime, appointment.id ")
+            query.append("SELECT doctorId, clientId, appointmentDay, appointmentTime, appointment.id ")
                     .append("FROM doctor ")
                     .append("JOIN appointment ON doctor.id = appointment.doctorId ")
                     .append("WHERE doctor.id = ?");
