@@ -217,12 +217,21 @@ public class ProfessionalForm {
     public List<WorkingHours> workingHoursList() {
 
         List<WorkingHours> list = new ArrayList<>();
-        list.add(new WorkingHours(DayOfWeek.MONDAY, getMonStart(), getMonEnd()));
-        list.add(new WorkingHours(DayOfWeek.TUESDAY, getTueStart(), getTueEnd()));
-        list.add(new WorkingHours(DayOfWeek.WEDNESDAY, getWedStart(), getWedEnd()));
-        list.add(new WorkingHours(DayOfWeek.THURSDAY, getThuStart(), getThuEnd()));
-        list.add(new WorkingHours(DayOfWeek.FRIDAY, getFriStart(), getFriEnd()));
-
+        if(getMonStart()!=null && getMonEnd()!=null){
+            list.add(new WorkingHours(DayOfWeek.MONDAY, getMonStart(), getMonEnd()));
+        }
+        if(getTueStart() != null && getTueEnd()!=null){
+            list.add(new WorkingHours(DayOfWeek.TUESDAY, getTueStart(), getTueEnd()));
+        }
+        if(getWedStart() != null && getWedEnd()!=null){
+            list.add(new WorkingHours(DayOfWeek.WEDNESDAY, getWedStart(), getWedEnd()));
+        }
+        if(getThuStart() != null && getThuEnd()!=null){
+            list.add(new WorkingHours(DayOfWeek.THURSDAY, getThuStart(), getThuEnd()));
+        }
+        if(getFriStart() !=null && getFriEnd()!=null){
+            list.add(new WorkingHours(DayOfWeek.FRIDAY, getFriStart(), getFriEnd()));
+        }
         return list;
     }
 }
