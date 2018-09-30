@@ -58,6 +58,15 @@ CREATE TABLE IF NOT EXISTS information (
  id IDENTITY PRIMARY KEY
  );
 
+CREATE TABLE IF NOT EXISTS workingHour(
+    doctorId integer,
+    starttime varchar(10),
+    finishtime varchar(10),
+    dayweek integer,
+    id IDENTITY PRIMARY KEY,
+    FOREIGN KEY (doctorId) REFERENCES doctor(id)
+);
+
 INSERT INTO doctor (firstName, lastName, sex, phoneNumber, address, licence, avatar, id, workingHours, district)
 VALUES ('Roberto Nicolas Agustin', 'Rosa', 'M', '47777777', 'Arce 211', '1234', 'https://d1cesmq0xhh7we.cloudfront.net/724f4a59-0f34-4cbc-980f-766f4df17d9bcircle_medium__v1__.png', '1', 'lunes 9am', 'Palermo');
 
