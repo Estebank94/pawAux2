@@ -52,6 +52,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().and()
                 .authorizeRequests()
                 .antMatchers("/doctorPanel/**").hasRole("DOCTOR")
+                /*.antMatchers("/doctorProfile/**").hasRole("DOCTOR")*/
                 .antMatchers("/patientPanel/**").hasRole("PATIENT")
                 .and().formLogin()
                 .usernameParameter("j_username")

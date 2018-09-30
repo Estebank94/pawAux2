@@ -5,12 +5,17 @@ import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.interfaces.SearchService;
 import ar.edu.itba.paw.models.Description;
 import ar.edu.itba.paw.models.Doctor;
+import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.WorkingHours;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +71,12 @@ public class RegistrationController {
 
             Doctor doctor = doctorService.createDoctor(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(),
                      personalForm.getSex(), personalForm.getLicence(), "null2", personalForm.getAddress());
-//            Patient patient = patientService.createPatient()
+            Patient patient = patientService.createPatient(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(), personalForm.getEmail(),
+                    personalForm.getPassword());
+            patientService.setDoctorId(patient.getPatientId(), doctor.getId());
+
+            /*TODO AUTOLOGIN*/
+//            Authentication authentication =
 
             mav.addObject("doctor", doctor);
             return mav;
@@ -111,8 +123,6 @@ public class RegistrationController {
 
         List<WorkingHours> workingHours = professionalForm.workingHoursList();
 
-        /*TODO agregar workingHours al doctorInfo */
-
         Doctor doctorProfessional = doctorService.setDoctorInfo(doctorId, professionalForm.getSpecialty(), insurance,workingHours ,description).get();
         
         /*TODO: agregar boton de cancelar y volver al incio y mostrar mensaje en pantalla que esta registrado como profesional pero que todavia
@@ -121,5 +131,18 @@ public class RegistrationController {
         final ModelAndView mav = new ModelAndView("finalStep");
         return mav;
     }
+
+    @RequestMapping(value="/doctorProfile")
+    public ModelAndView doctorProfilePrueba(){
+        return new ModelAndView("finalStep");
+    }
+
+//    public void authWithHttpServletRequest(HttpServletRequest request, String username, String password) {
+//        try {
+//
+//        } catch (ServletException e) {
+//            LOGGER.error("Error while login ", e);
+//        }
+//    }
 
 }
