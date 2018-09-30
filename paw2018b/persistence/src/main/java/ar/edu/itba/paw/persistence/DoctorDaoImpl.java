@@ -347,8 +347,8 @@ import java.util.*;
                 ,LocalDateTime.parse(rs.getString("dateTime"))
                 ,rs.getString("description")
                 ,new Integer (rs.getInt("id"))
-                ,rs.getString("firstname")
-                ,rs.getString("lastname"));
+                ,rs.getString("patient.firstname")
+                ,rs.getString("patient.lastname"));
 
         private List<Review> findDoctorReviewsById(Integer id){
             List<Review> reviews = new ArrayList<>();
