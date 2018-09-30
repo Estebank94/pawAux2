@@ -108,16 +108,16 @@
                 <div>
                     <div style="background-color: #F3F3F4; border-radius: 5px; padding: 16px; padding-bottom: 0px; margin-top: 32px; margin-bottom:32px">
                         <h3 class="doctor-name">Reservá un Turno</h3>
-                        <form>
+                        <form:form modelAttribute="appointment" method="post" action="/specialist/${doctor.id}" id="appointment">
                             <div class="row">
                                     <div class="col-sm-5">
                                         <label for="day">Día</label>
-                                        <select class="custom-select" id="day">
+                                        <form:select class="custom-select" id="day" path="day">
                                             <option value="no" selected>Elegí el Día</option>
                                             <c:forEach items="${appointmentsAvailable}" var="date">
-                                                <option value="${date.key}" label="${date.key}">${date.key}</option>
+                                                <form:option value="${date.key}" label="${date.key}">${date.key}</form:option>
                                             </c:forEach>
-                                        </select>
+                                        </form:select>
                                     </div>
                                 <div class="col-sm-5">
                                     <label for="time">Horario</label>
@@ -125,7 +125,8 @@
                                         <option value="no" selected>Elegí el Horario</option>
                                     <c:forEach items="${appointmentsAvailable}" var="date">
                                         <c:forEach items="${date.value}" var="listItem">
-                                            <option value="${listItem.appointmentDay}_${listItem.appointmentTime}" label="${listItem.appointmentTime}">${listItem.appointmentTime}</option>
+                                            <option value="${listItem.appointmentDay}_${listItem.appointmentTime}" label="${listItem.appointmentTime}" onclick="alert(${listItem.appointmentTime})">${listItem.appointmentTime}</option>
+                                            <%--<input type="hidden" id="time" name="time" value="${listItem.appointmentTime}">--%>
                                         </c:forEach>
                                     </c:forEach>
                                     </select>
@@ -142,7 +143,7 @@
                                 </security:authorize>
                             </div>
                             <br>
-                        </form>
+                        </form:form>
                     </div>
 
                     <h3 id="information">Información Profesional</h3>
@@ -218,6 +219,12 @@
             }})
             .change();
     });
+
+    function addInput(name, val) {
+        alert('hola')
+        alert(val.toString());
+        $('#appointment').append('<input type="hidden" name="'+name+'" value="'+val+'" class="'+id+'" id="'+name+'"/>');
+    }
 
 </script>
 </body>

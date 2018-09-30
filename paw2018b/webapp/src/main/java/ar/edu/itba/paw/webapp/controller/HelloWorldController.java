@@ -77,7 +77,7 @@ public class HelloWorldController {
 		return mav;
 	}
 
-	@RequestMapping("/specialist/{doctorId}")
+	@RequestMapping(value = "/specialist/{doctorId}", method = { RequestMethod.GET})
     public ModelAndView doctorDescription(@PathVariable Integer doctorId, @ModelAttribute("search") Search search,
 										  @ModelAttribute("appointment")AppointmentForm appointmentForm){
 
@@ -85,21 +85,22 @@ public class HelloWorldController {
 
 
 	    Doctor doctor = doctorService.findDoctorById(doctorId).get();
-//		doctor.getDescription().getCertificate().remove(null);
 		doctor.getDescription().getLanguages().remove(null);
-//		doctor.getDescription().getEducation().remove(null);
-
 
 		mav.addObject("doctor", doctor);
 		mav.addObject("insuranceNameList", doctor.getInsurance());
 		mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
-
-
-
-
         mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 
 	    return mav;
     }
+
+    @RequestMapping(value = "/specialist/{doctorId}", method = {RequestMethod.POST})
+	public ModelAndView doctorDescriptionPost(@PathVariable Integer doctorId, @ModelAttribute("search") Search search,
+											  @ModelAttribute("appointment")AppointmentForm appointmentForm){
+		System.out.println(appointmentForm.getDay());
+		System.out.println(appointmentForm.getTime());
+		return new ModelAndView("finalStep");
+	}
 
 }
