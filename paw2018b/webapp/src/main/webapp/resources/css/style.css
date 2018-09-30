@@ -443,5 +443,17 @@ h2
   display: table;
 }
 
+.center-img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 512px;
+  width: 512px;
+}
 
+.center-horiz {
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
 
