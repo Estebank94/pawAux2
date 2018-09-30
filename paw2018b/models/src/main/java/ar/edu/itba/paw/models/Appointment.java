@@ -7,34 +7,24 @@ import java.time.LocalTime;
 import java.util.*;
 
 public class Appointment implements Comparable<Appointment>{
-    private Integer id;
     private LocalDate appointmentDay;
     private LocalTime appointmentTime;
     private Integer clientId;
-    private String clientrole;
+    private Integer doctorId;
+    private String clientFirstName;
+    private String clientLastName;
 
     public Appointment(LocalDate appointmentDay, LocalTime appointmentTime) {
         this.appointmentDay = appointmentDay;
         this.appointmentTime = appointmentTime;
-        this.id = null;
         this.clientId = null;
-        this.clientrole = null;
+        this.doctorId = null;
     }
 
-    public Appointment(Integer id, LocalDate appointmentDay, LocalTime appointmentTime, Integer clientId, String clientrole) {
-        this.id = id;
+    public Appointment(LocalDate appointmentDay, LocalTime appointmentTime, Integer clientId) {
         this.appointmentDay = appointmentDay;
         this.appointmentTime = appointmentTime;
         this.clientId = clientId;
-        this.clientrole = clientrole;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public LocalDate getAppointmentDay() {
@@ -80,14 +70,6 @@ public class Appointment implements Comparable<Appointment>{
         return 0;
     }
 
-    public Integer getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(Integer clientId) {
-        this.clientId = clientId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -102,5 +84,36 @@ public class Appointment implements Comparable<Appointment>{
         return Objects.hash(appointmentDay, appointmentTime);
     }
 
+    public Integer getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Integer clientId) {
+        this.clientId = clientId;
+    }
+
+    public Integer getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(Integer doctorId) {
+        this.doctorId = doctorId;
+    }
+
+    public String getClientFirstName() {
+        return clientFirstName;
+    }
+
+    public void setClientFirstName(String clientFirstName) {
+        this.clientFirstName = clientFirstName;
+    }
+
+    public String getClientLastName() {
+        return clientLastName;
+    }
+
+    public void setClientLastName(String clientLastName) {
+        this.clientLastName = clientLastName;
+    }
 }
 
