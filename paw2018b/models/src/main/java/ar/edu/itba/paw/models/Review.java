@@ -7,13 +7,24 @@ public class Review {
     private LocalDateTime dateTime;
     private String description;
     private Integer id;
+    private String reviewerFirstName;
+    private String reviewerLastName;
+
+    public Review(Integer stars, LocalDateTime dateTime, String description, Integer id, String reviewerFirstName, String reviewerLastName) {
+        this.stars = stars;
+        this.dateTime = dateTime;
+        this.description = description;
+        this.id = id;
+        this.reviewerFirstName = reviewerFirstName;
+        this.reviewerLastName = reviewerLastName;
+    }
 
     public Review(Integer stars, LocalDateTime dateTime, String description, Integer id) {
         this.stars = stars;
         this.dateTime = dateTime;
         this.description = description;
         this.id = id;
-    }
+     }
 
     public String getDescription() {
         return description;

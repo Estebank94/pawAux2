@@ -318,15 +318,21 @@ import java.util.*;
             return Optional.of(compressedSearch.getDoctors().get(0));
         }
 
-        private static final RowMapper<Appointment> ROW_MAPPER_APPOINTMENT = (rs, rowNum) -> new Appointment(LocalDate.parse(rs.getString("appointmentday")) ,LocalTime.parse(rs.getString("appointmenttime")),Integer.valueOf(rs.getInt("clientid")));
+        private static final RowMapper<Appointment> ROW_MAPPER_APPOINTMENT = (rs, rowNum) -> new Appointment(
+                LocalDate.parse(rs.getString("appointmentday")) ,
+                LocalTime.parse(rs.getString("appointmenttime")),
+                Integer.valueOf(rs.getInt("clientid")),
+                rs.getString("patient.firstname"),
+                rs.getString("patient.lastname"));
 
 
         private Set<Appointment> findDoctorAppointmentsById(Integer id){
             Set<Appointment> appointments = new HashSet<>();
             StringBuilder query = new StringBuilder();
-            query.append("SELECT doctorId, clientId, appointmentDay, appointmentTime, appointment.id ")
+            query.append("SELECT doctorId, clientId, appointmentDay, appointmentTime, patient.firstname , patient.lastname")
                     .append("FROM doctor ")
                     .append("JOIN appointment ON doctor.id = appointment.doctorId ")
+                    .append("JOIN patient ON clientId = patient.id ")
                     .append("WHERE doctor.id = ?");
 
             List<Appointment> appointmentsList = jdbcTemplate.query(query.toString(), ROW_MAPPER_APPOINTMENT,id);
@@ -340,14 +346,17 @@ import java.util.*;
                 rs.getInt("stars")
                 ,LocalDateTime.parse(rs.getString("dateTime"))
                 ,rs.getString("description")
-                ,new Integer (rs.getInt("id")));
+                ,new Integer (rs.getInt("id"))
+                ,rs.getString("firstname")
+                ,rs.getString("lastname"));
 
         private List<Review> findDoctorReviewsById(Integer id){
             List<Review> reviews = new ArrayList<>();
             StringBuilder query = new StringBuilder();
-            query.append("SELECT doctorId,stars, daytime, review.id, description ")
+            query.append("SELECT doctorId,stars, daytime, review.id, description,firstname,lastname ")
                     .append("FROM doctor ")
                     .append("JOIN review ON doctor.id = review.doctorId ")
+                    .append("JOIN patient ON clientId = patient.id ")
                     .append("WHERE doctor.id = ?");
 
             reviews = jdbcTemplate.query(query.toString(), ROW_MAPPER_REVIEWS,id);

@@ -19,7 +19,7 @@ public class WorkingHoursDaoImpl implements WorkingHoursDao {
     @Autowired
     public WorkingHoursDaoImpl(final DataSource ds){
         jdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName("workinghours")
+                .withTableName("workinghour")
                 .usingColumns("doctorId","dayweek","starttime","finishtime")
         .usingGeneratedKeyColumns("id");
     }
@@ -29,7 +29,7 @@ public class WorkingHoursDaoImpl implements WorkingHoursDao {
     public void addWorkingHour(Integer doctorId, WorkingHours workingHours) {
         final Map<String,Object> entry = new HashMap<>();
         entry.put("doctorId",doctorId);
-        entry.put("dayweek",workingHours.getDayOfWeek().toString());
+        entry.put("dayweek",workingHours.getDayOfWeek().getValue());
         entry.put("starttime",workingHours.getStartTime().toString());
         entry.put("finishtime",workingHours.getFinishTime().toString());
 
