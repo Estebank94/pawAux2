@@ -23,7 +23,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-@RequestMapping("/doctorPanel")
 @Controller
 public class DoctorPanelController {
 
@@ -32,7 +31,7 @@ public class DoctorPanelController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DoctorPanelController.class);
 
-    @RequestMapping("/")
+    @RequestMapping("/doctorPanel")
     public ModelAndView doctorPanel(){
         ModelAndView mav = new ModelAndView("doctorPanel");
 
@@ -43,7 +42,7 @@ public class DoctorPanelController {
 ////            Map<LocalDate, List<Appointment>> appointments = doctor.getAvailableAppointments();
 ////        }
 
-        Doctor doctor = doctorService.findDoctorById(32).get();
+        Doctor doctor = doctorService.findDoctorById(2).get();
 
         Map<LocalDate, List<LocalTime>> appointments = doctor.appointmentsToMap();
 

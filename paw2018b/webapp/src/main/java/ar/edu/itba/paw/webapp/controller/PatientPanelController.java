@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/patientPanel")
+
 public class PatientPanelController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PatientPanelController.class);
 
-    @RequestMapping("/")
+    @RequestMapping("/patientPanel")
     public ModelAndView patientPanel(){
         ModelAndView mav = new ModelAndView("patientPanel");
         return mav;
