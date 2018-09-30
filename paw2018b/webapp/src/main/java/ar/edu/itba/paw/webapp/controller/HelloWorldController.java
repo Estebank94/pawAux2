@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.interfaces.PatientService;
 import java.util.*;
 
 @Controller
@@ -21,8 +21,8 @@ public class HelloWorldController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldController.class);
 	
 	 @Autowired
-	 @Qualifier("userServiceImpl")
-	 private UserService us;
+	 @Qualifier("patientServiceImpl")
+	 private PatientService us;
 
 	 @Autowired
 	 private DoctorService doctorService;

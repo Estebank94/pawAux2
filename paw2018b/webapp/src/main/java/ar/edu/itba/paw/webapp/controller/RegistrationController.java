@@ -1,11 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.DoctorService;
+import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.interfaces.SearchService;
-import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Description;
 import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.WorkingHours;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
@@ -39,7 +38,7 @@ public class RegistrationController {
     private DoctorService doctorService;
 
     @Autowired
-    private UserService userService;
+    private PatientService patientService;
 
     @RequestMapping(value="/doctorRegistration", method = { RequestMethod.POST })
     public ModelAndView doctorRegistration (@Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors){
@@ -65,7 +64,7 @@ public class RegistrationController {
 
             Doctor doctor = doctorService.createDoctor(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(),
                      personalForm.getSex(), personalForm.getLicence(), "null2", personalForm.getAddress());
-//            User user = userService.createUser()
+//            Patient patient = patientService.createPatient()
 
             mav.addObject("doctor", doctor);
             return mav;
