@@ -31,9 +31,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     private DescriptionDao descriptionDao;
-//
-//    @Autowired
-//    private WorkingHoursDao workingHoursDao;
+
+    @Autowired
+    private WorkingHoursDao workingHoursDao;
 
     @Override
     public Optional<CompressedSearch> listDoctors() {
@@ -117,7 +117,7 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setSpecialty(specialty);
 //
 //
-////        doctor.setWorkingHours(workingHours);
+        doctor.setWorkingHours(workingHours);
         doctor.setInsurance(insurance);
         doctor.setDescription(description);
         Optional<List<Integer>> specialtysId = specialtyDao.findSpecialtysId(specialty);
@@ -134,7 +134,7 @@ public class DoctorServiceImpl implements DoctorService {
         }
 //
         descriptionDao.addDescription(doctor.getId(), description);
-//        workingHoursDao.addWorkingHour(doctor.getId(), workingHours);
+        workingHoursDao.addWorkingHour(doctor.getId(), workingHours);
         return Optional.ofNullable(doctor);
     }
 }

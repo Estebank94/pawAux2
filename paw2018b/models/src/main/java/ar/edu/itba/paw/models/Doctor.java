@@ -201,6 +201,18 @@ public class Doctor {
         this.workingHours = workingHours;
     }
 
+    public void setWorkingHours(List<WorkingHours> workingHours){
+        Map< DayOfWeek, List<WorkingHours>>  map = new HashMap<>();
+        for (WorkingHours workingHoursIterator: workingHours){
+            if (!map.containsKey(workingHoursIterator.getDayOfWeek())){
+                List<WorkingHours> whDayList = new ArrayList<>();
+                whDayList.add(workingHoursIterator);
+            } else if (!map.get(workingHoursIterator.getDayOfWeek()).contains(workingHoursIterator)){
+                map.get(workingHoursIterator.getDayOfWeek()).add(workingHoursIterator);
+            }
+        }
+        setWorkingHours(map);
+    }
 
     public Set<Appointment> getAppointments() {
         return appointments;
@@ -281,6 +293,8 @@ public class Doctor {
         }
         return month;
     }
+
+
 }
 
 
