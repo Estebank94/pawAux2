@@ -232,6 +232,9 @@ public class ProfessionalForm {
         if(getFriStart() !=null && getFriEnd()!=null){
             list.add(new WorkingHours(DayOfWeek.FRIDAY, getFriStart(), getFriEnd()));
         }
+        if(getSatStart() != null && getSatEnd()!=null){
+            list.add(new WorkingHours(DayOfWeek.SATURDAY, getSatStart(), getSatEnd()));
+        }
         return list;
     }
 }
