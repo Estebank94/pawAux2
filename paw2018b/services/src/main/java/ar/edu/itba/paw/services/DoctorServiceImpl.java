@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
+import java.security.acl.LastOwnerException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -86,11 +87,11 @@ public class DoctorServiceImpl implements DoctorService {
         if (lastName == null) {
             throw new IllegalArgumentException("last name can't be null");
         }
-        if (firstName.length() == 0){
+        if (lastName.length() == 0){
             throw new IllegalArgumentException("Doctor firstname can't be empty");
         }
 
-        if (firstName.length() > 45){
+        if (lastName.length() > 45){
             throw new IllegalArgumentException("Doctor firstname maxlength is 50");
         }
 
@@ -101,7 +102,7 @@ public class DoctorServiceImpl implements DoctorService {
             throw new IllegalArgumentException("phonenumber firstname can't be empty");
         }
 
-        if (firstName.length() > 45){
+        if (phoneNumber.length() > 20){
             throw new IllegalArgumentException("phonenumber can't have more than 20 characters");
         }
 
