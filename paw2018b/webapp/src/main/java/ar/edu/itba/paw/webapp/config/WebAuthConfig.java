@@ -48,14 +48,18 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.userDetailsService(userDetailsService).authorizeRequests()
+        http.userDetailsService(userDetailsService)
+                .sessionManagement().and()
+                .authorizeRequests()
                 .antMatchers("/doctorPanel/**").hasRole("DOCTOR")
-                .antMatchers("/patientPanel/**").hasRole("PACIENTE").and().formLogin()
+                .antMatchers("/patientPanel/**").hasRole("PATIENT")
+                .and().formLogin()
                 .usernameParameter("j_username")
                 .passwordParameter("j_password")
-                .loginPage("/showLogIn").successHandler(successHandler())
+                .loginPage("/showLogIn")/*.successHandler(successHandler())*/
                 .permitAll().and().logout().permitAll().and().exceptionHandling()
-                .accessDeniedPage("/403");
+                .accessDeniedPage("/403")
+                .and().csrf().disable();
     }
     /*TODO: aca con los .accesDenied se puede usar para todo? Con eso manejamos los stack traces?*/
     /*TODO AUTOLOGIN:

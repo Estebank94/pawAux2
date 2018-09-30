@@ -6,16 +6,28 @@ public class Patient {
     private String firstName;
     private String lastName;
     private String phoneNumber;
-    private String address;
-    private String sex;
+    private String email;
+    private String password;
+    private Integer doctorId;
 
-    public Patient(Integer patientId, String firstName, String lastName, String phoneNumber, String address, String sex) {
+    public Patient(Integer patientId, String firstName, String lastName, String phoneNumber, String email, String password) {
         this.patientId = patientId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.address = address;
-        this.sex = sex;
+        this.email = email;
+        this.password = password;
+        this.doctorId = null;
+    }
+
+    public Patient(Integer patientId, String firstName, String lastName, String phoneNumber, String email, String password, Integer doctorId) {
+        this.patientId = patientId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.password = password;
+        this.doctorId = doctorId;
     }
 
     public Integer getPatientId() {
@@ -50,20 +62,27 @@ public class Patient {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getAddress() {
-        return address;
+    public String getEmail() {
+        return email;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getSex() {
-        return sex;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
+    public Integer getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(Integer doctorId) {
+        this.doctorId = doctorId;
+    }
 }

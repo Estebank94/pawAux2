@@ -13,8 +13,23 @@ public class PatientServiceImpl implements PatientService {
     private PatientDao patientDao;
 
     @Override
-    public Patient createPatient(String firstName, String lastName, String phoneNumber, String address, String sex) {
-        return patientDao.createPatient(firstName, lastName, phoneNumber, address, sex );
+    public Patient createPatient(String firstName, String lastName, String phoneNumber, String email, String password) {
+        return patientDao.createPatient(firstName, lastName, phoneNumber, email, password);
+    }
+
+    @Override
+    public Boolean setDoctorId(Integer patientId, Integer doctorId) {
+        return patientDao.setDoctorId(patientId, doctorId);
+    }
+
+    @Override
+    public Patient findPatientById(Integer id) {
+        return patientDao.findPatientById(id).get();
+    }
+
+    @Override
+    public Patient findPatientByEmail(String email) {
+        return patientDao.findPatientByEmail(email).get();
     }
 
 }
