@@ -121,15 +121,15 @@
                                     </div>
                                 <div class="col-sm-5">
                                     <label for="time">Horario</label>
-                                    <select class="custom-select" disabled="true" id="time">
+                                    <form:select class="custom-select" disabled="false" id="time" path="time">
                                         <option value="no" selected>Elegí el Horario</option>
                                     <c:forEach items="${appointmentsAvailable}" var="date">
                                         <c:forEach items="${date.value}" var="listItem">
-                                            <option value="${listItem.appointmentDay}_${listItem.appointmentTime}" label="${listItem.appointmentTime}" onclick="alert(${listItem.appointmentTime})">${listItem.appointmentTime}</option>
+                                            <form:option value="${listItem.appointmentTime}" label="pepito${listItem.appointmentTime}">${listItem.appointmentTime}</form:option>
                                             <%--<input type="hidden" id="time" name="time" value="${listItem.appointmentTime}">--%>
                                         </c:forEach>
                                     </c:forEach>
-                                    </select>
+                                    </form:select>
                                 </div>
                                 <security:authorize access="!isAuthenticated()">
                                 <div class="col-sm-2">
@@ -203,27 +203,27 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 <script>
 
-    $(function() {
-        $('#day').on('change', function() {
-            var val = this.value;
-            if(val == "no"){
-                $('#time').prop('disabled', true);
-                $('#time').val('no');
-            }
-            else{
-                $('#time').prop('disabled', false);
-                $('#time option').hide().filter(function() {
-                return this.value.indexOf( val + '_' ) === 0;
-            })
-                .show();
-            }})
-            .change();
-    });
+    // $(function() {
+    //     $('#day').on('change', function() {
+    //         var val = this.value;
+    //         if(val == "no"){
+    //             $('#time').prop('disabled', true);
+    //             $('#time').val('no');
+    //         }
+    //         else{
+    //             $('#time').prop('disabled', false);
+    //             $('#time option').hide().filter(function() {
+    //             return this.value.indexOf( val + '_' ) === 0;
+    //         })
+    //             .show();
+    //         }})
+    //         .change();
+    // });
 
-    function addInput(name, val) {
-        alert('hola')
-        alert(val.toString());
-        $('#appointment').append('<input type="hidden" name="'+name+'" value="'+val+'" class="'+id+'" id="'+name+'"/>');
+    function addInput(name) {
+        var val = $('#time').val();
+        alert(val);
+        $('#appointment').append('<input type="hidden" name="'+name+'" value="'+val+'" id="'+name+'"/>');
     }
 
 </script>
