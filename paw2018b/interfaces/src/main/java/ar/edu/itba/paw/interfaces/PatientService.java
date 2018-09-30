@@ -8,7 +8,7 @@ public interface PatientService {
 
     public Patient findPatientByEmail(String email);
 
-    public Patient createPatient(String firstName, String lastName, String phoneNumber, String address, String sex);
+    public Patient createPatient(String firstName, String lastName, String phoneNumber, String address, String sex) throws IllegalArgumentException;
 
     public Boolean setDoctorId(Integer patientId, Integer doctorId);
 
