@@ -93,9 +93,16 @@ public class HelloWorldController {
     @RequestMapping(value = "/specialist/{doctorId}", method = {RequestMethod.POST})
 	public ModelAndView doctorDescriptionPost(@PathVariable Integer doctorId, @ModelAttribute("search") Search search,
 											  @ModelAttribute("appointment")AppointmentForm appointmentForm){
-		System.out.println(appointmentForm.getDay());
-		System.out.println(appointmentForm.getTime());
-		return new ModelAndView("finalStep");
+		System.out.println("DIAAAA " + appointmentForm.getDay());
+		System.out.println("TIEMPO "+appointmentForm.getTime());
+
+		Doctor doctor = doctorService.findDoctorById(doctorId).get();
+
+		ModelAndView mav = new ModelAndView("appointmentSuccess");
+		mav.addObject("doctor", doctor);
+		mav.addObject("appointmentDay", appointmentForm.getDay());
+		mav.addObject("appointmentTime", appointmentForm.getTime());
+		return mav;
 	}
 
 }
