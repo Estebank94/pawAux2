@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.AppointmentService;
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.SearchService;
 import ar.edu.itba.paw.models.*;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,6 +20,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+import javax.validation.Valid;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -37,6 +40,9 @@ public class HelloWorldController {
 
 	@Autowired
 	private SearchService searchService;
+
+	@Autowired
+	private AppointmentService appointmentService;
 	
 	@RequestMapping("/")
 	public ModelAndView helloWorld() {
@@ -44,7 +50,6 @@ public class HelloWorldController {
 		mav.addObject("search", new Search());
 		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
-
 		return mav;
 	}
 
@@ -66,7 +71,7 @@ public class HelloWorldController {
 			theSearch.setInsurance("no");
 			theSearch.setSpecialty("");
 		}
-
+		LOGGER.debug("GET DoctorList {}", doctorsList);
 		mav.addObject("doctorList", doctorsList);
 		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
@@ -79,7 +84,7 @@ public class HelloWorldController {
 
 	@RequestMapping(value = "/specialist/{doctorId}", method = { RequestMethod.GET})
     public ModelAndView doctorDescription(@PathVariable Integer doctorId, @ModelAttribute("search") Search search,
-										  @ModelAttribute("appointment")AppointmentForm appointmentForm){
+										  @ModelAttribute("appointment") AppointmentForm appointmentForm){
 
 		final ModelAndView mav = new ModelAndView("specialist");
 
@@ -89,6 +94,7 @@ public class HelloWorldController {
 
 		mav.addObject("doctor", doctor);
 		mav.addObject("insuranceNameList", doctor.getInsurance());
+		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 		mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
         mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 
