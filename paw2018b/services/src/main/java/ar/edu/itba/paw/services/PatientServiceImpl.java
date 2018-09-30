@@ -13,8 +13,11 @@ public class PatientServiceImpl implements PatientService {
     private PatientDao patientDao;
 
     @Override
-    public Patient createPatient(String firstName, String lastName, String phoneNumber, String email, String password) {
-        return patientDao.createPatient(firstName, lastName, phoneNumber, email, password);
+    public Patient createPatient(String firstName, String lastName, String phoneNumber, String email, String password) throws IllegalArgumentException {
+        if(!patientDao.findPatientByEmail(email).isPresent()){
+            return patientDao.createPatient(firstName, lastName, phoneNumber, email, password);
+        }
+        throw new IllegalArgumentException("Username with email " + email + " already exists");
     }
 
     @Override
