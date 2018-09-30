@@ -457,3 +457,13 @@ h2
   margin-right: auto !important;
 }
 
+.outer-div
+{
+  padding: 64px;
+}
+.inner-div
+{
+  margin: 0 auto;
+  max-width: 700px;
+}
+
