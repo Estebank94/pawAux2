@@ -27,6 +27,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sound.midi.SysexMessage;
 import javax.validation.Valid;
 import java.time.DayOfWeek;
 import java.util.HashMap;
@@ -61,6 +62,7 @@ public class RegistrationController {
               /* || patientService.findPatientByEmail(personalForm.getEmail()) != null*/){
             if(!personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())){
                 /*TODO: this doesn't show the error message*/
+                System.out.println("passwordMatching");
                 showDoctorRegistration(personalForm).addObject("noMatchingPassword", true);
             }/*else if(patientService.findPatientByEmail(personalForm.getEmail()) != null){
                 showDoctorRegistration(personalForm).addObject("userExists", true);
@@ -100,6 +102,7 @@ public class RegistrationController {
                 return mav;
 
             } catch (IllegalArgumentException ex) {
+                /*TODO: VER CUANDO TIRA ESTO !!! PORQUE CADA TANTO LO ROMPE Y NI SE SABE PORQUE*/
                 return new ModelAndView("500");
             }
         }

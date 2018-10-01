@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -52,15 +53,28 @@ public class DoctorPanelController {
 
 
         if(doctorId != 0 && doctorId != null){
-            if(doctor.getSpecialty() == null || doctor.getInsurance().isEmpty() || doctor.getWorkingHours().isEmpty()){
-                mav.addObject("professionalIncomplete", true);
-            }
+            System.out.println("Education " + doctor.getDescription().getEducation());
+            System.out.println("Language " + doctor.getDescription().getLanguages().contains(null));
+            System.out.println("Certificate " + doctor.getDescription().getCertificate());
+
+//            if(doctor.getSpecialty() == null
+//                    || doctor.getInsurance().isEmpty()
+//                    || doctor.getWorkingHours().isEmpty()
+//                    || doctor.getDescription().getEducation() == null
+//                    || doctor.getDescription().getLanguages().contains(null)
+//                    || doctor.getDescription().getCertificate() == null){
+//
+//                mav.addObject("professionalIncomplete", true);
+//            }
+
             Map<LocalDate, List<Appointment>> appointments = doctor.appointmentsMap();
             mav.addObject("appointments", appointments);
             mav.addObject("doctor", doctor);
+
         }else{
             /*TODO CHECK IF THE ID IS A REAL DOCTOR*/
         }
+
 
 
 
