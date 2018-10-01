@@ -44,7 +44,7 @@ public class DoctorPanelController {
 
         Doctor doctor = doctorService.findDoctorById(2).get();
 
-        Map<LocalDate, List<LocalTime>> appointments = doctor.appointmentsToMap();
+        Map<LocalDate, List<Appointment>> appointments = doctor.appointmentsMap();
 
         mav.addObject("appointments", appointments);
         mav.addObject("doctor", doctor);
