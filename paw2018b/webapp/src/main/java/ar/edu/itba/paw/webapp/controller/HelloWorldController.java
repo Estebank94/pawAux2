@@ -9,17 +9,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.PatientService;
+
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 @Controller
 public class HelloWorldController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldController.class);
-	
+
 	 @Autowired
 	 @Qualifier("patientServiceImpl")
 	 private PatientService us;
@@ -29,6 +37,9 @@ public class HelloWorldController {
 
 	@Autowired
 	private SearchService searchService;
+
+	@Autowired
+	private PatientService patientService;
 
 	@Autowired
 	private AppointmentService appointmentService;
@@ -93,10 +104,18 @@ public class HelloWorldController {
     @RequestMapping(value = "/specialist/{doctorId}", method = {RequestMethod.POST})
 	public ModelAndView doctorDescriptionPost(@PathVariable Integer doctorId, @ModelAttribute("search") Search search,
 											  @ModelAttribute("appointment")AppointmentForm appointmentForm){
-		System.out.println("DIAAAA " + appointmentForm.getDay());
-		System.out.println("TIEMPO "+appointmentForm.getTime());
 
 		Doctor doctor = doctorService.findDoctorById(doctorId).get();
+
+		/*TODO: check validation for try catch*/
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		Patient patient = patientService.findPatientByEmail(authentication.getName());
+
+		LocalDate day = LocalDate.parse(appointmentForm.getDay());
+		LocalTime time = LocalTime.parse(appointmentForm.getTime());
+		appointmentService.createAppointment(doctorId, patient.getPatientId(), day, time);
 
 		ModelAndView mav = new ModelAndView("appointmentSuccess");
 		mav.addObject("doctor", doctor);

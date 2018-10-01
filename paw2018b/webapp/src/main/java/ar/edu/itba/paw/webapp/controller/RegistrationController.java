@@ -51,11 +51,14 @@ public class RegistrationController {
     public ModelAndView doctorRegistration (@Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors){
 
 
-        if(errors.hasErrors() || !personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())){
+        if(errors.hasErrors() || !personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())
+               /*|| patientService.findPatientByEmail(personalForm.getEmail()) != null*/){
             if(!personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())){
                 /*TODO: this doesn't show the error message*/
                 showDoctorRegistration(personalForm).addObject("noMatchingPassword", true);
-            }
+            }/*else if(patientService.findPatientByEmail(personalForm.getEmail()) != null){
+                System.out.println("no gila, ya existe");
+            }*/
             return showDoctorRegistration(personalForm);
         }else{
 

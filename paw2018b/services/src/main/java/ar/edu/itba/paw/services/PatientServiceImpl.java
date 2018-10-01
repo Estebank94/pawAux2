@@ -6,6 +6,8 @@ import ar.edu.itba.paw.models.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PatientServiceImpl implements PatientService {
 
@@ -32,7 +34,15 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Patient findPatientByEmail(String email) {
-        return patientDao.findPatientByEmail(email).get();
+
+        Optional<Patient> foundPatient = patientDao.findPatientByEmail(email);
+
+        if(foundPatient.isPresent()){
+            return patientDao.findPatientByEmail(email).get();
+        }
+
+        return null;
+        
     }
 
 }
