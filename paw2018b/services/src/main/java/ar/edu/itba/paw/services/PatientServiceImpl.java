@@ -30,29 +30,29 @@ public class PatientServiceImpl implements PatientService {
         }
 
         if (firstName.length() == 0){
-            throw new IllegalArgumentException("Doctor firstname can't be empty");
+            throw new IllegalArgumentException("Username firstname can't be empty");
         }
 
         if (firstName.length() > 45){
-            throw new IllegalArgumentException("Doctor firstname maxlength is 50");
+            throw new IllegalArgumentException("Username firstname maxlength is 50");
         }
 
         if (lastName == null) {
             throw new IllegalArgumentException("last name can't be null");
         }
         if (lastName.length() == 0){
-            throw new IllegalArgumentException("Doctor firstname can't be empty");
+            throw new IllegalArgumentException("Username firstname can't be empty");
         }
 
         if (lastName.length() > 45){
-            throw new IllegalArgumentException("Doctor firstname maxlength is 50");
+            throw new IllegalArgumentException("Username firstname maxlength is 50");
         }
 
         if (phoneNumber == null) {
-            throw new IllegalArgumentException("phonenumber can't be null");
+            throw new IllegalArgumentException("Username phonenumber can't be null");
         }
         if (phoneNumber.length() == 0){
-            throw new IllegalArgumentException("phonenumber firstname can't be empty");
+            throw new IllegalArgumentException("Username Phonenumber can't be empty");
         }
 
         if (phoneNumber.length() > 20){
@@ -96,13 +96,13 @@ public class PatientServiceImpl implements PatientService {
             throw new NotFoundException("Patient was not found");
         }
         if (doctorId == null){
-            throw new IllegalArgumentException("patientId can't be null");
+            throw new IllegalArgumentException("DoctorId can't be null");
         }
         if (doctorId <= 0){
-            throw new IllegalArgumentException("PatientId can't be negative or zero");
+            throw new IllegalArgumentException("DoctorId can't be negative or zero");
         }
         if(!doctorDao.findDoctorById(patientId).isPresent()){
-            throw new NotFoundException("Patient was not found");
+            throw new NotFoundException("Doctor was not found");
         }
 
         return patientDao.setDoctorId(patientId, doctorId);
