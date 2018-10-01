@@ -323,13 +323,13 @@ import java.util.*;
                 LocalTime.parse(rs.getString("appointmenttime")),
                 Integer.valueOf(rs.getInt("clientid")),
                 rs.getString("firstname"),
-                rs.getString("lastname"));
+                rs.getString("lastname"), rs.getString("phoneNumber"));
 
 
         private Set<Appointment> findDoctorAppointmentsById(Integer id){
             Set<Appointment> appointments = new HashSet<>();
             StringBuilder query = new StringBuilder();
-            query.append("SELECT appointment.doctorId, appointment.clientId, appointmentDay, appointmentTime, patient.firstname , patient.lastname ")
+            query.append("SELECT appointment.doctorId, appointment.clientId, appointmentDay, appointmentTime, patient.firstname , patient.lastname, patient.phoneNumber ")
                     .append("FROM doctor ")
                     .append("JOIN appointment ON doctor.id = appointment.doctorId ")
                     .append("JOIN patient ON appointment.clientid = patient.id ")
