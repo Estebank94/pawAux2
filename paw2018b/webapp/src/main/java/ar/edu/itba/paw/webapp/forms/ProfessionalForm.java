@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.WorkingHours;
 import com.sun.corba.se.spi.orbutil.threadpool.Work;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,9 +22,14 @@ public class ProfessionalForm {
     private String education;
 
     private Set<String> languages;
+
+    @NotNull(message = "Por favor, registre las obras sociales con las que trabaja")
     private List<String> insurance;
+    @NotNull(message = "Por favor, indique los planes de la obra social seleccionada, o seleccione una")
     private List<Set<String>> insurancePlan;
+    @NotNull(message = "Por favor, indique su especialidad")
     private Set<String> specialty;
+
 
     private LocalTime monStart;
     private LocalTime monEnd;
