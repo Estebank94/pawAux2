@@ -103,6 +103,7 @@
         </div>
         <br>
         <input type="submit" class="btn btn-primary" value="Siguiente" path="submit" />
+        <input type="button" class="btn btn-secondary" value="Cancelar" onclick="window.location='/'"/>
     </form:form>
     <br>
 </div>
