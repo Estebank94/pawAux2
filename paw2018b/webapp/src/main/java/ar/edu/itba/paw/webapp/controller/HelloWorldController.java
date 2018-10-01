@@ -51,6 +51,19 @@ public class HelloWorldController {
 		mav.addObject("search", new Search());
 		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
+
+		boolean hasUserRole = false;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+
+			hasUserRole = authentication.getAuthorities().stream()
+					.anyMatch(r -> r.getAuthority().equals("ROLE_DOCTOR"));
+			if(hasUserRole){
+				Patient patient = patientService.findPatientByEmail(authentication.getName());
+				Doctor doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+				mav.addObject("doctorID", doctor.getId());
+			}
+		}
 		return mav;
 	}
 
@@ -72,6 +85,17 @@ public class HelloWorldController {
 			theSearch.setInsurance("no");
 			theSearch.setSpecialty("");
 		}
+		boolean hasUserRole = false;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+
+			hasUserRole = authentication.getAuthorities().stream()
+					.anyMatch(r -> r.getAuthority().equals("ROLE_DOCTOR"));
+			if(hasUserRole){
+				Patient patient = patientService.findPatientByEmail(authentication.getName());
+				mav.addObject("doctorID", patient.getDoctorId());
+			}
+		}
 		LOGGER.debug("GET DoctorList {}", doctorsList);
 		mav.addObject("doctorList", doctorsList);
 		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
@@ -91,6 +115,21 @@ public class HelloWorldController {
 				Doctor doctor;
 				doctor = doctorService.findDoctorById(doctorId).get();
 				doctor.getDescription().getLanguages().remove(null);
+				if(doctor.getDescription().getLanguages().size() == 1){
+					doctor.getDescription().getLanguages().contains("no");
+					doctor.getDescription().getLanguages().remove("no");
+				}
+				boolean hasUserRole = false;
+				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+				if (!(authentication instanceof AnonymousAuthenticationToken)) {
+
+					hasUserRole = authentication.getAuthorities().stream()
+							.anyMatch(r -> r.getAuthority().equals("ROLE_DOCTOR"));
+					if(hasUserRole){
+						Patient patient = patientService.findPatientByEmail(authentication.getName());
+						mav.addObject("doctorID", doctor.getId());
+					}
+				}
 				mav.addObject("doctor", doctor);
 				mav.addObject("insuranceNameList", doctor.getInsurance());
 				mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
