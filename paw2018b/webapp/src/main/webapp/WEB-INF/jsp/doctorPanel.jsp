@@ -87,8 +87,9 @@
                                                     <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">
                                                     <div class="center-vertical">
                                                         <div>
-                                                                <p style="margin-bottom: 0px">${listItems}</p>
-                                                            <h5>Palito</h5>
+                                                                <p style="margin-bottom: 0px">${listItems.appointmentTime}</p>
+                                                            <h5><b>${listItems.clientLastName}</b>,  ${listItems.clientFirstName}</h5>
+                                                            Telefono: ${listItems.phoneNumber}
                                                         </div>
                                                     </div>
                                                 </div>
