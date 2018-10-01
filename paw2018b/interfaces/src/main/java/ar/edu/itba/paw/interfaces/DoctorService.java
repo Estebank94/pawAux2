@@ -25,4 +25,10 @@ public interface DoctorService {
 //
    Optional<Doctor> setDoctorInfo(Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance,
                       List<WorkingHours> workingHours, Description description);
+
+   Optional<Doctor> setDoctorSpecialty(Integer doctorId, Set<String> specialty);
+
+   Optional<Doctor> setDoctorInsurance(Integer doctorId,  Map<String, Set<String>> insurance);
+
+   Optional<Doctor> setWorkingHours(Integer doctorId, List<WorkingHours> workingHours);
 }

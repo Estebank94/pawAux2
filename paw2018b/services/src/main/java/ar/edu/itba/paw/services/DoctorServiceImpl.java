@@ -287,5 +287,37 @@ public class DoctorServiceImpl implements DoctorService {
         descriptionDao.addDescription(doctor.getId(), description);
         return Optional.ofNullable(doctor);
     }
+
+    @Override
+    public Optional<Doctor> setDoctorSpecialty(Integer doctorId, Set<String> specialty){
+        Optional<Doctor> doctorOptional = doctorDao.findDoctorById(doctorId);
+        Doctor doctor = doctorOptional.get();
+        doctor.setSpecialty(specialty);
+        Optional<List<Integer>> specialtysId = specialtyDao.findSpecialtysId(specialty);
+        doctorSpecialtyDao.addDoctorSpecialtyList(doctor.getId(),specialtysId.get());
+        return Optional.ofNullable(doctor);
+    }
+
+    @Override
+    public Optional<Doctor> setDoctorInsurance(Integer doctorId,  Map<String, Set<String>> insurance){
+        Optional<Doctor> doctorOptional = doctorDao.findDoctorById(doctorId);
+        Doctor doctor = doctorOptional.get();
+        Optional<List<Integer>> insurancesPlanIds = insurancePlanDao.getInsurancesPlanIds(insurance);
+        medicalcareDao.addMedicalCare(doctor.getId(), insurancesPlanIds.get());
+        doctor.setInsurance(insurance);
+        return Optional.ofNullable(doctor);
+    }
+
+    @Override
+    public Optional<Doctor> setWorkingHours(Integer doctorId, List<WorkingHours> workingHours){
+        Optional<Doctor> doctorOptional = doctorDao.findDoctorById(doctorId);
+        Doctor doctor = doctorOptional.get();
+        doctor.setWorkingHours(workingHours);
+        workingHoursDao.addWorkingHour(doctor.getId(), workingHours);
+        return Optional.ofNullable(doctor);
+    }
+
+
+
 }
 
