@@ -57,7 +57,9 @@
                                 <p class="doctor-specialty">Bienvenido</p>
                                 <h3 class="doctor-name">Dr. ${doctor.lastName}, ${doctor.firstName}</h3>
                                 <br>
-                                <button type="button" class="btn btn-outline-secondary"><i class="fas fa-cog"></i> Editar Perfil</button>
+                                <c:if test="${professionalIncomplete eq true}">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="window.location='/doctorProfile'"><i class="fas fa-cog"></i>Completar Perfil</button>
+                                </c:if>
                             </div>
                         </div>
                     </div>
