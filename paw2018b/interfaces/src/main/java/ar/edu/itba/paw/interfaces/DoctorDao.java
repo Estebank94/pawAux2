@@ -21,4 +21,5 @@ public interface DoctorDao {
     Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, String licence,
                                String avatar, String address);
 
+    Boolean isAnExistingLicence(Integer licence);
 }
