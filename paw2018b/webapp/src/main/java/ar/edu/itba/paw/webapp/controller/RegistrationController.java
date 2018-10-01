@@ -69,17 +69,21 @@ public class RegistrationController {
             /*TODO: manejar errores 500*/
             /*TODO: agregar boton de cancelar y volver al incio*/
 
-            Doctor doctor = doctorService.createDoctor(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(),
-                     personalForm.getSex(), personalForm.getLicence(), "null2", personalForm.getAddress());
-            Patient patient = patientService.createPatient(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(), personalForm.getEmail(),
-                    personalForm.getPassword());
-            patientService.setDoctorId(patient.getPatientId(), doctor.getId());
+            try {
+                Doctor doctor = doctorService.createDoctor(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(),
+                        personalForm.getSex(), personalForm.getLicence(), "null2", personalForm.getAddress());
+                Patient patient = patientService.createPatient(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(), personalForm.getEmail(),
+                        personalForm.getPassword());
+                patientService.setDoctorId(patient.getPatientId(), doctor.getId());
 
             /*TODO AUTOLOGIN*/
 //            Authentication authentication =
 
-            mav.addObject("doctor", doctor);
-            return mav;
+                mav.addObject("doctor", doctor);
+                return mav;
+            } catch (IllegalArgumentException ex) {
+                return new ModelAndView("500");
+            }
         }
 
     }
