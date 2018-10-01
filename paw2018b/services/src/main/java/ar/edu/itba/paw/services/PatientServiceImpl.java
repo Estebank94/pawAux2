@@ -65,11 +65,6 @@ public class PatientServiceImpl implements PatientService {
         if (email.length() > 90){
             throw new IllegalArgumentException("Email can't have more than 90 characters");
         }
-
-        if(patientDao.findPatientByEmail(email).isPresent()){
-            throw new IllegalArgumentException("Username with email " + email + " already exists");
-        }
-
         if (password.length() == 0){
             throw new IllegalArgumentException("password can't be empty");
         }
@@ -77,7 +72,19 @@ public class PatientServiceImpl implements PatientService {
         if (password.length() > 72){
             throw new IllegalArgumentException("password can't have more than 1 characters");
         }
+
+        try{
+            Optional<Patient> patient = patientDao.findPatientByEmail(email);
+            if(patient.isPresent()){
+                throw new IllegalArgumentException("Username with email " + email + " already exists");
+            }
+        }
+        catch (NotFoundException e){
+
+        }
         Patient patient = patientDao.createPatient(firstName, lastName, phoneNumber, email, password);
+
+
         if (patient == null) {
             throw new IllegalArgumentException("Error on create patient");
         }
