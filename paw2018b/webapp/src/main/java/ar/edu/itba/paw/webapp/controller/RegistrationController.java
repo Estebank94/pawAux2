@@ -3,10 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.interfaces.SearchService;
-import ar.edu.itba.paw.models.Description;
-import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.Patient;
-import ar.edu.itba.paw.models.WorkingHours;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.webapp.forms.PatientForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
@@ -24,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -74,8 +72,6 @@ public class RegistrationController {
             mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
             mav.addObject("specialtyList", searchService.listSpecialties().get());
 
-            /*TODO: agregar boton de cancelar y volver al incio*/
-
             try {
                 Doctor doctor = doctorService.createDoctor(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(),
                         personalForm.getSex(), personalForm.getLicence(), "null2", personalForm.getAddress());
@@ -107,10 +103,6 @@ public class RegistrationController {
     @RequestMapping(value = "/doctorProfile", method = {RequestMethod.GET})
     public ModelAndView showDoctorProfile(@ModelAttribute("professional")ProfessionalForm professionalForm){
 
-
-        /*TODO: agregar boton de cancelar y volver al incio y mostrar mensaje en pantalla que esta registrado como profesional pero que todavia
-        * no va a figurar en la lista de doctores porque no completo su perfil*/
-
         final ModelAndView mav = new ModelAndView("registerSpecialist2");
 
         mav.addObject("insuranceList", searchService.listInsurances().get());
@@ -127,7 +119,7 @@ public class RegistrationController {
     @RequestMapping(value = "/doctorProfile", method = {RequestMethod.POST})
     public ModelAndView doctorProfile ( @Valid @ModelAttribute("professional") ProfessionalForm professionalForm, final BindingResult errors){
 
-        if(errors.hasErrors()){
+        if(errors.hasErrors() || professionalForm.workingHoursList().isEmpty()){
             System.out.println("error");
             return showDoctorProfile(professionalForm);
         }
@@ -145,9 +137,6 @@ public class RegistrationController {
         List<WorkingHours> workingHours = professionalForm.workingHoursList();
 
         Doctor doctorProfessional = doctorService.setDoctorInfo(patient.getDoctorId(), professionalForm.getSpecialty(), insurance,workingHours ,description).get();
-        
-        /*TODO: agregar boton de cancelar y volver al incio y mostrar mensaje en pantalla que esta registrado como profesional pero que todavia
-         * no va a figurar en la lista de doctores porque no completo su perfil*/
 
         final ModelAndView mav = new ModelAndView("finalStep");
         return mav;
@@ -168,9 +157,12 @@ public class RegistrationController {
     }
 
     @RequestMapping(value="/patientRegistration", method = { RequestMethod.GET })
-    public ModelAndView showPatientRegistration (@ModelAttribute("personal") PatientForm patientForm){
+    public ModelAndView showPatientRegistration (@ModelAttribute("personal") PatientForm patientForm,
+                                                 @RequestParam(required=false) final String wrongPassword){
 
         final ModelAndView mav = new ModelAndView("registerPatient");
+        mav.addObject("wrongPassword", wrongPassword);
+
         return mav;
     }
 
@@ -178,23 +170,27 @@ public class RegistrationController {
     public ModelAndView patientRegistration (@Valid @ModelAttribute("personal") PatientForm patientForm, final BindingResult errors,
                                              HttpServletRequest request) {
 
-        final ModelAndView mav = new ModelAndView("finalStep");
+        final ModelAndView mav = new ModelAndView("index");
 
         if (errors.hasErrors() || !patientForm.matchingPasswords(patientForm.getPassword(), patientForm.getPasswordConfirmation())
             /* || patientService.findPatientByEmail(personalForm.getEmail()) != null*/) {
             if (!patientForm.matchingPasswords(patientForm.getPassword(), patientForm.getPasswordConfirmation())) {
                 /*TODO: this doesn't show the error message*/
-                showPatientRegistration(patientForm).addObject("noMatchingPassword", true);
+                showPatientRegistration(patientForm, "wrongPassword");
             }/*else if(patientService.findPatientByEmail(personalForm.getEmail()) != null){
                 showDoctorRegistration(personalForm).addObject("userExists", true);
             }*/
-            return showPatientRegistration(patientForm);
+            return showPatientRegistration(patientForm, "");
         } else {
             try {
                 Patient patient = patientService.createPatient(patientForm.getFirstName(), patientForm.getLastName(), patientForm.getPhoneNumber(), patientForm.getEmail(),
                         patientForm.getPassword());
 
                 authenticateUserAndSetSession(patient, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
+
+                mav.addObject("search", new Search());
+                mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
+                mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
 
                 return mav;
 
