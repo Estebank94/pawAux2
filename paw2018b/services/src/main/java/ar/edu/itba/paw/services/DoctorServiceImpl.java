@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.*;
 import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.security.acl.LastOwnerException;
@@ -62,7 +63,7 @@ public class DoctorServiceImpl implements DoctorService {
         Optional<Doctor> thisdoctor =  doctorDao.findDoctorById(id);
 
         if (!thisdoctor.isPresent()){
-            throw new IllegalStateException("Doctor doesn't exist");
+            throw new NotFoundException("Doctor doesn't exist");
         }
         return thisdoctor;
     }

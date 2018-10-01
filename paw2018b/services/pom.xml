@@ -78,8 +78,7 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-acl</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
+            <version>5.0.4.RELEASE</version>
         </dependency>
     </dependencies>
 </project>

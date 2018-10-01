@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -85,20 +86,20 @@ public class HelloWorldController {
 	@RequestMapping(value = "/specialist/{doctorId}", method = { RequestMethod.GET})
     public ModelAndView doctorDescription(@PathVariable Integer doctorId, @ModelAttribute("search") Search search,
 										  @ModelAttribute("appointment") AppointmentForm appointmentForm){
-
-		final ModelAndView mav = new ModelAndView("specialist");
-
-
-	    Doctor doctor = doctorService.findDoctorById(doctorId).get();
-		doctor.getDescription().getLanguages().remove(null);
-
-		mav.addObject("doctor", doctor);
-		mav.addObject("insuranceNameList", doctor.getInsurance());
-		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
-		mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
-        mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
-
-	    return mav;
+			final ModelAndView mav = new ModelAndView("specialist");
+			try {
+				Doctor doctor;
+				doctor = doctorService.findDoctorById(doctorId).get();
+				doctor.getDescription().getLanguages().remove(null);
+				mav.addObject("doctor", doctor);
+				mav.addObject("insuranceNameList", doctor.getInsurance());
+				mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
+				mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
+				mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
+			} catch (NotFoundException e) {
+				return new ModelAndView("404");
+			}
+			return mav;
     }
 
     @RequestMapping(value = "/specialist/{doctorId}", method = {RequestMethod.POST})
