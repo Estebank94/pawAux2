@@ -538,4 +538,20 @@ import java.util.*;
                 return compressedSearch;
             }
         }
+
+
+        private static final RowMapper<Integer> ROW_MAPPER_IS_EXISTING_LICENCE = (rs, rowNum) -> new Integer(rs.getInt("id"));
+
+        @Override
+        public Boolean isAnExistingLicence(Integer licence){
+            StringBuilder query = new StringBuilder();
+            query.append("SELECT id ")
+                    .append("FROM doctor ")
+                    .append("WHERE licence = ?");
+            List<Integer> id = jdbcTemplate.query(query.toString(),ROW_MAPPER_IS_EXISTING_LICENCE,licence);
+            if (id == null || id.size() == 0){
+                return Boolean.FALSE;
+            }
+            return Boolean.TRUE;
+        }
     };
