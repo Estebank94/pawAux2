@@ -28,7 +28,7 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-	@Value("classpath:schema.sql")
+	@Value("/resources/schema.sql")
 	private Resource schemaSQL;
 
 	@Bean
@@ -58,19 +58,19 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		return ds;
 	}
 
-//	@Bean
-//	public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
-//		final DataSourceInitializer dsi = new DataSourceInitializer();
-//		dsi.setDataSource(ds);
-//		dsi.setDatabasePopulator(databasePopulator());
-//		return dsi;
-//	}
-//
-//	private DatabasePopulator databasePopulator(){
-//		final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-//		dbp.addScript(schemaSQL);
-//		return dbp;
-//	}
+	@Bean
+	public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
+		final DataSourceInitializer dsi = new DataSourceInitializer();
+		dsi.setDataSource(ds);
+		dsi.setDatabasePopulator(databasePopulator());
+		return dsi;
+	}
+
+	private DatabasePopulator databasePopulator(){
+		final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
+		dbp.addScript(schemaSQL);
+		return dbp;
+	}
 
 	@Bean
 	public MessageSource messageSource (){

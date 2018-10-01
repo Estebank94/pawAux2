@@ -6,8 +6,7 @@ CREATE TABLE IF NOT EXISTS doctor (
     address varchar(100),
     licence integer UNIQUE,
     avatar varchar(100),
-    id SERIAL PRIMARY KEY
-    workingHours varchar(100),
+    id SERIAL PRIMARY KEY,
     district varchar (50)
 );
 
@@ -48,18 +47,18 @@ CREATE TABLE IF NOT EXISTS review(
     stars integer,
     doctorID integer,
     userID integer,
-    userrole varchar (10),
     daytime varchar (20),
     id SERIAL PRIMARY KEY,
-    FOREIGN KEY (doctorID) REFERENCES doctor(id)
+    FOREIGN KEY (doctorID) REFERENCES doctor(id),
+    FOREIGN KEY (userID) REFERENCES patient(id)
 );
 
 CREATE TABLE IF NOT EXISTS information (
     doctorId integer,
-    certificate varchar(100),
-    languages varchar(20),
-    education varchar(10),
-    id SERIAL PRIMARY KEY
+    certificate varchar(250),
+    languages varchar(100),
+    education varchar(250),
+    id SERIAL PRIMARY KEY,
     FOREIGN KEY (doctorID) REFERENCES doctor(id)
 );
 
@@ -78,16 +77,18 @@ CREATE TABLE IF NOT EXISTS appointment(
     clientId integer,
     appointmentDay varchar(10),
     appointmentTime VARCHAR (10),
+    identifier VARCHAR (30),
     id SERIAL PRIMARY KEY,
-    FOREIGN KEY (doctorId) REFERENCES doctor(id)
+    FOREIGN KEY (doctorId) REFERENCES doctor(id),
+    FOREIGN KEY (clientId) REFERENCES patient(id)
 );
 
-CREATE TABLE IF NOT EXISTS patient{
+CREATE TABLE IF NOT EXISTS patient(
     id SERIAL PRIMARY KEY,
     doctorId INTEGER ,
     firstname VARCHAR (50),
     lastname VARCHAR (50),
     phonenumber VARCHAR (20),
     email VARCHAR (90),
-    password VARCHAR (72),
-};
+    password VARCHAR (72)
+);
