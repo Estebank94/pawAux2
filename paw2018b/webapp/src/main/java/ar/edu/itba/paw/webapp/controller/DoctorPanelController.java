@@ -49,20 +49,15 @@ public class DoctorPanelController {
 
 
         if(doctorId != 0 && doctorId != null){
-            /*TODO pasar doctor (1)
-            *  Doctor doctor = doctorService.findDoctorById(doctorId).get();
-            Map<LocalDate, List<Appointment>> appointments = doctor.appointmentsMap();*/
+            Doctor doctor = doctorService.findDoctorById(doctorId).get();
+            Map<LocalDate, List<Appointment>> appointments = doctor.appointmentsMap();
+            mav.addObject("appointments", appointments);
+            mav.addObject("doctor", doctor);
         }else{
             /*TODO CHECK IF THE ID IS A REAL DOCTOR*/
         }
 
-        /*(1)*/
-        Doctor doctor = doctorService.findDoctorById(2).get();
 
-        Map<LocalDate, List<Appointment>> appointments = doctor.appointmentsMap();
-
-        mav.addObject("appointments", appointments);
-        mav.addObject("doctor", doctor);
 
         return mav;
 
