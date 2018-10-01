@@ -47,9 +47,14 @@ public class DoctorPanelController {
 
         Integer doctorId = patient.getDoctorId();
 
+        Doctor doctor = doctorService.findDoctorById(doctorId).get();
+
+
 
         if(doctorId != 0 && doctorId != null){
-            Doctor doctor = doctorService.findDoctorById(doctorId).get();
+            if(doctor.getSpecialty() == null || doctor.getInsurance().isEmpty() || doctor.getWorkingHours().isEmpty()){
+                mav.addObject("professionalIncomplete", true);
+            }
             Map<LocalDate, List<Appointment>> appointments = doctor.appointmentsMap();
             mav.addObject("appointments", appointments);
             mav.addObject("doctor", doctor);
