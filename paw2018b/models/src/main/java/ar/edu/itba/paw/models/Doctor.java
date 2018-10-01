@@ -310,6 +310,43 @@ public class Doctor {
         return month;
     }
 
+    public Set<DayOfWeek> emptyWorkingHours(){
+        Set<DayOfWeek> days = new HashSet<>();
+
+        for(DayOfWeek day : DayOfWeek.values()){
+            if(!workingHours.keySet().contains(day)){
+                days.add(day);
+            }
+        }
+        return days;
+    }
+
+    public boolean containsSpecialty(Set<String> specialtySet){
+
+
+        for(String specia : specialtySet){
+            if(getSpecialty().contains(specia)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean containsPlan(Map<String, Set<String>> setPlans){
+
+        Map<String, Set<String>> insurance;
+
+        for(String set : setPlans.keySet()){
+            if(getInsurance().containsKey(set)){
+                for(String string : setPlans.get(set)){
+                    if(getInsurance().containsValue(string)){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
 }
 
