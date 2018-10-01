@@ -76,8 +76,6 @@ public class RegistrationController {
             mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
             mav.addObject("specialtyList", searchService.listSpecialties().get());
 
-            /*TODO: habria que agregarle un campo a este create doctor que se settee en profileNotCompleted*/
-            /*TODO: manejar errores 500*/
             /*TODO: agregar boton de cancelar y volver al incio*/
 
             try {
@@ -89,10 +87,12 @@ public class RegistrationController {
 
             authenticateUserAndSetSession(patient, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
 
-//            Authentication authentication =
+//          Authentication authentication =
 
                 mav.addObject("doctor", doctor);
+
                 return mav;
+
             } catch (IllegalArgumentException ex) {
                 return new ModelAndView("500");
             }
@@ -108,8 +108,8 @@ public class RegistrationController {
         return mav;
     }
 
-    @RequestMapping(value = "/doctorProfile/{doctorId}", method = {RequestMethod.GET})
-    public ModelAndView showDoctorProfile(@PathVariable Integer doctorId, @ModelAttribute("professional")ProfessionalForm professionalForm){
+    @RequestMapping(value = "/doctorProfile", method = {RequestMethod.GET})
+    public ModelAndView showDoctorProfile(@ModelAttribute("professional")ProfessionalForm professionalForm){
 
 
         /*TODO: agregar boton de cancelar y volver al incio y mostrar mensaje en pantalla que esta registrado como profesional pero que todavia
@@ -120,18 +120,27 @@ public class RegistrationController {
         mav.addObject("insuranceList", searchService.listInsurances().get());
         mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
         mav.addObject("specialtyList", searchService.listSpecialties().get());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Patient patient = patientService.findPatientByEmail(authentication.getName());
+        Doctor doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+
         return mav;
     }
 
-    @RequestMapping(value = "/doctorProfile/{doctorId}", method = {RequestMethod.POST})
-    public ModelAndView doctorProfile (@PathVariable Integer doctorId, @Valid @ModelAttribute("professional") ProfessionalForm professionalForm, final BindingResult errors){
+    @RequestMapping(value = "/doctorProfile", method = {RequestMethod.POST})
+    public ModelAndView doctorProfile ( @Valid @ModelAttribute("professional") ProfessionalForm professionalForm, final BindingResult errors){
 
         if(errors.hasErrors()){
             System.out.println("error");
-            return showDoctorProfile(doctorId, professionalForm);
+            return showDoctorProfile(professionalForm);
         }
 
-        Doctor doctorById = doctorService.findDoctorById(doctorId).get();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Patient patient = patientService.findPatientByEmail(authentication.getName());
+        Doctor doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+
+        Doctor doctorById = doctorService.findDoctorById(doctor.getId()).get();
 
         Map<String, Set<String>> insurance = professionalForm.createMap(professionalForm.getInsurance(), professionalForm.getInsurancePlan());
 
@@ -139,19 +148,21 @@ public class RegistrationController {
 
         List<WorkingHours> workingHours = professionalForm.workingHoursList();
 
-        Doctor doctorProfessional = doctorService.setDoctorInfo(doctorId, professionalForm.getSpecialty(), insurance,workingHours ,description).get();
+        Doctor doctorProfessional = doctorService.setDoctorInfo(patient.getDoctorId(), professionalForm.getSpecialty(), insurance,workingHours ,description).get();
         
         /*TODO: agregar boton de cancelar y volver al incio y mostrar mensaje en pantalla que esta registrado como profesional pero que todavia
          * no va a figurar en la lista de doctores porque no completo su perfil*/
+
+
 
         final ModelAndView mav = new ModelAndView("finalStep");
         return mav;
     }
 
-    @RequestMapping(value="/doctorProfile")
-    public ModelAndView doctorProfilePrueba(){
-        return new ModelAndView("finalStep");
-    }
+//    @RequestMapping(value="/doctorProfile")
+//    public ModelAndView doctorProfilePrueba(){
+//        return new ModelAndView("finalStep");
+//    }
 
     private void authenticateUserAndSetSession(Patient patient, HttpServletRequest request) {
         String username = patient.getEmail();
@@ -164,7 +175,6 @@ public class RegistrationController {
         Authentication authenticatedUser = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
         request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-
     }
 
 }
