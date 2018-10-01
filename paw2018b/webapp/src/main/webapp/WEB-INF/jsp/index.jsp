@@ -32,7 +32,7 @@
                         Registrate
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <button class="dropdown-item" type="button" onclick="window.location='/doctorRegistration'">Registrate como paciente</button>
+                        <button class="dropdown-item" type="button" onclick="window.location='/patientRegistration'">Registrate como paciente</button>
                         <button class="dropdown-item" type="button" onclick="window.location='/doctorRegistration'">Registrate como especialista</button>
                     </div>
                     </security:authorize>
@@ -50,13 +50,13 @@
                                 <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:#257CBF !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b>${userName}</b></button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                     <button class="dropdown-item" type="submit">Cerrar Sesion</button>
-                                    <security:authorize access="hasRole('DOCTOR')">
+                                    <security:authorize access="hasRole('ROLE_DOCTOR')">
                                         <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/doctorPanel/'">
                                             Ver Perfil
                                         </button>
                                     </security:authorize>
-                                    <security:authorize access="hasRole('PACIENTE')">
-                                        <button class="btn btn-light dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/patientPanel/'">
+                                    <security:authorize access="hasRole('ROLE_PATIENT') and !hasRole('ROLE_DOCTOR')">
+                                        <button class="btn btn-light dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/patientPanel/'">
                                             Ver Perfil
                                         </button>
                                     </security:authorize>
