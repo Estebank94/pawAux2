@@ -82,8 +82,8 @@ function addStartWorkingHour(val, day){
 }
 
 function addEndWorkingHour(val, day){
-    const name = day+"End";
-    const nameStart = day+"Start";
+    var name = day+"End";
+    var nameStart = day+"Start";
 
     $('#profile').children('#'+name).remove();
     $('#profile').children('#'+nameStart).remove();
@@ -96,7 +96,7 @@ function addEndWorkingHour(val, day){
         $('#'+day+'EndWorkingHour').prop('disabled', true);
     }
     if(val!== "no"){
-        const valStart = $('#'+day+'StartWorkingHour').val();
+        var valStart = $('#'+day+'StartWorkingHour').val();
         if(getHours(val) <= getHours(valStart)){
             $('#'+day+'StartWorkingHour').val('no');
             $('#'+day+'EndWorkingHour').val('no');
@@ -117,6 +117,14 @@ function getHours(val){
         val = val.slice(0,index);
     }
     return val;
+}
+
+function cancel(){
+    if (window.confirm('Si usted no completa sus datos profesionales no aparecera en nuestra lista de medicos. ' +
+        '¿Esta seguro que desea cancelar?'))
+    {
+        window.location = '/';
+    }
 }
 
 $("#addedInsurances").on("click", ".btn", function(button){
@@ -142,3 +150,4 @@ $("#addedSpecialties").on("click", ".btn", function(button){
     $('#'+id).remove();
     $('#profile').children('.'+id).remove();
 });
+
