@@ -108,14 +108,11 @@ public class HelloWorldController {
 
 		Doctor doctor = doctorService.findDoctorById(doctorId).get();
 
-		Patient patient;
+		/*TODO: check validation for try catch*/
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-			patient = patientService.findPatientByEmail(authentication.getName());
-//		}else{
-//			//aca error !!!
-//		}
+
+		Patient patient = patientService.findPatientByEmail(authentication.getName());
 
 		LocalDate day = LocalDate.parse(appointmentForm.getDay());
 		LocalTime time = LocalTime.parse(appointmentForm.getTime());
