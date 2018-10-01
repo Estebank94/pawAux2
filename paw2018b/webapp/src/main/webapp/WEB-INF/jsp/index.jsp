@@ -54,6 +54,9 @@
                                         <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/doctorPanel/'">
                                             Ver Perfil
                                         </button>
+                                        <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='/specialist/${doctorID}'">
+                                            Mis Datos
+                                        </button>
                                     </security:authorize>
                                     <security:authorize access="hasRole('ROLE_PATIENT') and !hasRole('ROLE_DOCTOR')">
                                         <button class="btn btn-light dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/patientPanel/'">
