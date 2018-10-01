@@ -12,16 +12,20 @@ import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletException;
@@ -47,8 +51,12 @@ public class RegistrationController {
     @Autowired
     private PatientService patientService;
 
+    @Autowired
+    protected AuthenticationManager authenticationManager;
+
     @RequestMapping(value="/doctorRegistration", method = { RequestMethod.POST })
-    public ModelAndView doctorRegistration (@Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors){
+    public ModelAndView doctorRegistration (@Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors,
+                                            HttpServletRequest request){
 
 
         if(errors.hasErrors() || !personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())
@@ -78,7 +86,8 @@ public class RegistrationController {
                     personalForm.getPassword());
             patientService.setDoctorId(patient.getPatientId(), doctor.getId());
 
-            /*TODO AUTOLOGIN*/
+            authenticateUserAndSetSession(patient, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
+
 //            Authentication authentication =
 
             mav.addObject("doctor", doctor);
@@ -140,12 +149,18 @@ public class RegistrationController {
         return new ModelAndView("finalStep");
     }
 
-//    public void authWithHttpServletRequest(HttpServletRequest request, String username, String password) {
-//        try {
-//
-//        } catch (ServletException e) {
-//            LOGGER.error("Error while login ", e);
-//        }
-//    }
+    private void authenticateUserAndSetSession(Patient patient, HttpServletRequest request) {
+        String username = patient.getEmail();
+        String password = patient.getPassword();
+
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
+        // generate session if one doesn't exist
+        request.getSession();
+        token.setDetails(new WebAuthenticationDetails(request));
+        Authentication authenticatedUser = authenticationManager.authenticate(token);
+        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+        request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+
+    }
 
 }

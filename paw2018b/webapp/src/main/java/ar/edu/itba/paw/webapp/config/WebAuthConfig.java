@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -63,16 +64,16 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().csrf().disable();
     }
     /*TODO: aca con los .accesDenied se puede usar para todo? Con eso manejamos los stack traces?*/
-    /*TODO AUTOLOGIN:
-    * https://www.baeldung.com/spring-security-auto-login-user-after-registration
-    * https://stackoverflow.com/questions/3813028/auto-login-after-successful-registration
-    * https://stackoverflow.com/questions/46221515/spring-security-auto-login-not-working-after-registering-user
-    * https://coderanch.com/t/627731/frameworks/Autologin-site-registering-spring-security
-    * http://forum.spring.io/forum/spring-projects/security/19216-automatic-login-after-user-registration*/
 
     @Bean
     public AuthenticationSuccessHandler successHandler() {
         return new CustomLogInSuccessHandler("/");
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
 }
