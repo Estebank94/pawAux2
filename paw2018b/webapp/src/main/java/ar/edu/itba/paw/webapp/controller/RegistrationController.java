@@ -28,6 +28,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.time.DayOfWeek;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -71,10 +73,22 @@ public class RegistrationController {
             mav.addObject("insuranceList", searchService.listInsurances().get());
             mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
             mav.addObject("specialtyList", searchService.listSpecialties().get());
+            mav.addObject("noLanguage", true);
+            mav.addObject("noEducation", true);
+            mav.addObject("noCertificate", true);
+            mav.addObject("noSpecialty", true);
+            mav.addObject("noInsurance", true);
+            mav.addObject("EmptyMonday", true);
+            mav.addObject("EmptyTuesday", true);
+            mav.addObject("EmptyWednesday", true);
+            mav.addObject("EmptyThursday", true);
+            mav.addObject("EmptyFriday", true);
+            mav.addObject("EmptySaturday", true);
+            mav.addObject("cancelButton", true);
 
             try {
                 Doctor doctor = doctorService.createDoctor(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(),
-                        personalForm.getSex(), personalForm.getLicence(), "null2", personalForm.getAddress());
+                        personalForm.getSex(), personalForm.getLicence(), "https://image.freepik.com/free-icon/male-user-shadow_318-34042.jpg", personalForm.getAddress());
                 Patient patient = patientService.createPatient(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(), personalForm.getEmail(),
                         personalForm.getPassword());
                 patientService.setDoctorId(patient.getPatientId(), doctor.getId());
@@ -112,6 +126,40 @@ public class RegistrationController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Patient patient = patientService.findPatientByEmail(authentication.getName());
         Doctor doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+        doctor.getDescription().getLanguages().remove(null);
+        doctor.getSpecialty().remove(null);
+        doctor.getInsurance().keySet().remove(null);
+
+
+
+        Set<DayOfWeek> emptyWorkingHours = doctor.emptyWorkingHours();
+        if(emptyWorkingHours.contains(DayOfWeek.MONDAY)){mav.addObject("EmptyMonday", true);}
+        else{mav.addObject("EmptyMonday", false);}
+        if(emptyWorkingHours.contains(DayOfWeek.TUESDAY)){mav.addObject("EmptyTuesday", true);}
+        else{ mav.addObject("EmptyTuesday", false);}
+        if(emptyWorkingHours.contains(DayOfWeek.WEDNESDAY)){mav.addObject("EmptyWednesday", true);}
+        else{mav.addObject("EmptyWednesday", false);}
+        if(emptyWorkingHours.contains(DayOfWeek.THURSDAY)){mav.addObject("EmptyThursday", true);}
+        else{mav.addObject("EmptyThursday", false);}
+        if(emptyWorkingHours.contains(DayOfWeek.FRIDAY)){mav.addObject("EmptyFriday", true);}
+        else{mav.addObject("EmptyFriday", false);}
+        if(emptyWorkingHours.contains(DayOfWeek.SATURDAY)){mav.addObject("EmptySaturday", true);}
+        else{mav.addObject("EmptySaturday", false);}
+
+        if(doctor.getDescription().getLanguages().size() == 0 && doctor.getDescription().getEducation() == null &&
+                doctor.getDescription().getCertificate() == null && doctor.getSpecialty().isEmpty() && doctor.getInsurance().isEmpty()){
+            mav.addObject("noLanguage", true);
+            mav.addObject("noEducation", true);
+            mav.addObject("noCertificate", true);
+
+        }else{
+            mav.addObject("noLanguage", false);
+            mav.addObject("noEducation", false);
+            mav.addObject("noCertificate", false);
+            mav.addObject("cancelButton", false);
+        }
+        mav.addObject("noSpecialty", true);
+        mav.addObject("noInsurance", true);
 
         return mav;
     }
@@ -119,24 +167,59 @@ public class RegistrationController {
     @RequestMapping(value = "/doctorProfile", method = {RequestMethod.POST})
     public ModelAndView doctorProfile ( @Valid @ModelAttribute("professional") ProfessionalForm professionalForm, final BindingResult errors){
 
-        if(errors.hasErrors() || professionalForm.workingHoursList().isEmpty()){
-            System.out.println("error");
-            return showDoctorProfile(professionalForm);
-        }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Patient patient = patientService.findPatientByEmail(authentication.getName());
         Doctor doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
 
-        Doctor doctorById = doctorService.findDoctorById(doctor.getId()).get();
+        boolean withInfo = false;
+        if(doctor.getSpecialty() != null) {
+            withInfo = true;
+        }
 
-        Map<String, Set<String>> insurance = professionalForm.createMap(professionalForm.getInsurance(), professionalForm.getInsurancePlan());
+
+        boolean specialtyExists = false;
+        if(professionalForm.getSpecialty() != null){
+           specialtyExists = doctor.containsSpecialty(professionalForm.getSpecialty());
+        }
+
+        boolean medicalCareExists = false;
+        Map<String, Set<String>> insurance = new HashMap<>();
+        if(professionalForm.getInsurance() != null || professionalForm.getInsurancePlan() != null){
+            insurance = professionalForm.createMap(professionalForm.getInsurance(), professionalForm.getInsurancePlan());
+            medicalCareExists = doctor.containsPlan(insurance);
+        }
+
+
+        boolean doctorTime = false;
+        if(doctor.getWorkingHours().keySet().isEmpty() && professionalForm.workingHoursList().isEmpty()){doctorTime = true; }
+
+        if(errors.hasErrors() || doctorTime || specialtyExists || medicalCareExists){
+            if(doctorTime) System.out.println("doctorTime");
+            if(specialtyExists) System.out.println("specialtyExists");
+            if(medicalCareExists) System.out.println("medicalCareExists");
+            return showDoctorProfile(professionalForm);
+        }
+
+
 
         Description description = new Description(professionalForm.getCertificate(), professionalForm.getLanguages(), professionalForm.getEducation());
 
         List<WorkingHours> workingHours = professionalForm.workingHoursList();
 
-        Doctor doctorProfessional = doctorService.setDoctorInfo(patient.getDoctorId(), professionalForm.getSpecialty(), insurance,workingHours ,description).get();
+        //when no desceription is avaliable, just set one field
+        if(withInfo){
+            doctorService.setDoctorSpecialty(doctor.getId(), professionalForm.getSpecialty());
+            if(insurance != null){
+                doctorService.setDoctorInsurance(doctor.getId(), insurance);
+            }
+            if(workingHours != null){
+                doctorService.setWorkingHours(doctor.getId(), workingHours);
+            }
+        }else{
+            //can't have description values in null;
+            Doctor doctorProfessional = doctorService.setDoctorInfo(patient.getDoctorId(), professionalForm.getSpecialty(), insurance,workingHours ,description).get();
+        }
 
         final ModelAndView mav = new ModelAndView("finalStep");
         return mav;
