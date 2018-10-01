@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.Description;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.WorkingHours;
+import ar.edu.itba.paw.webapp.forms.PatientForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
 import org.slf4j.Logger;
@@ -21,17 +22,14 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -60,12 +58,12 @@ public class RegistrationController {
 
 
         if(errors.hasErrors() || !personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())
-               /*|| patientService.findPatientByEmail(personalForm.getEmail()) != null*/){
+              /* || patientService.findPatientByEmail(personalForm.getEmail()) != null*/){
             if(!personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())){
                 /*TODO: this doesn't show the error message*/
                 showDoctorRegistration(personalForm).addObject("noMatchingPassword", true);
             }/*else if(patientService.findPatientByEmail(personalForm.getEmail()) != null){
-                System.out.println("no gila, ya existe");
+                showDoctorRegistration(personalForm).addObject("userExists", true);
             }*/
             return showDoctorRegistration(personalForm);
         }else{
@@ -85,9 +83,7 @@ public class RegistrationController {
                         personalForm.getPassword());
                 patientService.setDoctorId(patient.getPatientId(), doctor.getId());
 
-            authenticateUserAndSetSession(patient, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
-
-//          Authentication authentication =
+                authenticateUserAndSetSession(patient, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
 
                 mav.addObject("doctor", doctor);
 
@@ -104,7 +100,7 @@ public class RegistrationController {
     public ModelAndView showDoctorRegistration (@ModelAttribute("personal") PersonalForm personalForm){
 
         final ModelAndView mav = new ModelAndView("registerSpecialist");
-        /*TODO: agregar boton de cancelar y volver al incio*/
+
         return mav;
     }
 
@@ -153,16 +149,10 @@ public class RegistrationController {
         /*TODO: agregar boton de cancelar y volver al incio y mostrar mensaje en pantalla que esta registrado como profesional pero que todavia
          * no va a figurar en la lista de doctores porque no completo su perfil*/
 
-
-
         final ModelAndView mav = new ModelAndView("finalStep");
         return mav;
     }
 
-//    @RequestMapping(value="/doctorProfile")
-//    public ModelAndView doctorProfilePrueba(){
-//        return new ModelAndView("finalStep");
-//    }
 
     private void authenticateUserAndSetSession(Patient patient, HttpServletRequest request) {
         String username = patient.getEmail();
@@ -175,6 +165,43 @@ public class RegistrationController {
         Authentication authenticatedUser = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
         request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+    }
+
+    @RequestMapping(value="/patientRegistration", method = { RequestMethod.GET })
+    public ModelAndView showPatientRegistration (@ModelAttribute("personal") PatientForm patientForm){
+
+        final ModelAndView mav = new ModelAndView("registerPatient");
+        return mav;
+    }
+
+    @RequestMapping(value="/patientRegistration", method = { RequestMethod.POST })
+    public ModelAndView patientRegistration (@Valid @ModelAttribute("personal") PatientForm patientForm, final BindingResult errors,
+                                             HttpServletRequest request) {
+
+        final ModelAndView mav = new ModelAndView("finalStep");
+
+        if (errors.hasErrors() || !patientForm.matchingPasswords(patientForm.getPassword(), patientForm.getPasswordConfirmation())
+            /* || patientService.findPatientByEmail(personalForm.getEmail()) != null*/) {
+            if (!patientForm.matchingPasswords(patientForm.getPassword(), patientForm.getPasswordConfirmation())) {
+                /*TODO: this doesn't show the error message*/
+                showPatientRegistration(patientForm).addObject("noMatchingPassword", true);
+            }/*else if(patientService.findPatientByEmail(personalForm.getEmail()) != null){
+                showDoctorRegistration(personalForm).addObject("userExists", true);
+            }*/
+            return showPatientRegistration(patientForm);
+        } else {
+            try {
+                Patient patient = patientService.createPatient(patientForm.getFirstName(), patientForm.getLastName(), patientForm.getPhoneNumber(), patientForm.getEmail(),
+                        patientForm.getPassword());
+
+                authenticateUserAndSetSession(patient, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
+
+                return mav;
+
+            } catch (IllegalArgumentException ex) {
+                return new ModelAndView("500");
+            }
+        }
     }
 
 }
