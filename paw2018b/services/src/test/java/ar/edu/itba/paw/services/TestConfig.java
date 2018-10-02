@@ -8,7 +8,7 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import javax.sql.DataSource;
 
-@ComponentScan({ "ar.edu.itba.paw.services", })
+@ComponentScan({ "ar.edu.itba.paw.services", "ar.edu.itba.paw.persistence" })
 @Configuration
 public class TestConfig {
     @Bean

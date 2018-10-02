@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.*;
 import ar.edu.itba.paw.models.CompressedSearch;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Search;
@@ -23,18 +22,16 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 @Sql("classpath:doctorServiceTest.sql")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 public class DoctorServiceImplTest {
 
-    private DoctorDao doctorDao;
-    private SpecialtyDao specialtyDao;
-    private MedicalCareDao medicalcareDao;
-    private DoctorSpecialtyDao doctorSpecialtyDao;
-    private InsurancePlanDao insurancePlanDao;
-    private DescriptionDao descriptionDao;
+    @Autowired
+    private DoctorServiceImpl doctorServiceImpl;
+
     private Doctor doctor, doctor2, doctor3;
     private Search search;
 
@@ -43,6 +40,7 @@ public class DoctorServiceImplTest {
     private static final Integer DOC_ID = 1;
     private static final String DOC_SPECIALTY = "NUTRICIÓN";
     private static final String DOC_INSURANCE = "Accord";
+    private static final String DOC_INSURANCE_PLAN_AS_STRING = "('Accord Salud')";
     private static final String DOC_INSURANCE_PLAN = "Accord Salud";
     private static final String DOC_SEX = "M";
 
@@ -66,16 +64,13 @@ public class DoctorServiceImplTest {
 
         jdbcTemplate = new JdbcTemplate(ds);
 
-        doctorDao = Mockito.mock(DoctorDao.class);
-        specialtyDao = Mockito.mock(SpecialtyDao.class);
-        medicalcareDao = Mockito.mock(MedicalCareDao.class);
-        doctorSpecialtyDao = Mockito.mock(DoctorSpecialtyDao.class);
-        insurancePlanDao = Mockito.mock(InsurancePlanDao.class);
-        descriptionDao = Mockito.mock(DescriptionDao.class);
         doctor = Mockito.mock(Doctor.class);
         doctor2 = Mockito.mock(Doctor.class);
         doctor3 = Mockito.mock(Doctor.class);
         search = Mockito.mock(Search.class);
+        when(doctor.getId()).thenReturn(1);
+        when(doctor2.getId()).thenReturn(2);
+        when(doctor3.getId()).thenReturn(3);
 
     }
 
@@ -88,32 +83,35 @@ public class DoctorServiceImplTest {
     @Test
     public void testList() {
 
-        doctor.setId(1);
-        doctor2.setId(2);
-        doctor3.setId(3);
-
-        final Optional<CompressedSearch> doctors = doctorDao.listDoctors();
+        final Optional<CompressedSearch> doctors = doctorServiceImpl.listDoctors();
 
         assertNotNull(doctors.get());
         assertEquals(3, doctors.get().getDoctors().size());
-        assertEquals(doctor, doctors.get().getDoctors().get(0));
-        assertEquals(doctor2, doctors.get().getDoctors().get(1));
-        assertEquals(doctor3, doctors.get().getDoctors().get(2));
+        assertEquals(doctor.getId(), doctors.get().getDoctors().get(0).getId());
+        assertEquals(doctor2.getId(), doctors.get().getDoctors().get(1).getId());
+        assertEquals(doctor3.getId(), doctors.get().getDoctors().get(2).getId());
 
     }
 
     @Test
     public void testFind() {
 
-        search.setName(DOC_SECOND_NAME);
-        search.setSpecialty(DOC_SPECIALTY);
-        search.setInsurance(DOC_INSURANCE);
+        StringBuilder nameBuilder = new StringBuilder();
+        nameBuilder.append("%");
+        nameBuilder.append(DOC_SECOND_NAME.toLowerCase());
+        nameBuilder.append("%");
+
         List<String> insurancePlan = new ArrayList<>();
         insurancePlan.add(DOC_INSURANCE_PLAN);
-        search.setInsurancePlan(insurancePlan);
-        search.setSex(DOC_SEX);
 
-        final Optional<CompressedSearch> filteredSearch = doctorDao.findDoctors(search);
+        when(search.getName()).thenReturn(DOC_SECOND_NAME);
+        when(search.getSimilarToName()).thenReturn(nameBuilder.toString());
+        when(search.getSpecialty()).thenReturn(DOC_SPECIALTY);
+        when(search.getInsurance()).thenReturn(DOC_INSURANCE);
+        when(search.getInsurancePlanAsString()).thenReturn(DOC_INSURANCE_PLAN_AS_STRING);
+        when(search.getSex()).thenReturn(DOC_SEX);
+
+        final Optional<CompressedSearch> filteredSearch = doctorServiceImpl.findDoctors(search);
 
         assertTrue(filteredSearch.isPresent());
         assertEquals(1, filteredSearch.get().getDoctors().size() );
@@ -129,19 +127,17 @@ public class DoctorServiceImplTest {
     @Test
     public void testFindById() {
 
-        doctor.setId(1);
+       final Optional<Doctor> filteredById = doctorServiceImpl.findDoctorById(DOC_ID);
 
-        final Optional<Doctor> filteredById = doctorDao.findDoctorById(DOC_ID);
-
-        assertTrue(filteredById.isPresent());
-        assertEquals(doctor, filteredById.get());
+       assertTrue(filteredById.isPresent());
+       assertEquals(doctor.getId(), filteredById.get().getId());
 
     }
 
     @Test
     public void testCreate() {
 
-        final Doctor newDoctor = doctorDao.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, NEW_DOC_ADDRESS, NEW_DOC_AVATAR);
+        final Doctor newDoctor = doctorServiceImpl.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, NEW_DOC_ADDRESS, NEW_DOC_AVATAR);
 
         assertNotNull(newDoctor);
         assertEquals(NEW_DOC_NAME, newDoctor.getFirstName());

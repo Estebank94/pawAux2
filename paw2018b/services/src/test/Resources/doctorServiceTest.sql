@@ -43,14 +43,17 @@ CREATE TABLE IF NOT EXISTS doctorSpecialty(
 );
 
 CREATE TABLE IF NOT EXISTS review(
-  description varchar(100),
-  stars integer,
-  doctorID integer,
-  id IDENTITY PRIMARY KEY,
-  FOREIGN KEY (doctorID) REFERENCES doctor(id)
+    description varchar(100),
+    stars integer,
+    doctorID integer,
+    userID integer,
+    userrole varchar (10),
+    daytime varchar (20),
+    id IDENTITY PRIMARY KEY,
+    FOREIGN KEY (doctorID) REFERENCES doctor(id)
 );
 
-CREATE TABLE IF NOT EXISTS information (
+CREATE TABLE IF NOT EXISTS information(
  doctorId integer,
  certificate varchar(100),
  languages varchar(20),
@@ -66,6 +69,27 @@ CREATE TABLE IF NOT EXISTS workingHour(
     id IDENTITY PRIMARY KEY,
     FOREIGN KEY (doctorId) REFERENCES doctor(id)
 );
+
+CREATE TABLE IF NOT EXISTS appointment(
+    doctorId integer,
+    clientId integer,
+    appointmentDay varchar(10),
+    appointmentTime VARCHAR(10),
+    id IDENTITY PRIMARY KEY,
+    FOREIGN KEY (doctorId) REFERENCES doctor(id)
+);
+
+CREATE TABLE IF NOT EXISTS patient(
+    doctorId INTEGER,
+    firstname VARCHAR(50),
+    lastname VARCHAR(50),
+    phonenumber VARCHAR(20),
+    email VARCHAR(90),
+    password VARCHAR(72),
+    id IDENTITY PRIMARY KEY,
+    FOREIGN KEY (doctorId) REFERENCES doctor(id)
+);
+
 
 INSERT INTO doctor (firstName, lastName, sex, phoneNumber, address, licence, avatar, id, workingHours, district)
 VALUES ('Roberto Nicolas Agustin', 'Rosa', 'M', '47777777', 'Arce 211', '1234', 'https://d1cesmq0xhh7we.cloudfront.net/724f4a59-0f34-4cbc-980f-766f4df17d9bcircle_medium__v1__.png', '1', 'lunes 9am', 'Palermo');
