@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.acls.model.NotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLDataException;
@@ -24,6 +25,9 @@ public class PatientServiceImpl implements PatientService {
 
     @Autowired
     private DoctorDao doctorDao;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PatientServiceImpl.class);
 
@@ -81,17 +85,23 @@ public class PatientServiceImpl implements PatientService {
             LOGGER.debug("Email has more than 90 characters. Email given: {}", email);
             throw new IllegalArgumentException("Email can't have more than 90 characters");
         }
+
+        if (password == null){
+            LOGGER.debug("Password is empty");
+            throw new IllegalArgumentException("password can't be null");
+        }
+
         if (password.length() == 0){
             LOGGER.debug("Password is empty");
             throw new IllegalArgumentException("password can't be empty");
         }
-
         if (password.length() > 72){
-            LOGGER.debug("Password has more than 75 characters. Password given: {}", password);
-            throw new IllegalArgumentException("password can't have more than 1 characters");
+            LOGGER.debug("Password has more than 72 characters. Password given: {}", password);
+            throw new IllegalArgumentException("password can't have more than 72 characters");
         }
 
         try{
+
             LOGGER.debug("patientDao.findPatientByEmail(email) with email: {}", email);
             Optional<Patient> patient = patientDao.findPatientByEmail(email);
             if(patient.isPresent()){
@@ -102,13 +112,14 @@ public class PatientServiceImpl implements PatientService {
         catch (NotFoundException e){
 
         }
+        String finalpassword = passwordEncoder.encode(password);
         LOGGER.debug("patientDao.createPatient(firstName, lastName, phoneNumber, email, password)");
         LOGGER.debug("First Name: {}", firstName);
         LOGGER.debug("Last Name: {}", lastName);
         LOGGER.debug("Phone Number: {}", phoneNumber);
         LOGGER.debug("Email: {}", email);
-        LOGGER.debug("Password: {}", password);
-        Patient patient = patientDao.createPatient(firstName, lastName, phoneNumber, email, password);
+        LOGGER.debug("Password: {}", finalpassword);
+        Patient patient = patientDao.createPatient(firstName, lastName, phoneNumber, email, finalpassword);
 
 
         if (patient == null) {
