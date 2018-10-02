@@ -57,9 +57,10 @@ public class RegistrationController {
     public ModelAndView doctorRegistration (@Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors,
                                             HttpServletRequest request){
 
+        LOGGER.debug("RegistrationController: doctorRegistration");
 
-        if(errors.hasErrors() || !personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())
-              /* || patientService.findPatientByEmail(personalForm.getEmail()) != null*/){
+        if(errors.hasErrors() || !personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation()
+        )/* || patientService.findPatientByEmail(personalForm.getEmail()) != null*/){
             if(!personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())){
                 /*TODO: this doesn't show the error message*/
                 System.out.println("passwordMatching");
@@ -95,6 +96,7 @@ public class RegistrationController {
                         personalForm.getPassword());
                 patientService.setDoctorId(patient.getPatientId(), doctor.getId());
 
+                LOGGER.debug("Auto log in for: {}", patient.getPatientId());
                 authenticateUserAndSetSession(patient, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
 
                 mav.addObject("doctor", doctor);
@@ -103,6 +105,7 @@ public class RegistrationController {
 
             } catch (IllegalArgumentException ex) {
                 /*TODO: VER CUANDO TIRA ESTO !!! PORQUE CADA TANTO LO ROMPE Y NI SE SABE PORQUE*/
+                LOGGER.trace("500 ERROR");
                 return new ModelAndView("500");
             }
         }
@@ -112,6 +115,7 @@ public class RegistrationController {
     @RequestMapping(value="/doctorRegistration", method = { RequestMethod.GET })
     public ModelAndView showDoctorRegistration (@ModelAttribute("personal") PersonalForm personalForm){
 
+        LOGGER.debug("RegistrationController: showDoctorRegistration");
         final ModelAndView mav = new ModelAndView("registerSpecialist");
 
         return mav;
@@ -120,6 +124,7 @@ public class RegistrationController {
     @RequestMapping(value = "/doctorProfile", method = {RequestMethod.GET})
     public ModelAndView showDoctorProfile(@ModelAttribute("professional")ProfessionalForm professionalForm){
 
+        LOGGER.debug("RegistrationController: showDoctorProfile");
         final ModelAndView mav = new ModelAndView("registerSpecialist2");
 
         mav.addObject("insuranceList", searchService.listInsurances().get());
@@ -133,6 +138,7 @@ public class RegistrationController {
         doctor.getSpecialty().remove(null);
         doctor.getInsurance().keySet().remove(null);
 
+        LOGGER.debug("Logged: {}", patient.getPatientId());
 
 
         Set<DayOfWeek> emptyWorkingHours = doctor.emptyWorkingHours();
@@ -170,6 +176,7 @@ public class RegistrationController {
     @RequestMapping(value = "/doctorProfile", method = {RequestMethod.POST})
     public ModelAndView doctorProfile ( @Valid @ModelAttribute("professional") ProfessionalForm professionalForm, final BindingResult errors){
 
+        LOGGER.debug("RegistrationController: doctorProfile");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Patient patient = patientService.findPatientByEmail(authentication.getName());
@@ -177,6 +184,7 @@ public class RegistrationController {
 
         boolean withInfo = false;
         if(doctor.getSpecialty() != null) {
+            LOGGER.debug("Doctor has description");
             withInfo = true;
         }
 
@@ -210,17 +218,20 @@ public class RegistrationController {
 
         List<WorkingHours> workingHours = professionalForm.workingHoursList();
 
-        //when no desceription is avaliable, just set one field
+        //when no description is available, just set one field
         if(withInfo){
             doctorService.setDoctorSpecialty(doctor.getId(), professionalForm.getSpecialty());
             if(insurance != null){
+                LOGGER.debug("SET Doctor's insurance to DB");
                 doctorService.setDoctorInsurance(doctor.getId(), insurance);
             }
             if(workingHours != null){
+                LOGGER.debug("SET Doctor's workingHours to DB");
                 doctorService.setWorkingHours(doctor.getId(), workingHours);
             }
         }else{
             //can't have description values in null;
+            LOGGER.debug("SET full Doctor's information to DB");
             Doctor doctorProfessional = doctorService.setDoctorInfo(patient.getDoctorId(), professionalForm.getSpecialty(), insurance,workingHours ,description).get();
         }
 
@@ -230,6 +241,7 @@ public class RegistrationController {
 
 
     private void authenticateUserAndSetSession(Patient patient, HttpServletRequest request) {
+
         String username = patient.getEmail();
         String password = patient.getPassword();
 
@@ -246,6 +258,7 @@ public class RegistrationController {
     public ModelAndView showPatientRegistration (@ModelAttribute("personal") PatientForm patientForm,
                                                  @RequestParam(required=false) final String wrongPassword){
 
+        LOGGER.debug("RegistrationController: showPatientRegistration");
         final ModelAndView mav = new ModelAndView("registerPatient");
         mav.addObject("wrongPassword", wrongPassword);
 
@@ -256,6 +269,7 @@ public class RegistrationController {
     public ModelAndView patientRegistration (@Valid @ModelAttribute("personal") PatientForm patientForm, final BindingResult errors,
                                              HttpServletRequest request) {
 
+        LOGGER.debug("RegistrationController: patientRegistration");
         final ModelAndView mav = new ModelAndView("index");
 
         if (errors.hasErrors() || !patientForm.matchingPasswords(patientForm.getPassword(), patientForm.getPasswordConfirmation())
@@ -269,9 +283,11 @@ public class RegistrationController {
             return showPatientRegistration(patientForm, "");
         } else {
             try {
+                LOGGER.debug("patientRegistration: create a patient");
                 Patient patient = patientService.createPatient(patientForm.getFirstName(), patientForm.getLastName(), patientForm.getPhoneNumber(), patientForm.getEmail(),
                         patientForm.getPassword());
 
+                LOGGER.debug("AutoLogIn of patient with ID: {}", patient.getPatientId());
                 authenticateUserAndSetSession(patient, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
 
                 mav.addObject("search", new Search());
@@ -281,6 +297,7 @@ public class RegistrationController {
                 return mav;
 
             } catch (IllegalArgumentException ex) {
+                LOGGER.trace("ERROR 500");
                 return new ModelAndView("500");
             }
         }

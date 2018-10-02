@@ -50,7 +50,7 @@ public class DoctorPanelController {
 
         Doctor doctor = doctorService.findDoctorById(doctorId).get();
 
-
+        LOGGER.debug("Doctor Panel: Doctor with ID: {}", doctorId);
 
         if(doctorId != 0 && doctorId != null){
             System.out.println("Education " + doctor.getDescription().getEducation());
@@ -68,14 +68,13 @@ public class DoctorPanelController {
 //            }
 
             Map<LocalDate, List<Appointment>> appointments = doctor.appointmentsMap();
+            LOGGER.debug("GET doctor's appointments: {}", appointments);
             mav.addObject("appointments", appointments);
             mav.addObject("doctor", doctor);
 
         }else{
             /*TODO CHECK IF THE ID IS A REAL DOCTOR*/
         }
-
-
 
 
         return mav;

@@ -47,6 +47,7 @@ public class HelloWorldController {
 	
 	@RequestMapping("/")
 	public ModelAndView helloWorld() {
+		LOGGER.debug("Starting Waldoc ... ");
 		final ModelAndView mav = new ModelAndView("index");
 		mav.addObject("search", new Search());
 		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
@@ -55,12 +56,13 @@ public class HelloWorldController {
 		boolean hasUserRole = false;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-
+			LOGGER.debug("There is an User Logged IN");
 			hasUserRole = authentication.getAuthorities().stream()
 					.anyMatch(r -> r.getAuthority().equals("ROLE_DOCTOR"));
 			if(hasUserRole){
 				Patient patient = patientService.findPatientByEmail(authentication.getName());
 				Doctor doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+				LOGGER.debug("The User Logged in is a DOCTOR with ID: {}", doctor.getId());
 				mav.addObject("doctorID", doctor.getId());
 			}
 		}
@@ -69,6 +71,8 @@ public class HelloWorldController {
 
 	@RequestMapping("/processForm")
 	public ModelAndView processForm(@ModelAttribute("search") Search theSearch) {
+		LOGGER.debug("Calling: ProcessForm");
+
 		final ModelAndView mav = new ModelAndView("specialists");
 		Optional<CompressedSearch> compressedSearch =  doctorService.findDoctors(theSearch);
 		List<Doctor> doctorsList = null;
@@ -96,7 +100,13 @@ public class HelloWorldController {
 				mav.addObject("doctorID", patient.getDoctorId());
 			}
 		}
-		LOGGER.debug("GET DoctorList {}", doctorsList);
+
+		LOGGER.debug("GET DoctorList {}", doctorsList.toString());
+		LOGGER.debug("GET ListInsurance {}", searchService.listInsurancesWithDoctors().get().toString());
+		LOGGER.debug("GET specialtyList {}",  searchService.listSpecialtiesWithDoctors().get().toString());
+		LOGGER.debug("GET sexList {}", compressedSearch.get().getSex().toString());
+		LOGGER.debug("GET insuranceNameList {}", compressedSearch.get().getInsurance().toString());
+
 		mav.addObject("doctorList", doctorsList);
 		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
@@ -104,12 +114,14 @@ public class HelloWorldController {
 		mav.addObject("insuranceNameList", compressedSearch.get().getInsurance());
 		mav.addObject("previousSearch", theSearch);
 
+
 		return mav;
 	}
 
 	@RequestMapping(value = "/specialist/{doctorId}", method = { RequestMethod.GET})
     public ModelAndView doctorDescription(@PathVariable Integer doctorId, @ModelAttribute("search") Search search,
 										  @ModelAttribute("appointment") AppointmentForm appointmentForm){
+		LOGGER.debug("DoctorDesciption. DoctorID = {}", doctorId);
 			final ModelAndView mav = new ModelAndView("specialist");
 			try {
 				Doctor doctor;
@@ -136,6 +148,7 @@ public class HelloWorldController {
 				mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
 				mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 			} catch (NotFoundException e) {
+				LOGGER.trace("404 error");
 				return new ModelAndView("404");
 			}
 			return mav;
