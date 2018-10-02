@@ -10,6 +10,7 @@ import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,8 +55,9 @@ public class RegistrationController {
     @Autowired
     protected AuthenticationManager authenticationManager;
 
-    @RequestMapping(value="/doctorRegistration", method = { RequestMethod.POST })
-    public ModelAndView doctorRegistration (@Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors,
+    @RequestMapping(value="/doctorRegistration", method = { RequestMethod.POST },consumes = {"multipart/form-data"})
+    public ModelAndView doctorRegistration (@RequestParam ("exampleFormControlFile1") MultipartFile image,
+            @Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors,
                                             HttpServletRequest request){
 
         LOGGER.debug("RegistrationController: doctorRegistration");
@@ -299,6 +302,10 @@ public class RegistrationController {
             } catch (IllegalArgumentException ex) {
                 LOGGER.trace("ERROR 500");
                 return new ModelAndView("500");
+            } catch (DuplicateKeyException ex2){
+                return showPatientRegistration(patientForm, "RepeatedKeyError");
+                //mav.addObject("RepeteadKeyError", Boolean.TRUE);
+
             }
         }
     }

@@ -30,10 +30,10 @@
     <p>Para aparecer en las búsquedas, vas a necesitar completar tu información profesional.</p>
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
-    <form:form modelAttribute="professional" method="POST" action="/doctorProfile" accept-charset="ISO-8859-1" id="profile">
+    <form:form modelAttribute="professional" method="POST" action="/doctorProfile" accept-charset="ISO-8859-1" id="profile" enctype="multipart/form-data">
         <div>
             <label for="exampleFormControlFile1"><strong>Foto de perfil</strong></label>
-            <form:input type="file" class="form-control-file" id="exampleFormControlFile1" path="avatar"/>
+            <form:input type="file" class="form-control-file" id="exampleFormControlFile1" path="avatar" name="exampleFormControlFile1"/>
             <form:errors path="avatar" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
