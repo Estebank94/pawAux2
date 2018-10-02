@@ -89,6 +89,6 @@ CREATE TABLE IF NOT EXISTS patient(
     firstname VARCHAR (50),
     lastname VARCHAR (50),
     phonenumber VARCHAR (20),
-    email VARCHAR (90),
+    email VARCHAR (90) UNIQUE,
     password VARCHAR (72)
 );

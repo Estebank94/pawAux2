@@ -4,6 +4,9 @@ import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.interfaces.SearchService;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.exceptions.NotValidFirstNameException;
+import ar.edu.itba.paw.models.exceptions.NotValidLastNameException;
+import ar.edu.itba.paw.models.exceptions.RepeatedEmailException;
 import ar.edu.itba.paw.webapp.forms.PatientForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
@@ -113,6 +116,15 @@ public class RegistrationController {
             } catch (IllegalArgumentException ex) {
                 /*TODO: VER CUANDO TIRA ESTO !!! PORQUE CADA TANTO LO ROMPE Y NI SE SABE PORQUE*/
                 LOGGER.trace("500 ERROR");
+                return new ModelAndView("500");
+            } catch (NotValidLastNameException e) {
+                e.printStackTrace();
+                return new ModelAndView("500");
+            } catch (RepeatedEmailException e) {
+                e.printStackTrace();
+                return new ModelAndView("500");
+            } catch (NotValidFirstNameException e) {
+                e.printStackTrace();
                 return new ModelAndView("500");
             }
         }
@@ -268,6 +280,7 @@ public class RegistrationController {
         LOGGER.debug("RegistrationController: showPatientRegistration");
         final ModelAndView mav = new ModelAndView("registerPatient");
         mav.addObject("wrongPassword", wrongPassword);
+        mav.addObject("repeatedEmail",false);
 
         return mav;
     }
@@ -303,13 +316,19 @@ public class RegistrationController {
 
                 return mav;
 
-            } catch (IllegalArgumentException ex) {
-                LOGGER.trace("ERROR 500");
-                return new ModelAndView("500");
-            } catch (DuplicateKeyException ex2){
-                return showPatientRegistration(patientForm, "RepeatedKeyError");
-                //mav.addObject("RepeteadKeyError", Boolean.TRUE);
-
+//            } catch (IllegalArgumentException ex) {
+//                return showPatientRegistration(patientForm, "RepeatedKeyError");
+//            } catch (DuplicateKeyException ex2){
+//                return showPatientRegistration(patientForm, "RepeatedKeyError").addObject("repeatedEmail",true);
+//                //mav.addObject("RepeteadKeyError", Boolean.TRUE);
+//            } catch (Exception ex3){
+//                return new ModelAndView("500");
+            } catch (NotValidLastNameException e) {
+                return showPatientRegistration(patientForm,"lastName").addObject("wrongLastName",true);
+            } catch (RepeatedEmailException e) {
+                return showPatientRegistration(patientForm, "RepeatedKeyError").addObject("repeatedEmail",true);
+            } catch (NotValidFirstNameException e) {
+                return showPatientRegistration(patientForm,"firstName").addObject("wrongFirstName",true);
             }
         }
     }

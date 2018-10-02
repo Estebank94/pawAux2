@@ -5,6 +5,10 @@ import ar.edu.itba.paw.interfaces.PatientDao;
 import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
+import ar.edu.itba.paw.models.exceptions.NotValidFirstNameException;
+import ar.edu.itba.paw.models.exceptions.NotValidLastNameException;
+import ar.edu.itba.paw.models.exceptions.RepeatedEmailException;
+import org.mockito.internal.matchers.Not;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,35 +36,35 @@ public class PatientServiceImpl implements PatientService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PatientServiceImpl.class);
 
     @Override
-    public Patient createPatient(String firstName, String lastName, String phoneNumber, String email, String password) throws IllegalArgumentException {
+    public Patient createPatient(String firstName, String lastName, String phoneNumber, String email, String password) throws RepeatedEmailException, NotValidFirstNameException, NotValidLastNameException {
         LOGGER.debug("PatientServiceImpl: createPatient");
         if (firstName == null){
             LOGGER.debug("First Name is null");
-            throw new IllegalArgumentException("firstName can't be null");
+            throw new NotValidFirstNameException("firstName can't be null");
         }
 
         if (firstName.length() == 0){
             LOGGER.debug("First Name of a Patient has 0 characters");
-            throw new IllegalArgumentException("Username firstname can't be empty");
+            throw new NotValidFirstNameException("Username firstname can't be empty");
         }
 
         if (firstName.length() > 45){
             LOGGER.debug("First Name of a Patient is longer than 45 characters. Name given: {}", firstName);
-            throw new IllegalArgumentException("Username firstname maxlength is 50");
+            throw new NotValidFirstNameException("Username firstname maxlength is 50");
         }
 
         if (lastName == null) {
             LOGGER.debug("Last Name of a Patient is null");
-            throw new IllegalArgumentException("last name can't be null");
+            throw new NotValidLastNameException("last name can't be null");
         }
         if (lastName.length() == 0){
             LOGGER.debug("Last Name of a Patient has 0 characters");
-            throw new IllegalArgumentException("Username Lastname can't be empty");
+            throw new NotValidLastNameException("Username Lastname can't be empty");
         }
 
         if (lastName.length() > 45){
             LOGGER.debug("Last Name longer than 45 characters. Last Name: {}", lastName);
-            throw new IllegalArgumentException("Username Lastname maxlength is 45");
+            throw new NotValidLastNameException("Username Lastname maxlength is 45");
         }
 
         if (phoneNumber == null) {
@@ -100,18 +104,6 @@ public class PatientServiceImpl implements PatientService {
             throw new IllegalArgumentException("password can't have more than 72 characters");
         }
 
-        try{
-
-            LOGGER.debug("patientDao.findPatientByEmail(email) with email: {}", email);
-            Optional<Patient> patient = patientDao.findPatientByEmail(email);
-            if(patient.isPresent()){
-                LOGGER.debug("Patient not found. Patient email: {}", email);
-                throw new IllegalArgumentException("Username with email " + email + " already exists");
-            }
-        }
-        catch (NotFoundException e){
-
-        }
         String finalpassword = passwordEncoder.encode(password);
         LOGGER.debug("patientDao.createPatient(firstName, lastName, phoneNumber, email, password)");
         LOGGER.debug("First Name: {}", firstName);
@@ -119,7 +111,12 @@ public class PatientServiceImpl implements PatientService {
         LOGGER.debug("Phone Number: {}", phoneNumber);
         LOGGER.debug("Email: {}", email);
         LOGGER.debug("Password: {}", finalpassword);
-        Patient patient = patientDao.createPatient(firstName, lastName, phoneNumber, email, finalpassword);
+        Patient patient;
+        try{
+            patient= patientDao.createPatient(firstName, lastName, phoneNumber, email, finalpassword);
+        }catch (RepeatedEmailException exc1){
+            throw new RepeatedEmailException();
+        }
 
 
         if (patient == null) {

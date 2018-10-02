@@ -2,13 +2,17 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.PatientDao;
 import ar.edu.itba.paw.models.Patient;
+import ar.edu.itba.paw.models.exceptions.RepeatedEmailException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,15 +39,21 @@ public class PatientDaoImpl implements PatientDao {
     }
 
     @Override
-    public Patient createPatient(String firstName, String lastName, String phoneNumber, String email, String password) {
+    public Patient createPatient(String firstName, String lastName, String phoneNumber, String email, String password) throws RepeatedEmailException {
         final Map<String, Object> args = new HashMap<>();
         args.put("firstname", firstName);
         args.put("lastname", lastName);
         args.put("phonenumber", phoneNumber);
         args.put("email", email);
         args.put("password", password);
-        final Number reviewId = jdbcInsert.executeAndReturnKey(args);
-        return new Patient(new Integer(reviewId.intValue()), firstName, lastName, phoneNumber, email, password);
+        Patient patient = null;
+        try {
+            final Number reviewId = jdbcInsert.executeAndReturnKey(args);
+            patient = new Patient(new Integer(reviewId.intValue()), firstName, lastName, phoneNumber, email, password);
+        }catch (DuplicateKeyException exc1){
+            throw new RepeatedEmailException();
+        }
+        return patient;
     }
 
     public Boolean setDoctorId(Integer patientId, Integer doctorId){
