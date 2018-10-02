@@ -23,7 +23,7 @@
 <body class="body-background">
 <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
     <div class="container">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="<c:url value="/"/>">
             <h1><strong>Waldoc</strong></h1>
         </a>
     </div>
@@ -103,7 +103,7 @@
         </div>
         <br>
         <input type="submit" class="btn btn-primary" value="Siguiente" path="submit" />
-        <input type="button" class="btn btn-secondary" value="Cancelar" onclick="window.location='/'"/>
+        <input type="button" class="btn btn-secondary" value="Cancelar" onclick="window.location='<c:url value="/"/>'"/>
     </form:form>
     <br>
 </div>

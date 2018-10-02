@@ -19,7 +19,7 @@
     <body class="body-background">
         <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
             <div class="container">
-                <a class="navbar-brand" href="/">
+                <a class="navbar-brand" href="<c:url value="/"/>">
                     <h1><strong>Waldoc</strong></h1>
                 </a>
             </div>

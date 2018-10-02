@@ -17,7 +17,7 @@
 <body class="body-background">
 <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
     <div class="container">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="<c:url value="/"/>">
             <h1><strong>Waldoc</strong></h1>
         </a>
     </div>
@@ -30,7 +30,8 @@
     <p>Para aparecer en las búsquedas, vas a necesitar completar tu información profesional.</p>
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
-    <form:form modelAttribute="professional" method="POST" action="/doctorProfile" accept-charset="ISO-8859-1" id="profile" enctype="multipart/form-data">
+    <%--enctype="multipart/form-data" for image--%>
+    <form:form modelAttribute="professional" method="POST" action="/doctorProfile" accept-charset="ISO-8859-1" id="profile">
         <div>
             <label for="exampleFormControlFile1"><strong>Foto de perfil</strong></label>
             <form:input type="file" class="form-control-file" id="exampleFormControlFile1" path="avatar" name="exampleFormControlFile1"/>
@@ -301,7 +302,7 @@
                 <input type="button" class="btn btn-secondary" value="Cancelar" onclick="cancel()"/>
             </c:if>
             <c:if test="${cancelButton eq false}">
-                <input type="button" class="btn btn-secondary" value="Cancelar" onclick="window.location='/'"/>
+                <input type="button" class="btn btn-secondary" value="Cancelar" onclick="window.location='<c:url value="/"/>'"/>
             </c:if>
         </div>
     </form:form>

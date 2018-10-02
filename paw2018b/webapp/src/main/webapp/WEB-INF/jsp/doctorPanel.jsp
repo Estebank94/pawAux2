@@ -25,7 +25,7 @@
 <body class="body-background">
 <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
     <div class="container">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="<c:url value="/"/>">
             <h1><strong>Waldoc</strong></h1>
         </a>
         <a>
@@ -58,7 +58,7 @@
                                 <h3 class="doctor-name">Dr. ${doctor.lastName}, ${doctor.firstName}</h3>
                                 <br>
                                 <c:if test="${professionalIncomplete eq true}">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="window.location='/doctorProfile'"><i class="fas fa-cog"></i>Completar Perfil</button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="window.location='<c:url value="/doctorProfile"/>'"><i class="fas fa-cog"></i>Completar Perfil</button>
                                 </c:if>
                             </div>
                         </div>
