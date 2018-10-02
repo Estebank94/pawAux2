@@ -55,10 +55,14 @@ public class RegistrationController {
     @Autowired
     protected AuthenticationManager authenticationManager;
 
-    @RequestMapping(value="/doctorRegistration", method = { RequestMethod.POST },consumes = {"multipart/form-data"})
-    public ModelAndView doctorRegistration (@RequestParam ("exampleFormControlFile1") MultipartFile image,
-            @Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors,
-                                            HttpServletRequest request){
+//    @RequestMapping(value="/doctorRegistration", method = { RequestMethod.POST }/*, consumes = {"multipart/form-data"}*/)
+//    public ModelAndView doctorRegistration (@RequestParam ("exampleFormControlFile1") MultipartFile image,
+//            @Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors,
+//                                            HttpServletRequest request)
+
+    @RequestMapping(value="/doctorRegistration", method = { RequestMethod.POST })
+    public ModelAndView doctorRegistration (@Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors,HttpServletRequest request)
+    {
 
         LOGGER.debug("RegistrationController: doctorRegistration");
 

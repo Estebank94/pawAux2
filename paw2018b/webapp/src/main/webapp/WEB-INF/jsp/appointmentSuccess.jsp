@@ -23,7 +23,7 @@
 <body class="body-background">
 <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
     <div class="container">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="<c:url value="/"/>">
             <h1><strong>Waldoc</strong></h1>
         </a>
     </div>
@@ -35,7 +35,7 @@
         <h2 style="text-align: center;">¡Turno Reservado!</h2>
         <p style="text-align: center; margin-left:16px; margin-right:16px;">Te hemos reservado un turno con ${doctor.firstName} ${doctor.lastName} el ${appointmentDay} a las ${appointmentTime}.<p>
         <br>
-        <button style="margin-bottom:64px;" class="btn btn-primary custom-btn center-horiz" type="button" onclick="window.location='/'">
+        <button style="margin-bottom:64px;" class="btn btn-primary custom-btn center-horiz" type="button" onclick="window.location='<c:url value="/"/>'">
             Volver al Inicio
         </button>
     </div>

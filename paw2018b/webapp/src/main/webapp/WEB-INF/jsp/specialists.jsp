@@ -27,7 +27,7 @@
 <body class="body-background">
 <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
     <div class="container">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="<c:url value="/"/>">
             <h1><strong><spring:message code="brand.name" /></strong></h1>
         </a>
         <a>
@@ -45,7 +45,7 @@
                 </security:authorize>
                 <div>
                     <security:authorize access="!isAuthenticated()">
-                        <button class="btn btn-secondary" style="background-color:transparent; border-color:transparent;" type="button" onclick="window.location='/showLogIn'">
+                        <button class="btn btn-secondary" style="background-color:transparent; border-color:transparent;" type="button" onclick="window.location='<c:url value="/showLogIn"/>'">
                             Iniciá Sesión
                         </button>
                     </security:authorize>
@@ -58,15 +58,15 @@
                                     <button class="dropdown-item" type="submit">Cerrar Sesion</button>
                                     <%--ARREGLAR !!! hay que arreglar el dropdown se ve por abajo del search form--%>
                                     <security:authorize access="hasRole('ROLE_DOCTOR')">
-                                        <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/doctorPanel/'">
+                                        <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="${pageContext.request.contextPath}/doctorPanel"/>'">
                                             Ver Perfil
                                         </button>
-                                        <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='/specialist/${doctorID}'">
+                                        <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="/specialist/${doctorID}"/>'">
                                             Mis Datos
                                         </button>
                                     </security:authorize>
                                     <security:authorize access="hasRole('ROLE_PATIENT') and !hasRole('ROLE_DOCTOR')">
-                                        <button class="btn btn-light dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/patientPanel/'">
+                                        <button class="btn btn-light dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="${pageContext.request.contextPath}/patientPanel"/>'">
                                             Ver Perfil
                                         </button>
                                     </security:authorize>

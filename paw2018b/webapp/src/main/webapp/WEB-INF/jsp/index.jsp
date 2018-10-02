@@ -11,7 +11,7 @@
     <title>Waldoc</title>
     <meta name="description" content="Roughly 155 characters">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css" />">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css"/>">
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/select2-bootstrap4.css" />">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
@@ -19,7 +19,7 @@
 <body class="body-background">
 <nav class="navbar navbar-dark" style="background-color: #FFFFFF; padding-bottom: 0px;">
     <div class="container">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="<c:url value="/"/>">
             <h1 class="navbar-brand-home"><strong><spring:message code="brand.name"/></strong></h1>
         </a>
         <a>
@@ -32,14 +32,14 @@
                         Registrate
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <button class="dropdown-item" type="button" onclick="window.location='/patientRegistration'">Registrate como paciente</button>
-                        <button class="dropdown-item" type="button" onclick="window.location='/doctorRegistration'">Registrate como especialista</button>
+                        <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/patientRegistration"/>'">Registrate como paciente</button>
+                        <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/doctorRegistration"/>'">Registrate como especialista</button>
                     </div>
                     </security:authorize>
                 </div>
                 <div>
                     <security:authorize access="!isAuthenticated()">
-                        <button class="btn btn-light" style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="button" onclick="window.location='/showLogIn'">
+                        <button class="btn btn-light" style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="button" onclick="window.location='<c:url value="/showLogIn"/>'">
                             Iniciá Sesión
                         </button>
                     </security:authorize>
@@ -51,15 +51,15 @@
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                     <button class="dropdown-item" type="submit">Cerrar Sesion</button>
                                     <security:authorize access="hasRole('ROLE_DOCTOR')">
-                                        <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/doctorPanel/'">
+                                        <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:out value="${pageContext.request.contextPath}/doctorPanel/"/>'">
                                             Ver Perfil
                                         </button>
-                                        <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='/specialist/${doctorID}'">
+                                        <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:out value="/specialist/${doctorID}"/>'">
                                             Mis Datos
                                         </button>
                                     </security:authorize>
                                     <security:authorize access="hasRole('ROLE_PATIENT') and !hasRole('ROLE_DOCTOR')">
-                                        <button class="btn btn-light dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='${pageContext.request.contextPath}/patientPanel/'">
+                                        <button class="btn btn-light dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:out value="${pageContext.request.contextPath}/patientPanel/"/>'">
                                             Ver Perfil
                                         </button>
                                     </security:authorize>
@@ -165,4 +165,3 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>
 </html>
-
