@@ -64,9 +64,8 @@ public class AppointmentServiceImplTest {
         assertTrue(appointment.isPresent());
         assertEquals(DATE, appointment.get().getAppointmentDay());
         assertEquals(TIME, appointment.get().getAppointmentTime());
-        // PQ EL CONSTRUCTOR LOS PONE EN NULL?
-//        assertEquals(DOC_ID, appointment.get().getDoctorId());
-//        assertEquals(PATIENT_ID, appointment.get().getClientId());
+        assertEquals(DOC_ID, appointment.get().getDoctorId());
+        assertEquals(PATIENT_ID, appointment.get().getClientId());
 
     }
 
