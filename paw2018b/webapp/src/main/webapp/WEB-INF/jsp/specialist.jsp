@@ -164,7 +164,22 @@
 
                     <h3 id="information">Información Profesional</h3>
                     <br>
-                    <br>
+                    <c:if test="${doctor.description.certificate != null}">
+                        <h4>Certificación</h4>
+                        <c:forEach items="${doctor.description.certificate}" var="certificate">
+                            <c:out value="${certificate}"/>
+                        </c:forEach>
+                        <br>
+                        <br>
+                    </c:if>
+                    <c:if test="${doctor.description.education != null}">
+                        <h4>Educación</h4>
+                        <c:forEach items="${doctor.description.education}" var="education">
+                           <c:out value="${education}"/>
+                        </c:forEach>
+                        <br>
+                        <br>
+                    </c:if>
                     <h4>Prepagas & Planes</h4>
                     <c:forEach items="${insuranceNameList}" var="insuranceNameList">
                         <b><c:out value="${insuranceNameList.key}"/></b>
@@ -177,22 +192,6 @@
                         </c:forEach>
                         </br>
                     </c:forEach>
-                    <c:if test="${doctor.description.education != null}">
-                        <h4>Educación</h4>
-                        <c:forEach items="${doctor.description.education}" var="education">
-                           <c:out value="${education}"/>
-                        </c:forEach>
-                        <br>
-                        <br>
-                    </c:if>
-                    <c:if test="${doctor.description.certificate != null}">
-                        <h4>Certificación</h4>
-                        <c:forEach items="${doctor.description.certificate}" var="certificate">
-                            <c:out value="${certificate}"/>
-                        </c:forEach>
-                        <br>
-                        <br>
-                    </c:if>
                     <c:if test="${doctor.description.languages.size() != 0}">
                         <h4>Ídiomas</h4>
                         <c:forEach items="${doctor.description.languages}" var="languages">
