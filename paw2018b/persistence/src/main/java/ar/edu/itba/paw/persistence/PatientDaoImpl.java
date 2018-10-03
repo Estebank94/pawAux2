@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.PatientDao;
+import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
@@ -15,10 +16,9 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.*;
 
 @Repository
 public class PatientDaoImpl implements PatientDao {
@@ -80,7 +80,7 @@ public class PatientDaoImpl implements PatientDao {
         if (list.isEmpty()) {
             return Optional.empty();
         }
-
+        list.get(0).setAppointments(findPacientAppointmentsById(id));
         return Optional.of(list.get(0));
     }
 
@@ -94,6 +94,32 @@ public class PatientDaoImpl implements PatientDao {
         }
 
         return Optional.of(list.get(0));
+    }
+
+    private static final RowMapper<Appointment> ROW_MAPPER_APPOINTMENT = (rs, rowNum) -> new Appointment(
+            LocalDate.parse(rs.getString("appointmentday")) ,
+            LocalTime.parse(rs.getString("appointmenttime")),
+            Integer.valueOf(rs.getInt("doctorId")),
+            rs.getString("firstname"),
+            rs.getString("lastname"),
+            rs.getString("phoneNumber"),
+            Integer.valueOf(rs.getInt("clientId")));
+
+
+    private Set<Appointment> findPacientAppointmentsById(Integer id){
+        Set<Appointment> appointments = new HashSet<>();
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT appointment.doctorId, appointment.clientId, appointmentDay, appointmentTime, doctor.firstname , doctor.lastname, doctor.phoneNumber ")
+                .append("FROM doctor ")
+                .append("JOIN appointment ON doctor.id = appointment.doctorId ")
+                .append("JOIN patient ON appointment.clientid = patient.id ")
+                .append("WHERE patient.id = ?");
+
+        List<Appointment> appointmentsList = jdbcTemplate.query(query.toString(), ROW_MAPPER_APPOINTMENT,id);
+        for (Appointment appointmentIterator: appointmentsList){
+            appointments.add(appointmentIterator);
+        }
+        return appointments;
     }
 
 }
