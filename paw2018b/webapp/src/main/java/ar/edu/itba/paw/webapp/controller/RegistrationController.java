@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.DoctorService;
+import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.interfaces.SearchService;
 import ar.edu.itba.paw.models.*;
@@ -56,6 +57,9 @@ public class RegistrationController {
     @Autowired
     protected AuthenticationManager authenticationManager;
 
+    @Autowired
+    private EmailService emailService;
+
 //    @RequestMapping(value="/doctorRegistration", method = { RequestMethod.POST }/*, consumes = {"multipart/form-data"}*/)
 //    public ModelAndView doctorRegistration (@RequestParam ("exampleFormControlFile1") MultipartFile image,
 //            @Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors,
@@ -83,9 +87,7 @@ public class RegistrationController {
                         .addObject("wrongAddress",false)
                         .addObject("wrongSex",false)
                         .addObject("wrongLicence",false);
-            }/*else if(patientService.findPatientByEmail(personalForm.getEmail()) != null){
-                showDoctorRegistration(personalForm).addObject("userExists", true);
-            }*/
+            }
             return showDoctorRegistration(personalForm);
         }else{
 
@@ -113,6 +115,9 @@ public class RegistrationController {
                 Patient patient = patientService.createPatient(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(), personalForm.getEmail(),
                         personalForm.getPassword());
                 patientService.setDoctorId(patient.getPatientId(), doctor.getId());
+
+//                Send welcome email to new user
+                emailService.sendMessageWithAttachment(patient.getFirstName(), patient.getEmail(), "Bienvenido a Waldoc");
 
                 LOGGER.debug("Auto log in for: {}", patient.getPatientId());
                 authenticateUserAndSetSession(patient, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
@@ -407,6 +412,9 @@ public class RegistrationController {
 
                 LOGGER.debug("AutoLogIn of patient with ID: {}", patient.getPatientId());
                 authenticateUserAndSetSession(patient, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
+
+//                Send welcome email to new user
+                emailService.sendMessageWithAttachment(patient.getFirstName(), patient.getEmail(), "Bienvenido a Waldoc");
 
                 mav.addObject("search", new Search());
                 mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
