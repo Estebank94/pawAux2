@@ -9,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -25,6 +27,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DoctorServiceImpl.class);
 
+    @Transactional(rollbackFor= SQLException.class)
     @Override
     public Optional<Appointment> createAppointment(Integer doctorId, Integer clientId, LocalDate appointmentDay, LocalTime appointmentTime) throws RepeatedAppointmentException, NotCreatedAppointmentException, NotValidDoctorIdException, NotValidAppointmentDayException, NotValidAppointmentTimeException, NotFoundDoctorException, NotValidPatientIdException {
         LOGGER.debug("AppointmentServiceImpl: CreateAppointment");

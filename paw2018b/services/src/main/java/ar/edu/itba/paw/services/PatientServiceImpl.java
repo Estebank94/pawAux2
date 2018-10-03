@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -144,6 +145,7 @@ public class PatientServiceImpl implements PatientService {
         return patient;
     }
 
+    @Transactional
     @Override
     public Boolean setDoctorId(Integer patientId, Integer doctorId) throws NotFoundDoctorException, NotValidPatientIdException, NotValidDoctorIdException, NotCreatePatientException {
         LOGGER.debug("PatientServiceImpl: setDoctorId");

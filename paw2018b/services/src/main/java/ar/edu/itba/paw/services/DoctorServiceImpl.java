@@ -7,11 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sun.rmi.runtime.Log;
 
 import java.security.acl.LastOwnerException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -215,6 +218,7 @@ public class DoctorServiceImpl implements DoctorService {
         return doctor;
     }
 
+    @Transactional(rollbackFor= SQLException.class)
     @Override
     public Optional<Doctor> setDoctorInfo(Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance, List<WorkingHours> workingHours, Description description) throws NotValidDoctorIdException, NotFoundDoctorException, NotValidSpecialtyException, NotValidWorkingHourException, NotValidInsuranceException, NotValidInsurancePlanException, NotValidDescriptionException, NotValidLanguagesException, NotValidCertificateException, NotValidEducationException {
         LOGGER.debug("DoctorServiceImpl: setDoctorInfo");
