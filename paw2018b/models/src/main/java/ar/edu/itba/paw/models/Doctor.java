@@ -207,6 +207,7 @@ public class Doctor {
             if (!map.containsKey(workingHoursIterator.getDayOfWeek())){
                 List<WorkingHours> whDayList = new ArrayList<>();
                 whDayList.add(workingHoursIterator);
+                map.put(workingHoursIterator.getDayOfWeek(), whDayList);
             } else if (!map.get(workingHoursIterator.getDayOfWeek()).contains(workingHoursIterator)){
                 map.get(workingHoursIterator.getDayOfWeek()).add(workingHoursIterator);
             }

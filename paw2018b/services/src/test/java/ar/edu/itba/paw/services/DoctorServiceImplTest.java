@@ -235,6 +235,10 @@ public class DoctorServiceImplTest {
         final Optional<Doctor> setDoctorWorkingHours = doctorServiceImpl.setWorkingHours(DOC_ID, workingHoursList);
 
         assertTrue(setDoctorWorkingHours.isPresent());
+        assertTrue(setDoctorWorkingHours.get().getWorkingHours().containsKey(DAY_OF_WEEK));
+        assertEquals(DAY_OF_WEEK, setDoctorWorkingHours.get().getWorkingHours().get(DAY_OF_WEEK).get(0).getDayOfWeek());
+        assertEquals(START, setDoctorWorkingHours.get().getWorkingHours().get(DAY_OF_WEEK).get(0).getStartTime());
+        assertEquals(END, setDoctorWorkingHours.get().getWorkingHours().get(DAY_OF_WEEK).get(0).getFinishTime());
 
     }
 
