@@ -24,7 +24,7 @@
         </a>
         <a>
             <div class="row">
-                <div class="dropdown">
+                <div class="dropdown center-vertical">
                     <%--<c:if test="${loggedInName != null}">--%>
                     <%--</c:if>--%>
                     <security:authorize access="!isAuthenticated()">
@@ -37,17 +37,17 @@
                     </div>
                     </security:authorize>
                 </div>
-                <div>
+                <div class="center-vertical">
                     <security:authorize access="!isAuthenticated()">
-                        <button class="btn btn-light" style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="button" onclick="window.location='<c:url value="/showLogIn"/>'">
+                        <button class="btn btn-light " style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="button" onclick="window.location='<c:url value="/showLogIn"/>'">
                             Iniciá Sesión
                         </button>
                     </security:authorize>
                     <security:authorize access="isAuthenticated()">
                         <form:form action="${pageContext.request.contextPath}/logout" method="post">
                             <security:authentication property="principal.username" var="userName"/>
-                            <div class="dropdown">
-                                <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:#257CBF !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>
+                            <div class="dropdown center-vertical">
+                                <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                     <button class="dropdown-item" type="submit">Cerrar Sesion</button>
                                     <security:authorize access="hasRole('ROLE_DOCTOR')">
