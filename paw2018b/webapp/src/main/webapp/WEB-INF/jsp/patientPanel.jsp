@@ -51,16 +51,12 @@
             <div class="card-body">
                 <div class="card-text">
                     <div class="row">
-                        <div class="doctor-info-container">
-                            <div>
-                                <p class="doctor-specialty"><spring:message code="welcome"/></p>
-                                <h3 class="doctor-name"><c:out value="${patient.lastName}"/>, <c:out value="${patient.firstName}"/></h3>
-                                <br>
-                            </div>
+                        <div style="margin: 24px">
+                            <p class="doctor-specialty"><spring:message code="welcome"/></p>
+                            <h3 class="doctor-name"><c:out value="${patient.lastName}"/>, <c:out value="${patient.firstName}"/></h3>
                         </div>
                     </div>
                 </div>
-                <br>
                 <c:if test="${patientAppointments.size() == 0}">
                     <div>
                         <div style="padding-top: 20px; padding-left: 20px; padding-right: 20px;">
