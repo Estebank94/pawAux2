@@ -52,7 +52,7 @@ public class DoctorServiceImplTest {
     private static final String NEW_DOC_AVATAR = "https://d1cesmq0xhh7we.cloudfront.net/cb5ddc05-1d68-48ca-a8ff-baba8239be85circle_medium__v1__.png";
     private static final String NEW_DOC_ADDRESS = "Cabildo 650";
 
-    private static final Integer DOCTOR_QUANTITY_BEFORE = 3;
+    private static final int DOCTOR_QUANTITY_BEFORE = 3;
 
     private static final DayOfWeek DAY_OF_WEEK = DayOfWeek.FRIDAY;
     private static final LocalTime START = LocalTime.of(9, 10, 50);
@@ -92,7 +92,7 @@ public class DoctorServiceImplTest {
         final Optional<CompressedSearch> doctors = doctorServiceImpl.listDoctors();
 
         assertNotNull(doctors.get());
-        assertEquals(3, doctors.get().getDoctors().size());
+        assertEquals(DOCTOR_QUANTITY_BEFORE, doctors.get().getDoctors().size());
         assertEquals(doctor.getId(), doctors.get().getDoctors().get(0).getId());
         assertEquals(doctor2.getId(), doctors.get().getDoctors().get(1).getId());
         assertEquals(doctor3.getId(), doctors.get().getDoctors().get(2).getId());
@@ -235,7 +235,6 @@ public class DoctorServiceImplTest {
         final Optional<Doctor> setDoctorWorkingHours = doctorServiceImpl.setWorkingHours(DOC_ID, workingHoursList);
 
         assertTrue(setDoctorWorkingHours.isPresent());
-//        assertEquals(workingHoursMap, setDoctorWorkingHours.get().getWorkingHours());
 
     }
 
