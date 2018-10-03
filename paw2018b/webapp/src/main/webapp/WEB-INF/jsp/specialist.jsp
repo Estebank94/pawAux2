@@ -83,12 +83,12 @@
 <form:form action="/processForm" method="GET" modelAttribute="search" accept-charset="ISO-8859-1">
     <div id="search-bar" class="input-group container">
         <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del médico" class="form-control" path="name"/>
-        <form:select class="custom-select" id="specialty" path="specialty" cssStyle="cursor: pointer;">
+        <form:select class="custom-select specialist-select" id="specialty" path="specialty" cssStyle="cursor: pointer;">
             <form:option value="noSpecialty" label="Especialidad" selected="Especialidad"/>
             <form:options items="${specialtyList}" itemValue="name" itemLabel="name" />
         </form:select>
             <%--<form:input type="text" aria-label="Buscar por especialidad" placeholder="Buscar por especialidad" class="form-control" path="specialty"/>--%>
-        <form:select class="custom-select" id="insurance" path="insurance" cssStyle="cursor: pointer;">
+        <form:select class="custom-select specialist-select" id="insurance" path="insurance" cssStyle="cursor: pointer;">
             <form:option value="no" label="Prepaga" selected="Prepaga"/>
             <form:options items="${insuranceList}" itemValue="name" itemLabel="name" />
         </form:select>
@@ -212,10 +212,10 @@
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-<script src="<c:url value="/resources/javascript/specialist.js"/>"></script>
 <%--select2 dropdown--%>
-<%--<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>--%>
-<%--<script src="<c:url value="/resources/javascript/dropdowns.js"/>"></script>--%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script src="<c:url value="/resources/javascript/specialist.js"/>"></script>
+
 </body>
 </html>
 

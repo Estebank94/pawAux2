@@ -162,9 +162,9 @@ public class HelloWorldController {
 				}
 				mav.addObject("doctor", doctor);
 				mav.addObject("insuranceNameList", doctor.getInsurance());
-				mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 				mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
 				mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
+				mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
 				mav.addObject("appointmentTaken",false);
 			} catch (NotFoundException e) {
 				LOGGER.trace("404 error");
