@@ -28,3 +28,5 @@ $('#time').on('change', function() {
     $('#appointment').append('<input type="hidden" name="time" value="'+time+'" id="time"/>');
     $('#appointment').append('<input type="hidden" name="day" value="'+day+'" id="day"/>');
 });
+
+$('.specialist-select').select2({theme: 'bootstrap4'});

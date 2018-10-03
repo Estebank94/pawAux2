@@ -18,18 +18,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.PatientService;
-import org.springframework.web.servlet.ModelAndViewDefiningException;
 
-import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
 @Controller
-public class HelloWorldController {
+public class FlowController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(FlowController.class);
 
 	 @Autowired
 	 @Qualifier("patientServiceImpl")
@@ -48,7 +45,7 @@ public class HelloWorldController {
 	private AppointmentService appointmentService;
 	
 	@RequestMapping("/")
-	public ModelAndView helloWorld() throws NotFoundDoctorException, NotValidIDException {
+	public ModelAndView index() throws NotFoundDoctorException, NotValidIDException {
 		LOGGER.debug("Starting Waldoc ... ");
 		final ModelAndView mav = new ModelAndView("index");
 		mav.addObject("search", new Search());
@@ -69,6 +66,12 @@ public class HelloWorldController {
 					doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
 					LOGGER.debug("The User Logged in is a DOCTOR with ID: {}", doctor.getId());
 				}catch (NotFoundDoctorException ex1){
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				} catch (NotFoundPacientException e) {
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				} catch (NotValidEmailException e) {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				}
@@ -106,7 +109,16 @@ public class HelloWorldController {
 			hasUserRole = authentication.getAuthorities().stream()
 					.anyMatch(r -> r.getAuthority().equals("ROLE_DOCTOR"));
 			if(hasUserRole){
-				Patient patient = patientService.findPatientByEmail(authentication.getName());
+				Patient patient = null;
+				try {
+					patient = patientService.findPatientByEmail(authentication.getName());
+				} catch (NotValidEmailException e) {
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				} catch (NotFoundPacientException e) {
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				}
 				mav.addObject("doctorID", patient.getDoctorId());
 			}
 		}
@@ -162,15 +174,21 @@ public class HelloWorldController {
 				}
 				mav.addObject("doctor", doctor);
 				mav.addObject("insuranceNameList", doctor.getInsurance());
-				mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 				mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
 				mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
+				mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
 				mav.addObject("appointmentTaken",false);
 			} catch (NotFoundException e) {
 				LOGGER.trace("404 error");
 				return new ModelAndView("404");
+			} catch (NotFoundPacientException e) {
+				LOGGER.trace("404 error");
+				return new ModelAndView("404");
+			} catch (NotValidEmailException e) {
+				LOGGER.trace("404 error");
+				return new ModelAndView("404");
 			}
-			return mav;
+		return mav;
     }
 
     @RequestMapping(value = "/specialist/{doctorId}", method = {RequestMethod.POST})
@@ -183,7 +201,16 @@ public class HelloWorldController {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-		Patient patient = patientService.findPatientByEmail(authentication.getName());
+		Patient patient = null;
+		try {
+			patient = patientService.findPatientByEmail(authentication.getName());
+		} catch (NotValidEmailException e) {
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		} catch (NotFoundPacientException e) {
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		}
 
 		LocalDate day = LocalDate.parse(appointmentForm.getDay());
 		LocalTime time = LocalTime.parse(appointmentForm.getTime());

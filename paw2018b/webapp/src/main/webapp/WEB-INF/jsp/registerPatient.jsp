@@ -14,7 +14,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Waldoc</title>
+    <title><spring:message code="brand.name"/></title>
     <meta name="description" content="Roughly 155 characters">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css" />">
@@ -24,7 +24,7 @@
 <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
     <div class="container">
         <a class="navbar-brand" href="<c:url value="/"/>">
-            <h1><strong>Waldoc</strong></h1>
+            <h1><strong><spring:message code="brand.name"/></strong></h1>
         </a>
     </div>
 </nav>
@@ -32,69 +32,69 @@
 <div class="container">
     <br>
     <br>
-    <h2>¡Registrate como Paciente!</h2>
-    <p>Completa tus datos personales.</p>
+    <h2>¡<spring:message code="dropdown.patientRegister"/>!</h2>
+    <p><spring:message code="register.personalInfo">.</p>
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
     <form:form modelAttribute="personal" method="POST" action="patientRegistration" accept-charset="ISO-8859-1">
         <div class="row">
             <div class="col">
                 <c:if test="${wrongFirstName eq true}">
-                    <b style="color: #dc3545">Lo siento! Su nombre es incorrecto, por favor, reinterntarlo</b>
+                    <b style="color: #dc3545"><spring:message code="error.badName"/></b>
                 </c:if>
-                <label for="exampleInputEmail1"><strong>Nombre</strong></label>
+                <label for="exampleInputEmail1"><strong><spring:message code="name"/></strong></label>
                 <form:input type="text" class="form-control" placeholder="Ingresá tu nombre" path="firstName"/>
                 <form:errors path="firstName" cssStyle="color: crimson"  element="p"></form:errors>
             </div>
             <div class="col">
                 <c:if test="${wrongLastName eq true}">
-                    <b style="color: #dc3545">Lo siento! Su apellido es incorrecto, por favor, reinterntarlo</b>
+                    <b style="color: #dc3545"><spring:message code="error.badLastName"/></b>
                 </c:if>
-                <label for="exampleInputEmail1"><strong>Apellido</strong></label>
+                <label for="exampleInputEmail1"><strong><spring:message code="lastName"/></strong></label>
                 <form:input type="text" class="form-control" placeholder="Ingresá tu apellido" path="lastName"/>
                 <form:errors path="lastName" cssStyle="color: crimson"  element="p"></form:errors>
             </div>
         </div>
         <br>
         <c:if test="${wrongEmail eq true}">
-            <b style="color: #dc3545">Lo siento! Su email es incorrecto, por favor, reinterntarlo</b>
+            <b style="color: #dc3545"><spring:message code="error.badMail"/></b>
         </c:if>
         <c:if test="${repeatedEmail eq true}">
-            <b style="color: #dc3545">Lo siento! Su email ya se encuentra registrado con otro usuario, por favor, intente otro mail</b>
+            <b style="color: #dc3545"><spring:message code="error.repetedMail"/></b>
         </c:if>
         <div>
-            <label for="exampleInputEmail1"><strong>Email</strong></label>
+            <label for="exampleInputEmail1"><strong><spring:message code="mail"/></strong></label>
             <form:input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu mail" path="email"/>
             <form:errors path="email" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
         <div class="row">
             <c:if test="${noMatchingPassword eq true}">
-                <b style="color: #dc3545">Lo siento! Sus contraseñas no coinciden, por favor, reinterntarlo</b>
+                <b style="color: #dc3545"><spring:message code="error.notmatching"/></b>
             </c:if>
             <c:if test="${wrongPassword eq true}">
-                <b style="color: #dc3545">Lo siento! Su contraseña es incorrecta, por favor, reinterntarlo</b>
+                <b style="color: #dc3545"><spring:message code="error.wrongPassword"/></b>
             </c:if>
             <div class="col">
-                <label for="inputPassword5"><strong>Contraseña</strong></label>
+                <label for="inputPassword5"><strong><spring:message code="password"/></strong></label>
                 <form:input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" placeholder="Creá tu contraseña" path="password"/>
                 <form:errors path="password" cssStyle="color: crimson"  element="p"></form:errors>
                 <small id="passwordHelpBlock" class="form-text text-muted">
-                    Tu contraseña debe tener al menos 6 caracteres.
+                    <spring:message code="password.message"/>
                 </small>
             </div>
             <div class="col">
-                <label for="inputPassword5"><strong>Confirma Contraseña</strong></label>
+                <label for="inputPassword5"><strong><spring:message code="repeatPassword"/></strong></label>
                 <form:input type="password" id="inputPassword5" class="form-control" placeholder="Confirmá tu contraseña" path="passwordConfirmation"/>
                 <form:errors path="passwordConfirmation" cssStyle="color: crimson"  element="p"></form:errors>
             </div>
         </div>
         <br>
         <c:if test="${wrongPhoneNumber eq true}">
-            <b style="color: #dc3545">Lo siento! Su telefono es incorrecto, por favor, reinterntarlo</b>
+            <b style="color: #dc3545"><spring:message code="error.wrongNumber"/></b>
         </c:if>
         <div>
-            <label for="exampleInputEmail1"><strong>Teléfono</strong></label>
+            <label for="exampleInputEmail1"><strong><spring:message code="phone"/></strong></label>
             <form:input class="form-control" id="exampleInputEmail1"  placeholder="Ingresá tu telefono" path="phoneNumber"/>
             <form:errors path="phoneNumber" cssStyle="color: crimson"  element="p"></form:errors>
         </div>

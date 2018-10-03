@@ -29,18 +29,18 @@
                     <%--</c:if>--%>
                     <security:authorize access="!isAuthenticated()">
                     <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Registrate
+                        <spring:message code="register"/>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-                        <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/patientRegistration"/>'">Registrate como paciente</button>
-                        <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/doctorRegistration"/>'">Registrate como especialista</button>
+                        <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/patientRegistration"/>'"><spring:message code="dropdown.patientRegister"/></button>
+                        <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/doctorRegistration"/>'"><spring:message code="dropdown.doctorRegister"/></button>
                     </div>
                     </security:authorize>
                 </div>
                 <div class="center-vertical">
                     <security:authorize access="!isAuthenticated()">
-                        <button class="btn btn-light " style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="button" onclick="window.location='<c:url value="/showLogIn"/>'">
-                            Iniciá Sesión
+                        <button class="btn btn-light" style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="button" onclick="window.location='<c:url value="/showLogIn"/>'">
+                            <spring:message code="login.message"/>
                         </button>
                     </security:authorize>
                     <security:authorize access="isAuthenticated()">
@@ -48,19 +48,19 @@
                             <security:authentication property="principal.username" var="userName"/>
                             <div class="dropdown center-vertical">
                                 <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-                                    <button class="dropdown-item" type="submit">Cerrar Sesion</button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                    <button class="dropdown-item" type="submit"><spring:message code="logout.message"/></button>
                                     <security:authorize access="hasRole('ROLE_DOCTOR')">
                                         <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:out value="${pageContext.request.contextPath}/doctorPanel/"/>'">
-                                            Ver Perfil
+                                            <spring:message code="dropdown.viewProfile"/>
                                         </button>
                                         <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:out value="/specialist/${doctorID}"/>'">
-                                            Mis Datos
+                                            <spring:message code="dropdown.viewInfo"/>
                                         </button>
                                     </security:authorize>
                                     <security:authorize access="hasRole('ROLE_PATIENT') and !hasRole('ROLE_DOCTOR')">
                                         <button class="btn btn-light dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:out value="${pageContext.request.contextPath}/patientPanel/"/>'">
-                                            Ver Perfil
+                                            <spring:message code="dropdown.viewProfile"/>
                                         </button>
                                     </security:authorize>
 

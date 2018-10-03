@@ -2,6 +2,8 @@ package ar.edu.itba.paw.webapp.auth;
 
 import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.models.Patient;
+import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
+import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,7 +23,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
 
-        final Patient user = us.findPatientByEmail(email);
+        Patient user = null;
+        try {
+            user = us.findPatientByEmail(email);
+        } catch (NotValidEmailException e) {
+            e.printStackTrace();
+        } catch (NotFoundPacientException e) {
+            e.printStackTrace();
+        }
 
         if (user == null) {
             throw new UsernameNotFoundException("No user found with email " + email);

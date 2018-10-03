@@ -24,7 +24,7 @@
 <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
     <div class="container">
         <a class="navbar-brand" href="<c:url value="/"/>">
-            <h1><strong>Waldoc</strong></h1>
+            <h1><strong><spring:message code="brand.name"/></strong></h1>
         </a>
     </div>
 </nav>
@@ -32,11 +32,11 @@
 <div class="outer-div">
     <div class="inner-div card">
         <p style="text-align: center;"><i style="color: #02bf02; font-size: 64px; margin-top:64px;" class="fas fa-check-circle"></i></p>
-        <h2 style="text-align: center;">¡Turno Reservado!</h2>
-        <p style="text-align: center; margin-left:16px; margin-right:16px;">Te hemos reservado un turno con <c:out value="${doctor.firstName}"/> <c:out value="${doctor.lastName}"/> el <c:out value="${appointmentDay}"/> a las <c:out value="${appointmentTime}"/>.<p>
+        <h2 style="text-align: center;"><spring:message code="appointment.tile"/></h2>
+        <p style="text-align: center; margin-left:16px; margin-right:16px;"><spring:message code="appointment.bodyStart"><c:out value="${doctor.firstName}"/> <c:out value="${doctor.lastName}"/> <spring:message code="appointment.middleOne"/> <c:out value="${appointmentDay}"/><spring:message code="appointment.middleTwo"/><c:out value="${appointmentTime}"/>.<p>
         <br>
         <button style="margin-bottom:64px;" class="btn btn-primary custom-btn center-horiz" type="button" onclick="window.location='<c:url value="/"/>'">
-            Volver al Inicio
+            <spring:message code="index"/>
         </button>
     </div>
 </div>

@@ -80,7 +80,7 @@ public class PatientDaoImpl implements PatientDao {
         if (list.isEmpty()) {
             return Optional.empty();
         }
-        list.get(0).setAppointments(findPacientAppointmentsById(id));
+        list.get(0).setAppointments(findPacientAppointmentsById(list.get(0).getPatientId()));
         return Optional.of(list.get(0));
     }
 
@@ -92,6 +92,7 @@ public class PatientDaoImpl implements PatientDao {
         if (list.isEmpty()) {
             return Optional.empty();
         }
+        list.get(0).setAppointments(findPacientAppointmentsById(list.get(0).getPatientId()));
 
         return Optional.of(list.get(0));
     }

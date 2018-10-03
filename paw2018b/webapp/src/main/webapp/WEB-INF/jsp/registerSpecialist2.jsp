@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Waldoc</title>
+    <title><spring:message code="brand.name"/></title>
     <meta name="description" content="Roughly 155 characters">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css"/>">
@@ -18,7 +18,7 @@
 <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
     <div class="container">
         <a class="navbar-brand" href="<c:url value="/"/>">
-            <h1><strong>Waldoc</strong></h1>
+            <h1><strong><spring:message code="brand.name"/></strong></h1>
         </a>
     </div>
 </nav>
@@ -26,28 +26,28 @@
 <div class="container">
     <br>
     <br>
-    <h2>Completá tu perfil profesional.</h2>
-    <p>Para aparecer en las búsquedas, vas a necesitar completar tu información profesional.</p>
+    <h2><spring:message code="regitrationDoctor"/>.</h2>
+    <p><spring:message code="registrationDoctor.advice"></p>
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
     <%--enctype="multipart/form-data" for image--%>
     <form:form modelAttribute="professional" method="POST" action="/doctorProfile" accept-charset="ISO-8859-1" id="profile">
         <div>
-            <label for="exampleFormControlFile1"><strong>Foto de perfil</strong></label>
+            <label for="exampleFormControlFile1"><strong><spring:message code="avatar"/></strong></label>
             <form:input type="file" class="form-control-file" id="exampleFormControlFile1" path="avatar" name="exampleFormControlFile1"/>
             <form:errors path="avatar" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
 
         <c:if test="${wrongCertificate eq true}">
-            <b style="color: #dc3545">Lo siento! El certificado es incorrecto, por favor, reinterntarlo</b>
+            <b style="color: #dc3545"><spring:message code="error.certificate"/></b>
         </c:if>
         <c:if test="${noCertificate eq true}">
             <c:if test="${wrongDesciption eq true}">
-                <b style="color: #dc3545">Lo siento! La descripción es incorrecta, por favor, reinterntarlo</b>
+                <b style="color: #dc3545"><spring:message code="error.description"/></b>
             </c:if>
             <div>
-                <label for="exampleFormControlTextarea1"><strong>Descripción</strong></label>
+                <label for="exampleFormControlTextarea1"><strong><spring:message code="desciption"/></strong></label>
                 <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Describi tu completar..." path="certificate"/>
                 <form:errors path="certificate" cssStyle="color: crimson"  element="p"></form:errors>
             </div>

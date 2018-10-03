@@ -8,7 +8,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Waldoc</title>
+        <title><spring:message code="brand.name"/></title>
         <meta name="description" content="Roughly 155 characters">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/select2-bootstrap4.css"/>">
@@ -20,30 +20,29 @@
         <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
             <div class="container">
                 <a class="navbar-brand" href="<c:url value="/"/>">
-                    <h1><strong>Waldoc</strong></h1>
+                    <h1><strong><spring:message code="brand.name"/></strong></h1>
                 </a>
             </div>
         </nav>
-
         <div class="container">
             <div class="div-center">
-                <h2>Iniciar Sesión</h2>
+                <h2><spring:message code="login.message"/></h2>
                 <br>
                 <c:url value="/showLogIn" var="loginUrl"/>
                 <form:form action="${loginUrl}" method="POST" enctype="application/x-www-form-urlencoded">
                     <c:if test="${param.error != null}">
-                        <b style="color: #dc3545">Lo siento! Usuario y constraseña invalida. Probar nuevamente!</b>
+                        <b style="color: #dc3545"><spring:message code="login.invalid"/></b>
                     </c:if>
                     <c:if test="${param.logout != null}">
                         <c:redirect><c:url value="/"/></c:redirect>
                     </c:if>
                     <div>
-                        <label for="username">Email</label>
+                        <label for="username"><spring:message code="login.user"/></label>
                         <input name="j_username" type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Ingresá tu mail">
                     </div>
                     <br>
                     <div>
-                        <label for="password">Contraseña</label>
+                        <label for="password"><spring:message code="login.password"/></label>
                         <input name="j_password" type="password" class="form-control" id="password" aria-describedby="emailHelp" placeholder="Ingresá tu contraseña">
                     </div>
                     <br>

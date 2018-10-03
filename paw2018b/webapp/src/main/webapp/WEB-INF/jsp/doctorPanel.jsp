@@ -14,7 +14,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Waldoc</title>
+    <title><spring:message code="brand.name"/></title>
     <meta name="description" content="Roughly 155 characters">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <!-- Pongo mi stylesheet despues de la de Bootstrap para poder hacer override los estilos -->
@@ -26,7 +26,7 @@
 <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
     <div class="container">
         <a class="navbar-brand" href="<c:url value="/"/>">
-            <h1><strong>Waldoc</strong></h1>
+            <h1><strong><spring:message code="brand.name"/></strong></h1>
         </a>
         <a>
             <security:authorize access="isAuthenticated()">
@@ -34,8 +34,8 @@
                     <security:authentication property="principal.username" var="userName"/>
                     <div class="dropdown">
                         <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:white !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                            <button class="dropdown-item" type="submit">Cerrar Sesion</button>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
+                            <button class="dropdown-item" type="submit"><spring:message code="logout.message"/></button>
                         <%--<button class="dropdown-item" type="button">Registrate como especialista</button>--%>
                         </div>
                     </div>
@@ -54,11 +54,11 @@
                         <img class="avatar big" src=<c:out value="${doctor.avatar}"/>>
                         <div class="doctor-info-container">
                             <div>
-                                <p class="doctor-specialty">Bienvenido</p>
+                                <p class="doctor-specialty"><spring:message code="welcome"/></p>
                                 <h3 class="doctor-name">Dr. <c:out value="${doctor.lastName}"/>, <c:out value="${doctor.firstName}"/></h3>
                                 <br>
                                 <c:if test="${professionalIncomplete eq true}">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="window.location='<c:url value="/doctorProfile"/>'"><i class="fas fa-cog"></i>Completar Perfil</button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="window.location='<c:url value="/doctorProfile"/>'"><i class="fas fa-cog"></i><spring:message code="complete"/></button>
                                 </c:if>
                             </div>
                         </div>
@@ -68,10 +68,10 @@
                 <div>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Mis Turnos Como Especialista</a>
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><spring:message code="doctor.appointment"/></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Mis Turnos Como Paciente</a>
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"><spring:message code="doctor.patientAppointment"/></a>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
@@ -80,18 +80,19 @@
                             <c:forEach items="${appointments}" var="appointment">
                                     <div style="margin-left: 16px; margin-right: 16px;">
                                         <h3>
-                                            <c:out value="${appointment.key.dayOfMonth}"/> de <c:out value="${appointment.key.month}"/> de <c:out value="${appointment.key.year}"/>
+                                            <%--<c:out value="${appointment.key}"></c:out>--%>
+                                            <c:out value="${appointment.key.dayOfMonth}"/>-<c:out value="${appointment.key.monthValue}"/>-<c:out value="${appointment.key.year}"/>
                                         </h3>
                                         <br>
                                         <c:forEach items="${appointment.value}" var="listItems">
                                             <div>
-                                                <div class="row">
-                                                    <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">
+                                                <div class="row" style="margin: 3px">
+                                                    <%--<img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">--%>
                                                     <div class="center-vertical">
                                                         <div>
                                                                 <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
-                                                            <h5><b><c:out value="${listItems.clientLastName}"/></b>,  <c:out value="${listItems.clientFirstName}"/></h5>
-                                                            Telefono: <c:out value="${listItems.phoneNumber}"/>
+                                                                <h5><b><c:out value="${listItems.clientLastName}"/></b>,  <c:out value="${listItems.clientFirstName}"/></h5>
+                                                                <p><spring:message code="phone"/>: <c:out value="${listItems.phoneNumber}"/></p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -102,8 +103,35 @@
                                     </div>
                             </c:forEach>
                         </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <br>
+                            <c:forEach items="${appointments}" var="appointment">
+                                <div style="margin-left: 16px; margin-right: 16px;">
+                                    <h3>
+                                        <c:out value="${appointment.key}"></c:out>
+                                        <%--<c:out value="${appointment.key.dayOfMonth}"/> - <c:out value="${appointment.key.monthValue}"/> - <c:out value="${appointment.key.year}"/>--%>
+                                    </h3>
+                                    <br>
+                                    <c:forEach items="${patientAppointments.value}" var="listItems">
+                                        <div>
+                                            <div class="row">
+                                                <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">
+                                                <div class="center-vertical">
+                                                    <div>
+                                                        <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
+                                                        <h5><b><c:out value="${listItems.doctorLastName}"/></b>,  <c:out value="${listItems.doctorFirstName}"/></h5>
+                                                        <%--Telefono: <c:out value="${listItems.phoneNumber}"/>--%>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr class="hr-header-sidebar">
+                                        </div>
+                                        <br>
+                                    </c:forEach>
+                                </div>
+                            </c:forEach>
+                        </div>
+                        <%--<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>--%>
                     </div>
                 </div>
             </div>
@@ -116,4 +144,3 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>
 </html>
-

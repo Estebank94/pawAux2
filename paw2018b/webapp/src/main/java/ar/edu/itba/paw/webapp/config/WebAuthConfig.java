@@ -69,12 +69,13 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().formLogin()
                 .usernameParameter("j_username")
                 .passwordParameter("j_password")
-                .loginPage("/showLogIn").successHandler(successHandler())
-                .permitAll().and().logout().permitAll().and().exceptionHandling()
+                .loginPage("/showLogIn").successHandler(successHandler()).defaultSuccessUrl("/")
+                .permitAll().and().logout()
+                .logoutSuccessUrl("/")
+                .permitAll().and().exceptionHandling()
                 .accessDeniedPage("/403")
                 .and().csrf().disable();
     }
-    /*TODO: aca con los .accesDenied se puede usar para todo? Con eso manejamos los stack traces?*/
 
     @Bean
     public AuthenticationSuccessHandler successHandler() {
