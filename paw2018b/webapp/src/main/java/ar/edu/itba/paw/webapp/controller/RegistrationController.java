@@ -184,7 +184,7 @@ public class RegistrationController {
                 .addObject("wrongSpecialty",false)
                 .addObject("wrongDesciption",false)
                 .addObject("wrongEducation",false)
-                .addObject("wrongCertificat",false);
+                .addObject("wrongCertificate",false);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Patient patient = patientService.findPatientByEmail(authentication.getName());
@@ -339,8 +339,16 @@ public class RegistrationController {
                 return showDoctorProfile(professionalForm).addObject("wrongCertificat",true);
             }
         }
+        LOGGER.debug("AutoLogIn of patient with ID: {}", patient.getPatientId());
+        authenticateUserAndSetSession(patient, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
 
-        final ModelAndView mav = new ModelAndView("finalStep");
+        final ModelAndView mav = new ModelAndView("index");
+        mav.addObject("search", new Search());
+        mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
+        mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
+
+        //return mav;
+        //final ModelAndView mav = new ModelAndView("finalStep");
         return mav;
     }
 
