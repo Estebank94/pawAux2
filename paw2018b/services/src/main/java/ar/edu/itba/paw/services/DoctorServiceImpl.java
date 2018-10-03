@@ -50,27 +50,27 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Optional<CompressedSearch> findDoctors(Search search) {
+    public Optional<CompressedSearch> findDoctors(Search search) throws NotValidSearchException {
         LOGGER.debug("DoctorServiceImpl: findDoctors");
         if (search == null){
             LOGGER.debug("Search can't bee null");
-            throw new IllegalArgumentException("Search can't be null");
+            throw new NotValidSearchException("Search can't be null");
         }
         LOGGER.debug("Find Doctors with search: {}", search);
         return doctorDao.findDoctors(search);
     }
 
     @Override
-    public Optional<Doctor> findDoctorById(Integer id){
+    public Optional<Doctor> findDoctorById(Integer id) throws NotFoundDoctorException, NotValidIDException {
         LOGGER.debug("DoctorServiceImpl: findDoctorById");
         if (id == null ){
             LOGGER.debug("Doctor ID can't be null");
-            throw new IllegalArgumentException("Doctor Id can't be null");
+            throw new NotValidIDException("Doctor Id can't be null");
         }
 
         if (id < 0){
             LOGGER.debug("Doctor ID can't be a negative number. The ID given is: {}", id);
-            throw new IllegalArgumentException("Doctor Id can't be negative");
+            throw new NotValidIDException("Doctor Id can't be negative");
         }
 
         LOGGER.debug("Find doctor by ID");
@@ -78,7 +78,7 @@ public class DoctorServiceImpl implements DoctorService {
 
         if (!thisdoctor.isPresent()){
             LOGGER.debug("The Doctor doesn't exist with ID number: {}", id);
-            throw new NotFoundException("Doctor doesn't exist");
+            throw new NotFoundDoctorException("Doctor doesn't exist");
         }
         LOGGER.debug("Doctor with ID: {} found", id);
         LOGGER.debug("Doctor is: {}", thisdoctor);

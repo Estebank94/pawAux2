@@ -171,7 +171,16 @@ public class RegistrationController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Patient patient = patientService.findPatientByEmail(authentication.getName());
-        Doctor doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+        Doctor doctor = null;
+        try {
+            doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+        } catch (NotFoundDoctorException e) {
+            LOGGER.trace("Error 404");
+            return new ModelAndView("404");
+        } catch (NotValidIDException e) {
+            LOGGER.trace("Error 404");
+            return new ModelAndView("404");
+        }
         doctor.getDescription().getLanguages().remove(null);
         doctor.getSpecialty().remove(null);
         doctor.getInsurance().keySet().remove(null);
@@ -218,7 +227,16 @@ public class RegistrationController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Patient patient = patientService.findPatientByEmail(authentication.getName());
-        Doctor doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+        Doctor doctor = null;
+        try {
+            doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+        } catch (NotFoundDoctorException e) {
+            LOGGER.trace("Error 404");
+            return new ModelAndView("404");
+        } catch (NotValidIDException e) {
+            LOGGER.trace("Error 404");
+            return new ModelAndView("404");
+        }
 
         boolean withInfo = false;
         if(doctor.getSpecialty() != null) {

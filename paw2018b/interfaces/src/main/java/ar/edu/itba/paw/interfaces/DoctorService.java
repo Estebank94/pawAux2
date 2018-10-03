@@ -13,9 +13,9 @@ public interface DoctorService {
 
    Optional<CompressedSearch> listDoctors();
 
-   Optional<CompressedSearch> findDoctors(Search search);
+   Optional<CompressedSearch> findDoctors(Search search) throws NotValidSearchException;
 
-   Optional<Doctor> findDoctorById(Integer id);
+   Optional<Doctor> findDoctorById(Integer id) throws NotFoundDoctorException, NotValidIDException;
 
 //   Doctor createDoctor(String firstName, String lastName, String sex, String address,
 //                       String avatar, Set<String> specialty, Map<String, Set<String>> insurance,

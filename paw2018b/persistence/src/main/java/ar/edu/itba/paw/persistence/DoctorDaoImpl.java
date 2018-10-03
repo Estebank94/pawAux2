@@ -66,108 +66,7 @@ import java.util.*;
             return doctor;
         }
 
-
-//            private static final RowMapper<Doctor> ROW_MAPPER = new RowMapper<Doctor>(){
-//
-//                @Override
-//                public Doctor mapRow(ResultSet rs, int rowNum) throws SQLException {
-//
-//                    Set<String> specialty = new HashSet<>();
-//
-//                    specialty.add(rs.getString("specialtyName"));
-//
-//                    Set<String> insurancePlanSet = new HashSet<>();
-//                    insurancePlanSet.add(rs.getString("insurancePlanName"));
-//
-//                    Map<String, Set<String>> insurancePlan = new HashMap<>();
-//                    insurancePlan.put(rs.getString("insuranceName"),insurancePlanSet);
-//
-//
-//                    return new Doctor(rs.getString("firstName"), rs.getString("lastName"), rs.getString("sex"),
-//                            rs.getString("address"), rs.getString("avatar"), specialty, insurancePlan, rs.getString("workingHours"), rs.getInt("id"));}
-//            };
-
-//            private static final ResultSetExtractor<CompressedSearch> RESULT_SET = (rs) -> {
-//                        CompressedSearch compressedSearch = new CompressedSearch();
-//
-//                        while (rs.next()) {
-//                            System.out.println(rs.getString("firstName") + rs.getString("lastName"));
-//                            boolean containsDoctor = false;
-//                            boolean containsInsurance = false;
-//                            for(Doctor existingDoctor : compressedSearch.getDoctors()){
-//                                if (existingDoctor.getId().equals(rs.getInt("id"))) {
-//                                    containsDoctor = true;
-//                                    existingDoctor.getSpecialty().add(rs.getString("specialtyName"));
-//
-//                                    for(String insurance : existingDoctor.getInsurance().keySet()){
-//                                        if(insurance.equals(rs.getString("insuranceName"))){
-//                                            containsInsurance = true;
-//                                            existingDoctor.getInsurance().get(insurance).add(rs.getString("insurancePlanName"));
-//                                            compressedSearch.getInsurance().get(insurance).add(rs.getString("insurancePlanName"));
-//                                        }
-//                                    }
-//                                    if(!containsInsurance){
-//                                        Set<String> insurancePlans = new HashSet<>();
-//                                        insurancePlans.add(rs.getString("insurancePlanName"));
-//                                        existingDoctor.getInsurance().put(rs.getString("insuranceName"), insurancePlans);
-//                                        compressedSearch.getInsurance().put(rs.getString("insuranceName"), insurancePlans);
-//                                    }
-//                                }
-//                            }
-//                            if(!containsDoctor){
-//                                Set<String> specialty = new HashSet<>();
-//
-//                                specialty.add(rs.getString("specialtyName"));
-//
-//                                Set<String> insurancePlanSet = new HashSet<>();
-//                                insurancePlanSet.add(rs.getString("insurancePlanName"));
-//
-//                                Map<String, Set<String>> insurancePlan = new HashMap<>();
-//                                insurancePlan.put(rs.getString("insuranceName"),insurancePlanSet);
-//
-//                                Doctor doctor =  new Doctor(rs.getString("firstName"), rs.getString("lastName"), rs.getString("sex"),
-//                                        rs.getString("address"), rs.getString("avatar"), specialty, insurancePlan, rs.getString("workingHours"), rs.getInt("id"));
-//
-//                                compressedSearch.getDoctors().add(doctor);
-//                                compressedSearch.getSex().add(rs.getString("sex"));
-//                                compressedSearch.getInsurance().put(rs.getString("insuranceName"), insurancePlanSet);
-//                            }
-//
-//
-//
-//                        }
-//
-//                        return compressedSearch;
-//                }
-
-
-
-            //    new RowMapper<Doctor>(){
-//
-//        @Override
-//        public Doctor mapRow(ResultSet rs, int rowNum) throws SQLException {
-//
-//            Set<String> specialty = new HashSet<>();
-//
-//            specialty.add(rs.getString("specialtyName"));
-//
-//            Set<String> insurancePlanSet = new HashSet<>();
-//            insurancePlanSet.add(rs.getString("insurancePlanName"));
-//
-//            Map<String, Set<String>> insurancePlan = new HashMap<>();
-//            insurancePlan.put(rs.getString("insuranceName"),insurancePlanSet);
-//
-//
-//            return new Doctor(rs.getString("firstName"), rs.getString("lastName"), rs.getString("sex"),
-//                    rs.getString("address"), rs.getString("avatar"), specialty, insurancePlan, rs.getString("workingHours"), rs.getInt("id"));}
-//        };
-
-//        @Autowired
-//        public DoctorDaoImpl(final DataSource ds) {
-//            jdbcTemplate = new JdbcTemplate(ds);
-//        }
-
-        @Override
+       @Override
         public Optional<CompressedSearch> listDoctors() {
             StringBuilder query = new StringBuilder();
             query.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName,information.languages, information.certificate, information.education, phoneNumber,dayweek, starttime, finishtime ")
@@ -377,55 +276,6 @@ import java.util.*;
             return reviews;
         }
 
-
-
-//    public String generateWhere(Search search) {
-//            String where = "WHERE (";
-//
-//
-//            if(!search.getName().isEmpty()) {
-//                where+="(firstName ~* '" + search.getName() + "' OR lastName ~* '" + search.getName() + "') " ;
-//
-//                if(!search.getSpecialty().isEmpty()) {
-//                    where+="AND specialty.specialtyName ~* '" + search.getSpecialty() +"' ";
-//                }
-////
-////                if(search.getLocation() != null) {
-////                    where+="AND location ~* '" + search.getLocation() +"' ";
-////                }
-////
-//                if(!search.getInsurance().matches("no")) {
-//                    where+="AND insurance.insuranceName ~* '" + search.getInsurance() +"' ";
-//                }
-//
-//
-//            }
-//
-//
-//            else if(!search.getSpecialty().isEmpty()) {
-//
-//                where+="specialty.specialtyName ~* '" + search.getSpecialty() + "' ";
-//                System.out.println("search.getSpecialty.isEmpty()" + search.getSpecialty().isEmpty());
-//
-////                if(!search.getLocation().isEmpty()) {
-////                    where+="AND location=";
-////                }
-//
-//                if(!search.getInsurance().matches("no")) {
-//                    where+="AND insurance.insuranceName= '" + search.getInsurance() + "' ";
-//                }
-//
-//            }
-//
-//            else if(!search.getInsurance().matches("no")) {
-//                where+="insurance.insuranceName= '" + search.getInsurance() + "' " ;
-//
-//            }
-//
-//            where += ") ";
-//        return where;
-//    }
-
         private List<Doctor> compressDoctors(List<Doctor> list){
             List<Doctor> ans = new ArrayList<>();
 
@@ -513,15 +363,8 @@ import java.util.*;
                         Set<String> insurancePlanSet = new HashSet<>();
                         insurancePlanSet.add(rs.getString("insurancePlanName"));
 
-
-
-
-//                        Set<String> certificate = new HashSet<>();
-//                        certificate.add(rs.getString("certificate"));
                         Set<String> languages = new HashSet<>();
                         languages.add(rs.getString("languages"));
-//                        Set<String> education = new HashSet<>();
-//                        education.add(rs.getString("education"));
                         Description description = new Description(rs.getString("certificate"), languages, rs.getString("education"));
 
                         Map<String, Set<String>> insurancePlan = new HashMap<>();

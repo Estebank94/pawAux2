@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.AppointmentService;
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.SearchService;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.forms.AppointmentForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.PatientService;
+import org.springframework.web.servlet.ModelAndViewDefiningException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -46,7 +48,7 @@ public class HelloWorldController {
 	private AppointmentService appointmentService;
 	
 	@RequestMapping("/")
-	public ModelAndView helloWorld() {
+	public ModelAndView helloWorld() throws NotFoundDoctorException, NotValidIDException {
 		LOGGER.debug("Starting Waldoc ... ");
 		final ModelAndView mav = new ModelAndView("index");
 		mav.addObject("search", new Search());
@@ -60,9 +62,16 @@ public class HelloWorldController {
 			hasUserRole = authentication.getAuthorities().stream()
 					.anyMatch(r -> r.getAuthority().equals("ROLE_DOCTOR"));
 			if(hasUserRole){
-				Patient patient = patientService.findPatientByEmail(authentication.getName());
-				Doctor doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
-				LOGGER.debug("The User Logged in is a DOCTOR with ID: {}", doctor.getId());
+				Doctor doctor;
+				Patient patient;
+				try {
+					patient = patientService.findPatientByEmail(authentication.getName());
+					doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+					LOGGER.debug("The User Logged in is a DOCTOR with ID: {}", doctor.getId());
+				}catch (NotFoundDoctorException ex1){
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				}
 				mav.addObject("doctorID", doctor.getId());
 			}
 		}
@@ -70,11 +79,12 @@ public class HelloWorldController {
 	}
 
 	@RequestMapping("/processForm")
-	public ModelAndView processForm(@ModelAttribute("search") Search theSearch) {
+	public ModelAndView processForm(@ModelAttribute("search") Search theSearch) throws NotValidSearchException {
 		LOGGER.debug("Calling: ProcessForm");
 
 		final ModelAndView mav = new ModelAndView("specialists");
-		Optional<CompressedSearch> compressedSearch =  doctorService.findDoctors(theSearch);
+		Optional<CompressedSearch> compressedSearch;
+		compressedSearch = doctorService.findDoctors(theSearch);
 		List<Doctor> doctorsList = null;
 		if(compressedSearch.isPresent()) {
 			doctorsList = compressedSearch.get().getDoctors();
@@ -125,7 +135,15 @@ public class HelloWorldController {
 			final ModelAndView mav = new ModelAndView("specialist");
 			try {
 				Doctor doctor;
-				doctor = doctorService.findDoctorById(doctorId).get();
+				try {
+					doctor = doctorService.findDoctorById(doctorId).get();
+				} catch (NotFoundDoctorException e) {
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				} catch (NotValidIDException e) {
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				}
 				doctor.getDescription().getLanguages().remove(null);
 				if(doctor.getDescription().getLanguages().size() == 1){
 					doctor.getDescription().getLanguages().contains("no");
@@ -147,6 +165,8 @@ public class HelloWorldController {
 				mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 				mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
 				mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
+				mav.addObject("appointmentTaken",false);
+				mav.addObject()
 			} catch (NotFoundException e) {
 				LOGGER.trace("404 error");
 				return new ModelAndView("404");
@@ -156,7 +176,7 @@ public class HelloWorldController {
 
     @RequestMapping(value = "/specialist/{doctorId}", method = {RequestMethod.POST})
 	public ModelAndView doctorDescriptionPost(@PathVariable Integer doctorId, @ModelAttribute("search") Search search,
-											  @ModelAttribute("appointment")AppointmentForm appointmentForm){
+											  @ModelAttribute("appointment")AppointmentForm appointmentForm) throws NotFoundDoctorException, NotValidIDException {
 
 		Doctor doctor = doctorService.findDoctorById(doctorId).get();
 
@@ -168,7 +188,27 @@ public class HelloWorldController {
 
 		LocalDate day = LocalDate.parse(appointmentForm.getDay());
 		LocalTime time = LocalTime.parse(appointmentForm.getTime());
-		appointmentService.createAppointment(doctorId, patient.getPatientId(), day, time);
+		try {
+			appointmentService.createAppointment(doctorId, patient.getPatientId(), day, time);
+		} catch (RepeatedAppointmentException e) {
+			LOGGER.debug("The appointment has just been taken");
+			return doctorDescription().addObject("appointmentTaken", true);
+		} catch (NotCreatedAppointmentException e) {
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		} catch (NotValidDoctorIdException e) {
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		} catch (NotValidAppointmentDayException e) {
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		} catch (NotValidAppointmentTimeException e) {
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		} catch (NotValidPatientIdException e) {
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		}
 
 		ModelAndView mav = new ModelAndView("appointmentSuccess");
 		mav.addObject("doctor", doctor);
