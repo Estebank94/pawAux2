@@ -4,9 +4,7 @@ import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.interfaces.SearchService;
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.models.exceptions.NotValidFirstNameException;
-import ar.edu.itba.paw.models.exceptions.NotValidLastNameException;
-import ar.edu.itba.paw.models.exceptions.RepeatedEmailException;
+import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.forms.PatientForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
@@ -74,7 +72,17 @@ public class RegistrationController {
             if(!personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())){
                 /*TODO: this doesn't show the error message*/
                 System.out.println("passwordMatching");
-                showDoctorRegistration(personalForm).addObject("noMatchingPassword", true);
+                showDoctorRegistration(personalForm).addObject("noMatchingPassword", true)
+                        .addObject("repeatedEmail",false)
+                        .addObject("wrongLastName",false)
+                        .addObject("wrongFirstName",false)
+                        .addObject("wrongPhoneNumber",false)
+                        .addObject("wrongPassword",false)
+                        .addObject("wrongEmail",false)
+                        .addObject("repeatedLicence",false)
+                        .addObject("wrongAddress",false)
+                        .addObject("wrongSex",false)
+                        .addObject("wrongLicence",false);
             }/*else if(patientService.findPatientByEmail(personalForm.getEmail()) != null){
                 showDoctorRegistration(personalForm).addObject("userExists", true);
             }*/
@@ -113,19 +121,30 @@ public class RegistrationController {
 
                 return mav;
 
-            } catch (IllegalArgumentException ex) {
-                /*TODO: VER CUANDO TIRA ESTO !!! PORQUE CADA TANTO LO ROMPE Y NI SE SABE PORQUE*/
-                LOGGER.trace("500 ERROR");
-                return new ModelAndView("500");
             } catch (NotValidLastNameException e) {
-                e.printStackTrace();
-                return new ModelAndView("500");
+                return showDoctorRegistration(personalForm).addObject("wrongLastName",true);
             } catch (RepeatedEmailException e) {
-                e.printStackTrace();
-                return new ModelAndView("500");
+                return showDoctorRegistration(personalForm).addObject("repeatedEmail",true);
             } catch (NotValidFirstNameException e) {
-                e.printStackTrace();
+                return showDoctorRegistration(personalForm).addObject("wrongFirstName",true);
+            } catch (NotCreatePatientException e) {
                 return new ModelAndView("500");
+            } catch (NotValidPhoneNumberException e) {
+                return showDoctorRegistration(personalForm).addObject("wrongPhoneNumber",true);
+            } catch (NotValidPasswordException e) {
+                return showDoctorRegistration(personalForm).addObject("wrongPassword",true);
+            } catch (NotValidEmailException e) {
+                return showDoctorRegistration(personalForm).addObject("wrongEmail",true);
+            } catch (NotCreateDoctorException e) {
+                return new ModelAndView("500");
+            } catch (RepeatedLicenceException e) {
+                return showDoctorRegistration(personalForm).addObject("repeatedLicence",true);
+            } catch (NotValidAddressException e) {
+                return showDoctorRegistration(personalForm).addObject("wrongAddress",true);
+            } catch (NotValidSexException e) {
+                return showDoctorRegistration(personalForm).addObject("wrongSex",true);
+            } catch (NotValidLicenceException e) {
+                return showDoctorRegistration(personalForm).addObject("wrongLicence",true);
             }
         }
 
@@ -279,9 +298,13 @@ public class RegistrationController {
 
         LOGGER.debug("RegistrationController: showPatientRegistration");
         final ModelAndView mav = new ModelAndView("registerPatient");
-        mav.addObject("wrongPassword", wrongPassword);
-        mav.addObject("repeatedEmail",false);
-
+        mav.addObject("wrongPassword", wrongPassword)
+                .addObject("repeatedEmail",false)
+                .addObject("wrongLastName",false)
+                .addObject("wrongFirstName",false)
+                .addObject("wrongPhoneNumber",false)
+                .addObject("wrongPassword",false)
+                .addObject("wrongEmail",false);
         return mav;
     }
 
@@ -315,20 +338,20 @@ public class RegistrationController {
                 mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
 
                 return mav;
-
-//            } catch (IllegalArgumentException ex) {
-//                return showPatientRegistration(patientForm, "RepeatedKeyError");
-//            } catch (DuplicateKeyException ex2){
-//                return showPatientRegistration(patientForm, "RepeatedKeyError").addObject("repeatedEmail",true);
-//                //mav.addObject("RepeteadKeyError", Boolean.TRUE);
-//            } catch (Exception ex3){
-//                return new ModelAndView("500");
             } catch (NotValidLastNameException e) {
                 return showPatientRegistration(patientForm,"lastName").addObject("wrongLastName",true);
             } catch (RepeatedEmailException e) {
                 return showPatientRegistration(patientForm, "RepeatedKeyError").addObject("repeatedEmail",true);
             } catch (NotValidFirstNameException e) {
                 return showPatientRegistration(patientForm,"firstName").addObject("wrongFirstName",true);
+            } catch (NotCreatePatientException e) {
+                return new ModelAndView("500");
+            } catch (NotValidPhoneNumberException e) {
+                return showPatientRegistration(patientForm,"lastName").addObject("wrongPhoneNumber",true);
+            } catch (NotValidPasswordException e) {
+                return showPatientRegistration(patientForm,"lastName").addObject("wrongPassword",true);
+            } catch (NotValidEmailException e) {
+                return showPatientRegistration(patientForm,"lastName").addObject("wrongEmail",true);
             }
         }
     }

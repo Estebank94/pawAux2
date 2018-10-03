@@ -3,12 +3,8 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.DoctorDao;
 import ar.edu.itba.paw.interfaces.PatientDao;
 import ar.edu.itba.paw.interfaces.PatientService;
-import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
-import ar.edu.itba.paw.models.exceptions.NotValidFirstNameException;
-import ar.edu.itba.paw.models.exceptions.NotValidLastNameException;
-import ar.edu.itba.paw.models.exceptions.RepeatedEmailException;
-import org.mockito.internal.matchers.Not;
+import ar.edu.itba.paw.models.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +12,6 @@ import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLDataException;
-import java.sql.SQLException;
-import java.time.LocalTime;
 import java.util.Optional;
 
 @Service
@@ -36,7 +29,7 @@ public class PatientServiceImpl implements PatientService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PatientServiceImpl.class);
 
     @Override
-    public Patient createPatient(String firstName, String lastName, String phoneNumber, String email, String password) throws RepeatedEmailException, NotValidFirstNameException, NotValidLastNameException {
+    public Patient createPatient(String firstName, String lastName, String phoneNumber, String email, String password) throws RepeatedEmailException, NotValidFirstNameException, NotValidLastNameException, NotValidPhoneNumberException, NotValidEmailException, NotValidPasswordException, NotCreatePatientException {
         LOGGER.debug("PatientServiceImpl: createPatient");
         if (firstName == null){
             LOGGER.debug("First Name is null");
@@ -69,39 +62,39 @@ public class PatientServiceImpl implements PatientService {
 
         if (phoneNumber == null) {
             LOGGER.debug("UserName is null");
-            throw new IllegalArgumentException("Username phonenumber can't be null");
+            throw new NotValidPhoneNumberException("Username phonenumber can't be null");
         }
         if (phoneNumber.length() == 0){
             LOGGER.debug("PhoneNumber has 0 characters");
-            throw new IllegalArgumentException("Username Phonenumber can't be empty");
+            throw new NotValidPhoneNumberException("Username Phonenumber can't be empty");
         }
 
         if (phoneNumber.length() > 20){
             LOGGER.debug("Phone Number has more than 20 characters. Phone Numbe given is: {}", phoneNumber);
-            throw new IllegalArgumentException("phonenumber can't have more than 20 characters");
+            throw new NotValidPhoneNumberException("phonenumber can't have more than 20 characters");
         }
 
         if (email == null) {
             LOGGER.debug("Email is null");
-            throw new IllegalArgumentException("email can't be null");
+            throw new NotValidEmailException("email can't be null");
         }
         if (email.length() > 90){
             LOGGER.debug("Email has more than 90 characters. Email given: {}", email);
-            throw new IllegalArgumentException("Email can't have more than 90 characters");
+            throw new NotValidEmailException("Email can't have more than 90 characters");
         }
 
         if (password == null){
             LOGGER.debug("Password is empty");
-            throw new IllegalArgumentException("password can't be null");
+            throw new NotValidPasswordException("password can't be null");
         }
 
         if (password.length() == 0){
             LOGGER.debug("Password is empty");
-            throw new IllegalArgumentException("password can't be empty");
+            throw new NotValidPasswordException("password can't be empty");
         }
-        if (password.length() > 72){
+        if (password.length() > 55){
             LOGGER.debug("Password has more than 72 characters. Password given: {}", password);
-            throw new IllegalArgumentException("password can't have more than 72 characters");
+            throw new NotValidPasswordException("password can't have more than 72 characters");
         }
 
         String finalpassword = passwordEncoder.encode(password);
@@ -118,10 +111,9 @@ public class PatientServiceImpl implements PatientService {
             throw new RepeatedEmailException();
         }
 
-
         if (patient == null) {
             LOGGER.debug("Error creating Patient");
-            throw new IllegalArgumentException("Error on create patient");
+            throw new NotCreatePatientException("Error on create patient");
         }
         LOGGER.debug("Success. Created patient");
         return patient;

@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.CompressedSearch;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Search;
+import ar.edu.itba.paw.models.exceptions.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -137,7 +138,18 @@ public class DoctorServiceImplTest {
     @Test
     public void testCreate() {
 
-        final Doctor newDoctor = doctorServiceImpl.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, NEW_DOC_ADDRESS, NEW_DOC_AVATAR);
+        Doctor newDoctor = null;
+        try {
+            newDoctor = doctorServiceImpl.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, NEW_DOC_ADDRESS, NEW_DOC_AVATAR);
+        } catch (NotValidFirstNameException e) {
+        } catch (NotValidLastNameException e) {
+        } catch (NotValidPhoneNumberException e) {
+        } catch (NotCreateDoctorException e) {
+        } catch (RepeatedLicenceException e) {
+        } catch (NotValidSexException e) {
+        } catch (NotValidLicenceException e) {
+        } catch (NotValidAddressException e) {
+        }
 
         assertNotNull(newDoctor);
         assertEquals(NEW_DOC_NAME, newDoctor.getFirstName());

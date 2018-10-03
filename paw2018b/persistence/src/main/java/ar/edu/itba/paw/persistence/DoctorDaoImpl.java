@@ -2,8 +2,12 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.DoctorDao;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.exceptions.NotCreateDoctorException;
+import ar.edu.itba.paw.models.exceptions.RepeatedLicenceException;
+import org.omg.CORBA.TRANSACTION_MODE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -37,7 +41,7 @@ import java.util.*;
 
         @Override
         public Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, String licence,
-                                   String avatar, String address){
+                                   String avatar, String address) throws RepeatedLicenceException, NotCreateDoctorException {
             final Map<String,Object> entry = new HashMap<>();
 
             entry.put("firstname",firstName);
@@ -47,10 +51,19 @@ import java.util.*;
             entry.put("licence",licence);
             entry.put("avatar",avatar);
             entry.put("address",address);
+            Doctor doctor = null;
+            Number doctorId = null;
+            try{
+                doctorId = jdbcInsert.executeAndReturnKey(entry);
+                doctor = new Doctor(firstName,lastName,sex,address,avatar, doctorId.intValue(),phoneNumber);
 
-            final Number doctorId = jdbcInsert.executeAndReturnKey(entry);
-
-            return new Doctor(firstName,lastName,sex,address,avatar, doctorId.intValue(),phoneNumber);
+            }catch (DuplicateKeyException ex1){
+                throw new RepeatedLicenceException();
+            }
+            if (doctor == null || doctorId == null){
+                throw new NotCreateDoctorException();
+            }
+            return doctor;
         }
 
 

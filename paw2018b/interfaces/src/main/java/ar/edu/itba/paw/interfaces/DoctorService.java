@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.interfaces;
 
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.exceptions.*;
 
 import javax.swing.text.html.Option;
 import java.util.List;
@@ -21,7 +22,7 @@ public interface DoctorService {
 //                       List<WorkingHours> workingHours, Description description, String phoneNumber, String licence);
 
    Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, String licence,
-                              String avatar, String address);
+                              String avatar, String address) throws NotValidFirstNameException, NotValidLastNameException, NotValidPhoneNumberException, NotCreateDoctorException, RepeatedLicenceException, NotValidSexException, NotValidLicenceException, NotValidAddressException;
 //
    Optional<Doctor> setDoctorInfo(Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance,
                       List<WorkingHours> workingHours, Description description);

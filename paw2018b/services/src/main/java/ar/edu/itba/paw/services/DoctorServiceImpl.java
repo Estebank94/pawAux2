@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.*;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,49 +88,49 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, String licence,
-                               String avatar, String address) {
+                               String avatar, String address) throws NotValidFirstNameException, NotValidLastNameException, NotValidPhoneNumberException, NotCreateDoctorException, RepeatedLicenceException, NotValidSexException, NotValidLicenceException, NotValidAddressException {
         LOGGER.debug("DoctorServiceImpl: createDoctor");
         if (firstName == null){
             LOGGER.debug("The First Name of a Doctor can't be null");
-            throw new IllegalArgumentException("firstName can't be null");
+            throw new NotValidFirstNameException("firstName can't be null");
         }
 
         if (firstName.length() == 0){
             LOGGER.debug("The First Name must at least have a character");
-            throw new IllegalArgumentException("Doctor firstname can't be empty");
+            throw new NotValidFirstNameException("Doctor firstname can't be empty");
         }
 
         if (firstName.length() > 45){
             LOGGER.debug("The First Name of a doctor can't have more than 45 characters. The name givven is: {}", firstName);
-            throw new IllegalArgumentException("Doctor firstname maxlength is 50");
+            throw new NotValidFirstNameException("Doctor firstname maxlength is 50");
         }
 
         if (lastName == null) {
             LOGGER.debug("The Last Name of a doctor can't be null");
-            throw new IllegalArgumentException("last name can't be null");
+            throw new NotValidLastNameException("last name can't be null");
         }
         if (lastName.length() == 0){
             LOGGER.debug("The Last Name of a Doctor must have at least 1 character");
-            throw new IllegalArgumentException("Doctor lastName can't be empty");
+            throw new NotValidLastNameException("Doctor lastName can't be empty");
         }
 
         if (lastName.length() > 45){
             LOGGER.debug("The Last Name of a doctor can't have more than 45 characters. The name given is: {}", lastName);
-            throw new IllegalArgumentException("Doctor lastName maxlength is 50");
+            throw new NotValidLastNameException("Doctor lastName maxlength is 50");
         }
 
         if (phoneNumber == null) {
             LOGGER.debug("The Phone Number of a doctor can't be null.");
-            throw new IllegalArgumentException("phonenumber can't be null");
+            throw new NotValidPhoneNumberException("phonenumber can't be null");
         }
         if (phoneNumber.length() == 0){
             LOGGER.debug("The Phone Number of a doctor must have at least 8 numbers");
-            throw new IllegalArgumentException("phonenumber firstname can't be empty");
+            throw new NotValidPhoneNumberException("phonenumber firstname can't be empty");
         }
         /*TODO: validar regExp de phone*/
         if (phoneNumber.length() > 20){
             LOGGER.debug("The Phone Number of a doctor can't have more than 20 numbers. The Phone Number given is: {}", phoneNumber);
-            throw new IllegalArgumentException("phonenumber can't have more than 20 characters");
+            throw new NotValidPhoneNumberException("phonenumber can't have more than 20 characters");
         }
 
         if (sex == null) {
@@ -138,40 +139,40 @@ public class DoctorServiceImpl implements DoctorService {
         }
         if (sex.length() == 0){
             LOGGER.debug("The Sex can't have 0 characters");
-            throw new IllegalArgumentException("sex can't be empty");
+            throw new NotValidSexException("sex can't be empty");
         }
 
         if (sex.length() > 1){
             LOGGER.debug("The Sex can't have more than one character. Sex given: {}", sex);
-            throw new IllegalArgumentException("sex can't have more than 1 characters");
+            throw new NotValidSexException("sex can't have more than 1 characters");
         }
 
         if (licence == null) {
             LOGGER.debug("The Licence of a Doctor can't be null");
-            throw new IllegalArgumentException("licence can't be null");
+            throw new NotValidLicenceException("licence can't be null");
         }
         if (licence.length() == 0){
             LOGGER.debug("The Licence of a Doctor can't have 0 characters");
-            throw new IllegalArgumentException("licence can't be empty");
+            throw new NotValidLicenceException("licence can't be empty");
         }
 
         if (licence.length() > 10){
             LOGGER.debug("The Licence of a Doctor can't have more than 10 characters. The Licence given is: {}", licence);
-            throw new IllegalArgumentException("licence can't have more than 10 characters");
+            throw new NotValidLicenceException("licence can't have more than 10 characters");
         }
 
         if (address == null) {
             LOGGER.debug("The address of a Doctor can't be null");
-            throw new IllegalArgumentException("address can't be null");
+            throw new NotValidAddressException("address can't be null");
         }
         if (address.length() == 0){
             LOGGER.debug("The address of a Doctor can't have 0 characters");
-            throw new IllegalArgumentException("address can't be empty");
+            throw new NotValidLicenceException("address can't be empty");
         }
 
         if (address.length() > 100){
             LOGGER.debug("The address of a Doctor can't have more tan 100 characters. The address given is: {}", address);
-            throw new IllegalArgumentException("address can't have more than 100 characters");
+            throw new NotValidAddressException("address can't have more than 100 characters");
         }
 
         LOGGER.debug("Doctor's First Name: {}", firstName);
@@ -181,7 +182,15 @@ public class DoctorServiceImpl implements DoctorService {
         LOGGER.debug("Doctor's Licence: {}", licence);
         LOGGER.debug("Doctor's Avatar: {}", avatar);
         LOGGER.debug("Doctor's Address: {}", address);
-        Doctor doctor = doctorDao.createDoctor(firstName, lastName, phoneNumber, sex, licence, avatar, address);
+        Doctor doctor;
+
+        try {
+            doctor = doctorDao.createDoctor(firstName, lastName, phoneNumber, sex, licence, avatar, address);
+        } catch (NotCreateDoctorException e) {
+            throw new NotCreateDoctorException();
+        } catch (RepeatedLicenceException e) {
+            throw new RepeatedLicenceException();
+        }
         return doctor;
     }
 

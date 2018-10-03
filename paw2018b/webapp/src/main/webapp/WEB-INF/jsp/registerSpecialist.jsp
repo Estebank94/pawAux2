@@ -38,11 +38,17 @@
     <hr style="border-top: 1px solid #D8D8D8 !important;">
     <form:form modelAttribute="personal" method="POST" action="doctorRegistration" accept-charset="ISO-8859-1">
         <div class="row">
+            <c:if test="${wrongFirstName eq true}">
+                <b style="color: #dc3545">Lo siento! Su nombre es incorrecto, por favor, reinterntarlo</b>
+            </c:if>
             <div class="col">
                 <label for="exampleInputEmail1">Nombre</label>
                 <form:input type="text" class="form-control" placeholder="Ingresá tu nombre" path="firstName"/>
                 <form:errors path="firstName" cssStyle="color: crimson"  element="p"></form:errors>
             </div>
+            <c:if test="${wrongLastName eq true}">
+                <b style="color: #dc3545">Lo siento! Su apellido es incorrecto, por favor, reinterntarlo</b>
+            </c:if>
             <div class="col">
                 <label for="exampleInputEmail1">Apellido</label>
                 <form:input type="text" class="form-control" placeholder="Ingresá tu apellido" path="lastName"/>
@@ -50,6 +56,12 @@
             </div>
         </div>
         <br>
+        <c:if test="${wrongEmail eq true}">
+            <b style="color: #dc3545">Lo siento! Su email es incorrecto, por favor, reinterntarlo</b>
+        </c:if>
+        <c:if test="${repeatedEmail eq true}">
+            <b style="color: #dc3545">Lo siento! Su email ya se encuentra registrado con otro usuario, por favor, intente otro mail</b>
+        </c:if>
         <div>
             <label for="exampleInputEmail1">Email</label>
             <form:input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu mail" path="email"/>
@@ -59,6 +71,9 @@
         <div class="row">
             <c:if test="${noMatchingPassword eq true}">
                 <b style="color: #dc3545">Lo siento! Sus contraseñas no coinciden, por favor, reinterntarlo</b>
+            </c:if>
+            <c:if test="${wrongPassword eq true}">
+                <b style="color: #dc3545">Lo siento! Su contraseña es incorrecta, por favor, reinterntarlo</b>
             </c:if>
             <div class="col">
                 <label for="inputPassword5">Contraseña</label>
@@ -75,18 +90,27 @@
             </div>
         </div>
         <br>
+        <c:if test="${wrongPhoneNumber eq true}">
+            <b style="color: #dc3545">Lo siento! Su telefono es incorrecto, por favor, reinterntarlo</b>
+        </c:if>
         <div>
             <label for="exampleInputEmail1">Teléfono</label>
             <form:input class="form-control" id="exampleInputEmail1"  placeholder="Ingresá tu telefono" path="phoneNumber"/>
             <form:errors path="phoneNumber" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
+        <c:if test="${wrongAddress eq true}">
+            <b style="color: #dc3545">Lo siento! Su dirección es incorrecta, por favor, reinterntarlo</b>
+        </c:if>
         <div>
             <label for="exampleInputEmail1">Dirección</label>
             <form:input class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu dirección" path="address"/>
             <form:errors path="address" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
+        <c:if test="${wrongSex eq true}">
+            <b style="color: #dc3545">Lo siento! Sexo seleccionado es incorrecto, por favor, reinterntarlo</b>
+        </c:if>
         <div>
             <label for="exampleFormControlSelect1">Sexo</label>
             <form:select class="custom-select" id="exampleFormControlSelect1" path="sex">
@@ -96,6 +120,12 @@
             <form:errors path="sex" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
+        <c:if test="${repeatedLicence eq true}">
+            <b style="color: #dc3545">Lo siento! Ya existe un usuario registrado con esa matricula, por favor, reinterntarlo</b>
+        </c:if>
+        <c:if test="${wrongLicence eq true}">
+            <b style="color: #dc3545">Lo siento! Su matricula es incorrecta, por favor, reinterntarlo</b>
+        </c:if>
         <div>
             <label for="exampleInputEmail1">Matrícula</label>
             <form:input class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu matrícula" path="licence"/>
