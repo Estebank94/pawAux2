@@ -31,7 +31,7 @@ function addInput(val, container, name){
     if(val!== "no" &&  $("#" + id).length === 0){
         $('#profile').append('<input type="hidden" name="'+name+'" value="'+val+'" class="'+id+'" id="'+name+'"/>');
         $('#'+ container).append('<button type="button" class="btn btn-primary"  id="'+id+'" style="margin-right: 8px; margin-bottom: 8px">'+
-            val + '<span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle">'+'</i></span></button>');
+            val + '<span style="margin-right: 4px; margin-left: 8px; pointer-events: none;"><i class="fas fa-times-circle">'+'</i></span></button>');
 
     }
 }
@@ -50,7 +50,7 @@ function addInputSelect(){
         $('#profile').append('<input type="hidden" name="insurancePlan"  class="'+id+'" value="' + selected + '" id="insurancePlan"/>');
         $('#profile').append('<input type="hidden" name="insurance" value="'+insurance+'" class="'+id+'" id="insurance"/>');
         $('#addedInsurances').append('<button type="button" class="btn btn-primary" id="'+id+'" style="margin-right: 8px; margin-bottom: 8px;">'+
-            $("#insurance").val() + '<span class="badge badge-light" style="margin-left: 8px; margin-right: 4px;">'+ selected.length +'</span><span style="margin-right: 4px; margin-left: 8px"><i class="fas fa-times-circle">'+'</i></span></button>');
+            $("#insurance").val() + '<span class="badge badge-light" style="margin-left: 8px; margin-right: 4px; pointer-events: none;">'+ selected.length +'</span><span style="margin-right: 4px; margin-left: 8px; pointer-events: none;"><i class="fas fa-times-circle">'+'</i></span></button>');
     }
 }
 
