@@ -38,7 +38,14 @@
             <form:errors path="avatar" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
+
+        <c:if test="${wrongCertificate eq true}">
+            <b style="color: #dc3545">Lo siento! El certificado es incorrecto, por favor, reinterntarlo</b>
+        </c:if>
         <c:if test="${noCertificate eq true}">
+            <c:if test="${wrongDesciption eq true}">
+                <b style="color: #dc3545">Lo siento! La descripción es incorrecta, por favor, reinterntarlo</b>
+            </c:if>
             <div>
                 <label for="exampleFormControlTextarea1"><strong>Descripción</strong></label>
                 <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Describi tu completar..." path="certificate"/>
@@ -47,6 +54,9 @@
             <br>
         </c:if>
         <%--<c:if test="${noCertificate eq false}"> Ya completaste tu descripción </c:if>--%>
+        <c:if test="${wrongEducaction eq true}">
+            <b style="color: #dc3545">Lo siento! Su educacion es incorrecta, por favor, reinterntarlo</b>
+        </c:if>
         <c:if test="${noEducation eq true}">
             <div>
                 <label for="exampleFormControlTextarea1"><strong>Educación</strong></label>
@@ -56,7 +66,9 @@
             <hr style="border-top: 1px solid #D8D8D8 !important;">
         </c:if>
         <%--<c:if test="${noEducation eq false}"> Ya completaste tu educación</c:if>--%>
-
+        <c:if test="${wrongLanguage eq true}">
+            <b style="color: #dc3545">Lo siento! El lenguage es incorrecto, por favor, reinterntarlo</b>
+        </c:if>
         <c:if test="${noLanguage eq true}">
             <div>
                 <div>
@@ -84,6 +96,9 @@
             <hr style="border-top: 1px solid #D8D8D8 !important;">
         </c:if>
        <%--<c:if test="${noLanguage eq false}">Ya completaste los idiomas</c:if>--%>
+        <c:if test="${wrongSpecialty eq true}">
+            <b style="color: #dc3545">Lo siento! La especialidad es incorrecta, por favor, reinterntarlo</b>
+        </c:if>
         <div>
             <div>
                 <label for="specialty"><strong>Especialidad</strong></label>
@@ -105,7 +120,14 @@
             </div>
         </div>
         <hr style="border-top: 1px solid #D8D8D8 !important;">
+
         <div>
+            <c:if test="${wrongInsurance eq true}">
+                <b style="color: #dc3545">Lo siento! La obra social es incorrecta, por favor, reinterntarlo</b>
+            </c:if>
+            <c:if test="${wrongInsurancePlan eq true}">
+                <b style="color: #dc3545">Lo siento! El plan de la obra social elegida es incorrecta, por favor, reinterntarlo</b>
+            </c:if>
             <div>
                 <label for="insurance"><strong>Obra Social</strong></label>
                 <select id="insurance" class="custom-select" cssStyle="cursor: pointer;" onchange="myFunc(value)">
@@ -144,6 +166,9 @@
             </div>
         </div>
         <hr style="border-top: 1px solid #D8D8D8 !important;">
+        <c:if test="${wrongWorkingHour eq true}">
+            <b style="color: #dc3545">Lo siento! El horario de trabajo es incorrecto, por favor, reinterntarlo</b>
+        </c:if>
         <div>
             <div>
                 <label><strong>Horario de Trabajo</strong></label>
