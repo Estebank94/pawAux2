@@ -61,6 +61,21 @@
                     </div>
                 </div>
                 <br>
+                <c:if test="${patientAppointments.size() == 0}">
+                    <div>
+                        <div style="padding-top: 20px; padding-left: 20px; padding-right: 20px;">
+                            <div class="media">
+                                <div class="media-left">
+                                    <i class="fas fa-exclamation-triangle" style="color:#CECECE; font-size: 24px; float: left; padding-right: 16px"></i>
+                                </div>
+                                <div class="media-body">
+                                    <h3><spring:message code="patient.noAppointments" /></h3>
+                                    <p><spring:message code="patient.noAppointmentsSub" /></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </c:if>
                 <c:forEach items="${patientAppointments}" var="appointment">
                     <div style="margin-left: 16px; margin-right: 16px;">
                         <h3>

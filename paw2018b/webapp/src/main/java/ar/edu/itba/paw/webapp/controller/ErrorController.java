@@ -19,47 +19,11 @@ public class ErrorController {
         return new ModelAndView("403");
     }
 
-
     @RequestMapping("/404")
-//    @ExceptionHandler(NoHandlerFoundException.class)
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView error404(){
         return new ModelAndView("404");
     }
-    //TODO: Filtro para manejar exepciones un internal server
 
-////    https://www.baeldung.com/custom-error-page-spring-mvc
-//    @RequestMapping(value = "errors", method = RequestMethod.GET)
-//    public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
-//
-//        ModelAndView errorPage = new ModelAndView("errors");
-//        String errorMsg = "";
-//        int httpErrorCode = getErrorCode(httpRequest);
-//
-//        switch (httpErrorCode) {
-//            case 400: {
-//                errorMsg = "Http Error Code: 400. Bad Request";
-//                break;
-//            }
-//            case 401: {
-//                errorMsg = "Http Error Code: 401. Unauthorized";
-//                break;
-//            }
-//            case 404: {
-//                errorMsg = "Http Error Code: 404. Resource not found";
-//                break;
-//            }
-//            case 500: {
-//                errorMsg = "Http Error Code: 500. Internal Server Error";
-//                break;
-//            }
-//        }
-//        errorPage.addObject("errorMsg", errorMsg);
-//        return errorPage;
-//    }
-//
-//    private int getErrorCode(HttpServletRequest httpRequest) {
-//        return (Integer) httpRequest
-//                .getAttribute("javax.servlet.error.status_code");
-//    }
+    @RequestMapping("/500")
+    public ModelAndView error500(){return new ModelAndView("500"); }
 }

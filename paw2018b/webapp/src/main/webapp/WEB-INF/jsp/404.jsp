@@ -27,7 +27,7 @@
 <body style="background-color: #99a3a8;">
 <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
     <div class="container">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="<c:url value="/"/>">
             <h1><strong>Waldoc</strong></h1>
         </a>
     </div>
@@ -35,7 +35,7 @@
 <div>
     <div class="inner-div" style="max-width: 1024px;">
         <img class="center-img" src="https://i.imgur.com/bh0EDf7.jpg">
-        <button class="btn btn-primary custom-btn center-horiz box" type="button" onclick="window.location='/'">
+        <button class="btn btn-primary custom-btn center-horiz box" type="button" onclick="window.location='<c:url value="/"/>'">
             Volver al Inicio
         </button>
     </div>
