@@ -31,7 +31,7 @@
                     <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Registrate
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
                         <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/patientRegistration"/>'">Registrate como paciente</button>
                         <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/doctorRegistration"/>'">Registrate como especialista</button>
                     </div>
@@ -48,7 +48,7 @@
                             <security:authentication property="principal.username" var="userName"/>
                             <div class="dropdown center-vertical">
                                 <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
                                     <button class="dropdown-item" type="submit">Cerrar Sesion</button>
                                     <security:authorize access="hasRole('ROLE_DOCTOR')">
                                         <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:out value="${pageContext.request.contextPath}/doctorPanel/"/>'">
