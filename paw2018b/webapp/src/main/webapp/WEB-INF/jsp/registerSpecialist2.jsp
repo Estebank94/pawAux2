@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8">
     <title><spring:message code="brand.name"/></title>
-    <meta name="description" content="Roughly 155 characters">
+    <meta name="description" content="Waldoc">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css"/>">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
@@ -24,51 +24,54 @@
 </nav>
 
 <div class="container">
-    <br>
-    <br>
-    <h2><spring:message code="regitrationDoctor"/>.</h2>
-    <p><spring:message code="registrationDoctor.advice"></p>
+<br>
+<br>
+<h2><spring:message code="regitrationDoctor"/>.</h2>
+<p><spring:message code="registrationDoctor.advice"/></p>
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
     <%--enctype="multipart/form-data" for image--%>
     <form:form modelAttribute="professional" method="POST" action="/doctorProfile" accept-charset="ISO-8859-1" id="profile">
-        <div>
-            <label for="exampleFormControlFile1"><strong><spring:message code="avatar"/></strong></label>
-            <form:input type="file" class="form-control-file" id="exampleFormControlFile1" path="avatar" name="exampleFormControlFile1"/>
-            <form:errors path="avatar" cssStyle="color: crimson"  element="p"></form:errors>
-        </div>
-        <br>
+        <%--<div>--%>
+            <%--<label for="exampleFormControlFile1"><strong><spring:message code="avatar"/></strong></label>--%>
+            <%--<form:input type="file" class="form-control-file" id="exampleFormControlFile1" path="avatar" name="exampleFormControlFile1"/>--%>
+            <%--<form:errors path="avatar" cssStyle="color: crimson"  element="p"></form:errors>--%>
+        <%--</div>--%>
+        <%--<br>--%>
 
         <c:if test="${wrongCertificate eq true}">
-            <b style="color: #dc3545"><spring:message code="error.certificate"/></b>
+            <p class="wrong"><spring:message code="error.certificate"/></p>
         </c:if>
         <c:if test="${noCertificate eq true}">
-            <c:if test="${wrongDesciption eq true}">
-                <b style="color: #dc3545"><spring:message code="error.description"/></b>
-            </c:if>
             <div>
                 <label for="exampleFormControlTextarea1"><strong><spring:message code="desciption"/></strong></label>
-                <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Describi tu completar..." path="certificate"/>
+                <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Describi tu forma de trabajo..." path="certificate"/>
+                <small class="form-text text-muted">
+                    <spring:message code="maxSize"/>
+                </small>
                 <form:errors path="certificate" cssStyle="color: crimson"  element="p"></form:errors>
+                <c:if test="${wrongDesciption eq true}">
+                    <p class="wrong"><spring:message code="error.description"/></p>
+                </c:if>
             </div>
             <br>
         </c:if>
         <%--<c:if test="${noCertificate eq false}"> Ya completaste tu descripción </c:if>--%>
-        <c:if test="${wrongEducaction eq true}">
-            <b style="color: #dc3545"><spring:message code="error.education"/></b>
-        </c:if>
         <c:if test="${noEducation eq true}">
             <div>
                 <label for="exampleFormControlTextarea1"><strong><spring:message code="education"/></strong></label>
                 <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Describi tu estudios academicos..." path="education"/>
+                <small class="form-text text-muted">
+                    <spring:message code="maxSize"/>
+                </small>
                 <form:errors path="education" cssStyle="color: crimson"  element="p"></form:errors>
+                <c:if test="${wrongEducaction eq true}">
+                    <b class="wrong"><spring:message code="error.education"/></b>
+                </c:if>
             </div>
             <hr style="border-top: 1px solid #D8D8D8 !important;">
         </c:if>
         <%--<c:if test="${noEducation eq false}"> Ya completaste tu educación</c:if>--%>
-        <c:if test="${wrongLanguage eq true}">
-            <b style="color: #dc3545"><spring:message code="error.language"/></b>
-        </c:if>
         <c:if test="${noLanguage eq true}">
             <div>
                 <div>
@@ -82,6 +85,9 @@
                         <option value="Chino" label="Chino"/>
                     </select>
                     <form:errors path="languages" cssStyle="color: crimson"  element="p"></form:errors>
+                    <c:if test="${wrongLanguage eq true}">
+                        <p class="wrong"><spring:message code="error.language"/></p>
+                    </c:if>
                 </div>
                 <br>
                 <div>
@@ -95,21 +101,21 @@
             </div>
             <hr style="border-top: 1px solid #D8D8D8 !important;">
         </c:if>
-       <%--<c:if test="${noLanguage eq false}">Ya completaste los idiomas</c:if>--%>
-        <c:if test="${wrongSpecialty eq true}">
-            <b style="color: #dc3545"><spring:message code="error.specialty"/></b>
-        </c:if>
+        <%--<c:if test="${noLanguage eq false}">Ya completaste los idiomas</c:if>--%>
         <div>
             <div>
                 <label for="specialty"><strong><spring:message code="specialty"/></strong></label>
                 <select id="specialty" class="custom-select" cssStyle="cursor: pointer;" onchange="addInput(value, 'addedSpecialties', 'specialty')">
                     <option value="noSpecialty" label="Especialidades" selected="Especialidades"/>
                     <c:forEach items="${specialtyList}" var="specialty">
-                        <option value="${specialty.name}" label="${specialty.name}">
-                    </c:forEach>
+                    <option value="${specialty.name}" label="${specialty.name}">
+                        </c:forEach>
                 </select>
-                <%--FALTA AGREGAR VALIDACION--%>
+                    <%--FALTA AGREGAR VALIDACION--%>
                 <form:errors path="specialty" cssStyle="color: crimson"  element="p"></form:errors>
+                <c:if test="${wrongSpecialty eq true}">
+                    <p class="wrong"><spring:message code="error.specialty"/></p>
+                </c:if>
             </div>
             <br>
             <div>
@@ -122,12 +128,6 @@
         <hr style="border-top: 1px solid #D8D8D8 !important;">
 
         <div>
-            <c:if test="${wrongInsurance eq true}">
-                <b style="color: #dc3545"><spring:message code="wrongInsurance"/></b>
-            </c:if>
-            <c:if test="${wrongInsurancePlan eq true}">
-                <b style="color: #dc3545"><spring:message code="wrongPlan"/></b>
-            </c:if>
             <div>
                 <label for="insurance"><strong><spring:message code="insurance"/></strong></label>
                 <select id="insurance" class="custom-select" cssStyle="cursor: pointer;" onchange="myFunc(value)">
@@ -137,6 +137,12 @@
                     </c:forEach>
                 </select>
                 <form:errors path="insurance" cssStyle="color: crimson"  element="p"></form:errors>
+                <c:if test="${wrongInsurance eq true}">
+                    <p class="wrong"><spring:message code="wrongInsurance"/></p>
+                </c:if>
+                <c:if test="${wrongInsurancePlan eq true}">
+                    <p class="wrong"><spring:message code="wrongPlan"/></p>
+                </c:if>
             </div>
             <br>
             <div>
@@ -172,10 +178,13 @@
         <div>
             <div>
                 <label><strong><spring:message code="workingHour"/></strong></label>
+                <c:if test="${wrongWorkingHour eq true}">
+                    <p class="wrong"><spring:message code="error.workingHours"/></p>
+                </c:if>
             </div>
             <br>
             <c:if test="${EmptyMonday eq true}">
-            <div class="form-group row">
+                <div class="form-group row">
                     <label for="monStartWorkingHour" class="col-sm-1 col-form-label"><spring:message code="day.monday"/></label>
                     <div id="monContainer" class="col-sm-4">
                         <div class="input-group">
@@ -195,31 +204,31 @@
                                 <%--<form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>--%>
                         </div>
                     </div>
-            </div>
+                </div>
             </c:if>
             <c:if test="${EmptyMonday eq false}"><p><spring:message code="day.mondayDone"/><br></p></c:if>
             <c:if test="${EmptyTuesday eq true}">
                 <div class="form-group row">
-                <label class="col-sm-1 col-form-label"><spring:message code="day.tuesday"/></label>
-                <div id="tueContainer" class="col-sm-4">
-                    <div class="input-group">
-                        <select class="custom-select" id="tueStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'tue')">
-                            <option value="no" label="Inicio" selected="Inicio"/>
-                            <c:forEach items="${professional.workingHours}" var="workingHour">
-                            <option value="${workingHour}" label="${workingHour}">
-                                </c:forEach>
-                        </select>
-                            <%--<form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>--%>
-                        <select class="custom-select" id="tueEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'tue')">
-                            <option value="no" label="Fin" selected="Fin"/>
-                            <c:forEach items="${professional.workingHours}" var="workingHour">
-                            <option value="${workingHour}" label="${workingHour}">
-                                </c:forEach>
-                        </select>
-                            <%--<form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>--%>
+                    <label class="col-sm-1 col-form-label"><spring:message code="day.tuesday"/></label>
+                    <div id="tueContainer" class="col-sm-4">
+                        <div class="input-group">
+                            <select class="custom-select" id="tueStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'tue')">
+                                <option value="no" label="Inicio" selected="Inicio"/>
+                                <c:forEach items="${professional.workingHours}" var="workingHour">
+                                <option value="${workingHour}" label="${workingHour}">
+                                    </c:forEach>
+                            </select>
+                                <%--<form:errors path="workingHoursStart" cssStyle="color: crimson"  element="p"></form:errors>--%>
+                            <select class="custom-select" id="tueEndWorkingHour" disabled="true" path="workingHoursEnd" onchange="addEndWorkingHour(value, 'tue')">
+                                <option value="no" label="Fin" selected="Fin"/>
+                                <c:forEach items="${professional.workingHours}" var="workingHour">
+                                <option value="${workingHour}" label="${workingHour}">
+                                    </c:forEach>
+                            </select>
+                                <%--<form:errors path="workingHoursEnd" cssStyle="color: crimson"  element="p"></form:errors>--%>
+                        </div>
                     </div>
                 </div>
-            </div>
             </c:if>
             <c:if test="${EmptyTuesday eq false}"><p><spring:message code="day.tuesdayDone"/><br></p></c:if>
             <c:if test="${EmptyWednesday eq true}">
@@ -332,10 +341,10 @@
         </div>
     </form:form>
     <br>
-</div>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="<c:url value="/resources/javascript/registerSpecialists.js"/>"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-</body>
-</html>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="<c:url value="/resources/javascript/registerSpecialists.js"/>"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    </body>
+    </html>

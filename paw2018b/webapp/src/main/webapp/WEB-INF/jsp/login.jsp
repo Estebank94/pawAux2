@@ -30,23 +30,23 @@
                 <br>
                 <c:url value="/showLogIn" var="loginUrl"/>
                 <form:form action="${loginUrl}" method="POST" enctype="application/x-www-form-urlencoded">
-                    <c:if test="${param.error != null}">
-                        <b style="color: #dc3545"><spring:message code="login.invalid"/></b>
-                    </c:if>
-                    <c:if test="${param.logout != null}">
-                        <c:redirect><c:url value="/"/></c:redirect>
-                    </c:if>
                     <div>
-                        <label for="username"><spring:message code="login.user"/></label>
+                        <label for="username"><strong><spring:message code="login.user"/></strong></label>
                         <input name="j_username" type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Ingresá tu mail">
                     </div>
                     <br>
                     <div>
-                        <label for="password"><spring:message code="login.password"/></label>
+                        <label for="password"><strong><spring:message code="login.password"/></strong></label>
                         <input name="j_password" type="password" class="form-control" id="password" aria-describedby="emailHelp" placeholder="Ingresá tu contraseña">
                     </div>
+                    <c:if test="${param.error != null}">
+                        <p class="wrong"><spring:message code="login.invalid"/></p>
+                    </c:if>
+                    <c:if test="${param.logout != null}">
+                        <c:redirect><c:url value="/"/></c:redirect>
+                    </c:if>
                     <br>
-                    <input type="submit" class="btn btn-primary" value="Iniciar Sesión"/>
+                    <input type="submit" class="btn btn-primary custom-btn" value="Iniciar Sesión"/>
                     <%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
                 </form:form>
             </div>
