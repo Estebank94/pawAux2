@@ -7,6 +7,8 @@ import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
+import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
+import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
 import ar.edu.itba.paw.models.exceptions.NotValidIDException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +48,16 @@ public class DoctorPanelController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        Patient patient = patientService.findPatientByEmail(authentication.getName());
+        Patient patient;
+        try {
+            patient = patientService.findPatientByEmail(authentication.getName());
+        } catch (NotValidEmailException e) {
+            LOGGER.trace("Error 404");
+            return new ModelAndView("404");
+        } catch (NotFoundPacientException e) {
+            LOGGER.trace("Error 404");
+            return new ModelAndView("404");
+        }
 
         Integer doctorId = patient.getDoctorId();
 
@@ -82,6 +93,9 @@ public class DoctorPanelController {
             LOGGER.debug("GET doctor's appointments: {}", appointments);
             mav.addObject("appointments", appointments);
             mav.addObject("doctor", doctor);
+            Map<LocalDate, List<Appointment>> patientAppointment = patient.appointmentsMap();
+            mav.addObject("patientAppointments", patientAppointment);
+
 
         }else{
             /*TODO CHECK IF THE ID IS A REAL DOCTOR*/

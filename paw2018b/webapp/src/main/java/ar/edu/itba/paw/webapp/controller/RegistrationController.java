@@ -193,7 +193,14 @@ public class RegistrationController {
                 .addObject("wrongCertificate",false);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Patient patient = patientService.findPatientByEmail(authentication.getName());
+        Patient patient = null;
+        try {
+            patient = patientService.findPatientByEmail(authentication.getName());
+        } catch (NotValidEmailException e) {
+            e.printStackTrace();
+        } catch (NotFoundPacientException e) {
+            e.printStackTrace();
+        }
         Doctor doctor = null;
         try {
             doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
@@ -249,7 +256,14 @@ public class RegistrationController {
         LOGGER.debug("RegistrationController: doctorProfile");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Patient patient = patientService.findPatientByEmail(authentication.getName());
+        Patient patient = null;
+        try {
+            patient = patientService.findPatientByEmail(authentication.getName());
+        } catch (NotValidEmailException e) {
+            e.printStackTrace();
+        } catch (NotFoundPacientException e) {
+            e.printStackTrace();
+        }
         Doctor doctor = null;
         try {
             doctor = doctorService.findDoctorById(patient.getDoctorId()).get();

@@ -6,6 +6,7 @@ import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.models.InputValidation;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.*;
+import org.omg.CosNaming.NamingContextPackage.NotFoundHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -183,47 +184,47 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Patient findPatientById(Integer id) {
+    public Patient findPatientById(Integer id) throws NotValidPatientIdException, NotCreatePatientException, NotFoundPacientException {
         LOGGER.debug("PatientServiceImpl: findPatientById");
         if (id == null){
             LOGGER.debug("Patient ID null");
-            throw new IllegalArgumentException("patientId can't be null");
+            throw new NotValidPatientIdException("patientId can't be null");
         }
         if (id <= 0){
             LOGGER.debug("Patient ID is negative. Patient ID given: {}", id);
-            throw new IllegalArgumentException("PatientId can't be negative or zero");
+            throw new NotValidPatientIdException("PatientId can't be negative or zero");
         }
         LOGGER.debug("find patient by id. ID {}", id);
         Patient patient = patientDao.findPatientById(id).get();
 
         if (patient == null){
             LOGGER.debug("Patient not found");
-            throw new NotFoundException("Patient was not found");
+            throw new NotFoundPacientException("Patient was not found");
         }
         LOGGER.debug("Patient {}", patient);
         return patient;
     }
 
     @Override
-    public Patient findPatientByEmail(String email) {
+    public Patient findPatientByEmail(String email) throws NotValidEmailException, NotFoundPacientException {
         LOGGER.debug("PatientServiceImpl: findPatientByEmail(String email)");
         if (email == null){
             LOGGER.debug("Email is null");
-            throw new IllegalArgumentException("patient email can't be null");
+            throw new NotValidEmailException("patient email can't be null");
         }
         if (email.length() == 0){
             LOGGER.debug("Email length is 0");
-            throw new IllegalArgumentException("Patient email can't be negative or zero");
+            throw new NotValidEmailException("Patient email can't be negative or zero");
         }
         if (email.length() > 90){
             LOGGER.debug("Email has more than 90 characters. Email: {}", email);
-            throw new IllegalArgumentException("PatientMail can't have more than 90 characters");
+            throw new NotValidEmailException("PatientMail can't have more than 90 characters");
         }
         LOGGER.debug("Calling patientDao.findPatientByEmail(email)");
         Optional<Patient> foundPatient = patientDao.findPatientByEmail(email);
         if (!foundPatient.isPresent()){
             LOGGER.debug("No patient found");
-            throw new IllegalArgumentException("Patient was not found");
+            throw new NotFoundPacientException("Patient was not found");
         }
         LOGGER.debug("Patient found. Patient: {}", foundPatient.get());
         LOGGER.debug("Patient name: {}", foundPatient.get().getFirstName());

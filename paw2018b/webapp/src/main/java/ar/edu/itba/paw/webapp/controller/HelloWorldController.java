@@ -71,6 +71,12 @@ public class HelloWorldController {
 				}catch (NotFoundDoctorException ex1){
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
+				} catch (NotFoundPacientException e) {
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				} catch (NotValidEmailException e) {
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
 				}
 				mav.addObject("doctorID", doctor.getId());
 			}
@@ -106,7 +112,16 @@ public class HelloWorldController {
 			hasUserRole = authentication.getAuthorities().stream()
 					.anyMatch(r -> r.getAuthority().equals("ROLE_DOCTOR"));
 			if(hasUserRole){
-				Patient patient = patientService.findPatientByEmail(authentication.getName());
+				Patient patient = null;
+				try {
+					patient = patientService.findPatientByEmail(authentication.getName());
+				} catch (NotValidEmailException e) {
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				} catch (NotFoundPacientException e) {
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				}
 				mav.addObject("doctorID", patient.getDoctorId());
 			}
 		}
@@ -169,8 +184,14 @@ public class HelloWorldController {
 			} catch (NotFoundException e) {
 				LOGGER.trace("404 error");
 				return new ModelAndView("404");
+			} catch (NotFoundPacientException e) {
+				LOGGER.trace("404 error");
+				return new ModelAndView("404");
+			} catch (NotValidEmailException e) {
+				LOGGER.trace("404 error");
+				return new ModelAndView("404");
 			}
-			return mav;
+		return mav;
     }
 
     @RequestMapping(value = "/specialist/{doctorId}", method = {RequestMethod.POST})
@@ -183,7 +204,16 @@ public class HelloWorldController {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-		Patient patient = patientService.findPatientByEmail(authentication.getName());
+		Patient patient = null;
+		try {
+			patient = patientService.findPatientByEmail(authentication.getName());
+		} catch (NotValidEmailException e) {
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		} catch (NotFoundPacientException e) {
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		}
 
 		LocalDate day = LocalDate.parse(appointmentForm.getDay());
 		LocalTime time = LocalTime.parse(appointmentForm.getTime());
