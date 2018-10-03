@@ -24,20 +24,20 @@
         </a>
         <a>
             <div class="row">
-                <div class="dropdown">
+                <div class="dropdown center-vertical">
                     <%--<c:if test="${loggedInName != null}">--%>
                     <%--</c:if>--%>
                     <security:authorize access="!isAuthenticated()">
                     <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <spring:message code="register"/>
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
                         <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/patientRegistration"/>'"><spring:message code="dropdown.patientRegister"/></button>
                         <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/doctorRegistration"/>'"><spring:message code="dropdown.doctorRegister"/></button>
                     </div>
                     </security:authorize>
                 </div>
-                <div>
+                <div class="center-vertical">
                     <security:authorize access="!isAuthenticated()">
                         <button class="btn btn-light" style="background-color:transparent; border-color:transparent; color: #257CBF !important;" type="button" onclick="window.location='<c:url value="/showLogIn"/>'">
                             <spring:message code="login.message"/>
@@ -46,8 +46,8 @@
                     <security:authorize access="isAuthenticated()">
                         <form:form action="${pageContext.request.contextPath}/logout" method="post">
                             <security:authentication property="principal.username" var="userName"/>
-                            <div class="dropdown">
-                                <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:#257CBF !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>
+                            <div class="dropdown center-vertical">
+                                <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                     <button class="dropdown-item" type="submit"><spring:message code="logout.message"/></button>
                                     <security:authorize access="hasRole('ROLE_DOCTOR')">

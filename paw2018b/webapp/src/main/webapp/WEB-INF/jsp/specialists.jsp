@@ -34,10 +34,10 @@
             <div class="row">
                 <security:authorize access="!isAuthenticated()">
                 <div class="dropdown" style="z-index: 1000000 !important;">
-                    <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:white; color:white !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:white; color:white !important;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Registrate
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
                         <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/patientRegistration"/>'">Registrate como paciente</button>
                         <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/doctorRegistration"/>'">Registrate como especialista</button>
                     </div>
@@ -52,9 +52,9 @@
                     <security:authorize access="isAuthenticated()">
                         <form:form action="${pageContext.request.contextPath}/logout" method="post">
                             <security:authentication property="principal.username" var="userName"/>
-                            <div class="dropdown">
-                                <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:#ffffff !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b>${userName}</b></button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            <div class="dropdown" >
+                                <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:#ffffff !important;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b>${userName}</b></button>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
                                     <button class="dropdown-item" type="submit">Cerrar Sesion</button>
                                     <%--ARREGLAR !!! hay que arreglar el dropdown se ve por abajo del search form--%>
                                     <security:authorize access="hasRole('ROLE_DOCTOR')">
