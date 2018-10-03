@@ -55,11 +55,11 @@
         </c:if>
         <%--<c:if test="${noCertificate eq false}"> Ya completaste tu descripción </c:if>--%>
         <c:if test="${wrongEducaction eq true}">
-            <b style="color: #dc3545">Lo siento! Su educacion es incorrecta, por favor, reinterntarlo</b>
+            <b style="color: #dc3545"><spring:message code="error.education"/></b>
         </c:if>
         <c:if test="${noEducation eq true}">
             <div>
-                <label for="exampleFormControlTextarea1"><strong>Educación</strong></label>
+                <label for="exampleFormControlTextarea1"><strong><spring:message code="education"/></strong></label>
                 <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Describi tu estudios academicos..." path="education"/>
                 <form:errors path="education" cssStyle="color: crimson"  element="p"></form:errors>
             </div>
@@ -67,12 +67,12 @@
         </c:if>
         <%--<c:if test="${noEducation eq false}"> Ya completaste tu educación</c:if>--%>
         <c:if test="${wrongLanguage eq true}">
-            <b style="color: #dc3545">Lo siento! El lenguage es incorrecto, por favor, reinterntarlo</b>
+            <b style="color: #dc3545"><spring:message code="error.language"/></b>
         </c:if>
         <c:if test="${noLanguage eq true}">
             <div>
                 <div>
-                    <label for="languages"><strong>Idiomas</strong></label>
+                    <label for="languages"><strong><spring:message code="language"/></strong></label>
                     <select class="custom-select" name="languages" id="languages" onchange="addInput(value, 'languageContainer', 'languages')">
                         <option value="no" label="Idioma" selected="Idioma"/>
                         <option value="Ingles" label="Ingles" />
@@ -87,7 +87,7 @@
                 <div>
                     <div>
                         <br>
-                        <label>Estos son los idiomas que agregaste por ahora:</label>
+                        <label><spring:message code="languagesNo"/></label>
                         <div class="row container" id="languageContainer">
                         </div>
                     </div>
@@ -97,11 +97,11 @@
         </c:if>
        <%--<c:if test="${noLanguage eq false}">Ya completaste los idiomas</c:if>--%>
         <c:if test="${wrongSpecialty eq true}">
-            <b style="color: #dc3545">Lo siento! La especialidad es incorrecta, por favor, reinterntarlo</b>
+            <b style="color: #dc3545"><spring:message code="error.specialty"/></b>
         </c:if>
         <div>
             <div>
-                <label for="specialty"><strong>Especialidad</strong></label>
+                <label for="specialty"><strong><spring:message code="specialty"/></strong></label>
                 <select id="specialty" class="custom-select" cssStyle="cursor: pointer;" onchange="addInput(value, 'addedSpecialties', 'specialty')">
                     <option value="noSpecialty" label="Especialidades" selected="Especialidades"/>
                     <c:forEach items="${specialtyList}" var="specialty">
@@ -114,7 +114,7 @@
             <br>
             <div>
                 <br>
-                <label>Estas son las especialidades que agregaste por ahora:</label>
+                <label><spring:message code="specialtyNo"/></label>
                 <div id="addedSpecialties" class="row container">
                 </div>
             </div>
@@ -123,13 +123,13 @@
 
         <div>
             <c:if test="${wrongInsurance eq true}">
-                <b style="color: #dc3545">Lo siento! La obra social es incorrecta, por favor, reinterntarlo</b>
+                <b style="color: #dc3545"><spring:message code="wrongInsurance"/></b>
             </c:if>
             <c:if test="${wrongInsurancePlan eq true}">
-                <b style="color: #dc3545">Lo siento! El plan de la obra social elegida es incorrecta, por favor, reinterntarlo</b>
+                <b style="color: #dc3545"><spring:message code="wrongPlan"/></b>
             </c:if>
             <div>
-                <label for="insurance"><strong>Obra Social</strong></label>
+                <label for="insurance"><strong><spring:message code="insurance"/></strong></label>
                 <select id="insurance" class="custom-select" cssStyle="cursor: pointer;" onchange="myFunc(value)">
                     <option value="no" label="Prepaga" selected="Prepaga"/>
                     <c:forEach items="${insuranceList}" var="insuranceName">
@@ -159,7 +159,7 @@
                 </div>
                 <div>
                     <br>
-                    <label>Estas son las obras sociales que agregaste por ahora:</label>
+                    <label><spring:message code="insurancesNo"/></label>
                     <div id="addedInsurances" class="row container">
                     </div>
                 </div>
@@ -167,16 +167,16 @@
         </div>
         <hr style="border-top: 1px solid #D8D8D8 !important;">
         <c:if test="${wrongWorkingHour eq true}">
-            <b style="color: #dc3545">Lo siento! El horario de trabajo es incorrecto, por favor, reinterntarlo</b>
+            <b style="color: #dc3545"><spring:message code="error.workingHours"/></b>
         </c:if>
         <div>
             <div>
-                <label><strong>Horario de Trabajo</strong></label>
+                <label><strong><spring:message code="workingHour"/></strong></label>
             </div>
             <br>
             <c:if test="${EmptyMonday eq true}">
             <div class="form-group row">
-                    <label for="monStartWorkingHour" class="col-sm-1 col-form-label">Lunes</label>
+                    <label for="monStartWorkingHour" class="col-sm-1 col-form-label"><spring:message code="day.monday"/></label>
                     <div id="monContainer" class="col-sm-4">
                         <div class="input-group">
                             <select class="custom-select" id="monStartWorkingHour" onchange="addStartWorkingHour(value, 'mon')">
@@ -197,10 +197,10 @@
                     </div>
             </div>
             </c:if>
-            <c:if test="${EmptyMonday eq false}"><p>Ya registraste tus horarios del dia Lunes<br></p></c:if>
+            <c:if test="${EmptyMonday eq false}"><p><spring:message code="day.mondayDone"/><br></p></c:if>
             <c:if test="${EmptyTuesday eq true}">
                 <div class="form-group row">
-                <label class="col-sm-1 col-form-label">Martes</label>
+                <label class="col-sm-1 col-form-label"><spring:message code="day.tuesday"/></label>
                 <div id="tueContainer" class="col-sm-4">
                     <div class="input-group">
                         <select class="custom-select" id="tueStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'tue')">
@@ -221,10 +221,10 @@
                 </div>
             </div>
             </c:if>
-            <c:if test="${EmptyTuesday eq false}"><p>Ya registraste tus horarios del dia Martes <br></p></c:if>
+            <c:if test="${EmptyTuesday eq false}"><p><spring:message code="day.tuesdayDone"/><br></p></c:if>
             <c:if test="${EmptyWednesday eq true}">
                 <div class="form-group row">
-                    <label class="col-sm-1 col-form-label">Miercoles</label>
+                    <label class="col-sm-1 col-form-label"><spring:message code="day.wednesday"/></label>
                     <div id="wedContainer" class="col-sm-4">
                         <div class="input-group">
                             <select class="custom-select" id="wedStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'wed')">
@@ -245,10 +245,10 @@
                     </div>
                 </div>
             </c:if>
-            <c:if test="${EmptyWednesday eq false}"><p>Ya registraste tus horarios del dia Miercoles <br></p></c:if>
+            <c:if test="${EmptyWednesday eq false}"><p><spring:message code="day.wednesdayDone"/><br></p></c:if>
             <c:if test="${EmptyThursday eq true}">
                 <div class="form-group row">
-                    <label class="col-sm-1 col-form-label">Jueves</label>
+                    <label class="col-sm-1 col-form-label"><spring:message code="day.thursday"/></label>
                     <div class="col-sm-4">
                         <div id="thuContainer" class="input-group">
                             <select class="custom-select" id="thuStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'thu')">
@@ -269,10 +269,10 @@
                     </div>
                 </div>
             </c:if>
-            <c:if test="${EmptyThursday eq false}"><p>Ya registraste tus horarios del dia Jueves <br></p></c:if>
+            <c:if test="${EmptyThursday eq false}"><p><spring:message code="day.thursdayDone"/><br></p></c:if>
             <c:if test="${EmptyFriday eq true}">
                 <div class="form-group row">
-                    <label class="col-sm-1 col-form-label">Viernes</label>
+                    <label class="col-sm-1 col-form-label"><spring:message code="day.friday"/></label>
                     <div id="friContainer" class="col-sm-4">
                         <div class="input-group">
                             <select class="custom-select" id="friStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'fri')">
@@ -293,10 +293,10 @@
                     </div>
                 </div>
             </c:if>
-            <c:if test="${EmptyFriday eq false}"> <p>Ya registraste tus horarios del dia Viernes <br></p></c:if>
+            <c:if test="${EmptyFriday eq false}"> <p><spring:message code="day.fridayDone"/> <br></p></c:if>
             <c:if test="${EmptySaturday eq true}">
                 <div class="form-group row">
-                    <label class="col-sm-1 col-form-label">Sabado</label>
+                    <label class="col-sm-1 col-form-label"><spring:message code="day.saturday"/></label>
                     <div id="satContainer" class="col-sm-4">
                         <div class="input-group">
                             <select class="custom-select" id="satStartWorkingHour" path="workingHoursStart" onchange="addStartWorkingHour(value, 'sat')">
@@ -317,7 +317,7 @@
                     </div>
                 </div>
             </c:if>
-            <c:if test="${EmptySaturday eq false}"><p> Ya registraste tus horarios del dia Sabado<br></p></c:if>
+            <c:if test="${EmptySaturday eq false}"><p><spring:message code="day.saturdayDone"/> <br></p></c:if>
         </div>
         <br>
         <div class="container row">
