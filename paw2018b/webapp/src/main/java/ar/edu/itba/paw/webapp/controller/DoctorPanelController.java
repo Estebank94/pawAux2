@@ -92,10 +92,6 @@ public class DoctorPanelController {
             Map<LocalDate, List<Appointment>> appointments = doctor.appointmentsMap();
             LOGGER.debug("GET doctor's appointments: {}", appointments);
             mav.addObject("appointments", appointments);
-            Map<LocalDate, List<Appointment>> patientAppointment = patient.appointmentsMap();
-            mav.addObject("patientAppointments", patientAppointment);
-
-
             mav.addObject("doctor", doctor);
             Map<LocalDate, List<Appointment>> patientAppointment = patient.appointmentsMap();
             mav.addObject("patientAppointments", patientAppointment);

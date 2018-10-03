@@ -135,23 +135,4 @@ public class Patient {
 
     }
 
-    public Map<LocalDate, List<Appointment>> appointmentsMap (){
-
-        Map<LocalDate, List<Appointment>> appointments = new HashMap<>();
-        Set<Appointment> all = getFutureAppointments();
-
-        for(Appointment appoint : all){
-            if(appointments.containsKey(appoint.getAppointmentDay())){
-                appointments.get(appoint.getAppointmentDay()).add(appoint);
-            }else{
-                List<Appointment> list = new ArrayList<>();
-                list.add(appoint);
-                appointments.put(appoint.getAppointmentDay(),list);
-            }
-        }
-        return appointments;
-
-
-    }
-
 }
