@@ -13,25 +13,24 @@ public class Appointment implements Comparable<Appointment>{
     private Integer doctorId;
     private String clientFirstName;
     private String clientLastName;
+    private String doctorFirstName;
+    private String doctorLastName;
 
-    public System getDoctorFirstName() {
+    public String getDoctorFirstName() {
         return doctorFirstName;
     }
 
-    public void setDoctorFirstName(System doctorFirstName) {
+    public void setDoctorFirstName(String doctorFirstName) {
         this.doctorFirstName = doctorFirstName;
     }
 
-    public System getDoctorLastName() {
+    public String getDoctorLastName() {
         return doctorLastName;
     }
 
-    public void setDoctorLastName(System doctorLastName) {
+    public void setDoctorLastName(String doctorLastName) {
         this.doctorLastName = doctorLastName;
     }
-
-    private System doctorFirstName;
-    private System doctorLastName;
 
     public String getPhoneNumber() {
         return phoneNumber;
