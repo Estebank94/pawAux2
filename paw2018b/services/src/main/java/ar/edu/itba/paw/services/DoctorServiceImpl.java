@@ -135,7 +135,7 @@ public class DoctorServiceImpl implements DoctorService {
 
         if (sex == null) {
             LOGGER.debug("The Sex of a Doctor can't be null");
-            throw new IllegalArgumentException("sex can't be null");
+            throw new NotValidSexException("sex can't be null");
         }
         if (sex.length() == 0){
             LOGGER.debug("The Sex can't have 0 characters");
@@ -195,44 +195,44 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Optional<Doctor> setDoctorInfo(Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance, List<WorkingHours> workingHours, Description description) {
+    public Optional<Doctor> setDoctorInfo(Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance, List<WorkingHours> workingHours, Description description) throws NotValidDoctorIdException, NotFoundDoctorException, NotValidSpecialtyException, NotValidWorkingHourException, NotValidInsuranceException, NotValidInsurancePlanException, NotValidDescriptionException, NotValidLanguagesException, NotValidCertificateException, NotValidEducationException {
         LOGGER.debug("DoctorServiceImpl: setDoctorInfo");
         if (doctorId == null ){
             LOGGER.debug("The Doctor ID can't be null");
-            throw new IllegalArgumentException("Doctor Id can't be null");
+            throw new NotValidDoctorIdException("Doctor Id can't be null");
         }
 
         if (doctorId < 0){
             LOGGER.debug("The Doctor ID can't be a negative number. The number given is: {}", doctorId);
-            throw new IllegalArgumentException("Doctor Id can't be negative");
+            throw new NotValidDoctorIdException("Doctor Id can't be negative");
         }
 
         Optional<Doctor> doctorOptional = doctorDao.findDoctorById(doctorId);
 
         if (!doctorOptional.isPresent()){
             LOGGER.debug("The Doctor with ID: {}, doesn't exist", doctorId);
-            throw new IllegalArgumentException("Doctor doesn't exist");
+            throw new NotFoundDoctorException("Doctor doesn't exist");
         }
 
         Doctor doctor = doctorOptional.get();
 
         if (specialty == null){
             LOGGER.debug("The Specialty of a Doctor can't be null. Doctor ID: {}", doctorId);
-            throw new IllegalArgumentException("SpecialtySet can't be null");
+            throw new NotValidSpecialtyException("SpecialtySet can't be null");
         }
         for (String specialtyIterator: specialty){
             if(specialtyIterator == null){
                 LOGGER.debug("There is a null specialty. A specialty can't be null");
-                throw new IllegalArgumentException("One Specialty is null. Specialty can't be null");
+                throw new NotValidSpecialtyException("One Specialty is null. Specialty can't be null");
             }
             if (specialtyIterator.length() == 0){
                 LOGGER.debug("There is a specialty with 0 characters. A specialty can't be empty");
-                throw new IllegalArgumentException("Specialty can't be empty");
+                throw new NotValidSpecialtyException("Specialty can't be empty");
             }
 
             if (specialtyIterator.length() > 50){
                 LOGGER.debug("The specialty can't have more than 50 characters. Specialty Name: {}", specialty);
-                throw new IllegalArgumentException("Specialty can't have more than 50 characters");
+                throw new NotValidSpecialtyException("Specialty can't have more than 50 characters");
             }
         }
         LOGGER.debug("Set specilty for Doctor with ID: {}", doctorId);
@@ -241,7 +241,7 @@ public class DoctorServiceImpl implements DoctorService {
         Optional<List<Integer>> specialtysId = specialtyDao.findSpecialtysId(specialty);
         if (!specialtysId.isPresent()){
             LOGGER.debug("Specialty: {} not recognized. Is not in the list", specialty);
-            throw new IllegalArgumentException("Not know specialty.");
+            throw new NotValidSpecialtyException("Not know specialty.");
         } else {
             LOGGER.debug("Add doctor Specialty List to Doctor with ID: {}", doctorId);
             doctorSpecialtyDao.addDoctorSpecialtyList(doctor.getId(),specialtysId.get());
@@ -249,24 +249,24 @@ public class DoctorServiceImpl implements DoctorService {
 
         if (workingHours == null){
             LOGGER.debug("The Working Hours of a Doctor can't be null. Doctor ID: {}", doctorId);
-            throw new IllegalArgumentException("The Working Hours list can't be null");
+            throw new NotValidWorkingHourException("The Working Hours list can't be null");
         }
         for (WorkingHours wh: workingHours){
             if (wh == null){
                 LOGGER.debug("The Working Hour list contains a null working hour. Day: {}", wh.getDayOfWeek());
-                throw new IllegalArgumentException("The Working Hours list contains a null working hour");
+                throw new NotValidWorkingHourException("The Working Hours list contains a null working hour");
             }
             if (wh.getFinishTime() == null){
                 LOGGER.debug("The Finish Time on {} is null. There can't be a null finish time", wh.getDayOfWeek());
-                throw new IllegalArgumentException("Finish Time from a Working Hour is null");
+                throw new NotValidWorkingHourException("Finish Time from a Working Hour is null");
             }
             if (wh.getStartTime() == null) {
                 LOGGER.debug("The Start Time on {} is null. There can't be a null starting time", wh.getDayOfWeek());
-                throw new IllegalArgumentException("StartTime from a Working Hour is null");
+                throw new NotValidWorkingHourException("StartTime from a Working Hour is null");
             }
             if (wh.getDayOfWeek() == null){
                 LOGGER.debug("There is a null DayOfWeek. The working hour is {}", wh);
-                throw new IllegalArgumentException("DayOfWeek from a working hour is null");
+                throw new NotValidWorkingHourException("DayOfWeek from a working hour is null");
             }
         }
         LOGGER.debug("Set working hours to Doctor with ID: {}", doctorId);
@@ -278,40 +278,40 @@ public class DoctorServiceImpl implements DoctorService {
 
         if (insurance == null){
             LOGGER.debug("The insurance map of the doctor with ID: {} is null", doctorId);
-            throw new IllegalArgumentException("Insurance map can't me null");
+            throw new NotValidInsuranceException("Insurance map can't me null");
         }
 
         for (String key: insurance.keySet()){
             if (key == null){
                 LOGGER.debug("The is a null insurance value for the Doctor with ID: {}", doctorId);
-                throw new IllegalArgumentException("There is a null Insurance");
+                throw new NotValidInsuranceException("There is a null Insurance");
             }
             if (key.length() == 0){
                 LOGGER.debug("There is an empty insurance. Doctor with ID: {}", doctorId);
-                throw new IllegalArgumentException("Insurance can't be empty");
+                throw new NotValidInsuranceException("Insurance can't be empty");
             }
             if (key.length() > 100){
                 LOGGER.debug("Doctor with ID: {}", doctorId);
                 LOGGER.debug("An insurance can't have more than 100 characters. Insurance given: {}", insurance);
-                throw new IllegalArgumentException("Insurance name can't have more than 100 characters");
+                throw new NotValidInsuranceException("Insurance name can't have more than 100 characters");
             }
             if (insurance.get(key) == null){
                 LOGGER.debug("The doctor with ID {} has a null insurance set", doctorId);
-                throw new IllegalArgumentException("There is a null Insurace Set");
+                throw new NotValidInsuranceException("There is a null Insurace Set");
             }
             for (String insuranceplan :  insurance.get(key)){
                 if (insuranceplan == null){
                     LOGGER.debug("There is a null insurance plan in {}", key);
-                    throw new IllegalArgumentException("There is an null Insurance Plan in " + key);
+                    throw new NotValidInsurancePlanException("There is an null Insurance Plan in " + key);
                 }
                 if (insuranceplan.length() == 0){
                     LOGGER.debug("There can't be an Insurance Plan with 0 characters. Doctor ID: {}", doctorId);
-                    throw new IllegalArgumentException("InsurancePlanName can't be empty");
+                    throw new NotValidInsurancePlanException("InsurancePlanName can't be empty");
                 }
                 if (insuranceplan.length() > 50){
                     LOGGER.debug("The Doctor ID is: {}", doctorId);
                     LOGGER.debug("There can't be an Insurance Plan with more than 50 characters. The insurance given is: {}", insuranceplan);
-                    throw new IllegalArgumentException("InsurancePlanName can't have more than 50 characters");
+                    throw new NotValidInsurancePlanException("InsurancePlanName can't have more than 50 characters");
                 }
             }
         }
@@ -322,7 +322,7 @@ public class DoctorServiceImpl implements DoctorService {
 
         if (!insurancesPlanIds.isPresent()) {
             LOGGER.debug("There is an unknown insurance plan: {}", insurancesPlanIds);
-            throw new IllegalArgumentException("There is a not known InsurancesPlan");
+            throw new NotValidInsurancePlanException("There is a not known InsurancesPlan");
         }else{
             LOGGER.debug("Add medical care to Dao");
             LOGGER.debug("Insurance Plan IDs: {}", insurancesPlanIds.get());
@@ -334,48 +334,48 @@ public class DoctorServiceImpl implements DoctorService {
 
         if (description == null) {
             LOGGER.debug("The Doctor description can't be null");
-            throw new IllegalArgumentException("Doctor description can't be null");
+            throw new NotValidDescriptionException("Doctor description can't be null");
         }
         if (description.getCertificate() == null){
             LOGGER.debug("The Doctor certificate can't be null");
-            throw new IllegalArgumentException("Certificate can't be null");
+            throw new NotValidCertificateException("Certificate can't be null");
         }
         if (description.getCertificate().length() > 250){
             LOGGER.debug("The Certificate can't have more than 250 characters. Certificate: {}", description.getCertificate());
-            throw new IllegalArgumentException("Certificate can't have more than 250 characters");
+            throw new NotValidCertificateException("Certificate can't have more than 250 characters");
         }
 
         if (description.getLanguages() == null){
             LOGGER.debug("The Languages of a Doctor can't be null");
-            throw new IllegalArgumentException("Languages can't be null");
+            throw new NotValidLanguagesException("Languages can't be null");
         }
 
         int size = 0;
         for (String language : description.getLanguages()){
            if (language == null) {
                LOGGER.debug("A null language was found in the Description");
-               throw new IllegalArgumentException("There is a null language");
+               throw new NotValidLanguagesException("There is a null language");
            }
 
            if (language.length() == 0){
                LOGGER.debug("A language with 0 characters was found in the Description");
-               throw new IllegalArgumentException("A language can't be empty");
+               throw new NotValidLanguagesException("A language can't be empty");
            }
             size = size + language.length();
            LOGGER.debug("Language: {}", language);
         }
         if (size > 100) {
             LOGGER.debug("A language with more than 100 can't exists");
-            throw new IllegalArgumentException("Languages size count can't have more than 100 characters");
+            throw new NotValidLanguagesException("Languages size count can't have more than 100 characters");
         }
 
         if (description.getEducation() == null){
             LOGGER.debug("The Education of a Doctor can't be null");
-            throw new IllegalArgumentException("Education can't be null");
+            throw new NotValidEducationException("Education can't be null");
         }
         if (description.getEducation().length() > 250){
             LOGGER.debug("The Education of a Doctor can't have more than 250 characters. Education: {}", description.getEducation());
-            throw new IllegalArgumentException("Education can't have more than 250 characters");
+            throw new NotValidEducationException("Education can't have more than 250 characters");
         }
         LOGGER.debug("Set descrption for doctor with ID: {}", doctorId);
         doctor.setDescription(description);
