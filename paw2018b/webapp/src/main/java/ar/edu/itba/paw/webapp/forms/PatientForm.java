@@ -37,6 +37,8 @@ public class PatientForm {
     @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su número de teléfono")
     private String phoneNumber;
 
+    private Byte[] image;
+
     public String getFirstName() {
         return firstName;
     }

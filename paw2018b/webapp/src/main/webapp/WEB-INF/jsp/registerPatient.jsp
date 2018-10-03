@@ -37,6 +37,7 @@
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
     <form:form modelAttribute="personal" method="POST" action="patientRegistration" accept-charset="ISO-8859-1">
+        <input type="file" name="fileUpload" size="50" />
         <div class="row">
             <div class="col">
                 <c:if test="${wrongFirstName eq true}">

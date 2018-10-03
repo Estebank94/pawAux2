@@ -1,9 +1,14 @@
 package ar.edu.itba.paw.webapp.config;
 
 
+import ar.edu.itba.paw.interfaces.FileUploadDao;
+import ar.edu.itba.paw.interfaces.FileUploadService;
+import org.apache.commons.fileupload.FileUpload;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +18,14 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.orm.hibernate4.HibernateTransactionManager;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -30,6 +39,7 @@ import java.nio.charset.StandardCharsets;
 
 @EnableWebMvc
 @ComponentScan({ "ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.services", "ar.edu.itba.paw.persistence" })
+@EnableTransactionManagement(mode = AdviceMode.PROXY)
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
@@ -38,6 +48,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
+
+	@Autowired
+	private FileUpload fileUpload;
 
 	@Bean
 	public ViewResolver viewResolver() {
@@ -100,6 +113,41 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		authProvider.setUserDetailsService(userDetailsService);
 		authProvider.setPasswordEncoder(passwordEncoder());
 		return authProvider;
+	}
+
+	@Bean
+	public LocalSessionFactoryBean sessionFactory() {
+		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+		sessionFactory.setDataSource(dataSource());
+		sessionFactory.setPackagesToScan(
+				new String[] { "ar.edu.itba.paw"  }
+		);
+
+		return sessionFactory;
+	}
+
+	@Bean
+	@Autowired
+	public HibernateTransactionManager transactionManager(
+			SessionFactory sessionFactory) {
+		HibernateTransactionManager txManager = new HibernateTransactionManager();
+		txManager.setSessionFactory(sessionFactory);
+		return txManager;
+	}
+
+
+	@Autowired
+	@Bean(name = "fileUploadDao")
+	public FileUploadDao getUserDao(SessionFactory sessionFactory) {
+		return new FileUploadService(sessionFactory);
+	}
+
+	@Bean(name = "multipartResolver")
+	public CommonsMultipartResolver getCommonsMultipartResolver() {
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+		multipartResolver.setMaxUploadSize(2097152);   // 2MB
+		multipartResolver.setMaxInMemorySize(1048576);  // 1MB
+		return multipartResolver;
 	}
 }
 

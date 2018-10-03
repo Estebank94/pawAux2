@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.DoctorService;
+import ar.edu.itba.paw.interfaces.FileUploadDao;
 import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.interfaces.SearchService;
 import ar.edu.itba.paw.models.*;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,6 +57,9 @@ public class RegistrationController {
 
     @Autowired
     protected AuthenticationManager authenticationManager;
+
+    @Autowired
+    private FileUploadDao fileUploadDao;
 
 //    @RequestMapping(value="/doctorRegistration", method = { RequestMethod.POST }/*, consumes = {"multipart/form-data"}*/)
 //    public ModelAndView doctorRegistration (@RequestParam ("exampleFormControlFile1") MultipartFile image,
@@ -385,7 +390,7 @@ public class RegistrationController {
 
     @RequestMapping(value="/patientRegistration", method = { RequestMethod.POST })
     public ModelAndView patientRegistration (@Valid @ModelAttribute("personal") PatientForm patientForm, final BindingResult errors,
-                                             HttpServletRequest request) {
+                                             HttpServletRequest request, @RequestParam CommonsMultipartFile[] fileUpload) {
 
         LOGGER.debug("RegistrationController: patientRegistration");
         final ModelAndView mav = new ModelAndView("index");
@@ -407,6 +412,18 @@ public class RegistrationController {
 
                 LOGGER.debug("AutoLogIn of patient with ID: {}", patient.getPatientId());
                 authenticateUserAndSetSession(patient, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
+
+                if (fileUpload != null && fileUpload.length > 0) {
+                    for (CommonsMultipartFile aFile : fileUpload){
+
+                        System.out.println("Saving file: " + aFile.getOriginalFilename());
+
+                        UploadFile uploadFile = new UploadFile();
+                        uploadFile.setFileName(aFile.getOriginalFilename());
+                        uploadFile.setData(aFile.getBytes());
+                        fileUploadDao.save(uploadFile);
+                    }
+                }
 
                 mav.addObject("search", new Search());
                 mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
