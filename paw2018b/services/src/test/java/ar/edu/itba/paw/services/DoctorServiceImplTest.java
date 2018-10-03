@@ -22,7 +22,7 @@ import java.util.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
-@Sql("classpath:doctorServiceTest.sql")
+@Sql("classpath:ServiceTest.sql")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 public class DoctorServiceImplTest {
