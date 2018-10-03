@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.DoctorDao;
 import ar.edu.itba.paw.interfaces.PatientDao;
 import ar.edu.itba.paw.interfaces.PatientService;
+import ar.edu.itba.paw.models.InputValidation;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.*;
 import org.slf4j.Logger;
@@ -46,6 +47,11 @@ public class PatientServiceImpl implements PatientService {
             throw new NotValidFirstNameException("Username firstname maxlength is 50");
         }
 
+        if (!InputValidation.validUTF8(firstName.getBytes())){
+            LOGGER.debug("The first name is not a valid UTF8");
+            throw new NotValidFirstNameException();
+        }
+
         if (lastName == null) {
             LOGGER.debug("Last Name of a Patient is null");
             throw new NotValidLastNameException("last name can't be null");
@@ -58,6 +64,11 @@ public class PatientServiceImpl implements PatientService {
         if (lastName.length() > 45){
             LOGGER.debug("Last Name longer than 45 characters. Last Name: {}", lastName);
             throw new NotValidLastNameException("Username Lastname maxlength is 45");
+        }
+
+        if (!InputValidation.validUTF8(lastName.getBytes())){
+            LOGGER.debug("The last name is not a valid UTF-8");
+            throw new NotValidLastNameException();
         }
 
         if (phoneNumber == null) {
@@ -74,6 +85,11 @@ public class PatientServiceImpl implements PatientService {
             throw new NotValidPhoneNumberException("phonenumber can't have more than 20 characters");
         }
 
+        if (!InputValidation.validUTF8(phoneNumber.getBytes())){
+            LOGGER.debug("The phonenumber is not a valid UTF8");
+            throw new NotValidPhoneNumberException();
+        }
+
         if (email == null) {
             LOGGER.debug("Email is null");
             throw new NotValidEmailException("email can't be null");
@@ -81,6 +97,11 @@ public class PatientServiceImpl implements PatientService {
         if (email.length() > 90){
             LOGGER.debug("Email has more than 90 characters. Email given: {}", email);
             throw new NotValidEmailException("Email can't have more than 90 characters");
+        }
+
+        if (!InputValidation.validUTF8(email.getBytes())){
+            LOGGER.debug("The email is not a valid UTF8");
+            throw new NotValidEmailException();
         }
 
         if (password == null){
@@ -95,6 +116,10 @@ public class PatientServiceImpl implements PatientService {
         if (password.length() > 55){
             LOGGER.debug("Password has more than 72 characters. Password given: {}", password);
             throw new NotValidPasswordException("password can't have more than 72 characters");
+        }
+        if (!InputValidation.validUTF8(password.getBytes())){
+            LOGGER.debug("The password is not a valid UTF8");
+            throw new NotValidPhoneNumberException();
         }
 
         String finalpassword = passwordEncoder.encode(password);
@@ -120,39 +145,39 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Boolean setDoctorId(Integer patientId, Integer doctorId) {
+    public Boolean setDoctorId(Integer patientId, Integer doctorId) throws NotFoundDoctorException, NotValidPatientIdException, NotValidDoctorIdException, NotCreatePatientException {
         LOGGER.debug("PatientServiceImpl: setDoctorId");
         if (patientId == null){
             LOGGER.debug("Patient ID: {} not found", patientId);
-            throw new IllegalArgumentException("patientId can't be null");
+            throw new NotValidPatientIdException("patientId can't be null");
         }
         if (patientId <= 0){
             LOGGER.debug("Patient ID: {} is negative", patientId);
-            throw new IllegalArgumentException("PatientId can't be negative or zero");
+            throw new NotValidPatientIdException("PatientId can't be negative or zero");
         }
-        if(!patientDao.findPatientById(patientId).isPresent()){
-            LOGGER.debug("Patient not found");
-            throw new NotFoundException("Patient was not found");
-        }
+
         if (doctorId == null){
             LOGGER.debug("Doctor ID is null");
-            throw new IllegalArgumentException("DoctorId can't be null");
+            throw new NotValidDoctorIdException("DoctorId can't be null");
         }
         if (doctorId <= 0){
             LOGGER.debug("Doctor ID is negative. ID given: {}", doctorId);
-            throw new IllegalArgumentException("DoctorId can't be negative or zero");
+            throw new NotValidDoctorIdException("DoctorId can't be negative or zero");
         }
         LOGGER.debug("Calling: doctorDao.findDoctorById(patientId).isPresent()");
         LOGGER.debug("patientID: {}", patientId);
-        if(!doctorDao.findDoctorById(patientId).isPresent()){
-            LOGGER.debug("Doctor with ID: {} not found", patientId);
-            throw new NotFoundException("Doctor was not found");
-        }
 
         LOGGER.debug("Calling patientDao.setDoctorId(patientId, doctorId)");
         LOGGER.debug("patientID: {}", patientId);
         LOGGER.debug("doctorId {}", doctorId);
-        return patientDao.setDoctorId(patientId, doctorId);
+        Boolean ans;
+        try {
+            ans = patientDao.setDoctorId(patientId,doctorId);
+        } catch (NotCreatePatientException e) {
+            LOGGER.trace("Error on set Doctor Id");
+            throw new NotCreatePatientException();
+        }
+        return ans;
     }
 
     @Override

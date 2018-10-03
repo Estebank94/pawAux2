@@ -2,6 +2,8 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.PatientDao;
 import ar.edu.itba.paw.models.Patient;
+import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
+import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.RepeatedEmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -56,13 +58,18 @@ public class PatientDaoImpl implements PatientDao {
         return patient;
     }
 
-    public Boolean setDoctorId(Integer patientId, Integer doctorId){
-
-        if( jdbcTemplate.update("UPDATE patient set doctorId = ? where id = ?", doctorId, patientId) == 1 ){
-            return true;
+    public Boolean setDoctorId(Integer patientId, Integer doctorId) throws NotCreatePatientException {
+        int ans;
+        try {
+            ans = jdbcTemplate.update("UPDATE patient set doctorId = ? where id = ?", doctorId, patientId);
+        } catch (Exception e){
+            throw new NotCreatePatientException();
         }
-
-        return false;
+        if (ans == 1){
+            return true;
+        }else{
+            return false;
+        }
 
     }
 

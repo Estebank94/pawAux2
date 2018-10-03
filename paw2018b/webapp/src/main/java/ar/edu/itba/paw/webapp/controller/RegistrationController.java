@@ -145,6 +145,15 @@ public class RegistrationController {
                 return showDoctorRegistration(personalForm).addObject("wrongSex",true);
             } catch (NotValidLicenceException e) {
                 return showDoctorRegistration(personalForm).addObject("wrongLicence",true);
+            } catch (NotFoundDoctorException e) {
+                LOGGER.trace("404");
+                return new ModelAndView("404");
+            } catch (NotValidPatientIdException e) {
+                LOGGER.trace("500");
+                return new ModelAndView("500");
+            } catch (NotValidDoctorIdException e) {
+                LOGGER.trace("500");
+                return new ModelAndView("500");
             }
         }
 

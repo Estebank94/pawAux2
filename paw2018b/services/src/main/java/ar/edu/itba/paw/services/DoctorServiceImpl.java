@@ -104,6 +104,10 @@ public class DoctorServiceImpl implements DoctorService {
             LOGGER.debug("The First Name of a doctor can't have more than 45 characters. The name givven is: {}", firstName);
             throw new NotValidFirstNameException("Doctor firstname maxlength is 50");
         }
+        if (!InputValidation.validUTF8(firstName.getBytes())){
+            LOGGER.debug("The first name is not a valid UTF8");
+            throw new NotValidFirstNameException();
+        }
 
         if (lastName == null) {
             LOGGER.debug("The Last Name of a doctor can't be null");
@@ -119,6 +123,11 @@ public class DoctorServiceImpl implements DoctorService {
             throw new NotValidLastNameException("Doctor lastName maxlength is 50");
         }
 
+        if (!InputValidation.validUTF8(lastName.getBytes())){
+            LOGGER.debug("The last name is not a valid UTF-8");
+            throw new NotValidLastNameException();
+        }
+
         if (phoneNumber == null) {
             LOGGER.debug("The Phone Number of a doctor can't be null.");
             throw new NotValidPhoneNumberException("phonenumber can't be null");
@@ -126,6 +135,10 @@ public class DoctorServiceImpl implements DoctorService {
         if (phoneNumber.length() == 0){
             LOGGER.debug("The Phone Number of a doctor must have at least 8 numbers");
             throw new NotValidPhoneNumberException("phonenumber firstname can't be empty");
+        }
+        if (!InputValidation.validUTF8(phoneNumber.getBytes())){
+            LOGGER.debug("The phonenumber is not a valid UTF8");
+            throw new NotValidPhoneNumberException();
         }
         /*TODO: validar regExp de phone*/
         if (phoneNumber.length() > 20){
@@ -173,6 +186,10 @@ public class DoctorServiceImpl implements DoctorService {
         if (address.length() > 100){
             LOGGER.debug("The address of a Doctor can't have more tan 100 characters. The address given is: {}", address);
             throw new NotValidAddressException("address can't have more than 100 characters");
+        }
+        if (!InputValidation.validUTF8(address.getBytes())){
+            LOGGER.debug("The first name is not a valid UTF8");
+            throw new NotValidAddressException();
         }
 
         LOGGER.debug("Doctor's First Name: {}", firstName);
@@ -344,6 +361,10 @@ public class DoctorServiceImpl implements DoctorService {
             LOGGER.debug("The Certificate can't have more than 250 characters. Certificate: {}", description.getCertificate());
             throw new NotValidCertificateException("Certificate can't have more than 250 characters");
         }
+        if (!InputValidation.validUTF8(description.getCertificate().getBytes())){
+            LOGGER.debug("The first name is not a valid UTF8");
+            throw new NotValidCertificateException();
+        }
 
         if (description.getLanguages() == null){
             LOGGER.debug("The Languages of a Doctor can't be null");
@@ -376,6 +397,10 @@ public class DoctorServiceImpl implements DoctorService {
         if (description.getEducation().length() > 250){
             LOGGER.debug("The Education of a Doctor can't have more than 250 characters. Education: {}", description.getEducation());
             throw new NotValidEducationException("Education can't have more than 250 characters");
+        }
+        if (!InputValidation.validUTF8(description.getEducation().getBytes())){
+            LOGGER.debug("The first name is not a valid UTF8");
+            throw new NotValidEducationException();
         }
         LOGGER.debug("Set descrption for doctor with ID: {}", doctorId);
         doctor.setDescription(description);
