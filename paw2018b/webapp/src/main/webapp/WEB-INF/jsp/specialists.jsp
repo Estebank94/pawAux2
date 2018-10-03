@@ -131,14 +131,15 @@
                                 </c:forEach>
                             </div>
                             <br>
-                            <div class="row container">
-                                <i class="fas fa-star star-yellow"></i>
-                                <i class="fas fa-star star-yellow"></i>
-                                <i class="fas fa-star star-yellow"></i>
-                                <i class="fas fa-star star-yellow"></i>
-                                <i class="fas fa-star star-grey"></i>
-                            </div>
-                            <p class="doctor-text">"Muy buena atención, muy puntual"</p>
+                            <p class="doctor-text">${doctorListItem.description.certificate}</p>
+                            <%--<div class="row container">--%>
+                                <%--<i class="fas fa-star star-yellow"></i>--%>
+                                <%--<i class="fas fa-star star-yellow"></i>--%>
+                                <%--<i class="fas fa-star star-yellow"></i>--%>
+                                <%--<i class="fas fa-star star-yellow"></i>--%>
+                                <%--<i class="fas fa-star star-grey"></i>--%>
+                            <%--</div>--%>
+                            <%--<p class="doctor-text">"Muy buena atención, muy puntual"</p>--%>
                             <br>
                             <%--
                             <p class="doctor-text"><i class="far fa-clock"></i> ${doctorListItem.workingHours} </p>

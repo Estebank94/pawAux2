@@ -137,6 +137,10 @@ p
   border-color: #257CBF;
 }
 
+.btn-primary.custom-btn:hover {
+  box-shadow: inset 0 0 100px 100px rgba(0, 0, 0, 0.1);
+}
+
 .jumbotron {
   background-color: #FFFFFF !important;
 }
