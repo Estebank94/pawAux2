@@ -33,7 +33,7 @@
     <div class="inner-div card">
         <p style="text-align: center;"><i style="color: #02bf02; font-size: 64px; margin-top:64px;" class="fas fa-check-circle"></i></p>
         <h2 style="text-align: center;">¡Turno Reservado!</h2>
-        <p style="text-align: center; margin-left:16px; margin-right:16px;">Te hemos reservado un turno con ${doctor.firstName} ${doctor.lastName} el ${appointmentDay} a las ${appointmentTime}.<p>
+        <p style="text-align: center; margin-left:16px; margin-right:16px;">Te hemos reservado un turno con <c:out value="${doctor.firstName}"/> <c:out value="${doctor.lastName}"/> el <c:out value="${appointmentDay}"/> a las <c:out value="${appointmentTime}"/>.<p>
         <br>
         <button style="margin-bottom:64px;" class="btn btn-primary custom-btn center-horiz" type="button" onclick="window.location='<c:url value="/"/>'">
             Volver al Inicio

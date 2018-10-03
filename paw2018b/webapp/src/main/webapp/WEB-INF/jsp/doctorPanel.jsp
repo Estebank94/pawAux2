@@ -33,7 +33,7 @@
                 <form:form action="${pageContext.request.contextPath}/logout" method="post">
                     <security:authentication property="principal.username" var="userName"/>
                     <div class="dropdown">
-                        <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:white !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b>${userName}</b></button>
+                        <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:white !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                             <button class="dropdown-item" type="submit">Cerrar Sesion</button>
                         <%--<button class="dropdown-item" type="button">Registrate como especialista</button>--%>
@@ -51,11 +51,11 @@
             <div class="card-body">
                 <div class="card-text">
                     <div class="row">
-                        <img class="avatar big" src=${doctor.avatar}>
+                        <img class="avatar big" src=<c:out value="${doctor.avatar}"/>>
                         <div class="doctor-info-container">
                             <div>
                                 <p class="doctor-specialty">Bienvenido</p>
-                                <h3 class="doctor-name">Dr. ${doctor.lastName}, ${doctor.firstName}</h3>
+                                <h3 class="doctor-name">Dr. <c:out value="${doctor.lastName}"/>, <c:out value="${doctor.firstName}"/></h3>
                                 <br>
                                 <c:if test="${professionalIncomplete eq true}">
                                     <button type="button" class="btn btn-outline-secondary" onclick="window.location='<c:url value="/doctorProfile"/>'"><i class="fas fa-cog"></i>Completar Perfil</button>
@@ -80,7 +80,7 @@
                             <c:forEach items="${appointments}" var="appointment">
                                     <div style="margin-left: 16px; margin-right: 16px;">
                                         <h3>
-                                            ${appointment.key.dayOfMonth} de ${appointment.key.month} de ${appointment.key.year}
+                                            <c:out value="${appointment.key.dayOfMonth}"/> de <c:out value="${appointment.key.month}"/> de <c:out value="${appointment.key.year}"/>
                                         </h3>
                                         <br>
                                         <c:forEach items="${appointment.value}" var="listItems">
@@ -89,9 +89,9 @@
                                                     <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">
                                                     <div class="center-vertical">
                                                         <div>
-                                                                <p style="margin-bottom: 0px">${listItems.appointmentTime}</p>
-                                                            <h5><b>${listItems.clientLastName}</b>,  ${listItems.clientFirstName}</h5>
-                                                            Telefono: ${listItems.phoneNumber}
+                                                                <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
+                                                            <h5><b><c:out value="${listItems.clientLastName}"/></b>,  <c:out value="${listItems.clientFirstName}"/></h5>
+                                                            Telefono: <c:out value="${listItems.phoneNumber}"/>
                                                         </div>
                                                     </div>
                                                 </div>

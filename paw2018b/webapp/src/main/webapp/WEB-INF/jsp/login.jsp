@@ -35,7 +35,7 @@
                         <b style="color: #dc3545">Lo siento! Usuario y constraseña invalida. Probar nuevamente!</b>
                     </c:if>
                     <c:if test="${param.logout != null}">
-                        <c:redirect url="/"/>
+                        <c:redirect><c:url value="/"/></c:redirect>
                     </c:if>
                     <div>
                         <label for="username">Email</label>

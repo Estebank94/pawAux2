@@ -12,7 +12,7 @@
     <title>Errors</title>
 </head>
 <body>
-<h1>${errorMsg}</h1>
+<h1><c:out value="${errorMsg}"/></h1>
 <a href="<c:url value="/"/>>Back to HomePage</a>
 </body>
 </html>
