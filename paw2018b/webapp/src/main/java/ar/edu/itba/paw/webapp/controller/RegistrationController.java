@@ -88,7 +88,7 @@ public class RegistrationController {
                         .addObject("wrongSex",false)
                         .addObject("wrongLicence",false);
             }
-            return showDoctorRegistration(personalForm);
+            return showDoctorRegistration(personalForm).addObject("noMatchingPassword", true);
         }else{
 
             final ModelAndView mav = new ModelAndView("registerSpecialist2");
@@ -418,7 +418,7 @@ public class RegistrationController {
             }/*else if(patientService.findPatientByEmail(personalForm.getEmail()) != null){
                 showDoctorRegistration(personalForm).addObject("userExists", true);
             }*/
-            return showPatientRegistration(patientForm, "");
+            return showPatientRegistration(patientForm, "").addObject("noMatchingPassword", true);
         } else {
             try {
                 LOGGER.debug("patientRegistration: create a patient");
