@@ -70,7 +70,7 @@ public class PatientServiceImplTest {
     }
 
     @Test
-    public void testFindByEmail(){
+    public void testFindByEmail() throws Exception{
 
         Patient patientByEmail = patientServiceImpl.findPatientByEmail(PATIENT_EMAIL);
 
@@ -81,7 +81,7 @@ public class PatientServiceImplTest {
     }
 
     @Test
-    public void testFindById() {
+    public void testFindById() throws Exception{
 
         Patient patientById = patientServiceImpl.findPatientById(PATIENT_ID);
 
