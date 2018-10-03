@@ -76,8 +76,8 @@
                                         <div>
                                             <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
                                             <h5><b><c:out value="${listItems.doctorLastName}"/></b>,  <c:out value="${listItems.doctorFirstName}"/></h5>
-                                                <p><spring:message code="phone"/>: <c:out value="${listItems.doctorPhonenumber}"/></p>
-                                                <p><spring:message code="address"/><c:out value="${listItems.doctorAddress}"/></p>
+                                                <p style="margin-bottom: 0rem"><strong><spring:message code="phone"/>:</strong> <c:out value="${listItems.doctorPhonenumber}"/></p>
+                                                <p><strong><spring:message code="address"/>:</strong> <c:out value="${listItems.doctorAddress}"/></p>
                                         </div>
                                     </div>
                                 </div>

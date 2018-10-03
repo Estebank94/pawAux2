@@ -123,11 +123,11 @@
                 </div>
                 <div>
                     <div style="background-color: #F3F3F4; border-radius: 5px; padding: 16px; padding-bottom: 0px; margin-top: 32px; margin-bottom:32px">
-                        <h3 class="doctor-name">Reservá un Turno</h3>
+                        <h3 class="doctor-name"><spring:message code="specialist.reserveAppointment" /></h3>
                         <form:form modelAttribute="appointment" method="POST" action="/specialist/${doctor.id}" id="appointment">
                             <div class="row">
                                     <div class="col-sm-5">
-                                        <label for="day">Día</label>
+                                        <label for="day"><spring:message code="specialist.appointmentDay" /></label>
                                         <select class="custom-select" id="day" path="day" cssStyle="cursor: pointer;">
                                             <option value="no" selected>Elegí el Día</option>
                                             <c:forEach items="${appointmentsAvailable}" var="date">
@@ -136,7 +136,7 @@
                                         </select>
                                     </div>
                                 <div class="col-sm-5">
-                                    <label for="time">Horario</label>
+                                    <label for="time"><spring:message code="specialist.appointmentTime" /></label>
                                     <select class="custom-select" disabled="false" id="time" path="time" cssStyle="cursor: pointer;">
                                         <option value="no" label="Elegi el Horario" selected>Elegí el Horario</option>
                                     <c:forEach items="${appointmentsAvailable}" var="date">
@@ -162,10 +162,10 @@
                         </form:form>
                     </div>
 
-                    <h3 id="information">Información Profesional</h3>
+                    <h3 id="information"><spring:message code="specialist.infoTitle" /></h3>
                     <br>
                     <c:if test="${doctor.description.certificate != null}">
-                        <h4>Certificación</h4>
+                        <h4><spring:message code="specialist.certificate" /></h4>
                         <c:forEach items="${doctor.description.certificate}" var="certificate">
                             <c:out value="${certificate}"/>
                         </c:forEach>
@@ -173,14 +173,14 @@
                         <br>
                     </c:if>
                     <c:if test="${doctor.description.education != null}">
-                        <h4>Educación</h4>
+                        <h4><spring:message code="specialist.education" /></h4>
                         <c:forEach items="${doctor.description.education}" var="education">
                            <c:out value="${education}"/>
                         </c:forEach>
                         <br>
                         <br>
                     </c:if>
-                    <h4>Prepagas & Planes</h4>
+                    <h4><spring:message code="specialist.insurances" /></h4>
                     <c:forEach items="${insuranceNameList}" var="insuranceNameList">
                         <b><c:out value="${insuranceNameList.key}"/></b>
                         </br>
@@ -193,7 +193,7 @@
                         </br>
                     </c:forEach>
                     <c:if test="${doctor.description.languages.size() != 0}">
-                        <h4>Ídiomas</h4>
+                        <h4><spring:message code="specialist.languages" /></h4>
                         <c:forEach items="${doctor.description.languages}" var="languages">
                             <c:out value="${languages}"/>
                         </c:forEach>
