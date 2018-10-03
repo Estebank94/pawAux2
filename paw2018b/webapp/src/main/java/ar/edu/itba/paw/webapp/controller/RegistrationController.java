@@ -362,13 +362,13 @@ public class RegistrationController {
         LOGGER.debug("AutoLogIn of patient with ID: {}", patient.getPatientId());
         authenticateUserAndSetSession(patient, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
 
-        final ModelAndView mav = new ModelAndView("index");
-        mav.addObject("search", new Search());
-        mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
-        mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
+        //final ModelAndView mav = new ModelAndView("index");
+        //mav.addObject("search", new Search());
+        //mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
+        //mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
 
         //return mav;
-        //final ModelAndView mav = new ModelAndView("finalStep");
+        final ModelAndView mav = new ModelAndView("finalStep");
         return mav;
     }
 
