@@ -102,7 +102,8 @@ INSERT INTO doctor (firstName, lastName, sex, phoneNumber, address, licence, ava
 VALUES ('Rihanna', 'Remo', 'F', '47777771', 'Bulnes 211', '4321',
 'https://dsw5h1xg5uvx.cloudfront.net/93af945e-50b0-45ef-a181-c1b638a0c898circle_medium.png', '3', 'martes 9am', 'Recoleta');
 
-INSERT INTO PATIENT (firstname, lastname, phonenumber, email, password, id) VALUES ('Ramon', 'Rodriguez', '444444444', 'a@a.com', '123456', 5);
+INSERT INTO PATIENT (firstname, lastname, phonenumber, email, password, id) VALUES ('Roberto Nicolas Agustin', 'Rosa', '444444444', 'Roberto@rosa.com', 'ThisIsSecret', 5);
+INSERT INTO PATIENT (firstname, lastname, phonenumber, email, password, id) VALUES ('Imanol', 'Alonso', '44444321', 'imanol@waldocclient.com', 'password', 6);
 
 INSERT INTO insurance (insuranceName, id) VALUES ('Accord', 206);
 INSERT INTO insurance (insuranceName, id) VALUES ('OSECAC', 210);
