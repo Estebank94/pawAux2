@@ -13,8 +13,11 @@ public class Appointment implements Comparable<Appointment>{
     private Integer doctorId;
     private String clientFirstName;
     private String clientLastName;
+    private String clientPhonenumber;
+    private String doctorPhonenumber;
     private String doctorFirstName;
     private String doctorLastName;
+    private String doctorAddress;
 
     public String getDoctorFirstName() {
         return doctorFirstName;
@@ -32,15 +35,21 @@ public class Appointment implements Comparable<Appointment>{
         this.doctorLastName = doctorLastName;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getClientPhonenumbe() {
+        return clientPhonenumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setClientPhonenumbe(String clientPhonenumbe) {
+        this.clientPhonenumber = clientPhonenumber;
     }
 
-    private String phoneNumber;
+    public String getDoctorPhonenumber() {
+        return doctorPhonenumber;
+    }
+
+    public void setDoctorPhonenumber(String phoneNumber) {
+        this.doctorPhonenumber = phoneNumber;
+    }
 
     public Appointment(LocalDate appointmentDay, LocalTime appointmentTime) {
         this.appointmentDay = appointmentDay;
@@ -56,16 +65,17 @@ public class Appointment implements Comparable<Appointment>{
         this.clientId = clientId;
         this.clientFirstName = clientFirstName;
         this.clientLastName = clientLastName;
-        this.phoneNumber = phoneNumber;
+        this.clientPhonenumber = phoneNumber;
     }
     public Appointment(LocalDate appointmentDay, LocalTime appointmentTime, Integer doctorId, String doctorFirstName, String doctorLastName,
-                       String phoneNumber, Integer clientId) {
+                       String phoneNumber, Integer clientId, String doctorAddress) {
         this.appointmentDay = appointmentDay;
         this.appointmentTime = appointmentTime;
         this.doctorId = clientId;
-        this.clientFirstName = doctorFirstName;
-        this.clientLastName = doctorLastName;
-        this.phoneNumber = phoneNumber;
+        this.doctorFirstName = doctorFirstName;
+        this.doctorLastName = doctorLastName;
+        this.doctorPhonenumber = phoneNumber;
+        this.doctorAddress = doctorAddress;
     }
 
     public LocalDate getAppointmentDay() {
@@ -155,6 +165,14 @@ public class Appointment implements Comparable<Appointment>{
 
     public void setClientLastName(String clientLastName) {
         this.clientLastName = clientLastName;
+    }
+
+    public String getDoctorAddress() {
+        return doctorAddress;
+    }
+
+    public void setDoctorAddress(String doctorAddress) {
+        this.doctorAddress = doctorAddress;
     }
 }
 

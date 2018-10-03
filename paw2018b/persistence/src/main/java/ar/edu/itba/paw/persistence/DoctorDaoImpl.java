@@ -235,7 +235,8 @@ import java.util.*;
                 LocalTime.parse(rs.getString("appointmenttime")),
                 Integer.valueOf(rs.getInt("clientid")),
                 rs.getString("firstname"),
-                rs.getString("lastname"), rs.getString("phoneNumber"));
+                rs.getString("lastname"),
+                rs.getString("phoneNumber"));
 
 
         private Set<Appointment> findDoctorAppointmentsById(Integer id){

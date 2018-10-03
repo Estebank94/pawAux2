@@ -92,7 +92,7 @@
                                                         <div>
                                                                 <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
                                                                 <h5><b><c:out value="${listItems.clientLastName}"/></b>,  <c:out value="${listItems.clientFirstName}"/></h5>
-                                                                <p><spring:message code="phone"/>: <c:out value="${listItems.phoneNumber}"/></p>
+                                                                <p><spring:message code="phone"/>: <c:out value="${listItems.clientPhonenumbe}"/></p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -120,7 +120,8 @@
                                                     <div>
                                                         <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
                                                         <h5><b><c:out value="${listItems.doctorLastName}"/></b>,  <c:out value="${listItems.doctorFirstName}"/></h5>
-                                                        <%--<p><spring:message code="phone"/>: <c:out value="${listItems.phoneNumber}"/></p>--%>
+                                                        <p><spring:message code="phone"/><c:out value="${listItems.doctorPhonenumber}"/></p>
+                                                        <p><spring:message code="address"/>${listItems.doctorAddress}</p>
                                                     </div>
                                                 </div>
                                             </div>

@@ -104,13 +104,14 @@ public class PatientDaoImpl implements PatientDao {
             rs.getString("firstname"),
             rs.getString("lastname"),
             rs.getString("phoneNumber"),
-            Integer.valueOf(rs.getInt("clientId")));
+            Integer.valueOf(rs.getInt("clientId")),
+            rs.getString("address"));
 
 
     private Set<Appointment> findPacientAppointmentsById(Integer id){
         Set<Appointment> appointments = new HashSet<>();
         StringBuilder query = new StringBuilder();
-        query.append("SELECT appointment.doctorId, appointment.clientId, appointmentDay, appointmentTime, doctor.firstname , doctor.lastname, doctor.phoneNumber ")
+        query.append("SELECT appointment.doctorId, appointment.clientId, appointmentDay, appointmentTime, doctor.firstname , doctor.lastname, doctor.phoneNumber,doctor.address ")
                 .append("FROM doctor ")
                 .append("JOIN appointment ON doctor.id = appointment.doctorId ")
                 .append("JOIN patient ON appointment.clientid = patient.id ")
