@@ -321,7 +321,7 @@
         </div>
         <br>
         <div class="container row">
-            <input type="submit" class="btn btn-primary" value="Registrar" path="submit"/>
+            <input type="submit" class="btn btn-primary custom-btn" value="Registrar" path="submit"/>
             <span style="margin-left: 8px;"></span>
             <c:if test="${cancelButton eq true}">
                 <input type="button" class="btn btn-secondary" value="Cancelar" onclick="cancel()"/>

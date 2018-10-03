@@ -42,7 +42,7 @@
                 <c:if test="${wrongFirstName eq true}">
                     <b style="color: #dc3545">Lo siento! Su nombre es incorrecto, por favor, reinterntarlo</b>
                 </c:if>
-                <label for="exampleInputEmail1">Nombre</label>
+                <label for="exampleInputEmail1"><strong>Nombre</strong></label>
                 <form:input type="text" class="form-control" placeholder="Ingresá tu nombre" path="firstName"/>
                 <form:errors path="firstName" cssStyle="color: crimson"  element="p"></form:errors>
             </div>
@@ -50,7 +50,7 @@
                 <c:if test="${wrongLastName eq true}">
                     <b style="color: #dc3545">Lo siento! Su apellido es incorrecto, por favor, reinterntarlo</b>
                 </c:if>
-                <label for="exampleInputEmail1">Apellido</label>
+                <label for="exampleInputEmail1"><strong>Apellido</strong></label>
                 <form:input type="text" class="form-control" placeholder="Ingresá tu apellido" path="lastName"/>
                 <form:errors path="lastName" cssStyle="color: crimson"  element="p"></form:errors>
             </div>
@@ -63,7 +63,7 @@
             <b style="color: #dc3545">Lo siento! Su email ya se encuentra registrado con otro usuario, por favor, intente otro mail</b>
         </c:if>
         <div>
-            <label for="exampleInputEmail1">Email</label>
+            <label for="exampleInputEmail1"><strong>Email</strong></label>
             <form:input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu mail" path="email"/>
             <form:errors path="email" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
@@ -76,7 +76,7 @@
                 <b style="color: #dc3545">Lo siento! Su contraseña es incorrecta, por favor, reinterntarlo</b>
             </c:if>
             <div class="col">
-                <label for="inputPassword5">Contraseña</label>
+                <label for="inputPassword5"><strong>Contraseña</strong></label>
                 <form:input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" placeholder="Creá tu contraseña" path="password"/>
                 <form:errors path="password" cssStyle="color: crimson"  element="p"></form:errors>
                 <small id="passwordHelpBlock" class="form-text text-muted">
@@ -84,7 +84,7 @@
                 </small>
             </div>
             <div class="col">
-                <label for="inputPassword5">Confirma Contraseña</label>
+                <label for="inputPassword5"><strong>Confirma Contraseña</strong></label>
                 <form:input type="password" id="inputPassword5" class="form-control" placeholder="Confirmá tu contraseña" path="passwordConfirmation"/>
                 <form:errors path="passwordConfirmation" cssStyle="color: crimson"  element="p"></form:errors>
             </div>
@@ -94,13 +94,13 @@
             <b style="color: #dc3545">Lo siento! Su telefono es incorrecto, por favor, reinterntarlo</b>
         </c:if>
         <div>
-            <label for="exampleInputEmail1">Teléfono</label>
+            <label for="exampleInputEmail1"><strong>Teléfono</strong></label>
             <form:input class="form-control" id="exampleInputEmail1"  placeholder="Ingresá tu telefono" path="phoneNumber"/>
             <form:errors path="phoneNumber" cssStyle="color: crimson"  element="p"></form:errors>
         </div>
         <br>
 
-        <input type="submit" class="btn btn-primary" value="Registrar" path="submit" />
+        <input type="submit" class="btn btn-primary custom-btn" value="Registrar" path="submit" />
         <input type="button" class="btn btn-secondary" value="Cancelar" onclick="window.location='<c:url value="/"/>'"/>
     </form:form>
     <br>
