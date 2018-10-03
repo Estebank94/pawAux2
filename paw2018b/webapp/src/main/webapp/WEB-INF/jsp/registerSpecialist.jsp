@@ -39,7 +39,7 @@
     <form:form modelAttribute="personal" method="POST" action="doctorRegistration" accept-charset="ISO-8859-1">
         <div class="row">
             <div class="col">
-                <label for="exampleInputEmail1"><strong><spring:message code="name"/s></strong></label>
+                <label for="exampleInputEmail1"><strong><spring:message code="name"/></strong></label>
                 <form:input type="text" class="form-control" placeholder="Ingresá tu nombre" path="firstName"/>
                 <form:errors path="firstName" cssStyle="color: crimson"  element="p"></form:errors>
                 <c:if test="${wrongFirstName eq true}">

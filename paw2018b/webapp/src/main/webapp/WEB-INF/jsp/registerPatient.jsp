@@ -33,7 +33,7 @@
     <br>
     <br>
     <h2>¡<spring:message code="dropdown.patientRegister"/>!</h2>
-    <p><spring:message code="register.personalInfo">.</p>
+    <p><spring:message code="register.personalInfo"/>.</p>
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
     <form:form modelAttribute="personal" method="POST" action="patientRegistration" accept-charset="ISO-8859-1">

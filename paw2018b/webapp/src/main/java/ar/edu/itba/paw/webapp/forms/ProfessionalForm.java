@@ -3,8 +3,10 @@ package ar.edu.itba.paw.webapp.forms;
 import ar.edu.itba.paw.interfaces.TimeService;
 import ar.edu.itba.paw.models.WorkingHours;
 import com.sun.corba.se.spi.orbutil.threadpool.Work;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -17,10 +19,13 @@ public class ProfessionalForm {
             "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00",
             "21:00", "22:00","23:00"};
 
+
     private String avatar;
 
+    @Length(max=250, message = "Cantidad de caracteres incorrecto. Su nombre debe contener entre 3 y 45 caracteres")
     private String certificate;
 
+    @Length(max=250, message = "Cantidad de caracteres incorrecto. Su nombre debe contener entre 3 y 45 caracteres")
     private String education;
 
     private Set<String> languages;
