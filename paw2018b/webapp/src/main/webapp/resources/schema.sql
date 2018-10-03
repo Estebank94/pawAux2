@@ -19,15 +19,15 @@ CREATE TABLE IF NOT EXISTS insurancePlan (
     insurancePlanName varchar(50),
     id SERIAL PRIMARY KEY,
     insuranceID integer,
-    FOREIGN KEY (insuranceID) REFERENCES insurance(id)
+    FOREIGN KEY (insuranceID) REFERENCES insurance(id) ON DELETE CASCADE
 );
 
 
 CREATE TABLE IF NOT EXISTS medicalCare(
     doctorID integer,
     insurancePlanID integer,
-    FOREIGN KEY (insurancePlanID) REFERENCES insurancePlan(id),
-    FOREIGN KEY (doctorID) REFERENCES doctor(id)
+    FOREIGN KEY (insurancePlanID) REFERENCES insurancePlan(id) ON DELETE CASCADE ,
+    FOREIGN KEY (doctorID) REFERENCES doctor(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS specialty(
@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS specialty(
 CREATE TABLE IF NOT EXISTS doctorSpecialty(
     specialtyID integer,
     doctorID integer,
-    FOREIGN KEY (specialtyID) REFERENCES specialty(id),
-    FOREIGN KEY (doctorID) REFERENCES doctor(id)
+    FOREIGN KEY (specialtyID) REFERENCES specialty(id) ON DELETE CASCADE ,
+    FOREIGN KEY (doctorID) REFERENCES doctor(id) ON DELETE CASCADE 
 );
 
 CREATE TABLE IF NOT EXISTS review(
@@ -49,8 +49,8 @@ CREATE TABLE IF NOT EXISTS review(
     userID integer,
     daytime varchar (20),
     id SERIAL PRIMARY KEY,
-    FOREIGN KEY (doctorID) REFERENCES doctor(id),
-    FOREIGN KEY (userID) REFERENCES patient(id)
+    FOREIGN KEY (doctorID) REFERENCES doctor(id) ON DELETE CASCADE,
+    FOREIGN KEY (userID) REFERENCES patient(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS information (
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS information (
     languages varchar(100),
     education varchar(250),
     id SERIAL PRIMARY KEY,
-    FOREIGN KEY (doctorID) REFERENCES doctor(id)
+    FOREIGN KEY (doctorID) REFERENCES doctor(id) ON DELETE CASCADE
 );
 
 
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS workingHour(
     finishtime varchar(10),
     dayweek integer,
     id SERIAL PRIMARY KEY,
-    FOREIGN KEY (doctorId) REFERENCES doctor(id)
+    FOREIGN KEY (doctorId) REFERENCES doctor(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS appointment(
@@ -79,8 +79,8 @@ CREATE TABLE IF NOT EXISTS appointment(
     appointmentTime VARCHAR (10),
     identifier VARCHAR (30),
     id SERIAL PRIMARY KEY,
-    FOREIGN KEY (doctorId) REFERENCES doctor(id),
-    FOREIGN KEY (clientId) REFERENCES patient(id)
+    FOREIGN KEY (doctorId) REFERENCES doctor(id) ON DELETE CASCADE ,
+    FOREIGN KEY (clientId) REFERENCES patient(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS patient(
