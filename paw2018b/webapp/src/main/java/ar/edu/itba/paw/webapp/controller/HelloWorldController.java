@@ -166,7 +166,6 @@ public class HelloWorldController {
 				mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
 				mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 				mav.addObject("appointmentTaken",false);
-				mav.addObject()
 			} catch (NotFoundException e) {
 				LOGGER.trace("404 error");
 				return new ModelAndView("404");
@@ -192,7 +191,7 @@ public class HelloWorldController {
 			appointmentService.createAppointment(doctorId, patient.getPatientId(), day, time);
 		} catch (RepeatedAppointmentException e) {
 			LOGGER.debug("The appointment has just been taken");
-			return doctorDescription().addObject("appointmentTaken", true);
+			return doctorDescription(doctorId,search,appointmentForm).addObject("appointmentTaken", true);
 		} catch (NotCreatedAppointmentException e) {
 			LOGGER.trace("404 error");
 			return new ModelAndView("404");
