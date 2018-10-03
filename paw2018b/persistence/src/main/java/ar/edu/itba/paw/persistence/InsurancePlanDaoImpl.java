@@ -44,7 +44,7 @@ public class InsurancePlanDaoImpl implements InsurancePlanDao {
         StringBuilder query = new StringBuilder();
         query.append("SELECT insurancePlan.id ");
         query.append("FROM insurance JOIN insurancePlan ON insurancePlan.insuranceID = insurance.Id ");
-        query.append("WHERE insurance.insuranceName ~* ? ");
+        query.append("WHERE insurance.insuranceName = ? ");
         query.append("AND insurancePlan.insurancePlanName in ");
         query.append(setToString(insurancesPlans));
 

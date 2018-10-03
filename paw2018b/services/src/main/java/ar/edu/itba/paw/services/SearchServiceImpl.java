@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.SearchService;
 import ar.edu.itba.paw.models.ListItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ public class SearchServiceImpl implements SearchService {
         return searchDao.listInsurancesWithDoctors();
     }
 
+    @Transactional
     @Override
     public Optional<List<ListItem>> listSpecialtiesWithDoctors() {
         return searchDao.listSpecialtiesWithDoctors();

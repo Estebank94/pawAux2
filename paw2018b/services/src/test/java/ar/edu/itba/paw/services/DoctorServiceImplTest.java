@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.*;
-import ar.edu.itba.paw.models.CompressedSearch;
-import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.Search;
+import ar.edu.itba.paw.models.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,24 +15,24 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.*;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 @Sql("classpath:doctorServiceTest.sql")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 public class DoctorServiceImplTest {
 
-    private DoctorDao doctorDao;
-    private SpecialtyDao specialtyDao;
-    private MedicalCareDao medicalcareDao;
-    private DoctorSpecialtyDao doctorSpecialtyDao;
-    private InsurancePlanDao insurancePlanDao;
-    private DescriptionDao descriptionDao;
+    @Autowired
+    private DoctorServiceImpl doctorServiceImpl;
+
     private Doctor doctor, doctor2, doctor3;
+    private WorkingHours workingHours;
+    private Description description;
     private Search search;
 
     private static final String DOC_NAME = "Roberto Nicolas Agustin";
@@ -43,6 +40,7 @@ public class DoctorServiceImplTest {
     private static final Integer DOC_ID = 1;
     private static final String DOC_SPECIALTY = "NUTRICIÓN";
     private static final String DOC_INSURANCE = "Accord";
+    private static final String DOC_INSURANCE_PLAN_AS_STRING = "('Accord Salud')";
     private static final String DOC_INSURANCE_PLAN = "Accord Salud";
     private static final String DOC_SEX = "M";
 
@@ -56,6 +54,12 @@ public class DoctorServiceImplTest {
 
     private static final Integer DOCTOR_QUANTITY_BEFORE = 3;
 
+    private static final DayOfWeek DAY_OF_WEEK = DayOfWeek.FRIDAY;
+    private static final LocalTime START = LocalTime.of(9, 10, 50);
+    private static final LocalTime END = LocalTime.of(11, 45, 20);
+    private static final String CERTIFICATE = "BACHELOR";
+    private static final String EDUCATION = "ITBA";
+
     @Autowired
     private DataSource ds;
 
@@ -66,54 +70,54 @@ public class DoctorServiceImplTest {
 
         jdbcTemplate = new JdbcTemplate(ds);
 
-        doctorDao = Mockito.mock(DoctorDao.class);
-        specialtyDao = Mockito.mock(SpecialtyDao.class);
-        medicalcareDao = Mockito.mock(MedicalCareDao.class);
-        doctorSpecialtyDao = Mockito.mock(DoctorSpecialtyDao.class);
-        insurancePlanDao = Mockito.mock(InsurancePlanDao.class);
-        descriptionDao = Mockito.mock(DescriptionDao.class);
         doctor = Mockito.mock(Doctor.class);
         doctor2 = Mockito.mock(Doctor.class);
         doctor3 = Mockito.mock(Doctor.class);
         search = Mockito.mock(Search.class);
+        when(doctor.getId()).thenReturn(1);
+        when(doctor2.getId()).thenReturn(2);
+        when(doctor3.getId()).thenReturn(3);
 
     }
 
     @After
     public void tearDown(){
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "medicalCare", "doctorSpecialty", "doctor", "insurancePlan", "insurance",
-                "Specialty", "review", "information");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "workingHour", "medicalCare", "doctorSpecialty", "doctor", "insurancePlan", "insurance",
+                "Specialty", "review", "information", "appointment", "patient");
     }
 
     @Test
     public void testList() {
 
-        doctor.setId(1);
-        doctor2.setId(2);
-        doctor3.setId(3);
-
-        final Optional<CompressedSearch> doctors = doctorDao.listDoctors();
+        final Optional<CompressedSearch> doctors = doctorServiceImpl.listDoctors();
 
         assertNotNull(doctors.get());
         assertEquals(3, doctors.get().getDoctors().size());
-        assertEquals(doctor, doctors.get().getDoctors().get(0));
-        assertEquals(doctor2, doctors.get().getDoctors().get(1));
-        assertEquals(doctor3, doctors.get().getDoctors().get(2));
+        assertEquals(doctor.getId(), doctors.get().getDoctors().get(0).getId());
+        assertEquals(doctor2.getId(), doctors.get().getDoctors().get(1).getId());
+        assertEquals(doctor3.getId(), doctors.get().getDoctors().get(2).getId());
 
     }
 
     @Test
-    public void testFind() {
+    public void testFind() throws Exception{
 
-        search.setName(DOC_SECOND_NAME);
-        search.setSpecialty(DOC_SPECIALTY);
-        search.setInsurance(DOC_INSURANCE);
+        StringBuilder nameBuilder = new StringBuilder();
+        nameBuilder.append("%");
+        nameBuilder.append(DOC_SECOND_NAME.toLowerCase());
+        nameBuilder.append("%");
+
         List<String> insurancePlan = new ArrayList<>();
         insurancePlan.add(DOC_INSURANCE_PLAN);
-        search.setInsurancePlan(insurancePlan);
-        search.setSex(DOC_SEX);
 
-        final Optional<CompressedSearch> filteredSearch = doctorDao.findDoctors(search);
+        when(search.getName()).thenReturn(DOC_SECOND_NAME);
+        when(search.getSimilarToName()).thenReturn(nameBuilder.toString());
+        when(search.getSpecialty()).thenReturn(DOC_SPECIALTY);
+        when(search.getInsurance()).thenReturn(DOC_INSURANCE);
+        when(search.getInsurancePlanAsString()).thenReturn(DOC_INSURANCE_PLAN_AS_STRING);
+        when(search.getSex()).thenReturn(DOC_SEX);
+
+        Optional<CompressedSearch> filteredSearch = filteredSearch = doctorServiceImpl.findDoctors(search);
 
         assertTrue(filteredSearch.isPresent());
         assertEquals(1, filteredSearch.get().getDoctors().size() );
@@ -127,21 +131,19 @@ public class DoctorServiceImplTest {
     }
 
     @Test
-    public void testFindById() {
+    public void testFindById() throws Exception{
 
-        doctor.setId(1);
-
-        final Optional<Doctor> filteredById = doctorDao.findDoctorById(DOC_ID);
+        Optional<Doctor> filteredById = filteredById = doctorServiceImpl.findDoctorById(DOC_ID);
 
         assertTrue(filteredById.isPresent());
-        assertEquals(doctor, filteredById.get());
+       assertEquals(doctor.getId(), filteredById.get().getId());
 
     }
 
     @Test
-    public void testCreate() {
+    public void testCreate() throws Exception {
 
-        final Doctor newDoctor = doctorDao.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, NEW_DOC_ADDRESS, NEW_DOC_AVATAR);
+        Doctor newDoctor = doctorServiceImpl.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, NEW_DOC_ADDRESS, NEW_DOC_AVATAR);
 
         assertNotNull(newDoctor);
         assertEquals(NEW_DOC_NAME, newDoctor.getFirstName());
@@ -151,6 +153,89 @@ public class DoctorServiceImplTest {
         assertEquals(NEW_DOC_AVATAR, newDoctor.getAvatar());
         assertEquals(NEW_DOC_ADDRESS, newDoctor.getAddress());
         assertEquals(DOCTOR_QUANTITY_BEFORE + 1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "doctor"));
+
+    }
+
+    @Test
+    public void testSetDoctorInfo() throws Exception{
+
+        workingHours = Mockito.mock(WorkingHours.class);
+        description = Mockito.mock(Description.class);
+
+        when(workingHours.getStartTime()).thenReturn(START);
+        when(workingHours.getFinishTime()).thenReturn(END);
+        when(workingHours.getDayOfWeek()).thenReturn(DAY_OF_WEEK);
+        when(description.getCertificate()).thenReturn(CERTIFICATE);
+        when(description.getEducation()).thenReturn(EDUCATION);
+
+        Set<String> specialtySet = new HashSet<>();
+        specialtySet.add(DOC_SPECIALTY);
+        Set<String> insurancePlanSet = new HashSet<>();
+        insurancePlanSet.add(DOC_INSURANCE_PLAN);
+        Map<String, Set<String>> insuranceMap = new HashMap<>();
+        insuranceMap.put(DOC_INSURANCE, insurancePlanSet);
+        List<WorkingHours> workingHoursList = new ArrayList<>();
+        workingHoursList.add(workingHours);
+        Map<DayOfWeek, List<WorkingHours>> workingHoursMap = new HashMap<>();
+        workingHoursMap.put(DAY_OF_WEEK, workingHoursList);
+
+        final Optional<Doctor> setDoctor = doctorServiceImpl.setDoctorInfo(DOC_ID, specialtySet, insuranceMap, workingHoursList, description);
+
+        assertTrue(setDoctor.isPresent());
+        assertEquals(DOC_ID, setDoctor.get().getId());
+        assertTrue(setDoctor.get().getInsurance().containsKey(DOC_INSURANCE));
+        assertTrue(setDoctor.get().getInsurance().containsValue(insurancePlanSet));
+        assertTrue(setDoctor.get().containsSpecialty(specialtySet));
+        assertEquals(description, setDoctor.get().getDescription());
+
+    }
+
+    @Test
+    public void testSetDoctorInsurance() {
+
+        Set<String> insurancePlanSet = new HashSet<>();
+        insurancePlanSet.add(DOC_INSURANCE_PLAN);
+        Map<String, Set<String>> insuranceMap = new HashMap<>();
+        insuranceMap.put(DOC_INSURANCE, insurancePlanSet);
+
+        final Optional<Doctor> setDoctorInsurance = doctorServiceImpl.setDoctorInsurance(DOC_ID, insuranceMap);
+
+        assertTrue(setDoctorInsurance.isPresent());
+        assertTrue(setDoctorInsurance.get().getInsurance().containsKey(DOC_INSURANCE));
+        assertTrue(setDoctorInsurance.get().getInsurance().containsValue(insurancePlanSet));
+
+    }
+
+    @Test
+    public void testSetDoctorSpecialty() {
+
+        Set<String> specialtySet = new HashSet<>();
+        specialtySet.add(DOC_SPECIALTY);
+
+        final Optional<Doctor> setDoctorSpecialty = doctorServiceImpl.setDoctorSpecialty(DOC_ID, specialtySet);
+
+        assertTrue(setDoctorSpecialty.isPresent());
+        assertTrue(setDoctorSpecialty.get().containsSpecialty(specialtySet));
+
+    }
+
+    @Test
+    public void testSetWorkingHours() {
+
+        workingHours = Mockito.mock(WorkingHours.class);
+        when(workingHours.getStartTime()).thenReturn(START);
+        when(workingHours.getFinishTime()).thenReturn(END);
+        when(workingHours.getDayOfWeek()).thenReturn(DAY_OF_WEEK);
+
+        List<WorkingHours> workingHoursList = new ArrayList<>();
+        workingHoursList.add(workingHours);
+        Map<DayOfWeek, List<WorkingHours>> workingHoursMap = new HashMap<>();
+        workingHoursMap.put(DAY_OF_WEEK, workingHoursList);
+
+        final Optional<Doctor> setDoctorWorkingHours = doctorServiceImpl.setWorkingHours(DOC_ID, workingHoursList);
+
+        assertTrue(setDoctorWorkingHours.isPresent());
+//        assertEquals(workingHoursMap, setDoctorWorkingHours.get().getWorkingHours());
 
     }
 

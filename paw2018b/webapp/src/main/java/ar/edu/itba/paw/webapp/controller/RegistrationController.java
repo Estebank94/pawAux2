@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.interfaces.SearchService;
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.forms.PatientForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
@@ -71,7 +72,17 @@ public class RegistrationController {
             if(!personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())){
                 /*TODO: this doesn't show the error message*/
                 System.out.println("passwordMatching");
-                showDoctorRegistration(personalForm).addObject("noMatchingPassword", true);
+                showDoctorRegistration(personalForm).addObject("noMatchingPassword", true)
+                        .addObject("repeatedEmail",false)
+                        .addObject("wrongLastName",false)
+                        .addObject("wrongFirstName",false)
+                        .addObject("wrongPhoneNumber",false)
+                        .addObject("wrongPassword",false)
+                        .addObject("wrongEmail",false)
+                        .addObject("repeatedLicence",false)
+                        .addObject("wrongAddress",false)
+                        .addObject("wrongSex",false)
+                        .addObject("wrongLicence",false);
             }/*else if(patientService.findPatientByEmail(personalForm.getEmail()) != null){
                 showDoctorRegistration(personalForm).addObject("userExists", true);
             }*/
@@ -110,9 +121,38 @@ public class RegistrationController {
 
                 return mav;
 
-            } catch (IllegalArgumentException ex) {
-                /*TODO: VER CUANDO TIRA ESTO !!! PORQUE CADA TANTO LO ROMPE Y NI SE SABE PORQUE*/
-                LOGGER.trace("500 ERROR");
+            } catch (NotValidLastNameException e) {
+                return showDoctorRegistration(personalForm).addObject("wrongLastName",true);
+            } catch (RepeatedEmailException e) {
+                return showDoctorRegistration(personalForm).addObject("repeatedEmail",true);
+            } catch (NotValidFirstNameException e) {
+                return showDoctorRegistration(personalForm).addObject("wrongFirstName",true);
+            } catch (NotCreatePatientException e) {
+                return new ModelAndView("500");
+            } catch (NotValidPhoneNumberException e) {
+                return showDoctorRegistration(personalForm).addObject("wrongPhoneNumber",true);
+            } catch (NotValidPasswordException e) {
+                return showDoctorRegistration(personalForm).addObject("wrongPassword",true);
+            } catch (NotValidEmailException e) {
+                return showDoctorRegistration(personalForm).addObject("wrongEmail",true);
+            } catch (NotCreateDoctorException e) {
+                return new ModelAndView("500");
+            } catch (RepeatedLicenceException e) {
+                return showDoctorRegistration(personalForm).addObject("repeatedLicence",true);
+            } catch (NotValidAddressException e) {
+                return showDoctorRegistration(personalForm).addObject("wrongAddress",true);
+            } catch (NotValidSexException e) {
+                return showDoctorRegistration(personalForm).addObject("wrongSex",true);
+            } catch (NotValidLicenceException e) {
+                return showDoctorRegistration(personalForm).addObject("wrongLicence",true);
+            } catch (NotFoundDoctorException e) {
+                LOGGER.trace("404");
+                return new ModelAndView("404");
+            } catch (NotValidPatientIdException e) {
+                LOGGER.trace("500");
+                return new ModelAndView("500");
+            } catch (NotValidDoctorIdException e) {
+                LOGGER.trace("500");
                 return new ModelAndView("500");
             }
         }
@@ -137,10 +177,27 @@ public class RegistrationController {
         mav.addObject("insuranceList", searchService.listInsurances().get());
         mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
         mav.addObject("specialtyList", searchService.listSpecialties().get());
+        mav.addObject("wrongInsurancePlan",false)
+                .addObject("wrongCertificate",false)
+                .addObject("wrongWorkingHour",false)
+                .addObject("wrongLanguage", false)
+                .addObject("wrongSpecialty",false)
+                .addObject("wrongDesciption",false)
+                .addObject("wrongEducation",false)
+                .addObject("wrongCertificate",false);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Patient patient = patientService.findPatientByEmail(authentication.getName());
-        Doctor doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+        Doctor doctor = null;
+        try {
+            doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+        } catch (NotFoundDoctorException e) {
+            LOGGER.trace("Error 404");
+            return new ModelAndView("404");
+        } catch (NotValidIDException e) {
+            LOGGER.trace("Error 404");
+            return new ModelAndView("404");
+        }
         doctor.getDescription().getLanguages().remove(null);
         doctor.getSpecialty().remove(null);
         doctor.getInsurance().keySet().remove(null);
@@ -187,7 +244,16 @@ public class RegistrationController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Patient patient = patientService.findPatientByEmail(authentication.getName());
-        Doctor doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+        Doctor doctor = null;
+        try {
+            doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+        } catch (NotFoundDoctorException e) {
+            LOGGER.trace("Error 404");
+            return new ModelAndView("404");
+        } catch (NotValidIDException e) {
+            LOGGER.trace("Error 404");
+            return new ModelAndView("404");
+        }
 
         boolean withInfo = false;
         if(doctor.getSpecialty() != null) {
@@ -239,10 +305,50 @@ public class RegistrationController {
         }else{
             //can't have description values in null;
             LOGGER.debug("SET full Doctor's information to DB");
-            Doctor doctorProfessional = doctorService.setDoctorInfo(patient.getDoctorId(), professionalForm.getSpecialty(), insurance,workingHours ,description).get();
+            try {
+                Doctor doctorProfessional = doctorService.setDoctorInfo(patient.getDoctorId(), professionalForm.getSpecialty(), insurance,workingHours ,description).get();
+            } catch (NotValidDoctorIdException e) {
+                LOGGER.trace("Error 404");
+                return new ModelAndView("404");
+            } catch (NotFoundDoctorException e) {
+                LOGGER.trace("Error 404");
+                return new ModelAndView("404");
+            } catch (NotValidInsurancePlanException e) {
+                LOGGER.debug("Wrong InsurancePlan Input");
+                return showDoctorProfile(professionalForm).addObject("wrongInsurancePlan",true);
+            } catch (NotValidCertificateException e) {
+                LOGGER.debug("Wrong Certificate Input");
+                return showDoctorProfile(professionalForm).addObject("wrongCertificate",true);
+            } catch (NotValidWorkingHourException e) {
+                LOGGER.debug("Wrong WorkingHour Input");
+                return showDoctorProfile(professionalForm).addObject("wrongWorkingHour",true);
+            } catch (NotValidLanguagesException e) {
+                LOGGER.debug("Wrong Language Input");
+                return showDoctorProfile(professionalForm).addObject("wrongLanguage",true);
+            } catch (NotValidSpecialtyException e) {
+                LOGGER.debug("Wrong specialty Input");
+                return showDoctorProfile(professionalForm).addObject("wrongSpecialty",true);
+            } catch (NotValidDescriptionException e) {
+                LOGGER.debug("Wrong Description Input");
+                return showDoctorProfile(professionalForm).addObject("wrongDesciption",true);
+            } catch (NotValidEducationException e) {
+                LOGGER.debug("Wrong education Input");
+                return showDoctorProfile(professionalForm).addObject("wrongEducation",true);
+            } catch (NotValidInsuranceException e) {
+                LOGGER.debug("Wrong Certificate Input");
+                return showDoctorProfile(professionalForm).addObject("wrongCertificat",true);
+            }
         }
+        LOGGER.debug("AutoLogIn of patient with ID: {}", patient.getPatientId());
+        authenticateUserAndSetSession(patient, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
 
-        final ModelAndView mav = new ModelAndView("finalStep");
+        final ModelAndView mav = new ModelAndView("index");
+        mav.addObject("search", new Search());
+        mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
+        mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
+
+        //return mav;
+        //final ModelAndView mav = new ModelAndView("finalStep");
         return mav;
     }
 
@@ -267,8 +373,13 @@ public class RegistrationController {
 
         LOGGER.debug("RegistrationController: showPatientRegistration");
         final ModelAndView mav = new ModelAndView("registerPatient");
-        mav.addObject("wrongPassword", wrongPassword);
-
+        mav.addObject("wrongPassword", wrongPassword)
+                .addObject("repeatedEmail",false)
+                .addObject("wrongLastName",false)
+                .addObject("wrongFirstName",false)
+                .addObject("wrongPhoneNumber",false)
+                .addObject("wrongPassword",false)
+                .addObject("wrongEmail",false);
         return mav;
     }
 
@@ -302,14 +413,20 @@ public class RegistrationController {
                 mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
 
                 return mav;
-
-            } catch (IllegalArgumentException ex) {
-                LOGGER.trace("ERROR 500");
+            } catch (NotValidLastNameException e) {
+                return showPatientRegistration(patientForm,"lastName").addObject("wrongLastName",true);
+            } catch (RepeatedEmailException e) {
+                return showPatientRegistration(patientForm, "RepeatedKeyError").addObject("repeatedEmail",true);
+            } catch (NotValidFirstNameException e) {
+                return showPatientRegistration(patientForm,"firstName").addObject("wrongFirstName",true);
+            } catch (NotCreatePatientException e) {
                 return new ModelAndView("500");
-            } catch (DuplicateKeyException ex2){
-                return showPatientRegistration(patientForm, "RepeatedKeyError");
-                //mav.addObject("RepeteadKeyError", Boolean.TRUE);
-
+            } catch (NotValidPhoneNumberException e) {
+                return showPatientRegistration(patientForm,"lastName").addObject("wrongPhoneNumber",true);
+            } catch (NotValidPasswordException e) {
+                return showPatientRegistration(patientForm,"lastName").addObject("wrongPassword",true);
+            } catch (NotValidEmailException e) {
+                return showPatientRegistration(patientForm,"lastName").addObject("wrongEmail",true);
             }
         }
     }

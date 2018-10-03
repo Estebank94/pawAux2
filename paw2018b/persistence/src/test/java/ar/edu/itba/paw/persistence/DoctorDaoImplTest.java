@@ -5,6 +5,8 @@ import ar.edu.itba.paw.models.Description;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Search;
 
+import ar.edu.itba.paw.models.exceptions.NotCreateDoctorException;
+import ar.edu.itba.paw.models.exceptions.RepeatedLicenceException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -69,8 +71,8 @@ public class DoctorDaoImplTest {
     }
 
     @Test
-    public void testCreate() {
-        final Doctor doctor = doctorDao.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, NEW_DOC_ADDRESS, NEW_DOC_AVATAR);
+    public void testCreate() throws Exception{
+        Doctor doctor = doctorDao.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, NEW_DOC_ADDRESS, NEW_DOC_AVATAR);
 
         assertNotNull(doctor);
         assertEquals(NEW_DOC_NAME, doctor.getFirstName());

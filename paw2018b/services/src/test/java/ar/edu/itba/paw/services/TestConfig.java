@@ -5,10 +5,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
 
-@ComponentScan({ "ar.edu.itba.paw.services", })
+@ComponentScan({ "ar.edu.itba.paw.services", "ar.edu.itba.paw.persistence" })
 @Configuration
 public class TestConfig {
     @Bean
@@ -19,5 +21,10 @@ public class TestConfig {
         ds.setUsername("ha");
         ds.setPassword("");
         return ds;
+    }
+
+    @Bean
+    PasswordEncoder getEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

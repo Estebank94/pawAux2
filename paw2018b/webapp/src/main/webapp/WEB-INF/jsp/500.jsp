@@ -31,7 +31,7 @@
     </div>
 </nav>
 <div class="div-center">
-    <img class="center-img" src="/resources/images/500.jpg">
+    <img class="center-img" src="https://i.imgur.com/rYW2N3E.jpg">
     <button class="btn btn-primary custom-btn center-horiz box" type="button" onclick="window.location='/'">
         Volver al Inicio
     </button>
