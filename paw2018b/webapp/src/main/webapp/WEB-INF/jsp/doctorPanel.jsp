@@ -105,22 +105,22 @@
                         </div>
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <br>
-                            <c:forEach items="${appointments}" var="appointment">
+                            <c:forEach items="${patientAppointments}" var="appointment">
                                 <div style="margin-left: 16px; margin-right: 16px;">
                                     <h3>
-                                        <c:out value="${appointment.key}"></c:out>
-                                        <%--<c:out value="${appointment.key.dayOfMonth}"/> - <c:out value="${appointment.key.monthValue}"/> - <c:out value="${appointment.key.year}"/>--%>
+                                            <%--<c:out value="${appointment.key}"></c:out>--%>
+                                        <c:out value="${appointment.key.dayOfMonth}"/>-<c:out value="${appointment.key.monthValue}"/>-<c:out value="${appointment.key.year}"/>
                                     </h3>
                                     <br>
-                                    <c:forEach items="${patientAppointments.value}" var="listItems">
+                                    <c:forEach items="${appointment.value}" var="listItems">
                                         <div>
-                                            <div class="row">
-                                                <img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">
+                                            <div class="row" style="margin: 3px">
+                                                    <%--<img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">--%>
                                                 <div class="center-vertical">
                                                     <div>
                                                         <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
                                                         <h5><b><c:out value="${listItems.doctorLastName}"/></b>,  <c:out value="${listItems.doctorFirstName}"/></h5>
-                                                        <%--Telefono: <c:out value="${listItems.phoneNumber}"/>--%>
+                                                        <%--<p><spring:message code="phone"/>: <c:out value="${listItems.phoneNumber}"/></p>--%>
                                                     </div>
                                                 </div>
                                             </div>
