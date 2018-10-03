@@ -38,8 +38,8 @@
                         Registrate
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <button class="dropdown-item" type="button">Registrate como paciente</button>
-                        <button class="dropdown-item" type="button">Registrate como especialista</button>
+                        <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/patientRegistration"/>'">Registrate como paciente</button>
+                        <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/doctorRegistration"/>'">Registrate como especialista</button>
                     </div>
                 </div>
                 </security:authorize>

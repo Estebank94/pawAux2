@@ -36,8 +36,8 @@
                     Registrate
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                    <button class="dropdown-item" type="button">Registrate como paciente</button>
-                    <button class="dropdown-item" type="button">Registrate como especialista</button>
+                    <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/patientRegistration"/>'">Registrate como paciente</button>
+                    <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/doctorRegistration"/>'">Registrate como especialista</button>
                 </div>
             </div>
             </security:authorize>
@@ -51,7 +51,7 @@
                     <form:form action="${pageContext.request.contextPath}/logout" method="post">
                         <security:authentication property="principal.username" var="userName"/>
                         <div class="dropdown">
-                            <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:#ffffff !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b>${userName}</b></button>
+                            <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:#ffffff !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                 <button class="dropdown-item" type="submit">Cerrar Sesion</button>
                                     <%--ARREGLAR !!! hay que arreglar el dropdown se ve por abajo del search form--%>
@@ -105,18 +105,18 @@
             <div class="card-body">
                 <div class="card-text">
                     <div class="row">
-                        <img class="avatar big" src=${doctor.avatar}>
+                        <img class="avatar big" src=<c:out value="${doctor.avatar}"/>>
                         <div class="doctor-info-container">
                             <div>
-                                <h3 class="doctor-name">${doctor.lastName}, ${doctor.firstName}</h3>
+                                <h3 class="doctor-name"><c:out value="${doctor.lastName}"/>, <c:out value="${doctor.firstName}"/></h3>
                                 <div class="row container">
                                     <c:forEach items="${doctor.specialty}" var="doctorSpecialty">
-                                        <p class="doctor-specialty" style="padding-right: 2em">${doctorSpecialty}</p>
+                                        <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty}"/></p>
                                     </c:forEach>
                                 </div>
-                                <p class="doctor-text"><i class="fas fa-phone" style="padding-right: 0.5em"></i>${doctor.phoneNumber}</p>
+                                <p class="doctor-text"><i class="fas fa-phone" style="padding-right: 0.5em"></i><c:out value="${doctor.phoneNumber}"/></p>
                                 <%--<p class="doctor-text"><i class="far fa-clock" style="padding-right: 0.5em"></i>${doctor.workingHours}</p>--%>
-                                <p class="doctor-text"><i class="fas fa-map-marker-alt" style="padding-right: 0.5em"></i>${doctor.address}, CABA</p>
+                                <p class="doctor-text"><i class="fas fa-map-marker-alt" style="padding-right: 0.5em"></i><c:out value="${doctor.address}"/>, CABA</p>
                             </div>
                         </div>
                     </div>
@@ -131,7 +131,7 @@
                                         <select class="custom-select" id="day" path="day" cssStyle="cursor: pointer;">
                                             <option value="no" selected>Elegí el Día</option>
                                             <c:forEach items="${appointmentsAvailable}" var="date">
-                                                <option value="${date.key}" label="${date.key}">${date.key}</option>
+                                                <option value="${date.key}" label="${date.key}"><c:out value="${date.key}"/></option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -141,7 +141,7 @@
                                         <option value="no" label="Elegi el Horario" selected>Elegí el Horario</option>
                                     <c:forEach items="${appointmentsAvailable}" var="date">
                                         <c:forEach items="${date.value}" var="listItem">
-                                            <option value="${listItem.appointmentDay}_${listItem.appointmentTime}" day="${listItem.appointmentDay}" time="${listItem.appointmentTime}">${listItem.appointmentTime}</option>
+                                            <option value="${listItem.appointmentDay}_${listItem.appointmentTime}" day="${listItem.appointmentDay}" time="${listItem.appointmentTime}"><c:out value="${listItem.appointmentTime}"/></option>
                                             <%--<input type="hidden" id="time" name="time" value="${listItem.appointmentTime}">--%>
                                         </c:forEach>
                                     </c:forEach>
@@ -167,28 +167,28 @@
                     <br>
                     <h4>Prepagas & Planes</h4>
                     <c:forEach items="${insuranceNameList}" var="insuranceNameList">
-                        <b>${insuranceNameList.key}</b>
+                        <b><c:out value="${insuranceNameList.key}"/></b>
                         </br>
                         <c:forEach items="${insuranceNameList.key}" var="insurance">
                             <c:forEach items="${insuranceNameList.value}" var="insurancePlan">
-                                ${insurancePlan}
+                                <c:out value="${insurancePlan}"/>
                                 </br>
                             </c:forEach>
                         </c:forEach>
                         </br>
                     </c:forEach>
-                    <c:if test="${doctor.description.education == null}">
+                    <c:if test="${doctor.description.education != null}">
                         <h4>Educación</h4>
                         <c:forEach items="${doctor.description.education}" var="education">
-                            ${education}
+                           <c:out value="${education}"/>
                         </c:forEach>
                         <br>
                         <br>
                     </c:if>
-                    <c:if test="${doctor.description.certificate == null}">
+                    <c:if test="${doctor.description.certificate != null}">
                         <h4>Certificación</h4>
                         <c:forEach items="${doctor.description.certificate}" var="certificate">
-                            ${certificate}
+                            <c:out value="${certificate}"/>
                         </c:forEach>
                         <br>
                         <br>
@@ -196,14 +196,14 @@
                     <c:if test="${doctor.description.languages.size() != 0}">
                         <h4>Ídiomas</h4>
                         <c:forEach items="${doctor.description.languages}" var="languages">
-                            ${languages}
+                            <c:out value="${languages}"/>
                         </c:forEach>
                         <br>
                         <br>
                     </c:if>
                     <%--<p>El Dr. Andres Miller ha ejercido la medicina por más de 20 años y se especializa en Medicina Antienvejecimiento y Regenerativa, así como Medicina General Integrativa.</p>--%>
-                    <h3 id="reviews">Reseñas</h3>
-                    <p>Muy bueno</p>
+                    <%--<h3 id="reviews">Reseñas</h3>--%>
+                    <%--<p>Muy bueno</p>--%>
                 </div>
             </div>
         </div>
