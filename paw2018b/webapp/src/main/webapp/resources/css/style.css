@@ -477,3 +477,7 @@ h2
 {
   z-index: 1000000 !important;
 }
+
+a {
+  color: #257CBF;
+}
