@@ -149,7 +149,7 @@
                                 </div>
                                 <security:authorize access="!isAuthenticated()">
                                 <div class="col-sm-2">
-                                    <button type="button" class="btn btn-primary" style="position: absolute; bottom: 0;" onclick="window.location='<c:url value="/showLogIn"/>'">Reservar Turno</button>
+                                    <button type="button" class="btn btn-primary custom-btn" style="position: absolute; bottom: 0;" onclick="window.location='<c:url value="/showLogIn"/>'">Reservar Turno</button>
                                 </div>
                                 </security:authorize>
                                 <security:authorize access="isAuthenticated()">
