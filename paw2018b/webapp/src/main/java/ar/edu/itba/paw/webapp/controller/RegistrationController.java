@@ -110,8 +110,9 @@ public class RegistrationController {
             mav.addObject("cancelButton", true);
 
             try {
+                String image = personalForm.getSex().equals("M") ? "https://i.imgur.com/au1zFvG.jpg" : "https://i.imgur.com/G66Hh4D.jpg";
                 Doctor doctor = doctorService.createDoctor(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(),
-                        personalForm.getSex(), personalForm.getLicence(), "https://image.freepik.com/free-icon/male-user-shadow_318-34042.jpg", personalForm.getAddress());
+                        personalForm.getSex(), personalForm.getLicence(), image, personalForm.getAddress());
                 Patient patient = patientService.createPatient(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(), personalForm.getEmail(),
                         personalForm.getPassword());
                 patientService.setDoctorId(patient.getPatientId(), doctor.getId());
