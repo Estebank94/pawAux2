@@ -169,8 +169,12 @@ public class DoctorServiceImpl implements DoctorService {
             throw new NotValidLicenceException("licence can't be empty");
         }
 
-        if (licence.length() > 10){
-            LOGGER.debug("The Licence of a Doctor can't have more than 10 characters. The Licence given is: {}", licence);
+        if (licence.length() >= 10){
+            LOGGER.debug("The Licence of a Doctor can't have more than 9 characters. The Licence given is: {}", licence);
+            throw new NotValidLicenceException("licence can't have more than 10 characters");
+        }
+        if (Integer.valueOf(licence) > Integer.MAX_VALUE){
+            LOGGER.debug("The Licence of a Doctor can't have more than 9 characters. The Licence given is: {}", licence);
             throw new NotValidLicenceException("licence can't have more than 10 characters");
         }
 
