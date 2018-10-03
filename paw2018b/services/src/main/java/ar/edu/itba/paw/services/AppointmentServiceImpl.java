@@ -108,6 +108,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         if (!appointment.isPresent()){
             throw new NotCreatedAppointmentException();
         }
+        appointment.get().setClientId(clientId);
+        appointment.get().setDoctorId(doctorId);
         return appointment;
     }
 }

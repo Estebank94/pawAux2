@@ -67,16 +67,16 @@ CREATE TABLE IF NOT EXISTS workingHour(
     FOREIGN KEY (doctorId) REFERENCES doctor(id)
 );
 
-INSERT INTO doctor (firstName, lastName, sex, phoneNumber, address, licence, avatar, id, workingHours, district)
-VALUES ('Roberto Nicolas Agustin', 'Rosa', 'M', '47777777', 'Arce 211', '1234', 'https://d1cesmq0xhh7we.cloudfront.net/724f4a59-0f34-4cbc-980f-766f4df17d9bcircle_medium__v1__.png', '1', 'lunes 9am', 'Palermo');
+INSERT INTO doctor (firstName, lastName, sex, phoneNumber, address, licence, avatar, id, district)
+VALUES ('Roberto Nicolas Agustin', 'Rosa', 'M', '4777-7777', 'Arce 211', '1234', 'https://d1cesmq0xhh7we.cloudfront.net/724f4a59-0f34-4cbc-980f-766f4df17d9bcircle_medium__v1__.png', '1', 'Palermo');
 
-INSERT INTO doctor (firstName, lastName, sex, phoneNumber, address, licence, avatar, id, workingHours, district)
-VALUES ('Ramiro', 'Roca', 'M', '47777778', 'Maure 211', '4567',
-'https://dsw5h1xg5uvx.cloudfront.net/1deb1e7e-f412-4446-9e79-dabb625a883ccircle_medium.png', '2', 'lunes 9pm', 'Belgrano');
+INSERT INTO doctor (firstName, lastName, sex, phoneNumber, address, licence, avatar, id, district)
+VALUES ('Ramiro', 'Roca', 'M', '4777-7778', 'Maure 211', '4567',
+'https://dsw5h1xg5uvx.cloudfront.net/1deb1e7e-f412-4446-9e79-dabb625a883ccircle_medium.png', '2', 'Belgrano');
 
-INSERT INTO doctor (firstName, lastName, sex, phoneNumber, address, licence, avatar, id, workingHours, district)
-VALUES ('Rihanna', 'Remo', 'F', '47777771', 'Bulnes 211', '4321',
-'https://dsw5h1xg5uvx.cloudfront.net/93af945e-50b0-45ef-a181-c1b638a0c898circle_medium.png', '3', 'martes 9am', 'Recoleta');
+INSERT INTO doctor (firstName, lastName, sex, phoneNumber, address, licence, avatar, id, district)
+VALUES ('Rihanna', 'Remo', 'F', '4777-7771', 'Bulnes 211', '4321',
+'https://dsw5h1xg5uvx.cloudfront.net/93af945e-50b0-45ef-a181-c1b638a0c898circle_medium.png', '3', 'Recoleta');
 
 INSERT INTO insurance (insuranceName, id) VALUES ('Accord', 206);
 INSERT INTO insurance (insuranceName, id) VALUES ('OSECAC', 210);
@@ -107,3 +107,7 @@ INSERT INTO information (doctorId, languages, education, certificate) VALUES (3,
 INSERT INTO doctorSpecialty (specialtyID, doctorID) VALUES (552, 1);
 INSERT INTO doctorSpecialty (specialtyID, doctorID) VALUES (551, 3);
 INSERT INTO doctorSpecialty (specialtyID, doctorID) VALUES (555, 2);
+
+INSERT INTO workingHour (doctorId, starttime, finishtime, dayweek, id) VALUES (1, '00:00:00', '23:59:59', 7, 7);
+INSERT INTO workingHour (doctorId, starttime, finishtime, dayweek, id) VALUES (2, '00:00:00', '23:59:59', 7, 8);
+INSERT INTO workingHour (doctorId, starttime, finishtime, dayweek, id) VALUES (3, '00:00:00', '23:59:59', 7, 9);
