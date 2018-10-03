@@ -119,7 +119,7 @@
     </div>
 
     <div class="d-flex flex-row margin-bottom-medium">
-        <img src="/resources/images/1.jpg" class="image-rectangle">
+        <img src="https://i.imgur.com/StIDems.jpg" class="image-rectangle">
         <div>
             <div class="list-home">
                 <h3><spring:message code="explanation.searchTitle" /></h3>
@@ -129,7 +129,7 @@
     </div>
 
     <div class="d-flex flex-row-reverse margin-bottom-medium">
-        <img src="/resources/images/2.jpg" class="image-rectangle-right">
+        <img src="https://i.imgur.com/N7X4FiE.jpg" class="image-rectangle-right">
         <div>
             <div class="list-home-right">
                 <h3><spring:message code="explanation.chooseTitle" /></h3>
@@ -139,7 +139,7 @@
     </div>
 
     <div class="d-flex flex-row margin-bottom-medium">
-        <img src="/resources/images/3.jpg" class="image-rectangle">
+        <img src="https://i.imgur.com/yjHKj1P.jpg" class="image-rectangle">
         <div>
             <div class="list-home">
                 <h3><spring:message code="explanation.reserveTitle" /></h3>

@@ -1,5 +1,10 @@
 package ar.edu.itba.paw.models;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.Set;
+
 public class Patient {
 
     private Integer patientId;
@@ -9,6 +14,7 @@ public class Patient {
     private String email;
     private String password;
     private Integer doctorId;
+    private Set<Appointment> appointments;
 
     public Patient(Integer patientId, String firstName, String lastName, String phoneNumber, String email, String password) {
         this.patientId = patientId;
@@ -84,5 +90,29 @@ public class Patient {
 
     public void setDoctorId(Integer doctorId) {
         this.doctorId = doctorId;
+    }
+
+    public Set<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(Set<Appointment> appointments) {
+        this.appointments = appointments;
+    }
+
+    public Set<Appointment> getFutureAppointments(){
+        Set<Appointment> returnSet = new HashSet<>();
+        Set<Appointment> appointments = getAppointments();
+        LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
+
+        for (Appointment appointmentIterator: appointments){
+            if (appointmentIterator.getAppointmentDay().isAfter(today)){
+                returnSet.add(appointmentIterator);
+            } else if (appointmentIterator.getAppointmentDay().isEqual(today) && appointmentIterator.getAppointmentTime().isAfter(now)){
+                returnSet.add(appointmentIterator);
+            }
+        }
+        return returnSet;
     }
 }

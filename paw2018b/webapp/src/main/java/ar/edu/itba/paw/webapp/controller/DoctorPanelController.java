@@ -6,6 +6,8 @@ import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
+import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
+import ar.edu.itba.paw.models.exceptions.NotValidIDException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +50,16 @@ public class DoctorPanelController {
 
         Integer doctorId = patient.getDoctorId();
 
-        Doctor doctor = doctorService.findDoctorById(doctorId).get();
+        Doctor doctor = null;
+        try {
+            doctor = doctorService.findDoctorById(doctorId).get();
+        } catch (NotFoundDoctorException e) {
+            LOGGER.trace("Error 404");
+            return new ModelAndView("404");
+        } catch (NotValidIDException e) {
+            LOGGER.trace("Error 404");
+            return new ModelAndView("404");
+        }
 
         LOGGER.debug("Doctor Panel: Doctor with ID: {}", doctorId);
 

@@ -3,12 +3,15 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.interfaces.AppointmentDao;
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
+import ar.edu.itba.paw.models.exceptions.RepeatedAppointmentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -28,7 +31,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
         .usingGeneratedKeyColumns("id");
     }
     @Override
-    public Optional<Appointment> createAppointment(Integer doctorId, Integer clientId, LocalDate appointmentDay, LocalTime appointmentTime) {
+    public Optional<Appointment> createAppointment(Integer doctorId, Integer clientId, LocalDate appointmentDay, LocalTime appointmentTime) throws RepeatedAppointmentException{
         final Map<String,Object> entry = new HashMap<>();
         StringBuilder identifier = new StringBuilder();
         identifier.append(appointmentDay.toString())
@@ -40,7 +43,12 @@ public class AppointmentDaoImpl implements AppointmentDao {
         entry.put("appointmentDay",appointmentDay);
         entry.put("appointmentTime",appointmentTime);
         entry.put("identifier",identifier.toString());
-        final Number appointmentId = jdbcInsert.executeAndReturnKey(entry);
+        Number appointmentId = null;
+        try {
+            appointmentId = jdbcInsert.executeAndReturnKey(entry);
+        } catch (DuplicateKeyException ex1){
+            throw new RepeatedAppointmentException();
+        }
         return Optional.ofNullable(new Appointment(appointmentDay, appointmentTime));
     }
 }

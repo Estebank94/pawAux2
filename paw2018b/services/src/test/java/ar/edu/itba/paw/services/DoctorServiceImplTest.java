@@ -117,7 +117,12 @@ public class DoctorServiceImplTest {
         when(search.getInsurancePlanAsString()).thenReturn(DOC_INSURANCE_PLAN_AS_STRING);
         when(search.getSex()).thenReturn(DOC_SEX);
 
-        final Optional<CompressedSearch> filteredSearch = doctorServiceImpl.findDoctors(search);
+        Optional<CompressedSearch> filteredSearch = Optional.empty();
+        try {
+            filteredSearch = doctorServiceImpl.findDoctors(search);
+        } catch (NotValidSearchException e) {
+            e.printStackTrace();
+        }
 
         assertTrue(filteredSearch.isPresent());
         assertEquals(1, filteredSearch.get().getDoctors().size() );
@@ -133,9 +138,16 @@ public class DoctorServiceImplTest {
     @Test
     public void testFindById() {
 
-       final Optional<Doctor> filteredById = doctorServiceImpl.findDoctorById(DOC_ID);
+        Optional<Doctor> filteredById = Optional.empty();
+        try {
+            filteredById = doctorServiceImpl.findDoctorById(DOC_ID);
+        } catch (NotFoundDoctorException e) {
+            e.printStackTrace();
+        } catch (NotValidIDException e) {
+            e.printStackTrace();
+        }
 
-       assertTrue(filteredById.isPresent());
+        assertTrue(filteredById.isPresent());
        assertEquals(doctor.getId(), filteredById.get().getId());
 
     }
