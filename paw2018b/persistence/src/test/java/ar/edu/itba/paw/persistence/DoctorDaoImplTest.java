@@ -71,13 +71,9 @@ public class DoctorDaoImplTest {
     }
 
     @Test
-    public void testCreate() {
-        Doctor doctor = null;
-        try {
-             doctor = doctorDao.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, NEW_DOC_ADDRESS, NEW_DOC_AVATAR);
-        } catch (NotCreateDoctorException e) {
-        } catch (RepeatedLicenceException e) {
-        }
+    public void testCreate() throws Exception{
+        Doctor doctor = doctorDao.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, NEW_DOC_ADDRESS, NEW_DOC_AVATAR);
+
         assertNotNull(doctor);
         assertEquals(NEW_DOC_NAME, doctor.getFirstName());
         assertEquals(NEW_DOC_LASTNAME, doctor.getLastName());

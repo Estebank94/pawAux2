@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.CompressedSearch;
-import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.Search;
-import ar.edu.itba.paw.models.exceptions.*;
+import ar.edu.itba.paw.models.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,9 +15,9 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
@@ -34,6 +31,8 @@ public class DoctorServiceImplTest {
     private DoctorServiceImpl doctorServiceImpl;
 
     private Doctor doctor, doctor2, doctor3;
+    private WorkingHours workingHours;
+    private Description description;
     private Search search;
 
     private static final String DOC_NAME = "Roberto Nicolas Agustin";
@@ -54,6 +53,12 @@ public class DoctorServiceImplTest {
     private static final String NEW_DOC_ADDRESS = "Cabildo 650";
 
     private static final Integer DOCTOR_QUANTITY_BEFORE = 3;
+
+    private static final DayOfWeek DAY_OF_WEEK = DayOfWeek.FRIDAY;
+    private static final LocalTime START = LocalTime.of(9, 10, 50);
+    private static final LocalTime END = LocalTime.of(11, 45, 20);
+    private static final String CERTIFICATE = "BACHELOR";
+    private static final String EDUCATION = "ITBA";
 
     @Autowired
     private DataSource ds;
@@ -77,8 +82,8 @@ public class DoctorServiceImplTest {
 
     @After
     public void tearDown(){
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "medicalCare", "doctorSpecialty", "doctor", "insurancePlan", "insurance",
-                "Specialty", "review", "information");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "workingHour", "medicalCare", "doctorSpecialty", "doctor", "insurancePlan", "insurance",
+                "Specialty", "review", "information", "appointment", "patient");
     }
 
     @Test
@@ -136,20 +141,9 @@ public class DoctorServiceImplTest {
     }
 
     @Test
-    public void testCreate() {
+    public void testCreate() throws Exception {
 
-        Doctor newDoctor = null;
-        try {
-            newDoctor = doctorServiceImpl.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, NEW_DOC_ADDRESS, NEW_DOC_AVATAR);
-        } catch (NotValidFirstNameException e) {
-        } catch (NotValidLastNameException e) {
-        } catch (NotValidPhoneNumberException e) {
-        } catch (NotCreateDoctorException e) {
-        } catch (RepeatedLicenceException e) {
-        } catch (NotValidSexException e) {
-        } catch (NotValidLicenceException e) {
-        } catch (NotValidAddressException e) {
-        }
+        Doctor newDoctor = doctorServiceImpl.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, NEW_DOC_ADDRESS, NEW_DOC_AVATAR);
 
         assertNotNull(newDoctor);
         assertEquals(NEW_DOC_NAME, newDoctor.getFirstName());
@@ -159,6 +153,89 @@ public class DoctorServiceImplTest {
         assertEquals(NEW_DOC_AVATAR, newDoctor.getAvatar());
         assertEquals(NEW_DOC_ADDRESS, newDoctor.getAddress());
         assertEquals(DOCTOR_QUANTITY_BEFORE + 1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "doctor"));
+
+    }
+
+    @Test
+    public void testSetDoctorInfo() {
+
+        workingHours = Mockito.mock(WorkingHours.class);
+        description = Mockito.mock(Description.class);
+
+        when(workingHours.getStartTime()).thenReturn(START);
+        when(workingHours.getFinishTime()).thenReturn(END);
+        when(workingHours.getDayOfWeek()).thenReturn(DAY_OF_WEEK);
+        when(description.getCertificate()).thenReturn(CERTIFICATE);
+        when(description.getEducation()).thenReturn(EDUCATION);
+
+        Set<String> specialtySet = new HashSet<>();
+        specialtySet.add(DOC_SPECIALTY);
+        Set<String> insurancePlanSet = new HashSet<>();
+        insurancePlanSet.add(DOC_INSURANCE_PLAN);
+        Map<String, Set<String>> insuranceMap = new HashMap<>();
+        insuranceMap.put(DOC_INSURANCE, insurancePlanSet);
+        List<WorkingHours> workingHoursList = new ArrayList<>();
+        workingHoursList.add(workingHours);
+        Map<DayOfWeek, List<WorkingHours>> workingHoursMap = new HashMap<>();
+        workingHoursMap.put(DAY_OF_WEEK, workingHoursList);
+
+        final Optional<Doctor> setDoctor = doctorServiceImpl.setDoctorInfo(DOC_ID, specialtySet, insuranceMap, workingHoursList, description);
+
+        assertTrue(setDoctor.isPresent());
+        assertEquals(DOC_ID, setDoctor.get().getId());
+        assertTrue(setDoctor.get().getInsurance().containsKey(DOC_INSURANCE));
+        assertTrue(setDoctor.get().getInsurance().containsValue(insurancePlanSet));
+        assertTrue(setDoctor.get().containsSpecialty(specialtySet));
+        assertEquals(description, setDoctor.get().getDescription());
+
+    }
+
+    @Test
+    public void testSetDoctorInsurance() {
+
+        Set<String> insurancePlanSet = new HashSet<>();
+        insurancePlanSet.add(DOC_INSURANCE_PLAN);
+        Map<String, Set<String>> insuranceMap = new HashMap<>();
+        insuranceMap.put(DOC_INSURANCE, insurancePlanSet);
+
+        final Optional<Doctor> setDoctorInsurance = doctorServiceImpl.setDoctorInsurance(DOC_ID, insuranceMap);
+
+        assertTrue(setDoctorInsurance.isPresent());
+        assertTrue(setDoctorInsurance.get().getInsurance().containsKey(DOC_INSURANCE));
+        assertTrue(setDoctorInsurance.get().getInsurance().containsValue(insurancePlanSet));
+
+    }
+
+    @Test
+    public void testSetDoctorSpecialty() {
+
+        Set<String> specialtySet = new HashSet<>();
+        specialtySet.add(DOC_SPECIALTY);
+
+        final Optional<Doctor> setDoctorSpecialty = doctorServiceImpl.setDoctorSpecialty(DOC_ID, specialtySet);
+
+        assertTrue(setDoctorSpecialty.isPresent());
+        assertTrue(setDoctorSpecialty.get().containsSpecialty(specialtySet));
+
+    }
+
+    @Test
+    public void testSetWorkingHours() {
+
+        workingHours = Mockito.mock(WorkingHours.class);
+        when(workingHours.getStartTime()).thenReturn(START);
+        when(workingHours.getFinishTime()).thenReturn(END);
+        when(workingHours.getDayOfWeek()).thenReturn(DAY_OF_WEEK);
+
+        List<WorkingHours> workingHoursList = new ArrayList<>();
+        workingHoursList.add(workingHours);
+        Map<DayOfWeek, List<WorkingHours>> workingHoursMap = new HashMap<>();
+        workingHoursMap.put(DAY_OF_WEEK, workingHoursList);
+
+        final Optional<Doctor> setDoctorWorkingHours = doctorServiceImpl.setWorkingHours(DOC_ID, workingHoursList);
+
+        assertTrue(setDoctorWorkingHours.isPresent());
+//        assertEquals(workingHoursMap, setDoctorWorkingHours.get().getWorkingHours());
 
     }
 
