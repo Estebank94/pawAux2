@@ -100,7 +100,7 @@ public class DoctorServiceImplTest {
     }
 
     @Test
-    public void testFind() {
+    public void testFind() throws Exception{
 
         StringBuilder nameBuilder = new StringBuilder();
         nameBuilder.append("%");
@@ -117,12 +117,7 @@ public class DoctorServiceImplTest {
         when(search.getInsurancePlanAsString()).thenReturn(DOC_INSURANCE_PLAN_AS_STRING);
         when(search.getSex()).thenReturn(DOC_SEX);
 
-        Optional<CompressedSearch> filteredSearch = Optional.empty();
-        try {
-            filteredSearch = doctorServiceImpl.findDoctors(search);
-        } catch (NotValidSearchException e) {
-            e.printStackTrace();
-        }
+        Optional<CompressedSearch> filteredSearch = filteredSearch = doctorServiceImpl.findDoctors(search);
 
         assertTrue(filteredSearch.isPresent());
         assertEquals(1, filteredSearch.get().getDoctors().size() );
@@ -136,16 +131,9 @@ public class DoctorServiceImplTest {
     }
 
     @Test
-    public void testFindById() {
+    public void testFindById() throws Exception{
 
-        Optional<Doctor> filteredById = Optional.empty();
-        try {
-            filteredById = doctorServiceImpl.findDoctorById(DOC_ID);
-        } catch (NotFoundDoctorException e) {
-            e.printStackTrace();
-        } catch (NotValidIDException e) {
-            e.printStackTrace();
-        }
+        Optional<Doctor> filteredById = filteredById = doctorServiceImpl.findDoctorById(DOC_ID);
 
         assertTrue(filteredById.isPresent());
        assertEquals(doctor.getId(), filteredById.get().getId());
@@ -169,7 +157,7 @@ public class DoctorServiceImplTest {
     }
 
     @Test
-    public void testSetDoctorInfo() {
+    public void testSetDoctorInfo() throws Exception{
 
         workingHours = Mockito.mock(WorkingHours.class);
         description = Mockito.mock(Description.class);
