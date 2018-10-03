@@ -355,7 +355,8 @@ import java.util.*;
                             }
                         }
                     }
-                    if(!containsDoctor) {
+                    if(!containsDoctor && validDoctor(rs)) {
+
                         Set<String> specialty = new HashSet<>();
 
                         specialty.add(rs.getString("specialtyName"));
@@ -393,6 +394,26 @@ import java.util.*;
 
                 return compressedSearch;
             }
+        }
+
+        private boolean validDoctor(ResultSet rs) throws SQLException {
+
+            if (rs.getString("insurancePlanName") == null){
+                return false;
+            }
+            if (rs.getString("insuranceName") == null){
+                return false;
+            }
+            if(rs.getString("specialtyName") == null){
+                return false;
+            }
+            if (rs.getString("starttime") == null){
+                return false;
+            }
+            if (rs.getString("finishtime") == null){
+                return false;
+            }
+            return true;
         }
 
 
