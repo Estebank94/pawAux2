@@ -76,7 +76,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedPage("/403")
                 .and().csrf().disable();
     }
-    /*TODO: aca con los .accesDenied se puede usar para todo? Con eso manejamos los stack traces?*/
 
     @Bean
     public AuthenticationSuccessHandler successHandler() {
