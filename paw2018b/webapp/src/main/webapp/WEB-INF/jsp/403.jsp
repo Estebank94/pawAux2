@@ -30,11 +30,13 @@
         </a>
     </div>
 </nav>
-<div class="div-center">
-    <img class="center-img" src="https://i.imgur.com/djVjfbI.jpg">
-    <button class="btn btn-primary custom-btn center-horiz box" type="button" onclick="window.location='/'">
-        Volver al Inicio
-    </button>
+<div>
+    <div class="inner-div" style="max-width: 1024px;">
+        <img class="center-img" src="https://i.imgur.com/djVjfbI.jpg">
+        <button class="btn btn-primary custom-btn center-horiz box" type="button" onclick="window.location='/'">
+            Volver al Inicio
+        </button>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
