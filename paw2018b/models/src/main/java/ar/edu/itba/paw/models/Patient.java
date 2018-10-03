@@ -2,8 +2,7 @@ package ar.edu.itba.paw.models;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Patient {
 
@@ -106,13 +105,33 @@ public class Patient {
         LocalDate today = LocalDate.now();
         LocalTime now = LocalTime.now();
 
-        for (Appointment appointmentIterator: appointments){
-            if (appointmentIterator.getAppointmentDay().isAfter(today)){
-                returnSet.add(appointmentIterator);
-            } else if (appointmentIterator.getAppointmentDay().isEqual(today) && appointmentIterator.getAppointmentTime().isAfter(now)){
-                returnSet.add(appointmentIterator);
+            for (Appointment appointmentIterator: appointments){
+                if (appointmentIterator.getAppointmentDay().isAfter(today)){
+                    returnSet.add(appointmentIterator);
+                } else if (appointmentIterator.getAppointmentDay().isEqual(today) && appointmentIterator.getAppointmentTime().isAfter(now)){
+                    returnSet.add(appointmentIterator);
+                }
             }
-        }
-        return returnSet;
+            return returnSet;
+
+    }
+
+    public Map<LocalDate, List<Appointment>> appointmentsMap (){
+
+        Map<LocalDate, List<Appointment>> appointments = new HashMap<>();
+        Set<Appointment> all = getFutureAppointments();
+
+            for(Appointment appoint : all){
+                if(appointments.containsKey(appoint.getAppointmentDay())){
+                    appointments.get(appoint.getAppointmentDay()).add(appoint);
+                }else{
+                    List<Appointment> list = new ArrayList<>();
+                    list.add(appoint);
+                    appointments.put(appoint.getAppointmentDay(),list);
+                }
+            }
+            return appointments;
+
+
     }
 }
