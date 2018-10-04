@@ -222,6 +222,7 @@ import java.util.*;
 
             final CompressedSearch compressedSearch = jdbcTemplate.query(select.toString() , new CompressedExtractor(), id);
 
+            System.out.print(compressedSearch.getDoctors().size());
             if(compressedSearch.getDoctors().isEmpty()){
                 return Optional.empty();
             }
@@ -356,7 +357,7 @@ import java.util.*;
                             }
                         }
                     }
-                    if(!containsDoctor && validDoctor(rs)) {
+                    if(!containsDoctor /*&& validDoctor(rs)*/) {
 
                         Set<String> specialty = new HashSet<>();
 
@@ -397,25 +398,25 @@ import java.util.*;
             }
         }
 
-        private boolean validDoctor(ResultSet rs) throws SQLException {
-
-            if (rs.getString("insurancePlanName") == null){
-                return false;
-            }
-            if (rs.getString("insuranceName") == null){
-                return false;
-            }
-            if(rs.getString("specialtyName") == null){
-                return false;
-            }
-            if (rs.getString("starttime") == null){
-                return false;
-            }
-            if (rs.getString("finishtime") == null){
-                return false;
-            }
-            return true;
-        }
+//        private boolean validDoctor(ResultSet rs) throws SQLException {
+//
+//            if (rs.getString("insurancePlanName") == null){
+//                return false;
+//            }
+//            if (rs.getString("insuranceName") == null){
+//                return false;
+//            }
+//            if(rs.getString("specialtyName") == null){
+//                return false;
+//            }
+//            if (rs.getString("starttime") == null){
+//                return false;
+//            }
+//            if (rs.getString("finishtime") == null){
+//                return false;
+//            }
+//            return true;
+//        }
 
 
         private static final RowMapper<Integer> ROW_MAPPER_IS_EXISTING_LICENCE = (rs, rowNum) -> new Integer(rs.getInt("id"));

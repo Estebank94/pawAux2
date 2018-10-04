@@ -60,15 +60,9 @@ public class RegistrationController {
     @Autowired
     private EmailService emailService;
 
-//    @RequestMapping(value="/doctorRegistration", method = { RequestMethod.POST }/*, consumes = {"multipart/form-data"}*/)
-//    public ModelAndView doctorRegistration (@RequestParam ("exampleFormControlFile1") MultipartFile image,
-//            @Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors,
-//                                            HttpServletRequest request)
-
     @RequestMapping(value="/doctorRegistration", method = { RequestMethod.POST })
     public ModelAndView doctorRegistration (@Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors,HttpServletRequest request)
     {
-
         LOGGER.debug("RegistrationController: doctorRegistration");
 
         if(errors.hasErrors() || !personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation()
@@ -177,6 +171,7 @@ public class RegistrationController {
     @RequestMapping(value = "/doctorProfile", method = {RequestMethod.GET})
     public ModelAndView showDoctorProfile(@ModelAttribute("professional")ProfessionalForm professionalForm){
 
+        System.out.print("Entre al Get de DOCTOR_PROFILE");
         LOGGER.debug("RegistrationController: showDoctorProfile");
         final ModelAndView mav = new ModelAndView("registerSpecialist2");
 
@@ -368,7 +363,7 @@ public class RegistrationController {
         //mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
 
         //return mav;
-        final ModelAndView mav = new ModelAndView("finalStep");
+        final ModelAndView mav = new ModelAndView("ok");
         return mav;
     }
 
