@@ -66,7 +66,7 @@ public class RegistrationController {
         LOGGER.debug("RegistrationController: doctorRegistration");
 
         if(errors.hasErrors() || !personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation()
-        )/* || patientService.findPatientByEmail(personalForm.getEmail()) != null*/){
+        )){
             if(!personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())){
                 /*TODO: this doesn't show the error message*/
                 System.out.println("passwordMatching");
@@ -293,7 +293,7 @@ public class RegistrationController {
         boolean doctorTime = false;
         if(doctor.getWorkingHours().keySet().isEmpty() && professionalForm.workingHoursList().isEmpty()){doctorTime = true; }
 
-        if(errors.hasErrors() || doctorTime || specialtyExists || medicalCareExists){
+        if(errors.hasErrors() /* || doctorTime ||specialtyExists || medicalCareExists*/){
             if(doctorTime) System.out.println("doctorTime");
             if(specialtyExists) System.out.println("specialtyExists");
             if(medicalCareExists) System.out.println("medicalCareExists");
@@ -357,14 +357,14 @@ public class RegistrationController {
         LOGGER.debug("AutoLogIn of patient with ID: {}", patient.getPatientId());
         authenticateUserAndSetSession(patient, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
 
-        //final ModelAndView mav = new ModelAndView("index");
-        //mav.addObject("search", new Search());
-        //mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
-        //mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
+        final ModelAndView mav = new ModelAndView("index");
+        mav.addObject("search", new Search());
+        mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
+        mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
 
-        //return mav;
-        final ModelAndView mav = new ModelAndView("ok");
         return mav;
+//        final ModelAndView mav = new ModelAndView("ok");
+//        return mav;
     }
 
 
