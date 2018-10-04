@@ -48,7 +48,8 @@
                     </button>
                 </security:authorize>
                 <security:authorize access="isAuthenticated()">
-                    <form:form action="${pageContext.request.contextPath}/logout" method="post">
+                    <c:url value="${pageContext.request.contextPath}/logout" var="logout"/>
+                    <form:form action="${logout}" method="post">
                         <security:authentication property="principal.username" var="userName"/>
                         <div class="dropdown">
                             <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:#ffffff !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>
@@ -80,7 +81,8 @@
 
 <div class="navbar-search sticky-top">
 <%--action="${postPath}--%>
-<form:form action="/processForm" method="GET" modelAttribute="search" accept-charset="ISO-8859-1">
+    <c:url value="/processForm" var="processForm"/>
+<form:form action="${processForm}" method="GET" modelAttribute="search" accept-charset="ISO-8859-1">
     <div id="search-bar" class="input-group container">
         <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del médico" class="form-control" path="name"/>
         <form:select class="custom-select specialist-select" id="specialty" path="specialty" cssStyle="cursor: pointer;">
@@ -124,7 +126,8 @@
                 <div>
                     <div style="background-color: #F3F3F4; border-radius: 5px; padding: 16px; padding-bottom: 0px; margin-top: 32px; margin-bottom:32px">
                         <h3 class="doctor-name"><spring:message code="specialist.reserveAppointment" /></h3>
-                        <form:form modelAttribute="appointment" method="POST" action="/specialist/${doctor.id}" id="appointment">
+                        <c:url var="specialist_id"  value="/specialist/${doctor.id}" />
+                        <form:form modelAttribute="appointment" method="POST" action="${specialist_id}" id="appointment">
                             <div class="row">
                                     <div class="col-sm-5">
                                         <label for="day"><spring:message code="specialist.appointmentDay" /></label>
@@ -136,7 +139,7 @@
                                         </select>
                                     </div>
                                 <div class="col-sm-5">
-                                    <label for="time"><spring:message code="specialist.appointmentTime" /></label>
+                                    <label for="time"><spring:message code="specialist.appointmentTime"/></label>
                                     <select class="custom-select" disabled="false" id="time" path="time" cssStyle="cursor: pointer;">
                                         <option value="no" label="Elegi el Horario" selected>Elegí el Horario</option>
                                     <c:forEach items="${appointmentsAvailable}" var="date">
@@ -200,9 +203,6 @@
                         <br>
                         <br>
                     </c:if>
-                    <%--<p>El Dr. Andres Miller ha ejercido la medicina por más de 20 años y se especializa en Medicina Antienvejecimiento y Regenerativa, así como Medicina General Integrativa.</p>--%>
-                    <%--<h3 id="reviews">Reseñas</h3>--%>
-                    <%--<p>Muy bueno</p>--%>
                 </div>
             </div>
         </div>

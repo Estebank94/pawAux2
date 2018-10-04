@@ -31,7 +31,8 @@
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
     <%--enctype="multipart/form-data" for image--%>
-    <form:form modelAttribute="professional" method="POST" action="/doctorProfile" accept-charset="ISO-8859-1" id="profile">
+    <c:url value="/doctorProfile" var="doctorProfile"/>
+    <form:form modelAttribute="professional" method="POST" action="${doctorProfile}" accept-charset="ISO-8859-1" id="profile">
         <%--<div>--%>
             <%--<label for="exampleFormControlFile1"><strong><spring:message code="avatar"/></strong></label>--%>
             <%--<form:input type="file" class="form-control-file" id="exampleFormControlFile1" path="avatar" name="exampleFormControlFile1"/>--%>

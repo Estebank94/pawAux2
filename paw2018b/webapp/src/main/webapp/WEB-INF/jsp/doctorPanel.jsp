@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: estebankramer
-  Date: 26/09/2018
-  Time: 17:38
-  To change this template use File | Settings | File Templates.
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -30,7 +23,8 @@
         </a>
         <a>
             <security:authorize access="isAuthenticated()">
-                <form:form action="${pageContext.request.contextPath}/logout" method="post">
+                <c:url var="logout" value="${pageContext.request.contextPath}/logout"/>
+                <form:form action="${logout}" method="post">
                     <security:authentication property="principal.username" var="userName"/>
                     <div class="dropdown">
                         <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:white !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>
@@ -115,7 +109,7 @@
                                     <c:forEach items="${appointment.value}" var="listItems">
                                         <div>
                                             <div class="row" style="margin: 3px">
-                                                    <%--<img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">--%>
+                                                    <%--<img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_xh_2017.jpg" class="avatar medium">--%>
                                                 <div class="center-vertical">
                                                     <div>
                                                         <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>

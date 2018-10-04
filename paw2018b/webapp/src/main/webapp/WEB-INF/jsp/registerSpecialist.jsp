@@ -36,7 +36,8 @@
     <p><spring:message code="register.personalInfo"/>.</p>
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
-    <form:form modelAttribute="personal" method="POST" action="doctorRegistration" accept-charset="ISO-8859-1">
+    <c:url value="/doctorRegistration" var="doctorRegistration"/>
+    <form:form modelAttribute="personal" method="POST" action="${doctorRegistration}" accept-charset="ISO-8859-1">
         <div class="row">
             <div class="col">
                 <label for="exampleInputEmail1"><strong><spring:message code="name"/></strong></label>

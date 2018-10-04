@@ -44,7 +44,8 @@
                         </button>
                     </security:authorize>
                     <security:authorize access="isAuthenticated()">
-                        <form:form action="${pageContext.request.contextPath}/logout" method="post">
+                        <c:url value="${pageContext.request.contextPath}/logout" var="logout"/>
+                        <form:form action="logout" method="post">
                             <security:authentication property="principal.username" var="userName"/>
                             <div class="dropdown center-vertical">
                                 <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; color: #257CBF !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>
@@ -91,7 +92,8 @@
     <div class="container padding-top-big padding-bottom-big">
         <p class="jumbotron-subtitle"><spring:message code="brand.slogan" /></p>
         <div class="navbar-search-home">
-            <form:form action="processForm" method="POST" modelAttribute="search" accept-charset="ISO-8859-1">
+            <c:url value="/processForm" var="processForm"/>
+            <form:form action="${processForm}" method="POST" modelAttribute="search" accept-charset="ISO-8859-1">
                 <div class="input-group container">
                     <form:input type="text" aria-label="Buscar por nombre del médico" placeholder="Nombre del médico" class="form-control" path="name"/>
                     <form:select class="custom-select" id="speciality" path="specialty" cssStyle="cursor: pointer;">

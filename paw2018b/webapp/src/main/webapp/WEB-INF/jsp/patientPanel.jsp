@@ -30,7 +30,8 @@
         </a>
         <a>
             <security:authorize access="isAuthenticated()">
-                <form:form action="${pageContext.request.contextPath}/logout" method="post">
+                <c:url value="${pageContext.request.contextPath}/logout" var="logout"/>
+                <form:form action="${logout}" method="post">
                     <security:authentication property="principal.username" var="userName"/>
                     <div class="dropdown">
                         <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:white !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>

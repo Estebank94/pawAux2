@@ -271,6 +271,7 @@ public class RegistrationController {
         }
 
         boolean withInfo = false;
+        doctor.getSpecialty().remove(null);
         if(doctor.getSpecialty() != null) {
             LOGGER.debug("Doctor has description");
             withInfo = true;
@@ -363,8 +364,6 @@ public class RegistrationController {
         mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
 
         return mav;
-//        final ModelAndView mav = new ModelAndView("ok");
-//        return mav;
     }
 
 
