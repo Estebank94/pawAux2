@@ -48,7 +48,7 @@
                     </button>
                 </security:authorize>
                 <security:authorize access="isAuthenticated()">
-                    <c:url value="${pageContext.request.contextPath}/logout" var="logout"/>
+                    <c:url value="/logout" var="logout"/>
                     <form:form action="${logout}" method="post">
                         <security:authentication property="principal.username" var="userName"/>
                         <div class="dropdown">
@@ -57,7 +57,7 @@
                                 <button class="dropdown-item" type="submit">Cerrar Sesion</button>
                                     <%--ARREGLAR !!! hay que arreglar el dropdown se ve por abajo del search form--%>
                                 <security:authorize access="hasRole('ROLE_DOCTOR')">
-                                    <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="${pageContext.request.contextPath}/doctorPanel"/>'">
+                                    <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="/doctorPanel"/>'">
                                         Ver Perfil
                                     </button>
                                     <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="/specialist/${doctorID}'"/>">
@@ -65,7 +65,7 @@
                                     </button>
                                 </security:authorize>
                                 <security:authorize access="hasRole('ROLE_PATIENT') and !hasRole('ROLE_DOCTOR')">
-                                    <button class="btn btn-light dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="${pageContext.request.contextPath}/patientPanel"/>'">
+                                    <button class="btn btn-light dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="/patientPanel"/>'">
                                         Ver Perfil
                                     </button>
                                 </security:authorize>

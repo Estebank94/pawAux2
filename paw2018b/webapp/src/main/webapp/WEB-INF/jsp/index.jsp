@@ -44,7 +44,7 @@
                         </button>
                     </security:authorize>
                     <security:authorize access="isAuthenticated()">
-                        <c:url value="${pageContext.request.contextPath}/logout" var="logout"/>
+                        <c:url value="/logout" var="logout"/>
                         <form:form action="logout" method="post">
                             <security:authentication property="principal.username" var="userName"/>
                             <div class="dropdown center-vertical">
