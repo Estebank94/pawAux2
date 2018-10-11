@@ -23,7 +23,7 @@
         </a>
         <a>
             <security:authorize access="isAuthenticated()">
-                <c:url var="logout" value="${pageContext.request.contextPath}/logout"/>
+                <c:url var="logout" value="/logout"/>
                 <form:form action="${logout}" method="post">
                     <security:authentication property="principal.username" var="userName"/>
                     <div class="dropdown">
@@ -50,9 +50,17 @@
                             <div>
                                 <p class="doctor-specialty"><spring:message code="welcome"/></p>
                                 <h3 class="doctor-name">Dr. <c:out value="${doctor.lastName}"/>, <c:out value="${doctor.firstName}"/></h3>
+                                <div class="row container">
+                                    <c:forEach items="${doctor.specialty}" var="doctorSpecialty">
+                                        <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty}"/></p>
+                                    </c:forEach>
+                                </div>
                                 <br>
                                 <c:if test="${professionalIncomplete eq true}">
                                     <button type="button" class="btn btn-outline-secondary" onclick="window.location='<c:url value="/doctorProfile"/>'"><i class="fas fa-cog"></i><spring:message code="complete"/></button>
+                                </c:if>
+                                <c:if test="${addInfo eq true}">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="window.location='<c:url value="/doctorProfile"/>'"><i class="fas fa-cog"></i> <spring:message code="addInfo"/></button>
                                 </c:if>
                             </div>
                         </div>
