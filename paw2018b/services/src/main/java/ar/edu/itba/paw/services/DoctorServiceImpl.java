@@ -419,7 +419,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public Optional<Doctor> setDoctorSpecialty(Integer doctorId, Set<String> specialty){
-        LOGGER.debug("DoctorServiceImpl: setDoctorSpecialty");
+        LOGGER.debug("setDoctorSpecialty");
         Optional<Doctor> doctorOptional = doctorDao.findDoctorById(doctorId);
         Doctor doctor = doctorOptional.get();
         doctor.setSpecialty(specialty);
@@ -430,7 +430,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public Optional<Doctor> setDoctorInsurance(Integer doctorId,  Map<String, Set<String>> insurance){
-        LOGGER.debug("DoctorServiceImpl: setDoctoeInsurance");
+        LOGGER.debug("setDoctorInsurance");
         Optional<Doctor> doctorOptional = doctorDao.findDoctorById(doctorId);
         Doctor doctor = doctorOptional.get();
         Optional<List<Integer>> insurancesPlanIds = insurancePlanDao.getInsurancesPlanIds(insurance);
@@ -441,7 +441,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public Optional<Doctor> setWorkingHours(Integer doctorId, List<WorkingHours> workingHours){
-        LOGGER.debug("DoctorServiceImpl: setWorkingHours");
+        LOGGER.debug("setWorkingHours");
         Optional<Doctor> doctorOptional = doctorDao.findDoctorById(doctorId);
         Doctor doctor = doctorOptional.get();
         doctor.setWorkingHours(workingHours);
