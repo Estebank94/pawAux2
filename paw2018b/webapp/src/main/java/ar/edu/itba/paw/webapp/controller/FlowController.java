@@ -67,7 +67,8 @@ public class FlowController {
 					LOGGER.debug("The User Logged in is a DOCTOR with ID: {}", doctor.getId());
 				}catch (NotFoundDoctorException ex1){
 					LOGGER.trace("404 error");
-					return new ModelAndView("finalStep");
+					/*aca esta llegando cuando toco en el registrationController waldoc*/
+					return new ModelAndView("404");
 				} catch (NotFoundPacientException e) {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
