@@ -75,19 +75,19 @@ public class DoctorPanelController {
         LOGGER.debug("Doctor Panel: Doctor with ID: {}", doctorId);
 
         if(doctorId != 0 && doctorId != null){
-            System.out.println("Education " + doctor.getDescription().getEducation());
-            System.out.println("Language " + doctor.getDescription().getLanguages().contains(null));
-            System.out.println("Certificate " + doctor.getDescription().getCertificate());
 
-//            if(doctor.getSpecialty() == null
-//                    || doctor.getInsurance().isEmpty()
-//                    || doctor.getWorkingHours().isEmpty()
-//                    || doctor.getDescription().getEducation() == null
-//                    || doctor.getDescription().getLanguages().contains(null)
-//                    || doctor.getDescription().getCertificate() == null){
-//
-//                mav.addObject("professionalIncomplete", true);
-//            }
+            /*completar información*/
+            if(doctor.getSpecialty() == null
+                    || doctor.getInsurance().isEmpty()
+                    || doctor.getWorkingHours().isEmpty()){
+                mav.addObject("professionalIncomplete", true);
+            }
+            /*agregar información*/
+            else if(doctor.getDescription().getEducation() == null
+                    || doctor.getDescription().getLanguages().contains(null)
+                    || doctor.getDescription().getCertificate() == null){
+               mav.addObject("addInfo", true);
+            }
 
             Map<LocalDate, List<Appointment>> appointments = doctor.appointmentsMap();
             LOGGER.debug("GET doctor's appointments: {}", appointments);
