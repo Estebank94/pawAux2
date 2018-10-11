@@ -46,7 +46,7 @@
                 <div>
                     <security:authorize access="!isAuthenticated()">
                         <button class="btn btn-secondary" style="background-color:transparent; border-color:transparent;" type="button" onclick="window.location='<c:url value="/showLogIn"/>'">
-                            Iniciá Sesión
+                            <spring:message code="login.message"/>
                         </button>
                     </security:authorize>
                     <security:authorize access="isAuthenticated()">
@@ -59,15 +59,15 @@
                                     <%--ARREGLAR !!! hay que arreglar el dropdown se ve por abajo del search form--%>
                                     <security:authorize access="hasRole('ROLE_DOCTOR')">
                                         <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="/doctorPanel"/>'">
-                                            Ver Perfil
+                                            <spring:message code="dropdown.viewProfile"/>
                                         </button>
                                         <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="/specialist/${doctorID}"/>'">
-                                            Mis Datos
+                                            <spring:message code="dropdown.viewInfo"/>
                                         </button>
                                     </security:authorize>
                                     <security:authorize access="hasRole('ROLE_PATIENT') and !hasRole('ROLE_DOCTOR')">
                                         <button class="btn btn-light dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="/patientPanel"/>'">
-                                            Ver Perfil
+                                            <spring:message code="dropdown.viewProfile"/>
                                         </button>
                                     </security:authorize>
                                 </div>
@@ -127,7 +127,7 @@
                             <h3 class="doctor-name">${doctorListItem.lastName}, ${doctorListItem.firstName}</h3>
                             <div class="row container">
                                 <c:forEach items="${doctorListItem.specialty}" var="doctorSpecialty">
-                                    <p class="doctor-specialty" style="padding-right: 2em">${doctorSpecialty}</p>
+                                    <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty}"/></p>
                                 </c:forEach>
                             </div>
                             <br>
@@ -179,8 +179,8 @@
                                                 <form:radiobutton path="sex" value="ALL"/> Todos <br>
                                                 <c:forEach items="${sexList}" var="sex">
                                                     <form:radiobutton path="sex" value="${sex}"/>
-                                                    <c:if test="${sex.equals('M')}">Masculino<br></c:if>
-                                                    <c:if test="${sex.equals('F')}">Femenino<br></c:if>
+                                                    <c:if test="${sex.equals('M')}"><spring:message code="male"/><br></c:if>
+                                                    <c:if test="${sex.equals('F')}"><spring:message code="female"/><br></c:if>
                                                 </c:forEach>
                                             </div>
                                         </c:if>

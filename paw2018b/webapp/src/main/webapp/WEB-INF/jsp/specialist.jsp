@@ -27,13 +27,13 @@
 <nav class="navbar navbar-dark" style="background-color: #257CBF; padding-bottom: 0px;">
     <div class="container">
         <a class="navbar-brand" href="<c:url value="/"/>">
-            <h1><strong>Waldoc</strong></h1>
+            <h1><strong><spring:message code="brand.name"/></strong></h1>
         </a>
         <div class="row">
             <security:authorize access="!isAuthenticated()">
             <div class="dropdown" style="z-index: 1000000 !important;">
                 <button class="btn btn-light dropdown-toggle" style="margin-right: 8px; background-color:transparent; border-color:white; color:white !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Registrate
+                    <spring:message code="register"/>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
                     <button class="dropdown-item" type="button" onclick="window.location='<c:url value="/patientRegistration"/>'">Registrate como paciente</button>
@@ -44,7 +44,7 @@
             <div>
                 <security:authorize access="!isAuthenticated()">
                     <button class="btn btn-secondary" style="background-color:transparent; border-color:transparent;" type="button" onclick="window.location='<c:url value="/showLogIn"/>'">
-                        Iniciá Sesión
+                        <spring:message code="login.message"/>
                     </button>
                 </security:authorize>
                 <security:authorize access="isAuthenticated()">
@@ -58,15 +58,15 @@
                                     <%--ARREGLAR !!! hay que arreglar el dropdown se ve por abajo del search form--%>
                                 <security:authorize access="hasRole('ROLE_DOCTOR')">
                                     <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="/doctorPanel"/>'">
-                                        Ver Perfil
+                                        <spring:message code="dropdown.viewProfile"/>
                                     </button>
                                     <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="/specialist/${doctorID}'"/>">
-                                        Mis Datos
+                                        <spring:message code="dropdown.viewInfo"/>
                                     </button>
                                 </security:authorize>
                                 <security:authorize access="hasRole('ROLE_PATIENT') and !hasRole('ROLE_DOCTOR')">
                                     <button class="btn btn-light dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="/patientPanel"/>'">
-                                        Ver Perfil
+                                        <spring:message code="dropdown.viewProfile"/>
                                     </button>
                                 </security:authorize>
                             </div>
@@ -211,7 +211,6 @@
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-<%--select2 dropdown--%>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <script src="<c:url value="/resources/javascript/specialist.js"/>"></script>
 
