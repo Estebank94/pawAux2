@@ -39,6 +39,10 @@
                         <label for="password"><strong><spring:message code="login.password"/></strong></label>
                         <input name="j_password" type="password" class="form-control" id="password" aria-describedby="emailHelp" placeholder="Ingresá tu contraseña">
                     </div>
+                    <br>
+                    <div>
+                        <label><input name="j_rememberme" type="checkbox"/><spring:message code="login.remember_me"/></label>
+                    </div>
                     <c:if test="${param.error != null}">
                         <p class="wrong"><spring:message code="login.invalid"/></p>
                     </c:if>

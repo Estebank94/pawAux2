@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import java.util.concurrent.TimeUnit;
+
 @Configuration
 @EnableWebSecurity
 @ComponentScan("ar.edu.itba.paw.webapp.auth")
@@ -22,6 +25,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     /*TODO: security so as to not put info on the url*/
     /*TODO: CHECK from the tables, have to decide between user, doctor, regular user*/
+
+    @Value("${prefix.remember_me}")
+    private String rememberMeKey;
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
@@ -70,7 +76,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("j_username")
                 .passwordParameter("j_password")
                 .loginPage("/showLogIn").successHandler(successHandler()).defaultSuccessUrl("/")
-                .permitAll().and().logout()
+                .permitAll()
+                .and().rememberMe().rememberMeParameter("j_rememberme").userDetailsService(userDetailsService)
+                .key(rememberMeKey).tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(30))
+                .and().logout()
                 .logoutSuccessUrl("/")
                 .permitAll().and().exceptionHandling()
                 .accessDeniedPage("/403")
