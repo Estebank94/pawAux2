@@ -77,9 +77,12 @@ import java.util.*;
                     .append("LEFT JOIN doctorSpecialty ON doctor.id = doctorSpecialty.doctorID ")
                     .append("LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ")
                     .append("LEFT JOIN information ON doctor.id = information.doctorid ")
-                    .append("LEFT JOIN workinghour ON doctor.id = workinghour.doctorid");
+                    .append("LEFT JOIN workinghour ON doctor.id = workinghour.doctorid")
+                    .append("WHERE specialtyname IS NOT NULL")
+                    .append("AND insuranceName IS NOT NULL");
 
-            final CompressedSearch compressedSearch = jdbcTemplate.query(query.toString(), new CompressedExtractor());
+
+           final CompressedSearch compressedSearch = jdbcTemplate.query(query.toString(), new CompressedExtractor());
 
             if(compressedSearch.getDoctors().isEmpty()){
                 return Optional.empty();
@@ -193,7 +196,10 @@ import java.util.*;
             {
                 select.append(")");
             }
-            select.append(")");
+            select.append(") ");
+            select.append("AND specialtyName IS NOT NULL ");
+            select.append("AND insuranceName IS NOT NULL");
+
 
             final CompressedSearch compressedSearch = jdbcTemplate.query(select.toString() , new CompressedExtractor(),
                     parameters.toArray());
@@ -357,7 +363,7 @@ import java.util.*;
                             }
                         }
                     }
-                    if(!containsDoctor /*&& validDoctor(rs)*/) {
+                    if(!containsDoctor) {
 
                         Set<String> specialty = new HashSet<>();
 
@@ -397,26 +403,6 @@ import java.util.*;
                 return compressedSearch;
             }
         }
-
-//        private boolean validDoctor(ResultSet rs) throws SQLException {
-//
-//            if (rs.getString("insurancePlanName") == null){
-//                return false;
-//            }
-//            if (rs.getString("insuranceName") == null){
-//                return false;
-//            }
-//            if(rs.getString("specialtyName") == null){
-//                return false;
-//            }
-//            if (rs.getString("starttime") == null){
-//                return false;
-//            }
-//            if (rs.getString("finishtime") == null){
-//                return false;
-//            }
-//            return true;
-//        }
 
 
         private static final RowMapper<Integer> ROW_MAPPER_IS_EXISTING_LICENCE = (rs, rowNum) -> new Integer(rs.getInt("id"));
