@@ -242,6 +242,16 @@ public class RegistrationController {
         mav.addObject("noSpecialty", true);
         mav.addObject("noInsurance", true);
 
+        if(professionalForm.getSpecialty() != null && doctor.containsSpecialty(professionalForm.getSpecialty())){mav.addObject("specialtyExists", true);}
+
+        boolean medicalCareExists = false;
+        Map<String, Set<String>> insurance;
+        if(professionalForm.getInsurance() != null || professionalForm.getInsurancePlan() != null){
+            insurance = professionalForm.createMap(professionalForm.getInsurance(), professionalForm.getInsurancePlan());
+            medicalCareExists = doctor.containsPlan(insurance);
+        }
+        System.out.println(medicalCareExists);
+        if(medicalCareExists == true){ mav.addObject("medicalCareExists", true);}
         return mav;
     }
 
@@ -294,13 +304,9 @@ public class RegistrationController {
         boolean doctorTime = false;
         if(doctor.getWorkingHours().keySet().isEmpty() && professionalForm.workingHoursList().isEmpty()){doctorTime = true; }
 
-        if(errors.hasErrors() /* || doctorTime ||specialtyExists || medicalCareExists*/){
-            if(doctorTime) System.out.println("doctorTime");
-            if(specialtyExists) System.out.println("specialtyExists");
-            if(medicalCareExists) System.out.println("medicalCareExists");
+        if(errors.hasErrors() || doctorTime || specialtyExists || medicalCareExists){
             return showDoctorProfile(professionalForm);
         }
-
 
 
         Description description = new Description(professionalForm.getCertificate(), professionalForm.getLanguages(), professionalForm.getEducation());
