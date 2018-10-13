@@ -117,6 +117,9 @@
                 <c:if test="${wrongSpecialty eq true}">
                     <p class="wrong"><spring:message code="error.specialty"/></p>
                 </c:if>
+                <c:if test="${specialtyExists eq true}">
+                    <p class="wrong"><spring:message code="error.specialtyExtists"/></p>
+                </c:if>
             </div>
             <br>
             <div>
@@ -143,6 +146,9 @@
                 </c:if>
                 <c:if test="${wrongInsurancePlan eq true}">
                     <p class="wrong"><spring:message code="wrongPlan"/></p>
+                </c:if>
+                <c:if test="${medicalCareExists eq true}">
+                    <p class="wrong"><spring:message code="error.medicalCareExists"/></p>
                 </c:if>
             </div>
             <br>
