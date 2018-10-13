@@ -78,7 +78,7 @@ import java.util.*;
                     .append("LEFT JOIN specialty ON specialty.id = doctorSpecialty.specialtyID ")
                     .append("LEFT JOIN information ON doctor.id = information.doctorid ")
                     .append("LEFT JOIN workinghour ON doctor.id = workinghour.doctorid")
-                    .append("WHERE specialtyname IS NOT NULL")
+                    .append("AND specialtyname IS NOT NULL ")
                     .append("AND insuranceName IS NOT NULL");
 
 
