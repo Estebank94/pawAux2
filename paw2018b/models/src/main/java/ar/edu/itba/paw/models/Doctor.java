@@ -324,7 +324,6 @@ public class Doctor {
 
     public boolean containsSpecialty(Set<String> specialtySet){
 
-
         for(String specia : specialtySet){
             if(getSpecialty().contains(specia)){
                 return true;
@@ -340,7 +339,7 @@ public class Doctor {
         for(String set : setPlans.keySet()){
             if(getInsurance().containsKey(set)){
                 for(String string : setPlans.get(set)){
-                    if(getInsurance().containsValue(string)){
+                    if(getInsurance().get(set).contains(string)){
                         return true;
                     }
                 }
