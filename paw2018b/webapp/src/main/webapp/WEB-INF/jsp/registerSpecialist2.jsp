@@ -50,7 +50,7 @@
                 <small class="form-text text-muted">
                     <spring:message code="maxSize"/>
                 </small>
-                <form:errors path="certificate" class="wrong"  element="p"></form:errors>
+                <form:errors path="certificate" cssClass="wrong"  element="p"></form:errors>
                 <c:if test="${wrongDesciption eq true}">
                     <p class="wrong"><spring:message code="error.description"/></p>
                 </c:if>
@@ -65,7 +65,7 @@
                 <small class="form-text text-muted">
                     <spring:message code="maxSize"/>
                 </small>
-                <form:errors path="education" class="wrong"  element="p"></form:errors>
+                <form:errors path="education" cssClass="wrong"  element="p"></form:errors>
                 <c:if test="${wrongEducaction eq true}">
                     <b class="wrong"><spring:message code="error.education"/></b>
                 </c:if>
@@ -85,7 +85,7 @@
                         <option value="Frances" label="Frances" />
                         <option value="Chino" label="Chino"/>
                     </select>
-                    <form:errors path="languages" class="wrong"  element="p"></form:errors>
+                    <form:errors path="languages" cssClass="wrong" element="p"></form:errors>
                     <c:if test="${wrongLanguage eq true}">
                         <p class="wrong"><spring:message code="error.language"/></p>
                     </c:if>
@@ -113,7 +113,7 @@
                         </c:forEach>
                 </select>
                     <%--FALTA AGREGAR VALIDACION--%>
-                <form:errors path="specialty" class="wrong"  element="p"></form:errors>
+                <form:errors path="specialty" cssClass="wrong"  element="p"></form:errors>
                 <c:if test="${wrongSpecialty eq true}">
                     <p class="wrong"><spring:message code="error.specialty"/></p>
                 </c:if>
@@ -140,7 +140,7 @@
                         <option value="${insuranceName.name}" label="${insuranceName.name}"/>
                     </c:forEach>
                 </select>
-                <form:errors path="insurance" class="wrong"  element="p"></form:errors>
+                <form:errors path="insurance" cssClass="wrong"  element="p"></form:errors>
                 <c:if test="${wrongInsurance eq true}">
                     <p class="wrong"><spring:message code="wrongInsurance"/></p>
                 </c:if>

@@ -42,7 +42,7 @@
             <div class="col">
                 <label for="exampleInputEmail1"><strong><spring:message code="name"/></strong></label>
                 <form:input type="text" class="form-control" placeholder="Ingresá tu nombre" path="firstName"/>
-                <form:errors path="firstName" class="wrong"  element="p"></form:errors>
+                <form:errors path="firstName" cssClass="wrong"  element="p"></form:errors>
                 <c:if test="${wrongFirstName eq true}">
                     <p class="wrong"><spring:message code="error.badName"/></p>
                 </c:if>
@@ -50,7 +50,7 @@
             <div class="col">
                 <label for="exampleInputEmail1"><strong>Apellido</strong></label>
                 <form:input type="text" class="form-control" placeholder="Ingresá tu apellido" path="lastName"/>
-                <form:errors path="lastName" class="wrong"  element="p"></form:errors>
+                <form:errors path="lastName" cssClass="wrong"  element="p"></form:errors>
                 <c:if test="${wrongLastName eq true}">
                     <p class="wrong"><spring:message code="error.badLastName"/></p>
                 </c:if>
@@ -60,7 +60,7 @@
         <div>
             <label for="exampleInputEmail1"><strong><spring:message code="mail"/></strong></label>
             <form:input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu mail" path="email"/>
-            <form:errors path="email" class="wrong"  element="p"></form:errors>
+            <form:errors path="email" cssClass="wrong"  element="p"></form:errors>
             <c:if test="${wrongEmail eq true}">
                 <p class="wrong"><spring:message code="error.badMail"/></p>
             </c:if>
@@ -73,7 +73,7 @@
             <div class="col">
                 <label for="inputPassword5"><strong><spring:message code="password"/></strong></label>
                 <form:input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" placeholder="Creá tu contraseña" path="password"/>
-                <form:errors path="password" class="wrong"  element="p"></form:errors>
+                <form:errors path="password" cssClass="wrong"  element="p"></form:errors>
                 <small id="passwordHelpBlock" class="form-text text-muted">
                     <spring:message code="password.message"/>
                 </small>
@@ -87,7 +87,7 @@
             <div class="col">
                 <label for="inputPassword5"><strong><spring:message code="repeatPassword"/></strong></label>
                 <form:input type="password" id="inputPassword5" class="form-control" placeholder="Confirmá tu contraseña" path="passwordConfirmation"/>
-                <form:errors path="passwordConfirmation" class="wrong"  element="p"></form:errors>
+                <form:errors path="passwordConfirmation" cssClass="wrong"  element="p"></form:errors>
             </div>
         </div>
         <br>
@@ -97,7 +97,7 @@
             <small class="form-text text-muted">
                 <spring:message code="phone.hint"/>
             </small>
-            <form:errors path="phoneNumber" class="wrong"  element="p"></form:errors>
+            <form:errors path="phoneNumber" cssClass="wrong"  element="p"></form:errors>
             <c:if test="${wrongPhoneNumber eq true}">
                 <p class="wrong"><spring:message code="error.wrongNumber"/></p>
             </c:if>
@@ -106,7 +106,7 @@
         <div>
             <label for="exampleInputEmail1"><strong><spring:message code="address"/></strong></label>
             <form:input class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu dirección" path="address"/>
-            <form:errors path="address" class="wrong"  element="p"></form:errors>
+            <form:errors path="address" cssClass="wrong"  element="p"></form:errors>
             <c:if test="${wrongAddress eq true}">
                 <p class="wrong"><spring:message code="error.badAddress"/></p>
             </c:if>
@@ -118,7 +118,7 @@
                 <option value="F"><spring:message code="female"/></option>
                 <option value="M"><spring:message code="male"/></option>
             </form:select>
-            <form:errors path="sex" class="wrong"  element="p"></form:errors>
+            <form:errors path="sex" cssClass="wrong"  element="p"></form:errors>
             <c:if test="${wrongSex eq true}">
                 <p class="wrong"><spring:message code="error.sex"/></p>
             </c:if>
@@ -127,7 +127,7 @@
         <div>
             <label for="exampleInputEmail1"><strong><spring:message code="licence"/></strong></label>
             <form:input class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingresá tu matrícula" path="licence"/>
-            <form:errors path="licence" class="wrong"  element="p"></form:errors>
+            <form:errors path="licence" cssClass="wrong"  element="p"></form:errors>
             <c:if test="${repeatedLicence eq true}">
                 <p class="wrong"><spring:message code="error.repeatedLicence"/></p>
             </c:if>
