@@ -3,6 +3,9 @@ package ar.edu.itba.paw.models;
 import ar.edu.itba.paw.App;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,11 +25,16 @@ public class Doctor {
     Set<String> specialty;
     Map<String, Set<String>> insurance;
     Integer id;
-    Description description;
     String phoneNumber;
     Map< DayOfWeek, List<WorkingHours>> workingHours;
+    @OneToMany(mappedBy = "doctor")
     Set<Appointment> appointments;
     List<Review> reviews;
+    @OneToOne
+    Patient patient;
+
+    @JoinColumn (name = "doctor_id")
+    Description description;
 
     @Autowired
     public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, Integer id, Description description, String phoneNumber, Map<DayOfWeek,List<WorkingHours>> workingHours) {

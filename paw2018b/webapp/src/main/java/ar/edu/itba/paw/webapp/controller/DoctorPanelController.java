@@ -59,7 +59,7 @@ public class DoctorPanelController {
             return new ModelAndView("404");
         }
 
-        Integer doctorId = patient.getDoctorId();
+        Integer doctorId = patient.getDoctor().getId();
 
         Doctor doctor = null;
         try {

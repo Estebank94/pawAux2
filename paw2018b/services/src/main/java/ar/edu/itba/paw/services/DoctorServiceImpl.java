@@ -47,7 +47,7 @@ public class DoctorServiceImpl implements DoctorService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DoctorServiceImpl.class);
 
     @Override
-    public Optional<CompressedSearch> listDoctors() {
+    public List<Doctor> listDoctors() {
         LOGGER.debug("DoctorServiceImpl: listDoctors");
         return doctorDao.listDoctors();
     }
@@ -413,7 +413,7 @@ public class DoctorServiceImpl implements DoctorService {
         LOGGER.debug("Set descrption for doctor with ID: {}", doctorId);
         doctor.setDescription(description);
         LOGGER.debug("Set the description in the DB for doctor with ID: {}", doctorId);
-        descriptionDao.addDescription(doctor.getId(), description);
+        descriptionDao.createDescription(description.getCertificate(), description.getLanguages(), description.getEducation());
         return Optional.ofNullable(doctor);
     }
 

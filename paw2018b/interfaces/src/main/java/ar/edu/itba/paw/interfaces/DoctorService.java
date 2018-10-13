@@ -3,6 +3,7 @@ package ar.edu.itba.paw.interfaces;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
 
+import javax.print.Doc;
 import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,8 @@ import java.util.Set;
 
 public interface DoctorService {
 
-   Optional<CompressedSearch> listDoctors();
+
+   List<Doctor> listDoctors();
 
    Optional<CompressedSearch> findDoctors(Search search) throws NotValidSearchException;
 

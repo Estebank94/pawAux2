@@ -198,7 +198,7 @@ public class RegistrationController {
         }
         Doctor doctor = null;
         try {
-            doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+            doctor = doctorService.findDoctorById(patient.getDoctor().getId()).get();
         } catch (NotFoundDoctorException e) {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
@@ -261,7 +261,7 @@ public class RegistrationController {
         }
         Doctor doctor = null;
         try {
-            doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+            doctor = doctorService.findDoctorById(patient.getDoctor().getId()).get();
         } catch (NotFoundDoctorException e) {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
@@ -322,7 +322,7 @@ public class RegistrationController {
             //can't have description values in null;
             LOGGER.debug("SET full Doctor's information to DB");
             try {
-                Doctor doctorProfessional = doctorService.setDoctorInfo(patient.getDoctorId(), professionalForm.getSpecialty(), insurance,workingHours ,description).get();
+                Doctor doctorProfessional = doctorService.setDoctorInfo(patient.getDoctor().getId(), professionalForm.getSpecialty(), insurance,workingHours ,description).get();
             } catch (NotValidDoctorIdException e) {
                 LOGGER.trace("Error 404");
                 return new ModelAndView("404");

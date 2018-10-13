@@ -6,8 +6,8 @@ import java.util.Set;
 
 public interface DescriptionDao {
 
-        Description createDescription(Integer doctorId, String certificate, Set<String> languages, String education);
+        Description createDescription(String certificate, Set<String> languages, String education);
 
-        void addDescription(Integer doctorId, Description description);
+//        void addDescription(Integer doctorId, Description description);
 
 }

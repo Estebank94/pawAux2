@@ -1,19 +1,34 @@
 package ar.edu.itba.paw.models;
 
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
 public class Patient {
 
+    @Id
     private Integer patientId;
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private String email;
     private String password;
-    private Integer doctorId;
+    @OneToMany(mappedBy = "patient")
     private Set<Appointment> appointments;
+
+    @OneToOne(mappedBy = "patient")
+    private Doctor doctor;
+
+    public Patient( String firstName, String lastName, String phoneNumber, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.password = password;
+    }
 
     public Patient(Integer patientId, String firstName, String lastName, String phoneNumber, String email, String password) {
         this.patientId = patientId;
@@ -22,7 +37,6 @@ public class Patient {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
-        this.doctorId = null;
     }
 
     public Patient(Integer patientId, String firstName, String lastName, String phoneNumber, String email, String password, Integer doctorId) {
@@ -32,7 +46,6 @@ public class Patient {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
-        this.doctorId = doctorId;
     }
 
     public Integer getPatientId() {
@@ -83,14 +96,6 @@ public class Patient {
         this.password = password;
     }
 
-    public Integer getDoctorId() {
-        return doctorId;
-    }
-
-    public void setDoctorId(Integer doctorId) {
-        this.doctorId = doctorId;
-    }
-
     public Set<Appointment> getAppointments() {
         return appointments;
     }
@@ -99,20 +104,28 @@ public class Patient {
         this.appointments = appointments;
     }
 
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
     public Set<Appointment> getFutureAppointments(){
         Set<Appointment> returnSet = new HashSet<>();
         Set<Appointment> appointments = getAppointments();
         LocalDate today = LocalDate.now();
         LocalTime now = LocalTime.now();
 
-            for (Appointment appointmentIterator: appointments){
-                if (appointmentIterator.getAppointmentDay().isAfter(today)){
-                    returnSet.add(appointmentIterator);
-                } else if (appointmentIterator.getAppointmentDay().isEqual(today) && appointmentIterator.getAppointmentTime().isAfter(now)){
-                    returnSet.add(appointmentIterator);
-                }
+        for (Appointment appointmentIterator: appointments){
+            if (appointmentIterator.getAppointmentDay().isAfter(today)){
+                returnSet.add(appointmentIterator);
+            } else if (appointmentIterator.getAppointmentDay().isEqual(today) && appointmentIterator.getAppointmentTime().isAfter(now)){
+                returnSet.add(appointmentIterator);
             }
-            return returnSet;
+        }
+        return returnSet;
 
     }
 
@@ -121,16 +134,16 @@ public class Patient {
         Map<LocalDate, List<Appointment>> appointments = new HashMap<>();
         Set<Appointment> all = getFutureAppointments();
 
-            for(Appointment appoint : all){
-                if(appointments.containsKey(appoint.getAppointmentDay())){
-                    appointments.get(appoint.getAppointmentDay()).add(appoint);
-                }else{
-                    List<Appointment> list = new ArrayList<>();
-                    list.add(appoint);
-                    appointments.put(appoint.getAppointmentDay(),list);
-                }
+        for(Appointment appoint : all){
+            if(appointments.containsKey(appoint.getAppointmentDay())){
+                appointments.get(appoint.getAppointmentDay()).add(appoint);
+            }else{
+                List<Appointment> list = new ArrayList<>();
+                list.add(appoint);
+                appointments.put(appoint.getAppointmentDay(),list);
             }
-            return appointments;
+        }
+        return appointments;
 
 
     }

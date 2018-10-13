@@ -14,7 +14,8 @@ import java.util.Set;
 
 public interface DoctorDao {
 
-    Optional<CompressedSearch> listDoctors();
+
+    List<Doctor> listDoctors();
 
     Optional<CompressedSearch> findDoctors(Search search);
 

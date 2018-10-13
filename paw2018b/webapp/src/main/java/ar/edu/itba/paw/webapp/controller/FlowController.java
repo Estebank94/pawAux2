@@ -63,7 +63,7 @@ public class FlowController {
 				Patient patient;
 				try {
 					patient = patientService.findPatientByEmail(authentication.getName());
-					doctor = doctorService.findDoctorById(patient.getDoctorId()).get();
+					doctor = doctorService.findDoctorById(patient.getDoctor().getId()).get();
 					LOGGER.debug("The User Logged in is a DOCTOR with ID: {}", doctor.getId());
 				}catch (NotFoundDoctorException ex1){
 					LOGGER.trace("404 error");
@@ -84,57 +84,54 @@ public class FlowController {
 
 	@RequestMapping("/processForm")
 	public ModelAndView processForm(@ModelAttribute("search") Search theSearch) throws NotValidSearchException {
-		LOGGER.debug("Calling: ProcessForm");
-
+//		LOGGER.debug("Calling: ProcessForm");
+//
 		final ModelAndView mav = new ModelAndView("specialists");
-		Optional<CompressedSearch> compressedSearch;
-		compressedSearch = doctorService.findDoctors(theSearch);
-		List<Doctor> doctorsList = null;
-		if(compressedSearch.isPresent()) {
-			doctorsList = compressedSearch.get().getDoctors();
-		}
-		else {
-			compressedSearch = doctorService.listDoctors();
-			mav.addObject("notFound", "no");
-			if(compressedSearch.isPresent()) {
-				doctorsList = compressedSearch.get().getDoctors();
-			}
-			theSearch.setName("");
-			theSearch.setInsurance("no");
-			theSearch.setSpecialty("");
-		}
-		boolean hasUserRole = false;
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+//		Optional<CompressedSearch> compressedSearch;
+//		compressedSearch = doctorService.findDoctors(theSearch);
+//		List<Doctor> doctorsList = null;
+//		if(compressedSearch.isPresent()) {
+//			doctorsList = compressedSearch.get().getDoctors();
+//		}
+//		else {
+//			doctorsList = doctorService.listDoctors();
+//			mav.addObject("notFound", "no");
+//			theSearch.setName("");
+//			theSearch.setInsurance("no");
+//			theSearch.setSpecialty("");
+//		}
+//		boolean hasUserRole = false;
+//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+//
+//			hasUserRole = authentication.getAuthorities().stream()
+//					.anyMatch(r -> r.getAuthority().equals("ROLE_DOCTOR"));
+//			if(hasUserRole){
+//				Patient patient = null;
+//				try {
+//					patient = patientService.findPatientByEmail(authentication.getName());
+//				} catch (NotValidEmailException e) {
+//					LOGGER.trace("404 error");
+//					return new ModelAndView("404");
+//				} catch (NotFoundPacientException e) {
+//					LOGGER.trace("404 error");
+//					return new ModelAndView("404");
+//				}
+//				mav.addObject("doctorID", patient.getDoctor().getId());
+//			}
+//		}
+//
+//		LOGGER.debug("GET DoctorList {}", doctorsList.toString());
+//		LOGGER.debug("GET ListInsurance {}", searchService.listInsurancesWithDoctors().get().toString());
+//		LOGGER.debug("GET specialtyList {}",  searchService.listSpecialtiesWithDoctors().get().toString());
+//		LOGGER.debug("GET sexList {}", compressedSearch.get().getSex().toString());
+//		LOGGER.debug("GET insuranceNameList {}", compressedSearch.get().getInsurance().toString());
 
-			hasUserRole = authentication.getAuthorities().stream()
-					.anyMatch(r -> r.getAuthority().equals("ROLE_DOCTOR"));
-			if(hasUserRole){
-				Patient patient = null;
-				try {
-					patient = patientService.findPatientByEmail(authentication.getName());
-				} catch (NotValidEmailException e) {
-					LOGGER.trace("404 error");
-					return new ModelAndView("404");
-				} catch (NotFoundPacientException e) {
-					LOGGER.trace("404 error");
-					return new ModelAndView("404");
-				}
-				mav.addObject("doctorID", patient.getDoctorId());
-			}
-		}
-
-		LOGGER.debug("GET DoctorList {}", doctorsList.toString());
-		LOGGER.debug("GET ListInsurance {}", searchService.listInsurancesWithDoctors().get().toString());
-		LOGGER.debug("GET specialtyList {}",  searchService.listSpecialtiesWithDoctors().get().toString());
-		LOGGER.debug("GET sexList {}", compressedSearch.get().getSex().toString());
-		LOGGER.debug("GET insuranceNameList {}", compressedSearch.get().getInsurance().toString());
-
-		mav.addObject("doctorList", doctorsList);
-		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
-		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
-		mav.addObject("sexList", compressedSearch.get().getSex());
-		mav.addObject("insuranceNameList", compressedSearch.get().getInsurance());
+		mav.addObject("doctorList", doctorService.listDoctors());
+//		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
+//		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
+//		mav.addObject("sexList", compressedSearch.get().getSex());
+//		mav.addObject("insuranceNameList", compressedSearch.get().getInsurance());
 		mav.addObject("previousSearch", theSearch);
 
 
@@ -216,7 +213,7 @@ public class FlowController {
 		LocalDate day = LocalDate.parse(appointmentForm.getDay());
 		LocalTime time = LocalTime.parse(appointmentForm.getTime());
 		try {
-			appointmentService.createAppointment(doctorId, patient.getPatientId(), day, time);
+			appointmentService.createAppointment(day, time);
 		} catch (RepeatedAppointmentException e) {
 			LOGGER.debug("The appointment has just been taken");
 			return doctorDescription(doctorId,search,appointmentForm).addObject("appointmentTaken", true);

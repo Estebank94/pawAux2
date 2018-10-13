@@ -10,6 +10,6 @@ import java.time.LocalTime;
 import java.util.Optional;
 
 public interface AppointmentDao {
-    Optional<Appointment> createAppointment(Integer doctorId, Integer clientId, LocalDate appointmentDay, LocalTime appointmentTime) throws Exception;
+    Appointment createAppointment(LocalDate appointmentDay, LocalTime appointmentTime) throws Exception;
 
 }
