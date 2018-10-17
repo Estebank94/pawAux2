@@ -57,7 +57,7 @@
                                 </div>
                                 <br>
                                 <c:if test="${professionalIncomplete eq true}">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="window.location='<c:url value="/doctorProfile"/>'"><i class="fas fa-cog"></i><spring:message code="complete"/></button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="window.location='<c:url value="/doctorProfile"/>'"><i class="fas fa-cog"></i> <spring:message code="complete"/></button>
                                 </c:if>
                                 <c:if test="${addInfo eq true}">
                                     <button type="button" class="btn btn-outline-secondary" onclick="window.location='<c:url value="/doctorProfile"/>'"><i class="fas fa-cog"></i> <spring:message code="addInfo"/></button>
