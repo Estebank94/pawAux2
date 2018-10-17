@@ -35,7 +35,6 @@ public class PatientForm {
 
 
     @Pattern(regexp = "^((\\(|)(011)(\\)|)(|\\s)(\\d{8}|\\d{4}\\s\\d{4}))$", message = "Su número de teléfono es incorrecto. Recuerde que el formato es : (Código de Area) Número de Teléfono ")
-    @NotNull(message = "Este campo es obligatorio. Por favor, ingrese su número de teléfono")
     @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su número de teléfono")
     private String phoneNumber;
 
