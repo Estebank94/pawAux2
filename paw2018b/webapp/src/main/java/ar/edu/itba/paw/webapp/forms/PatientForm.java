@@ -11,12 +11,12 @@ public class PatientForm {
 
     @Length(min=3, max=45, message = "Cantidad de caracteres incorrecto. Su nombre debe contener entre 3 y 45 caracteres")
     @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su nombre")
-    @Pattern(regexp = "^[a-zA-Z\\s]*$", message = "Su nombre no puede contener simbolos que no sean letras y especios")
+    @Pattern(regexp = "^[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]*$", message = "Su nombre no puede contener simbolos que no sean letras y especios")
     private String firstName;
 
     @Length(min=2, max=45, message = "Cantidad de caracteres incorrecto. Su apellido debe contener entre 2 y 45 caracteres")
     @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su apellido")
-    @Pattern(regexp = "^[a-zA-Z\\s]*$", message = "Su apellido no puede contener simbolos que no sean letras y especios")
+    @Pattern(regexp = "^[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]*$", message = "Su apellido no puede contener simbolos que no sean letras y especios")
     private String lastName;
 
     @Email(message = "El email ingresado es invalido. Por favor, ingrese un email valido")
