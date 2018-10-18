@@ -9,9 +9,9 @@ import javax.validation.constraints.Pattern;
 
 public class PatientForm {
 
-    @Length(min=3, max=45)
-    @NotEmpty()
-//    @Pattern(regexp = "^[a-zA-Z\\s]*$", message = "Su nombre no puede contener simbolos que no sean letras y especios")
+    @Length(min=3, max=45, message = "Cantidad de caracteres incorrecto. Su nombre debe contener entre 3 y 45 caracteres")
+    @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su nombre")
+    @Pattern(regexp = "^[a-zA-Z\\s]*$", message = "Su nombre no puede contener simbolos que no sean letras y especios")
     private String firstName;
 
     @Length(min=2, max=45, message = "Cantidad de caracteres incorrecto. Su apellido debe contener entre 2 y 45 caracteres")
