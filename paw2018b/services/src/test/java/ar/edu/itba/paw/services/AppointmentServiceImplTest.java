@@ -56,8 +56,6 @@ public class AppointmentServiceImplTest {
     @Test
     public void testCreateAppointment() throws Exception {
 
-        System.out.println(DATE);
-        System.out.println(TIME.toString());
 
         final Optional<Appointment> appointment = appointmentServiceImpl.createAppointment(DOC_ID, PATIENT_ID, DATE, TIME);
 

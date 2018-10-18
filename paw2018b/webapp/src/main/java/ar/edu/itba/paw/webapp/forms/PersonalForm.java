@@ -24,7 +24,7 @@ public class PersonalForm {
     @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su email")
     private String email;
 
-    @Length(min=6, max=10, message = "Cantidad de caracteres incorrecto. Su contraseña debe contener entre 6 y 10 caracteres")
+    @Length(min=6, max=55, message = "Cantidad de caracteres incorrecto. Su contraseña debe contener entre 6 y 55 caracteres y un número")
     @NotEmpty(message = "Este campo es obligatorio.Por favor, ingrese una contraseña")
     @Pattern(regexp = "[a-zA-Z0-9]+", message = "Su contraseña debe contener al menos un número. Por favor, reingrese una contraseña valida")
     private String password;

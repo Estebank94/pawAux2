@@ -39,7 +39,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         final Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_PATIENT"));
 
-        System.out.println(user.getDoctorId());
 
         if(user.getDoctorId() != null && user.getDoctorId() != 0) {
             authorities.add(new SimpleGrantedAuthority("ROLE_DOCTOR"));

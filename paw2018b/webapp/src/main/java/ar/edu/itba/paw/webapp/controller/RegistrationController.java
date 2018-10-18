@@ -69,7 +69,6 @@ public class RegistrationController {
         )){
             if(!personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())){
                 /*TODO: this doesn't show the error message*/
-                System.out.println("passwordMatching");
                 showDoctorRegistration(personalForm).addObject("noMatchingPassword", true)
                         .addObject("repeatedEmail",false)
                         .addObject("wrongLastName",false)
@@ -171,7 +170,7 @@ public class RegistrationController {
     @RequestMapping(value = "/doctorProfile", method = {RequestMethod.GET})
     public ModelAndView showDoctorProfile(@ModelAttribute("professional")ProfessionalForm professionalForm){
 
-        System.out.print("Entre al Get de DOCTOR_PROFILE");
+
         LOGGER.debug("RegistrationController: showDoctorProfile");
         final ModelAndView mav = new ModelAndView("registerSpecialist2");
 
@@ -250,7 +249,6 @@ public class RegistrationController {
             insurance = professionalForm.createMap(professionalForm.getInsurance(), professionalForm.getInsurancePlan());
             medicalCareExists = doctor.containsPlan(insurance);
         }
-        System.out.println(medicalCareExists);
         if(medicalCareExists == true){ mav.addObject("medicalCareExists", true);}
         return mav;
     }

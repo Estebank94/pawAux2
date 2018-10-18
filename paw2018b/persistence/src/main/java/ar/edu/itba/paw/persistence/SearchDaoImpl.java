@@ -142,10 +142,6 @@ public class SearchDaoImpl implements SearchDao {
                 }
 
             }
-            System.out.println(map.keySet().size());
-            for(String insurance : map.keySet()){
-                System.out.println(insurance);
-            }
             return map;
         }
     }

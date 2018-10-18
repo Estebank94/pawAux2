@@ -228,7 +228,6 @@ import java.util.*;
 
             final CompressedSearch compressedSearch = jdbcTemplate.query(select.toString() , new CompressedExtractor(), id);
 
-            System.out.print(compressedSearch.getDoctors().size());
             if(compressedSearch.getDoctors().isEmpty()){
                 return Optional.empty();
             }

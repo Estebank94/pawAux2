@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.models;
 
-import ar.edu.itba.paw.App;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
