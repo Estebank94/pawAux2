@@ -292,7 +292,7 @@ public class RegistrationController {
 
 
         boolean doctorTime = false;
-        if(doctor.getWorkingHours().keySet().isEmpty() && professionalForm.workingHoursList().isEmpty()){doctorTime = true; }
+        if(doctor.getWorkingHours().isEmpty() && professionalForm.workingHoursList().isEmpty()){doctorTime = true; }
 
         if(errors.hasErrors() /* || doctorTime ||specialtyExists || medicalCareExists*/){
             if(doctorTime) System.out.println("doctorTime");

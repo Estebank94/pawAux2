@@ -3,9 +3,7 @@ package ar.edu.itba.paw.models;
 import ar.edu.itba.paw.App;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,6 +14,8 @@ import java.util.*;
  * Created by estebankramer on 31/08/2018.
  */
 
+@Entity
+@Table(name = "doctor")
 public class Doctor {
     String firstName;
     String lastName;
@@ -23,43 +23,86 @@ public class Doctor {
     String address;
     String avatar;
     Set<String> specialty;
-    Map<String, Set<String>> insurance;
+    List<Insurance> insurances;
+    List<InsurancePlan> insurancePlans;
+    @Id
     Integer id;
     String phoneNumber;
-    Map< DayOfWeek, List<WorkingHours>> workingHours;
+    @OneToMany(mappedBy = "doctor")
+    List<WorkingHours> workingHours;
     @OneToMany(mappedBy = "doctor")
     Set<Appointment> appointments;
     List<Review> reviews;
     @OneToOne
     Patient patient;
 
-    @JoinColumn (name = "doctor_id")
+    public List<Insurance> getInsurances() {
+        return insurances;
+    }
+
+    public void setInsurances(List<Insurance> insurances) {
+        this.insurances = insurances;
+    }
+
+    @OneToOne
     Description description;
 
-    @Autowired
-    public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, Integer id, Description description, String phoneNumber, Map<DayOfWeek,List<WorkingHours>> workingHours) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.sex = sex;
-        this.address = address;
-        this.avatar = avatar;
-        this.specialty = specialty;
-        this.insurance = insurance;
-        this.id = id;
-        this.description = description;
-        this.phoneNumber = phoneNumber;
+//  Agregue estos porque estaban en la tabla y no en el model
+    String license;
+    String district;
+
+    public void setWorkingHours(List<WorkingHours> workingHours) {
         this.workingHours = workingHours;
     }
 
-    public Doctor(String firstName, String lastName, String sex, String avatar, String address, Integer id, String phoneNumber){
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.sex = sex;
-        this.address = address;
-        this.avatar = avatar;
-        this.id = id;
-        this.phoneNumber = phoneNumber;
+    public Patient getPatient() {
+        return patient;
     }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public String getLicense() {
+        return license;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    //    @Autowired
+//    public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, Integer id, Description description, String phoneNumber, Map<DayOfWeek,List<WorkingHours>> workingHours) {
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.sex = sex;
+//        this.address = address;
+//        this.avatar = avatar;
+//        this.specialty = specialty;
+//        this.insurance = insurance;
+//        this.id = id;
+//        this.description = description;
+//        this.phoneNumber = phoneNumber;
+//        this.workingHours = workingHours;
+//    }
+//
+//    public Doctor(String firstName, String lastName, String sex, String avatar, String address, Integer id, String phoneNumber){
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.sex = sex;
+//        this.address = address;
+//        this.avatar = avatar;
+//        this.id = id;
+//        this.phoneNumber = phoneNumber;
+//    }
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -133,12 +176,12 @@ public class Doctor {
         this.id = id;
     }
 
-    public Map<String, Set<String>> getInsurance() {
-        return insurance;
+    public List<InsurancePlan> getInsurancePlans() {
+        return insurancePlans;
     }
 
-    public void setInsurance(Map<String, Set<String>> insurance) {
-        this.insurance = insurance;
+    public void setInsurancePlans(List<InsurancePlan> insurancePlans) {
+        this.insurancePlans = insurancePlans;
     }
 
     @Override
@@ -169,8 +212,18 @@ public class Doctor {
         return map;
     }
 
+    private List<WorkingHours> getWorkingHoursByDay(DayOfWeek dow){
+        List<WorkingHours> ans = new ArrayList<>();
+        for (WorkingHours wh: workingHours){
+            if (wh.getDayOfWeek().equals(dow)){
+                ans.add(wh);
+            }
+        }
+        return ans;
+    }
+
     private List<Appointment> generateAppointments(LocalDate date) {
-        List<WorkingHours> workingHours = getWorkingHours().get(date.getDayOfWeek());
+        List<WorkingHours> workingHours = getWorkingHoursByDay(date.getDayOfWeek());
 
         List<Appointment> list = new ArrayList<>();
         Set<Appointment> futureAppointments = getFutureAppointments();
@@ -197,30 +250,12 @@ public class Doctor {
     }
 
 
-    public Map<DayOfWeek, List<WorkingHours>> getWorkingHours() {
+    public List<WorkingHours> getWorkingHours() {
         return workingHours;
     }
 
-    public void setWorkingHoursMap(Map<DayOfWeek, List<WorkingHours>> workingHoursMap) {
-        this.workingHours = workingHoursMap;
-    }
-
-    public void setWorkingHours(Map<DayOfWeek, List<WorkingHours>> workingHours) {
+    public void setWorkingHoursMap(List<WorkingHours> workingHours) {
         this.workingHours = workingHours;
-    }
-
-    public void setWorkingHours(List<WorkingHours> workingHours){
-        Map< DayOfWeek, List<WorkingHours>>  map = new HashMap<>();
-        for (WorkingHours workingHoursIterator: workingHours){
-            if (!map.containsKey(workingHoursIterator.getDayOfWeek())){
-                List<WorkingHours> whDayList = new ArrayList<>();
-                whDayList.add(workingHoursIterator);
-                map.put(workingHoursIterator.getDayOfWeek(), whDayList);
-            } else if (!map.get(workingHoursIterator.getDayOfWeek()).contains(workingHoursIterator)){
-                map.get(workingHoursIterator.getDayOfWeek()).add(workingHoursIterator);
-            }
-        }
-        setWorkingHours(map);
     }
 
     public Set<Appointment> getAppointments() {
@@ -321,10 +356,15 @@ public class Doctor {
 
     public Set<DayOfWeek> emptyWorkingHours(){
         Set<DayOfWeek> days = new HashSet<>();
-
         for(DayOfWeek day : DayOfWeek.values()){
-            if(!workingHours.keySet().contains(day)){
-                days.add(day);
+            days.add(day);
+        }
+        for (WorkingHours wh: workingHours){
+            if (days.contains(wh.getDayOfWeek())){
+                days.remove(wh.getDayOfWeek());
+            }
+            if (days.isEmpty()){
+                return days;
             }
         }
         return days;
@@ -341,16 +381,12 @@ public class Doctor {
         return false;
     }
 
-    public boolean containsPlan(Map<String, Set<String>> setPlans){
+    public boolean containsPlan(List<InsurancePlan> plans){
 
-        Map<String, Set<String>> insurance;
-
-        for(String set : setPlans.keySet()){
-            if(getInsurance().containsKey(set)){
-                for(String string : setPlans.get(set)){
-                    if(getInsurance().containsValue(string)){
-                        return true;
-                    }
+        for(InsurancePlan wantedPlan : plans){
+            for(InsurancePlan insurancePlan : insurancePlans){
+                if(wantedPlan.equals(insurancePlan)){
+                    return true;
                 }
             }
         }

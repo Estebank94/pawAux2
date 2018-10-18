@@ -1,12 +1,12 @@
 package ar.edu.itba.paw.models;
 
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
+@Entity
+@Table(name="patient")
 public class Patient {
 
     @Id

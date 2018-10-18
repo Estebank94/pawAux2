@@ -32,7 +32,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
     @Override
     public List<Doctor> listDoctors() {
-        final TypedQuery<Doctor> query = em.createQuery("FROM doctor", Doctor.class);
+        final TypedQuery<Doctor> query = em.createQuery("FROM Doctor", Doctor.class);
         final List<Doctor> list = query.getResultList();
         return list.isEmpty() ? null : list;
     }

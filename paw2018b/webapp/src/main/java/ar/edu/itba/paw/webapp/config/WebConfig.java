@@ -10,8 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-import org.springframework.jdbc.datasource.init.DataSourceInitializer;
-import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -76,20 +74,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
-		final DataSourceInitializer dsi = new DataSourceInitializer();
-		dsi.setDataSource(ds);
-		dsi.setDatabasePopulator(databasePopulator());
-		return dsi;
-	}
-
-	private DatabasePopulator databasePopulator(){
-		final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-		dbp.addScript(schemaSQL);
-		return dbp;
-	}
-
-	@Bean
 	public MessageSource messageSource (){
 		final ReloadableResourceBundleMessageSource source = new ReloadableResourceBundleMessageSource();
 		source.setBasename("/resources/i18n/messages");
@@ -132,12 +116,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-		factoryBean.setPackagesToScan("ar.edu.itba.model");
+		factoryBean.setPackagesToScan("ar.edu.itba.paw.models");
 		factoryBean.setDataSource(dataSource());
 		final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		factoryBean.setJpaVendorAdapter(vendorAdapter);
 		final Properties properties = new Properties();
-		properties.setProperty("hibernate.hbm2ddl.auto", "update");
+		properties.setProperty("hibernate.hbm2ddl.auto", "validate");
 		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
 		// Si ponen esto en prod, hay tabla!!!
 		properties.setProperty("hibernate.show_sql", "true");

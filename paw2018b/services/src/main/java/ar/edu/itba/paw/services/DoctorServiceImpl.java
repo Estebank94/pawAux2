@@ -299,7 +299,8 @@ public class DoctorServiceImpl implements DoctorService {
         LOGGER.debug("Add working hours to DAO");
         LOGGER.debug("Doctor with ID: {}", doctor.getId());
         LOGGER.debug("Doctor's working hours {}", workingHours);
-        workingHoursDao.addWorkingHour(doctor.getId(), workingHours);
+//        workingHoursDao.addWorkingHour(doctor.getId(), workingHours);
+        workingHoursDao.addWorkingHour( workingHours);
 
         if (insurance == null){
             LOGGER.debug("The insurance map of the doctor with ID: {} is null", doctorId);
@@ -445,7 +446,8 @@ public class DoctorServiceImpl implements DoctorService {
         Optional<Doctor> doctorOptional = doctorDao.findDoctorById(doctorId);
         Doctor doctor = doctorOptional.get();
         doctor.setWorkingHours(workingHours);
-        workingHoursDao.addWorkingHour(doctor.getId(), workingHours);
+//        workingHoursDao.addWorkingHour(doctor.getId(), workingHours);
+        workingHoursDao.addWorkingHour(workingHours);
         return Optional.ofNullable(doctor);
     }
 

@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface WorkingHoursDao {
 
-    void addWorkingHour(Integer doctorId, WorkingHours workingHours);
+    void addWorkingHour(WorkingHours workingHours);
 
-    void addWorkingHour(Integer doctorId, List<WorkingHours> workingHours);
+    void addWorkingHour(List<WorkingHours> workingHours);
 
 }

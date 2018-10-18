@@ -1,11 +1,18 @@
 package ar.edu.itba.paw.models;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
+@Entity
+@Table(name="appointment")
 public class Appointment implements Comparable<Appointment>{
+    @Id
+    private Integer id;
     private LocalDate appointmentDay;
     private LocalTime appointmentTime;
     @ManyToOne
@@ -32,6 +39,18 @@ public class Appointment implements Comparable<Appointment>{
         this.appointmentTime = appointmentTime;
         this.patient = patient;
         this.doctor = doctor;
+    }
+
+    public Appointment(){
+
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public LocalDate getAppointmentDay() {
