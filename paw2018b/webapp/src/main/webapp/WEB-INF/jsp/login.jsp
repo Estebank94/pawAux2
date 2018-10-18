@@ -32,12 +32,14 @@
                 <form:form action="${loginUrl}" method="POST" enctype="application/x-www-form-urlencoded">
                     <div>
                         <label for="username"><strong><spring:message code="login.user"/></strong></label>
-                        <input name="j_username" type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Ingresá tu email">
+                        <spring:message code="holder.mail" var="mail"/>
+                        <input name="j_username" type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder="${mail}">
                     </div>
                     <br>
                     <div>
                         <label for="password"><strong><spring:message code="login.password"/></strong></label>
-                        <input name="j_password" type="password" class="form-control" id="password" aria-describedby="emailHelp" placeholder="Ingresá tu contraseña">
+                        <spring:message code="holder.newPassword" var="password"/>
+                        <input name="j_password" type="password" class="form-control" id="password" aria-describedby="emailHelp" placeholder="${password}">
                     </div>
                     <br>
                     <div>

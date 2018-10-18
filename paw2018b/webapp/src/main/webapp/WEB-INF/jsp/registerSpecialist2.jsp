@@ -46,7 +46,8 @@
         <c:if test="${noCertificate eq true}">
             <div>
                 <label for="exampleFormControlTextarea1"><strong><spring:message code="desciption"/></strong></label>
-                <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Describi tu forma de trabajo..." path="certificate"/>
+                <spring:message code="holder.work" var="work"/>
+                <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="${work}" path="certificate"/>
                 <small class="form-text text-muted">
                     <spring:message code="maxSize"/>
                 </small>
@@ -61,7 +62,8 @@
         <c:if test="${noEducation eq true}">
             <div>
                 <label for="exampleFormControlTextarea1"><strong><spring:message code="education"/></strong></label>
-                <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Describi tu estudios academicos..." path="education"/>
+                <spring:message code="holder.studies" var="studies"/>
+                <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="${studies}" path="education"/>
                 <small class="form-text text-muted">
                     <spring:message code="maxSize"/>
                 </small>

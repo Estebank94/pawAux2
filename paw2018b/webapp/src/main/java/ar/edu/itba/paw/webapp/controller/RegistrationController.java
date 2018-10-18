@@ -413,7 +413,6 @@ public class RegistrationController {
         if (errors.hasErrors() || !patientForm.matchingPasswords(patientForm.getPassword(), patientForm.getPasswordConfirmation())
             /* || patientService.findPatientByEmail(personalForm.getEmail()) != null*/) {
             if (!patientForm.matchingPasswords(patientForm.getPassword(), patientForm.getPasswordConfirmation())) {
-                /*TODO: this doesn't show the error message*/
                 showPatientRegistration(patientForm, "wrongPassword");
             }/*else if(patientService.findPatientByEmail(personalForm.getEmail()) != null){
                 showDoctorRegistration(personalForm).addObject("userExists", true);
