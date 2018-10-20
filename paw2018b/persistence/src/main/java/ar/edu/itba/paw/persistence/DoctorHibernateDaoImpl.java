@@ -19,6 +19,7 @@ import java.util.Optional;
  */
 @Repository
 public class DoctorHibernateDaoImpl implements DoctorDao {
+
     @PersistenceContext
     private EntityManager em;
 

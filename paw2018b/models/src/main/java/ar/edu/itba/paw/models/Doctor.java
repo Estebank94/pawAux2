@@ -8,6 +8,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -17,38 +18,43 @@ import java.util.*;
 @Entity
 @Table(name = "doctor")
 public class Doctor {
+    @Id
+    @GeneratedValue
+    Integer id;
     String firstName;
     String lastName;
     String sex;
     String address;
     String avatar;
-    Set<String> specialty;
-    List<Insurance> insurances;
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name="doctorSpecialty",
+            joinColumns = {@JoinColumn(name = "doctorid", referencedColumnName="id")},
+            inverseJoinColumns = {@JoinColumn(name = "specialtyid", referencedColumnName="id")}
+    )
+    Set<Specialty> specialties;
+
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name="medicalCare",
+            joinColumns = {@JoinColumn(name="doctorid", referencedColumnName="id")},
+            inverseJoinColumns = {@JoinColumn(name="insuranceplanid", referencedColumnName="id")}
+    )
     List<InsurancePlan> insurancePlans;
-    @Id
-    Integer id;
     String phoneNumber;
     @OneToMany(mappedBy = "doctor")
     List<WorkingHours> workingHours;
     @OneToMany(mappedBy = "doctor")
     Set<Appointment> appointments;
-    List<Review> reviews;
+//    List<Review> reviews;
     @OneToOne
     Patient patient;
-
-    public List<Insurance> getInsurances() {
-        return insurances;
-    }
-
-    public void setInsurances(List<Insurance> insurances) {
-        this.insurances = insurances;
-    }
 
     @OneToOne
     Description description;
 
 //  Agregue estos porque estaban en la tabla y no en el model
-    String license;
+    Integer licence;
     String district;
 
     public void setWorkingHours(List<WorkingHours> workingHours) {
@@ -63,12 +69,12 @@ public class Doctor {
         this.patient = patient;
     }
 
-    public String getLicense() {
-        return license;
+    public Integer getLicence() {
+        return licence;
     }
 
-    public void setLicense(String license) {
-        this.license = license;
+    public void setLicence(Integer licence) {
+        this.licence = licence;
     }
 
     public String getDistrict() {
@@ -120,12 +126,12 @@ public class Doctor {
         this.description = description;
     }
 
-    public Set<String> getSpecialty() {
-        return specialty;
+    public Set<Specialty> getSpecialties() {
+        return specialties;
     }
 
-    public void setSpecialty(Set<String> specialty) {
-        this.specialty = specialty;
+    public void setSpecialties(Set<Specialty> specialties) {
+        this.specialties = specialties;
     }
 
     public String getFirstName() {
@@ -236,7 +242,14 @@ public class Doctor {
                     if (workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).isAfter(workingHoursIterator.getFinishTime()) || (workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).compareTo(workingHoursIterator.getFinishTime()) == 0)){
                         flag = false;
                     } else{
-                        Appointment dateAppointment = new Appointment(date,workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i));
+
+                        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        String formattedDate = date.format(dateFormatter);
+
+                        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+                        String formattedTime = workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).format(timeFormatter);
+
+                        Appointment dateAppointment = new Appointment(formattedDate,formattedTime, patient);
                         if (!futureAppointments.contains(dateAppointment)){
                             list.add(dateAppointment);
                         }
@@ -273,22 +286,22 @@ public class Doctor {
         LocalTime now = LocalTime.now();
 
         for (Appointment appointmentIterator: appointments){
-            if (appointmentIterator.getAppointmentDay().isAfter(today)){
+            if (LocalDate.parse(appointmentIterator.getAppointmentDay()).isAfter(today)){
                 returnSet.add(appointmentIterator);
-            } else if (appointmentIterator.getAppointmentDay().isEqual(today) && appointmentIterator.getAppointmentTime().isAfter(now)){
+            } else if (LocalDate.parse(appointmentIterator.getAppointmentDay()).isEqual(today) && LocalTime.parse(appointmentIterator.getAppointmentTime()).isAfter(now)){
                 returnSet.add(appointmentIterator);
             }
         }
         return returnSet;
     }
-
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
+//
+//    public List<Review> getReviews() {
+//        return reviews;
+//    }
+//
+//    public void setReviews(List<Review> reviews) {
+//        this.reviews = reviews;
+//    }
 
     public Map<LocalDate, List<LocalTime>> appointmentsToMap (){
 
@@ -296,11 +309,11 @@ public class Doctor {
         Set<Appointment> all = getFutureAppointments();
         for(Appointment appoint : all){
             if(appointments.containsKey(appoint.getAppointmentDay())){
-                appointments.get(appoint.getAppointmentDay()).add(appoint.getAppointmentTime());
+                appointments.get(appoint.getAppointmentDay()).add(LocalTime.parse(appoint.getAppointmentTime()));
             }else{
                 List<LocalTime> list = new ArrayList<>();
-                list.add(appoint.getAppointmentTime());
-                appointments.put(appoint.getAppointmentDay(),list);
+                list.add(LocalTime.parse(appoint.getAppointmentTime()));
+                appointments.put(LocalDate.parse(appoint.getAppointmentDay()),list);
             }
         }
         return  appointments;
@@ -316,7 +329,7 @@ public class Doctor {
             }else{
                 List<Appointment> list = new ArrayList<>();
                 list.add(appoint);
-                appointments.put(appoint.getAppointmentDay(),list);
+                appointments.put(LocalDate.parse(appoint.getAppointmentDay()),list);
             }
         }
         return  appointments;
@@ -374,7 +387,7 @@ public class Doctor {
 
 
         for(String specia : specialtySet){
-            if(getSpecialty().contains(specia)){
+            if(getSpecialties().contains(specia)){
                 return true;
             }
         }
@@ -391,6 +404,14 @@ public class Doctor {
             }
         }
         return false;
+    }
+
+    public void addSpecialties(Set<Specialty> specialties){
+        getSpecialties().addAll(specialties);
+    }
+
+    public void addInsurancePlans(List<InsurancePlan> plans){
+        getInsurancePlans().addAll(plans);
     }
 
 }

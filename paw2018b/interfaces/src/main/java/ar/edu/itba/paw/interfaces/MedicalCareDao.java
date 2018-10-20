@@ -1,10 +1,13 @@
 package ar.edu.itba.paw.interfaces;
 
+import ar.edu.itba.paw.models.Doctor;
+import ar.edu.itba.paw.models.InsurancePlan;
+
 import java.util.List;
 
 public interface MedicalCareDao {
 
-    void addMedicalCare(Integer doctorId, Integer insurancePlanId);
+    void addMedicalCare(Doctor doctor, InsurancePlan insurancePlan);
 
-    void addMedicalCare(Integer doctorId, List<Integer> insurancePlanId);
+    void addMedicalCare(Doctor doctor, List<InsurancePlan> insurancePlans);
 }

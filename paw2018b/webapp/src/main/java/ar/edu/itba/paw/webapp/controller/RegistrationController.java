@@ -34,10 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.sound.midi.SysexMessage;
 import javax.validation.Valid;
 import java.time.DayOfWeek;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 @Controller
@@ -206,9 +203,9 @@ public class RegistrationController {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
         }
-        doctor.getDescription().getLanguages().remove(null);
-        doctor.getSpecialty().remove(null);
-        doctor.getInsurance().keySet().remove(null);
+        doctor.getDescription().getLanguages();
+        doctor.getSpecialties().remove(null);
+        doctor.getInsurancePlans().remove(null);
 
         LOGGER.debug("Logged: {}", patient.getPatientId());
 
@@ -227,8 +224,8 @@ public class RegistrationController {
         if(emptyWorkingHours.contains(DayOfWeek.SATURDAY)){mav.addObject("EmptySaturday", true);}
         else{mav.addObject("EmptySaturday", false);}
 
-        if(doctor.getDescription().getLanguages().size() == 0 && doctor.getDescription().getEducation() == null &&
-                doctor.getDescription().getCertificate() == null && doctor.getSpecialty().isEmpty() && doctor.getInsurance().isEmpty()){
+        if(doctor.getDescription().getLanguages() == null && doctor.getDescription().getEducation() == null &&
+                doctor.getDescription().getCertificate() == null && doctor.getSpecialties().isEmpty() && doctor.getInsurancePlans().isEmpty()){
             mav.addObject("noLanguage", true);
             mav.addObject("noEducation", true);
             mav.addObject("noCertificate", true);
@@ -271,8 +268,8 @@ public class RegistrationController {
         }
 
         boolean withInfo = false;
-        doctor.getSpecialty().remove(null);
-        if(doctor.getSpecialty() != null) {
+        doctor.getSpecialties().remove(null);
+        if(doctor.getSpecialties() != null) {
             LOGGER.debug("Doctor has description");
             withInfo = true;
         }
@@ -284,10 +281,9 @@ public class RegistrationController {
         }
 
         boolean medicalCareExists = false;
-        Map<String, Set<String>> insurance = new HashMap<>();
-        if(professionalForm.getInsurance() != null || professionalForm.getInsurancePlan() != null){
-            insurance = professionalForm.createMap(professionalForm.getInsurance(), professionalForm.getInsurancePlan());
-            medicalCareExists = doctor.containsPlan(insurance);
+        Set<Insurance> insurance = new HashSet<>();
+        if(professionalForm.getInsurance() != null || professionalForm.getInsurancePlans() != null){
+            medicalCareExists = doctor.containsPlan(professionalForm.getInsurancePlans());
         }
 
 
@@ -309,10 +305,10 @@ public class RegistrationController {
 
         //when no description is available, just set one field
         if(withInfo){
-            doctorService.setDoctorSpecialty(doctor.getId(), professionalForm.getSpecialty());
+            doctorService.setDoctorSpecialty(doctor, professionalForm.getSpecialties());
             if(insurance != null){
                 LOGGER.debug("SET Doctor's insurance to DB");
-                doctorService.setDoctorInsurance(doctor.getId(), insurance);
+                doctorService.setDoctorInsurancePlans(doctor, professionalForm.getInsurancePlans());
             }
             if(workingHours != null){
                 LOGGER.debug("SET Doctor's workingHours to DB");
@@ -322,7 +318,7 @@ public class RegistrationController {
             //can't have description values in null;
             LOGGER.debug("SET full Doctor's information to DB");
             try {
-                Doctor doctorProfessional = doctorService.setDoctorInfo(patient.getDoctor().getId(), professionalForm.getSpecialty(), insurance,workingHours ,description).get();
+                Doctor doctorProfessional = doctorService.setDoctorInfo(patient.getDoctor().getId(), professionalForm.getSpecialties(), insurance,workingHours ,description).get();
             } catch (NotValidDoctorIdException e) {
                 LOGGER.trace("Error 404");
                 return new ModelAndView("404");

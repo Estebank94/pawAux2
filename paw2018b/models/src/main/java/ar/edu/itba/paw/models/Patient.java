@@ -119,9 +119,9 @@ public class Patient {
         LocalTime now = LocalTime.now();
 
         for (Appointment appointmentIterator: appointments){
-            if (appointmentIterator.getAppointmentDay().isAfter(today)){
+            if (LocalDate.parse(appointmentIterator.getAppointmentDay()).isAfter(today)){
                 returnSet.add(appointmentIterator);
-            } else if (appointmentIterator.getAppointmentDay().isEqual(today) && appointmentIterator.getAppointmentTime().isAfter(now)){
+            } else if (LocalDate.parse(appointmentIterator.getAppointmentDay()).isEqual(today) && LocalTime.parse(appointmentIterator.getAppointmentTime()).isAfter(now)){
                 returnSet.add(appointmentIterator);
             }
         }
@@ -140,7 +140,7 @@ public class Patient {
             }else{
                 List<Appointment> list = new ArrayList<>();
                 list.add(appoint);
-                appointments.put(appoint.getAppointmentDay(),list);
+                appointments.put(LocalDate.parse(appoint.getAppointmentDay()),list);
             }
         }
         return appointments;

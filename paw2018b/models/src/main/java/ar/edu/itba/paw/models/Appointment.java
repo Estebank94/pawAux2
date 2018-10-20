@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -12,38 +9,49 @@ import java.util.*;
 @Table(name="appointment")
 public class Appointment implements Comparable<Appointment>{
     @Id
+    @GeneratedValue
     private Integer id;
-    private LocalDate appointmentDay;
-    private LocalTime appointmentTime;
+//    private LocalDate appointmentDay;
+//    private LocalTime appointmentTime;
+    private String appointmentDay;
+    private String appointmentTime;
     @ManyToOne
+    @JoinTable(
+            name="patient",
+            joinColumns= {@JoinColumn(name="id")},
+            inverseJoinColumns={@JoinColumn(name="clientid")}
+    )
     private Patient patient;
     @ManyToOne
+    @JoinTable(
+            name="doctor",
+            joinColumns= {@JoinColumn(name="id")},
+            inverseJoinColumns={@JoinColumn(name="doctorid")}
+    )
     private Doctor doctor;
 
-    public Appointment(LocalDate appointmentDay, LocalTime appointmentTime) {
-        this.appointmentDay = appointmentDay;
-        this.appointmentTime = appointmentTime;
-        this.patient = null;
-        this.doctor = null;
-    }
-
-    public Appointment(LocalDate appointmentDay, LocalTime appointmentTime, Patient patient) {
-        this.appointmentDay = appointmentDay;
-        this.appointmentTime = appointmentTime;
-        this.patient = patient;
-        this.doctor = null;
-    }
-
-    public Appointment(LocalDate appointmentDay, LocalTime appointmentTime, Patient patient, Doctor doctor) {
+    public Appointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) {
         this.appointmentDay = appointmentDay;
         this.appointmentTime = appointmentTime;
         this.patient = patient;
         this.doctor = doctor;
     }
 
+    public Appointment(String appointmentDay, String appointmentTime) {
+        this.appointmentDay = appointmentDay;
+        this.appointmentTime = appointmentTime;
+    }
+
+    public Appointment(String appointmentDay, String appointmentTime, Patient patient) {
+        this.appointmentDay = appointmentDay;
+        this.appointmentTime = appointmentTime;
+        this.patient = patient;
+    }
+
     public Appointment(){
 
     }
+
 
     public Integer getId() {
         return id;
@@ -53,19 +61,19 @@ public class Appointment implements Comparable<Appointment>{
         this.id = id;
     }
 
-    public LocalDate getAppointmentDay() {
+    public String getAppointmentDay() {
         return appointmentDay;
     }
 
-    public void setAppointmentDay(LocalDate appointmentDay) {
+    public void setAppointmentDay(String appointmentDay) {
         this.appointmentDay = appointmentDay;
     }
 
-    public LocalTime getAppointmentTime() {
+    public String getAppointmentTime() {
         return appointmentTime;
     }
 
-    public void setAppointmentTime(LocalTime appointmentTime) {
+    public void setAppointmentTime(String appointmentTime) {
         this.appointmentTime = appointmentTime;
     }
 

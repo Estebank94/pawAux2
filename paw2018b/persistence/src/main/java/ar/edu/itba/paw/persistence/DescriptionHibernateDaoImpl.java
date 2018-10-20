@@ -19,11 +19,9 @@ public class DescriptionHibernateDaoImpl implements DescriptionDao {
     private EntityManager em;
 
     @Override
-    public Description createDescription(String certificate, Set<String> languages, String education) {
+    public Description createDescription(String certificate, String languages, String education) {
         final Description description = new Description(certificate, languages, education);
         em.persist(description);
         return description;
     }
-
-
 }

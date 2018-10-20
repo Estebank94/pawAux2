@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.interfaces;
 
 import ar.edu.itba.paw.models.Appointment;
+import ar.edu.itba.paw.models.Doctor;
+import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.RepeatedAppointmentException;
 
 import javax.swing.text.html.Option;
@@ -10,6 +12,6 @@ import java.time.LocalTime;
 import java.util.Optional;
 
 public interface AppointmentDao {
-    Appointment createAppointment(LocalDate appointmentDay, LocalTime appointmentTime) throws Exception;
+    Appointment createAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) throws Exception;
 
 }

@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.forms;
 
 import ar.edu.itba.paw.interfaces.TimeService;
+import ar.edu.itba.paw.models.InsurancePlan;
+import ar.edu.itba.paw.models.Specialty;
 import ar.edu.itba.paw.models.WorkingHours;
 import com.sun.corba.se.spi.orbutil.threadpool.Work;
 import org.hibernate.validator.constraints.Length;
@@ -28,12 +30,12 @@ public class ProfessionalForm {
     @Length(max=250, message = "Cantidad de caracteres incorrecto. Su nombre debe contener entre 3 y 45 caracteres")
     private String education;
 
-    private Set<String> languages;
+    private String languages;
 
     @NotNull(message = "Por favor, registre las obras sociales con las que trabaja")
     private List<String> insurance;
     @NotNull(message = "Por favor, indique los planes de la obra social seleccionada, o seleccione una")
-    private List<Set<String>> insurancePlan;
+    private List<InsurancePlan> insurancePlans;
     @NotNull(message = "Por favor, indique su especialidad")
     private Set<String> specialty;
 
@@ -193,11 +195,11 @@ public class ProfessionalForm {
         this.education = education;
     }
 
-    public Set<String> getLanguages() {
+    public String getLanguages() {
         return languages;
     }
 
-    public void setLanguages(Set<String> languages) {
+    public void setLanguages(String languages) {
         this.languages = languages;
     }
 
@@ -209,12 +211,16 @@ public class ProfessionalForm {
         this.insurance = insurance;
     }
 
-    public List<Set<String>>  getInsurancePlan() {
-        return insurancePlan;
+    public String[] getWORKING_HOURS() {
+        return WORKING_HOURS;
     }
 
-    public void setInsurancePlan(List<Set<String>>  insurancePlan) {
-        this.insurancePlan = insurancePlan;
+    public List<InsurancePlan> getInsurancePlans() {
+        return insurancePlans;
+    }
+
+    public void setInsurancePlans(List<InsurancePlan> insurancePlans) {
+        this.insurancePlans = insurancePlans;
     }
 
     public Map<String, Set<String>> createMap(List<String> insurance, List<Set<String>> insurancePlan) {
@@ -250,6 +256,15 @@ public class ProfessionalForm {
         }
         return list;
     }
+
+    public Set<Specialty> getSpecialties(){
+        Set<Specialty> list = new HashSet<>();
+        for(String s : getSpecialty()){
+            list.add(new Specialty(s));
+        }
+        return (list.isEmpty() ? Collections.emptySet() : list);
+    }
+
 }
 
 

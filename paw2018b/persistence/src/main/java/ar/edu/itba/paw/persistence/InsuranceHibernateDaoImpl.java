@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.InsuranceDao;
 import ar.edu.itba.paw.models.Insurance;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,6 +10,8 @@ import javax.persistence.PersistenceContext;
 /**
  * Created by estebankramer on 17/10/2018.
  */
+
+@Repository
 public class InsuranceHibernateDaoImpl implements InsuranceDao {
 
     @PersistenceContext

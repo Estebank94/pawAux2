@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.*;
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
+import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.WorkingHours;
 import ar.edu.itba.paw.models.exceptions.*;
 import org.slf4j.Logger;
@@ -29,12 +30,12 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Transactional(rollbackFor= SQLException.class)
     @Override
-    public Appointment createAppointment(LocalDate appointmentDay, LocalTime appointmentTime) throws RepeatedAppointmentException, NotCreatedAppointmentException, NotValidDoctorIdException, NotValidAppointmentDayException, NotValidAppointmentTimeException, NotFoundDoctorException, NotValidPatientIdException {
+    public Appointment createAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) throws RepeatedAppointmentException, NotCreatedAppointmentException, NotValidDoctorIdException, NotValidAppointmentDayException, NotValidAppointmentTimeException, NotFoundDoctorException, NotValidPatientIdException {
         LOGGER.debug("AppointmentServiceImpl: CreateAppointment");
 
         Appointment appointment;
         try{
-           appointment =  appointmentDao.createAppointment(appointmentDay, appointmentTime);
+           appointment =  appointmentDao.createAppointment(appointmentDay, appointmentTime, patient, doctor);
         } catch (RepeatedAppointmentException e) {
             throw new RepeatedAppointmentException();
         } catch (Exception e) {

@@ -154,10 +154,11 @@ public class FlowController {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				}
-				doctor.getDescription().getLanguages().remove(null);
-				if(doctor.getDescription().getLanguages().size() == 1){
+				doctor.getDescription().getLanguages();
+				if(doctor.getDescription().getLanguages() == null){
 					doctor.getDescription().getLanguages().contains("no");
-					doctor.getDescription().getLanguages().remove("no");
+//					TODO buscar el no en el string y sacarlo. PARSERRRRR
+//					doctor.getDescription().getLanguages().remove("no");
 				}
 				boolean hasUserRole = false;
 				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -171,7 +172,8 @@ public class FlowController {
 					}
 				}
 				mav.addObject("doctor", doctor);
-				mav.addObject("insuranceNameList", doctor.getInsurance());
+//				TODO: AGREGAR FUNCION QUE BUSCA INSURANCE USANDO LOS INSURANCE PLANS
+				mav.addObject("insuranceNameList", doctor.getInsurancePlans());
 				mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
 				mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 				mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
@@ -209,11 +211,8 @@ public class FlowController {
 			LOGGER.trace("404 error");
 			return new ModelAndView("404");
 		}
-
-		LocalDate day = LocalDate.parse(appointmentForm.getDay());
-		LocalTime time = LocalTime.parse(appointmentForm.getTime());
 		try {
-			appointmentService.createAppointment(day, time);
+			appointmentService.createAppointment(appointmentForm.getDay(), appointmentForm.getTime(), patient, doctor);
 		} catch (RepeatedAppointmentException e) {
 			LOGGER.debug("The appointment has just been taken");
 			return doctorDescription(doctorId,search,appointmentForm).addObject("appointmentTaken", true);

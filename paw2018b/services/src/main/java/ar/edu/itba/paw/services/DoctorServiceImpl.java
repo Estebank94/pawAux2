@@ -29,11 +29,6 @@ public class DoctorServiceImpl implements DoctorService {
     @Autowired
     private SpecialtyDao specialtyDao;
 
-    @Autowired
-    private MedicalCareDao medicalcareDao;
-
-    @Autowired
-    private DoctorSpecialtyDao doctorSpecialtyDao;
 
     @Autowired
     private InsurancePlanDao insurancePlanDao;
@@ -220,7 +215,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Transactional(rollbackFor= SQLException.class)
     @Override
-    public Optional<Doctor> setDoctorInfo(Integer doctorId, Set<String> specialty, Map<String, Set<String>> insurance, List<WorkingHours> workingHours, Description description) throws NotValidDoctorIdException, NotFoundDoctorException, NotValidSpecialtyException, NotValidWorkingHourException, NotValidInsuranceException, NotValidInsurancePlanException, NotValidDescriptionException, NotValidLanguagesException, NotValidCertificateException, NotValidEducationException {
+    public Optional<Doctor> setDoctorInfo(Integer doctorId, Set<Specialty> specialty, Set<Insurance> insurances, List<WorkingHours> workingHours, Description description) throws NotValidDoctorIdException, NotFoundDoctorException, NotValidSpecialtyException, NotValidWorkingHourException, NotValidInsuranceException, NotValidInsurancePlanException, NotValidDescriptionException, NotValidLanguagesException, NotValidCertificateException, NotValidEducationException {
         LOGGER.debug("DoctorServiceImpl: setDoctorInfo");
         if (doctorId == null ){
             LOGGER.debug("The Doctor ID can't be null");
@@ -245,117 +240,118 @@ public class DoctorServiceImpl implements DoctorService {
             LOGGER.debug("The Specialty of a Doctor can't be null. Doctor ID: {}", doctorId);
             throw new NotValidSpecialtyException("SpecialtySet can't be null");
         }
-        for (String specialtyIterator: specialty){
-            if(specialtyIterator == null){
-                LOGGER.debug("There is a null specialty. A specialty can't be null");
-                throw new NotValidSpecialtyException("One Specialty is null. Specialty can't be null");
-            }
-            if (specialtyIterator.length() == 0){
-                LOGGER.debug("There is a specialty with 0 characters. A specialty can't be empty");
-                throw new NotValidSpecialtyException("Specialty can't be empty");
-            }
-
-            if (specialtyIterator.length() > 50){
-                LOGGER.debug("The specialty can't have more than 50 characters. Specialty Name: {}", specialty);
-                throw new NotValidSpecialtyException("Specialty can't have more than 50 characters");
-            }
-        }
+//        for (Specialty specialtyIterator: specialty){
+//            if(specialtyIterator == null){
+//                LOGGER.debug("There is a null specialty. A specialty can't be null");
+//                throw new NotValidSpecialtyException("One Specialty is null. Specialty can't be null");
+//            }
+//            if (specialtyIterator.length() == 0){
+//                LOGGER.debug("There is a specialty with 0 characters. A specialty can't be empty");
+//                throw new NotValidSpecialtyException("Specialty can't be empty");
+//            }
+//
+//            if (specialtyIterator.length() > 50){
+//                LOGGER.debug("The specialty can't have more than 50 characters. Specialty Name: {}", specialty);
+//                throw new NotValidSpecialtyException("Specialty can't have more than 50 characters");
+//            }
+//        }
         LOGGER.debug("Set specilty for Doctor with ID: {}", doctorId);
-        doctor.setSpecialty(specialty);
+        doctor.setSpecialties(specialty);
 
-        Optional<List<Integer>> specialtysId = specialtyDao.findSpecialtysId(specialty);
-        if (!specialtysId.isPresent()){
-            LOGGER.debug("Specialty: {} not recognized. Is not in the list", specialty);
-            throw new NotValidSpecialtyException("Not know specialty.");
-        } else {
-            LOGGER.debug("Add doctor Specialty List to Doctor with ID: {}", doctorId);
-            doctorSpecialtyDao.addDoctorSpecialtyList(doctor.getId(),specialtysId.get());
-        }
+        List<Specialty> specialties = specialtyDao.findSpecialties(specialty);
 
-        if (workingHours == null){
-            LOGGER.debug("The Working Hours of a Doctor can't be null. Doctor ID: {}", doctorId);
-            throw new NotValidWorkingHourException("The Working Hours list can't be null");
-        }
-        for (WorkingHours wh: workingHours){
-            if (wh == null){
-                LOGGER.debug("The Working Hour list contains a null working hour. Day: {}", wh.getDayOfWeek());
-                throw new NotValidWorkingHourException("The Working Hours list contains a null working hour");
-            }
-            if (wh.getFinishTime() == null){
-                LOGGER.debug("The Finish Time on {} is null. There can't be a null finish time", wh.getDayOfWeek());
-                throw new NotValidWorkingHourException("Finish Time from a Working Hour is null");
-            }
-            if (wh.getStartTime() == null) {
-                LOGGER.debug("The Start Time on {} is null. There can't be a null starting time", wh.getDayOfWeek());
-                throw new NotValidWorkingHourException("StartTime from a Working Hour is null");
-            }
-            if (wh.getDayOfWeek() == null){
-                LOGGER.debug("There is a null DayOfWeek. The working hour is {}", wh);
-                throw new NotValidWorkingHourException("DayOfWeek from a working hour is null");
-            }
-        }
-        LOGGER.debug("Set working hours to Doctor with ID: {}", doctorId);
-        doctor.setWorkingHours(workingHours);
-        LOGGER.debug("Add working hours to DAO");
-        LOGGER.debug("Doctor with ID: {}", doctor.getId());
-        LOGGER.debug("Doctor's working hours {}", workingHours);
-//        workingHoursDao.addWorkingHour(doctor.getId(), workingHours);
-        workingHoursDao.addWorkingHour( workingHours);
+//        if (!specialty.isPresent()){
+//            LOGGER.debug("Specialty: {} not recognized. Is not in the list", specialty);
+//            throw new NotValidSpecialtyException("Not know specialty.");
+//        } else {
+//            LOGGER.debug("Add doctor Specialty List to Doctor with ID: {}", doctorId);
+//            doctorSpecialtyDao.addDoctorSpecialtyList(doctor.getId(),specialty.get());
+//        }
+//
+//        if (workingHours == null){
+//            LOGGER.debug("The Working Hours of a Doctor can't be null. Doctor ID: {}", doctorId);
+//            throw new NotValidWorkingHourException("The Working Hours list can't be null");
+//        }
+//        for (WorkingHours wh: workingHours){
+//            if (wh == null){
+//                LOGGER.debug("The Working Hour list contains a null working hour. Day: {}", wh.getDayOfWeek());
+//                throw new NotValidWorkingHourException("The Working Hours list contains a null working hour");
+//            }
+//            if (wh.getFinishTime() == null){
+//                LOGGER.debug("The Finish Time on {} is null. There can't be a null finish time", wh.getDayOfWeek());
+//                throw new NotValidWorkingHourException("Finish Time from a Working Hour is null");
+//            }
+//            if (wh.getStartTime() == null) {
+//                LOGGER.debug("The Start Time on {} is null. There can't be a null starting time", wh.getDayOfWeek());
+//                throw new NotValidWorkingHourException("StartTime from a Working Hour is null");
+//            }
+//            if (wh.getDayOfWeek() == null){
+//                LOGGER.debug("There is a null DayOfWeek. The working hour is {}", wh);
+//                throw new NotValidWorkingHourException("DayOfWeek from a working hour is null");
+//            }
+//        }
+//        LOGGER.debug("Set working hours to Doctor with ID: {}", doctorId);
+//        doctor.setWorkingHours(workingHours);
+//        LOGGER.debug("Add working hours to DAO");
+//        LOGGER.debug("Doctor with ID: {}", doctor.getId());
+//        LOGGER.debug("Doctor's working hours {}", workingHours);
+////        workingHoursDao.addWorkingHour(doctor.getId(), workingHours);
+//        workingHoursDao.addWorkingHour( workingHours);
 
-        if (insurance == null){
-            LOGGER.debug("The insurance map of the doctor with ID: {} is null", doctorId);
-            throw new NotValidInsuranceException("Insurance map can't me null");
-        }
+//        if (insurance == null){
+//            LOGGER.debug("The insurance map of the doctor with ID: {} is null", doctorId);
+//            throw new NotValidInsuranceException("Insurance map can't me null");
+//        }
 
-        for (String key: insurance.keySet()){
-            if (key == null){
-                LOGGER.debug("The is a null insurance value for the Doctor with ID: {}", doctorId);
-                throw new NotValidInsuranceException("There is a null Insurance");
-            }
-            if (key.length() == 0){
-                LOGGER.debug("There is an empty insurance. Doctor with ID: {}", doctorId);
-                throw new NotValidInsuranceException("Insurance can't be empty");
-            }
-            if (key.length() > 100){
-                LOGGER.debug("Doctor with ID: {}", doctorId);
-                LOGGER.debug("An insurance can't have more than 100 characters. Insurance given: {}", insurance);
-                throw new NotValidInsuranceException("Insurance name can't have more than 100 characters");
-            }
-            if (insurance.get(key) == null){
-                LOGGER.debug("The doctor with ID {} has a null insurance set", doctorId);
-                throw new NotValidInsuranceException("There is a null Insurace Set");
-            }
-            for (String insuranceplan :  insurance.get(key)){
-                if (insuranceplan == null){
-                    LOGGER.debug("There is a null insurance plan in {}", key);
-                    throw new NotValidInsurancePlanException("There is an null Insurance Plan in " + key);
-                }
-                if (insuranceplan.length() == 0){
-                    LOGGER.debug("There can't be an Insurance Plan with 0 characters. Doctor ID: {}", doctorId);
-                    throw new NotValidInsurancePlanException("InsurancePlanName can't be empty");
-                }
-                if (insuranceplan.length() > 50){
-                    LOGGER.debug("The Doctor ID is: {}", doctorId);
-                    LOGGER.debug("There can't be an Insurance Plan with more than 50 characters. The insurance given is: {}", insuranceplan);
-                    throw new NotValidInsurancePlanException("InsurancePlanName can't have more than 50 characters");
-                }
-            }
-        }
+//        for (Insurance i : insurances){
+//            if (key == null){
+//                LOGGER.debug("The is a null insurance value for the Doctor with ID: {}", doctorId);
+//                throw new NotValidInsuranceException("There is a null Insurance");
+//            }
+//            if (key.length() == 0){
+//                LOGGER.debug("There is an empty insurance. Doctor with ID: {}", doctorId);
+//                throw new NotValidInsuranceException("Insurance can't be empty");
+//            }
+//            if (key.length() > 100){
+//                LOGGER.debug("Doctor with ID: {}", doctorId);
+//                LOGGER.debug("An insurance can't have more than 100 characters. Insurance given: {}", insurance);
+//                throw new NotValidInsuranceException("Insurance name can't have more than 100 characters");
+//            }
+//            if (insurance.get(key) == null){
+//                LOGGER.debug("The doctor with ID {} has a null insurance set", doctorId);
+//                throw new NotValidInsuranceException("There is a null Insurace Set");
+//            }
+//            for (String insuranceplan :  insurance.get(key)){
+//                if (insuranceplan == null){
+//                    LOGGER.debug("There is a null insurance plan in {}", key);
+//                    throw new NotValidInsurancePlanException("There is an null Insurance Plan in " + key);
+//                }
+//                if (insuranceplan.length() == 0){
+//                    LOGGER.debug("There can't be an Insurance Plan with 0 characters. Doctor ID: {}", doctorId);
+//                    throw new NotValidInsurancePlanException("InsurancePlanName can't be empty");
+//                }
+//                if (insuranceplan.length() > 50){
+//                    LOGGER.debug("The Doctor ID is: {}", doctorId);
+//                    LOGGER.debug("There can't be an Insurance Plan with more than 50 characters. The insurance given is: {}", insuranceplan);
+//                    throw new NotValidInsurancePlanException("InsurancePlanName can't have more than 50 characters");
+//                }
+//            }
+//        }
 
         LOGGER.debug("Get insurance plan ids");
-        Optional<List<Integer>> insurancesPlanIds = insurancePlanDao.getInsurancesPlanIds(insurance);
+        List<InsurancePlan> insurancePlans = insurancePlanDao.getInsurancePlansFromAllInsurances(insurances);
 
 
-        if (!insurancesPlanIds.isPresent()) {
-            LOGGER.debug("There is an unknown insurance plan: {}", insurancesPlanIds);
-            throw new NotValidInsurancePlanException("There is a not known InsurancesPlan");
-        }else{
-            LOGGER.debug("Add medical care to Dao");
-            LOGGER.debug("Insurance Plan IDs: {}", insurancesPlanIds.get());
-            medicalcareDao.addMedicalCare(doctor.getId(), insurancesPlanIds.get());
-        }
-        LOGGER.debug("Set insurance to doctor. Insurance: {}", insurance);
-        doctor.setInsurance(insurance);
+//        if (!insurancesPlan.isPresent()) {
+//            LOGGER.debug("There is an unknown insurance plan: {}", insurancesPlanIds);
+//            throw new NotValidInsurancePlanException("There is a not known InsurancesPlan");
+//        }else{
+//            LOGGER.debug("Add medical care to Dao");
+//            LOGGER.debug("Insurance Plan IDs: {}", insurancesPlanIds.get());
+//            medicalcareDao.addMedicalCare(doctor.getId(), insurancesPlanIds.get());
+//        }
+//        LOGGER.debug("Set insurance to doctor. Insurance: {}", insurance);
+        doctor.setInsurancePlans(insurancePlans);
 
 
         if (description == null) {
@@ -381,19 +377,19 @@ public class DoctorServiceImpl implements DoctorService {
         }
 
         int size = 0;
-        for (String language : description.getLanguages()){
-           if (language == null) {
-               LOGGER.debug("A null language was found in the Description");
-               throw new NotValidLanguagesException("There is a null language");
-           }
-
-           if (language.length() == 0){
-               LOGGER.debug("A language with 0 characters was found in the Description");
-               throw new NotValidLanguagesException("A language can't be empty");
-           }
-            size = size + language.length();
-           LOGGER.debug("Language: {}", language);
-        }
+//        for (String language : description.getLanguages()){
+//           if (language == null) {
+//               LOGGER.debug("A null language was found in the Description");
+//               throw new NotValidLanguagesException("There is a null language");
+//           }
+//
+//           if (language.length() == 0){
+//               LOGGER.debug("A language with 0 characters was found in the Description");
+//               throw new NotValidLanguagesException("A language can't be empty");
+//           }
+//            size = size + language.length();
+//           LOGGER.debug("Language: {}", language);
+//        }
         if (size > 100) {
             LOGGER.debug("A language with more than 100 can't exists");
             throw new NotValidLanguagesException("Languages size count can't have more than 100 characters");
@@ -419,26 +415,28 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Optional<Doctor> setDoctorSpecialty(Integer doctorId, Set<String> specialty){
+    public Optional<Doctor> setDoctorSpecialty(Doctor doctor, Set<Specialty> specialty){
         LOGGER.debug("setDoctorSpecialty");
-        Optional<Doctor> doctorOptional = doctorDao.findDoctorById(doctorId);
-        Doctor doctor = doctorOptional.get();
-        doctor.setSpecialty(specialty);
-        Optional<List<Integer>> specialtysId = specialtyDao.findSpecialtysId(specialty);
-        doctorSpecialtyDao.addDoctorSpecialtyList(doctor.getId(),specialtysId.get());
+        doctor.addSpecialties(specialty);
         return Optional.ofNullable(doctor);
     }
 
     @Override
-    public Optional<Doctor> setDoctorInsurance(Integer doctorId,  Map<String, Set<String>> insurance){
-        LOGGER.debug("setDoctorInsurance");
-        Optional<Doctor> doctorOptional = doctorDao.findDoctorById(doctorId);
-        Doctor doctor = doctorOptional.get();
-        Optional<List<Integer>> insurancesPlanIds = insurancePlanDao.getInsurancesPlanIds(insurance);
-        medicalcareDao.addMedicalCare(doctor.getId(), insurancesPlanIds.get());
-        doctor.setInsurance(insurance);
-        return Optional.ofNullable(doctor);
+    public Optional<Doctor> setDoctorInsurancePlans(Doctor doctor,  List<InsurancePlan> insurancePlans) {
+        doctor.addInsurancePlans(insurancePlans);
+        return Optional.of(doctor);
     }
+
+//    @Override
+//    public Optional<Doctor> setDoctorInsurance(Integer doctorId,  Set<Insurance> insurances){
+//        LOGGER.debug("setDoctorInsurance");
+//        Optional<Doctor> doctorOptional = doctorDao.findDoctorById(doctorId);
+//        Doctor doctor = doctorOptional.get();
+//        List<InsurancePlan> insurancesPlans = insurancePlanDao.getInsurancePlansFromAllInsurances(insurances);
+//        medicalcareDao.addMedicalCare(doctor.getId(), insurancesPlan);
+//        doctor.setInsurance(insurance);
+//        return Optional.ofNullable(doctor);
+//    }
 
     @Override
     public Optional<Doctor> setWorkingHours(Integer doctorId, List<WorkingHours> workingHours){

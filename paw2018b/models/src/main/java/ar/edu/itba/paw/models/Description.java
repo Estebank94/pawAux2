@@ -7,12 +7,12 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name="jnformation")
+@Table(name="information")
 public class Description {
 
 
     private String certificate;
-    private Set<String> languages;
+    private String languages;
     private String education;
     @Id
     private Integer id;
@@ -28,7 +28,7 @@ public class Description {
     }
 
     @Autowired
-    public Description(String certificate, Set<String> languages, String education){
+    public Description(String certificate, String languages, String education){
         this.certificate = certificate;
         this.languages = languages;
         this.education = education;
@@ -46,11 +46,11 @@ public class Description {
         this.certificate = certificate;
     }
 
-    public Set<String> getLanguages() {
+    public String getLanguages() {
         return languages;
     }
 
-    public void setLanguages(Set<String> languages) {
+    public void setLanguages(String languages) {
         this.languages = languages;
     }
 

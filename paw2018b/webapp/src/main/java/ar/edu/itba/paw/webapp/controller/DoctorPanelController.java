@@ -77,8 +77,8 @@ public class DoctorPanelController {
         if(doctorId != 0 && doctorId != null){
 
             /*completar información*/
-            if(doctor.getSpecialty() == null
-                    || doctor.getInsurance().isEmpty()
+            if(doctor.getSpecialties() == null
+                    || doctor.getInsurancePlans().isEmpty()
                     || doctor.getWorkingHours().isEmpty()){
                 mav.addObject("professionalIncomplete", true);
             }

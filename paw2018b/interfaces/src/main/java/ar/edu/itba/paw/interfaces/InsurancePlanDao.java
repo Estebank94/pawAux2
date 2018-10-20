@@ -10,7 +10,10 @@ import java.util.Set;
 
 public interface InsurancePlanDao {
 
-//      List<Integer> getInsurancesPlanIds(Set<String> insurance);
+      List<InsurancePlan> getInsurancePlansFromAllInsurances(Set<Insurance> insurance);
+
+      List<InsurancePlan> getInsurancePlans(Insurance insurance);
 
       InsurancePlan createInsurancePlan(Insurance insurance, String plan);
+
 }
