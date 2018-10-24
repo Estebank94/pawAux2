@@ -4,13 +4,13 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.NotNull;
+
 import javax.validation.constraints.Pattern;
 
 public class PatientForm {
 
-    @Length(min=3, max=45, message = "Cantidad de caracteres incorrecto. Su nombre debe contener entre 3 y 45 caracteres")
-    @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su nombre")
+    @Length(min=3, max=45)
+    @NotEmpty
     @Pattern(regexp = "^[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]*$", message = "Su nombre no puede contener simbolos que no sean letras y especios")
     private String firstName;
 
