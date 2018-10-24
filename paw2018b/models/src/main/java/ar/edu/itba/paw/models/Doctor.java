@@ -19,7 +19,7 @@ import java.util.*;
 @Table(name = "doctor")
 public class Doctor {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     String firstName;
     String lastName;
@@ -44,13 +44,15 @@ public class Doctor {
     String phoneNumber;
     @OneToMany(mappedBy = "doctor")
     List<WorkingHours> workingHours;
+
+
     @OneToMany(mappedBy = "doctor")
     Set<Appointment> appointments;
 //    List<Review> reviews;
-    @OneToOne
+    @OneToOne(mappedBy="doctor")
     Patient patient;
 
-    @OneToOne
+    @OneToOne(mappedBy="doctor")
     Description description;
 
 //  Agregue estos porque estaban en la tabla y no en el model
@@ -239,7 +241,7 @@ public class Doctor {
             for (WorkingHours workingHoursIterator: workingHours){
                 flag = true;
                 for (i = 0; flag; i++){
-                    if (workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).isAfter(workingHoursIterator.getFinishTime()) || (workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).compareTo(workingHoursIterator.getFinishTime()) == 0)){
+                    if (LocalTime.parse(workingHoursIterator.getStartTime()).plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).isAfter(LocalTime.parse(workingHoursIterator.getFinishTime())) || (LocalTime.parse(workingHoursIterator.getStartTime()).plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).compareTo(LocalTime.parse(workingHoursIterator.getFinishTime())) == 0)){
                         flag = false;
                     } else{
 
@@ -247,7 +249,7 @@ public class Doctor {
                         String formattedDate = date.format(dateFormatter);
 
                         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-                        String formattedTime = workingHoursIterator.getStartTime().plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).format(timeFormatter);
+                        String formattedTime = LocalTime.parse(workingHoursIterator.getStartTime()).plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).format(timeFormatter);
 
                         Appointment dateAppointment = new Appointment(formattedDate,formattedTime, patient);
                         if (!futureAppointments.contains(dateAppointment)){

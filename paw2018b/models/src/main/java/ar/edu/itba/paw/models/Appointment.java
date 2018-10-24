@@ -1,33 +1,24 @@
 package ar.edu.itba.paw.models;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
+
 
 @Entity
 @Table(name="appointment")
 public class Appointment implements Comparable<Appointment>{
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 //    private LocalDate appointmentDay;
 //    private LocalTime appointmentTime;
     private String appointmentDay;
     private String appointmentTime;
     @ManyToOne
-    @JoinTable(
-            name="patient",
-            joinColumns= {@JoinColumn(name="id")},
-            inverseJoinColumns={@JoinColumn(name="clientid")}
-    )
+    @JoinColumn(name="clientid")
     private Patient patient;
     @ManyToOne
-    @JoinTable(
-            name="doctor",
-            joinColumns= {@JoinColumn(name="id")},
-            inverseJoinColumns={@JoinColumn(name="doctorid")}
-    )
+    @JoinColumn(name="doctorid")
     private Doctor doctor;
 
     public Appointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) {

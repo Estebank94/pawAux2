@@ -10,7 +10,8 @@ import java.util.*;
 public class Patient {
 
     @Id
-    private Integer patientId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -19,7 +20,8 @@ public class Patient {
     @OneToMany(mappedBy = "patient")
     private Set<Appointment> appointments;
 
-    @OneToOne(mappedBy = "patient")
+    @OneToOne
+    @JoinColumn(name = "doctorid")
     private Doctor doctor;
 
     public Patient( String firstName, String lastName, String phoneNumber, String email, String password) {
@@ -30,8 +32,8 @@ public class Patient {
         this.password = password;
     }
 
-    public Patient(Integer patientId, String firstName, String lastName, String phoneNumber, String email, String password) {
-        this.patientId = patientId;
+    public Patient(Integer id, String firstName, String lastName, String phoneNumber, String email, String password) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -39,8 +41,8 @@ public class Patient {
         this.password = password;
     }
 
-    public Patient(Integer patientId, String firstName, String lastName, String phoneNumber, String email, String password, Integer doctorId) {
-        this.patientId = patientId;
+    public Patient(Integer id, String firstName, String lastName, String phoneNumber, String email, String password, Integer doctorId) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -49,11 +51,11 @@ public class Patient {
     }
 
     public Integer getPatientId() {
-        return patientId;
+        return id;
     }
 
     public void setPatientId(Integer patientId) {
-        this.patientId = patientId;
+        this.id = patientId;
     }
 
     public String getFirstName() {

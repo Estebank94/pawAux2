@@ -6,11 +6,11 @@ import javax.persistence.*;
  * Created by estebankramer on 19/10/2018.
  */
 @Entity
-@Table(name="speciality")
+@Table(name="specialty")
 public class Specialty {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name="specialtyname")
     private String speciality;

@@ -10,11 +10,14 @@ import javax.persistence.*;
 @Table(name="insurancePlan")
 public class InsurancePlan {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
+    @JoinColumn(name="insuranceid")
     private Insurance insurance;
+
+    @Column(name="insuranceplanname")
     private String plan;
 
     public InsurancePlan(Insurance insurance, String plan){

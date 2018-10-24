@@ -14,9 +14,13 @@ public class Description {
     private String certificate;
     private String languages;
     private String education;
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @OneToOne(mappedBy = "description")
+
+    @OneToOne
+    @JoinColumn(name="doctorid")
     private Doctor doctor;
 
     public Doctor getDoctor() {
