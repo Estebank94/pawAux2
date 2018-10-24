@@ -110,7 +110,9 @@
                         <img class="avatar big" src=<c:out value="${doctor.avatar}"/>>
                         <div class="doctor-info-container">
                             <div>
-                                <h3 class="doctor-name"><c:out value="${doctor.lastName}"/>, <c:out value="${doctor.firstName}"/></h3>
+                                <c:set var="name" value="${doctor.firstName}"/>
+                                <c:set var="lastName" value="${doctor.lastName}"/>
+                                <h3 class="doctor-name"><spring:message argumentSeparator=";" htmlEscape="false" arguments="${name}; ${lastName}" code="general.doctorName"/></h3>
                                 <div class="row container">
                                     <c:forEach items="${doctor.specialty}" var="doctorSpecialty">
                                         <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty}"/></p>

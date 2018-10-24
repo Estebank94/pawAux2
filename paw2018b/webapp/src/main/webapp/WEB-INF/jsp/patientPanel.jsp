@@ -87,7 +87,9 @@
                                     <div class="center-vertical">
                                         <div>
                                             <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
-                                            <h5><b><c:out value="${listItems.doctorLastName}"/></b>,  <c:out value="${listItems.doctorFirstName}"/></h5>
+                                            <c:set var="name" value="${doctorListItem.firstName}"/>
+                                            <c:set var="lastName" value="${doctorListItem.lastName}"/>
+                                            <h5><spring:message code="general.doctorName" arguments="${name}; ${lastName}" htmlEscape="false" argumentSeparator=";"/></h5>
                                                 <p style="margin-bottom: 0rem"><strong><spring:message code="phone"/>:</strong> <c:out value="${listItems.doctorPhonenumber}"/></p>
                                                 <p><strong><spring:message code="address"/>:</strong> <c:out value="${listItems.doctorAddress}"/></p>
                                         </div>

@@ -124,7 +124,9 @@
                     <img src=${doctorListItem.avatar} class="avatar">
                     <div class="card-body">
                         <div class="card-text">
-                            <h3 class="doctor-name">${doctorListItem.lastName}, ${doctorListItem.firstName}</h3>
+                            <c:set var="name" value="${doctorListItem.firstName}"/>
+                            <c:set var="lastName" value="${doctorListItem.lastName}"/>
+                            <h3 class="doctor-name"><spring:message code="general.doctorName" arguments="${name}; ${lastName}" htmlEscape="false" argumentSeparator=";"/></h3>
                             <div class="row container">
                                 <c:forEach items="${doctorListItem.specialty}" var="doctorSpecialty">
                                     <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty}"/></p>
