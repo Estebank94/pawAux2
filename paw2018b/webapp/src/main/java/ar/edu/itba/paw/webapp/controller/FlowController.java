@@ -127,9 +127,10 @@ public class FlowController {
 //		LOGGER.debug("GET sexList {}", compressedSearch.get().getSex().toString());
 //		LOGGER.debug("GET insuranceNameList {}", compressedSearch.get().getInsurance().toString());
 
+		List<Doctor> doctor = doctorService.listDoctors();
 		mav.addObject("doctorList", doctorService.listDoctors());
-//		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
-//		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
+		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
+		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
 //		mav.addObject("sexList", compressedSearch.get().getSex());
 //		mav.addObject("insuranceNameList", compressedSearch.get().getInsurance());
 		mav.addObject("previousSearch", theSearch);
@@ -172,6 +173,7 @@ public class FlowController {
 					}
 				}
 				mav.addObject("doctor", doctor);
+				mav.addObject("workingHoursTest", doctor.getWorkingHours());
 //				TODO: AGREGAR FUNCION QUE BUSCA INSURANCE USANDO LOS INSURANCE PLANS
 				mav.addObject("insuranceNameList", doctor.getInsurancePlans());
 				mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());

@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -39,6 +41,7 @@ public class Appointment implements Comparable<Appointment>{
         this.patient = patient;
     }
 
+    @Autowired
     public Appointment(){
 
     }

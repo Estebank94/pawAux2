@@ -7,10 +7,13 @@ import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.exceptions.NotCreateDoctorException;
 import ar.edu.itba.paw.models.exceptions.RepeatedLicenceException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.print.Doc;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +41,14 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         return list.isEmpty() ? null : list;
     }
 
+//    public List<Doctor> listDoctors(Search search) {
+//        final TypedQuery<Doctor> query = em.createQuery("FROM Doctor" +
+//                "", Doctor.class);
+//
+//        final List<Doctor> list = query.getResultList();
+//        return list.isEmpty() ? null : list;
+//    }
+
     @Override
     public Optional<CompressedSearch> findDoctors(Search search) {
         return null;
@@ -45,7 +56,10 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
     @Override
     public Optional<Doctor> findDoctorById(Integer id) {
-        return null;
+        final TypedQuery<Doctor> query = em.createQuery("FROM Doctor where id = :id", Doctor.class);
+        query.setParameter("id", id);
+        Doctor doctor = query.getSingleResult();
+        return Optional.ofNullable(doctor);
     }
 
     @Override

@@ -126,8 +126,8 @@
                         <div class="card-text">
                             <h3 class="doctor-name">${doctorListItem.lastName}, ${doctorListItem.firstName}</h3>
                             <div class="row container">
-                                <c:forEach items="${doctorListItem.specialty}" var="doctorSpecialty">
-                                    <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty}"/></p>
+                                <c:forEach items="${doctorListItem.specialties}" var="doctorSpecialty">
+                                    <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty.speciality}"/></p>
                                 </c:forEach>
                             </div>
                             <br>

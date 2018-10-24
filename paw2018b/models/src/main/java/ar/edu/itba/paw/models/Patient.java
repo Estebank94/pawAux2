@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -23,6 +25,7 @@ public class Patient {
     @OneToOne
     @JoinColumn(name = "doctorid")
     private Doctor doctor;
+
 
     public Patient( String firstName, String lastName, String phoneNumber, String email, String password) {
         this.firstName = firstName;
@@ -48,6 +51,11 @@ public class Patient {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
+    }
+
+    @Autowired
+    public Patient(){
+
     }
 
     public Integer getPatientId() {

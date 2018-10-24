@@ -26,7 +26,9 @@ public class Doctor {
     String sex;
     String address;
     String avatar;
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.ALL},
+                fetch = FetchType.EAGER
+    )
     @JoinTable(
             name="doctorSpecialty",
             joinColumns = {@JoinColumn(name = "doctorid", referencedColumnName="id")},
@@ -34,7 +36,9 @@ public class Doctor {
     )
     Set<Specialty> specialties;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.ALL},
+                fetch = FetchType.EAGER
+    )
     @JoinTable(
             name="medicalCare",
             joinColumns = {@JoinColumn(name="doctorid", referencedColumnName="id")},
@@ -86,6 +90,7 @@ public class Doctor {
     public void setDistrict(String district) {
         this.district = district;
     }
+
 
     //    @Autowired
 //    public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, Integer id, Description description, String phoneNumber, Map<DayOfWeek,List<WorkingHours>> workingHours) {

@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class Insurance {
         this.name = name;
     }
 
+    @Autowired
     public Insurance(){
 
     }
