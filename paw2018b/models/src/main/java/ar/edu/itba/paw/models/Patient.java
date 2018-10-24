@@ -12,7 +12,8 @@ import java.util.*;
 public class Patient {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="patient_id_seq")
+    @SequenceGenerator(sequenceName = "patient_id_seq", name = "patient_id_seq", allocationSize = 1)
     private Integer id;
     private String firstName;
     private String lastName;
@@ -28,6 +29,7 @@ public class Patient {
 
 
     public Patient( String firstName, String lastName, String phoneNumber, String email, String password) {
+        this.id = null;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
