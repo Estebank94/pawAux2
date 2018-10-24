@@ -26,8 +26,8 @@
 <div class="container">
 <br>
 <br>
-<h2><spring:message code="regitrationDoctor"/>.</h2>
-<p><spring:message code="registrationDoctor.advice"/></p>
+<h2><spring:message code="registration.doctorProf"/>.</h2>
+<p><spring:message code="registration.doctorProf.advice"/></p>
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
     <%--enctype="multipart/form-data" for image--%>
@@ -45,11 +45,11 @@
         </c:if>
         <c:if test="${noCertificate eq true}">
             <div>
-                <label for="exampleFormControlTextarea1"><strong><spring:message code="desciption"/></strong></label>
+                <label for="exampleFormControlTextarea1"><strong><spring:message code="registration.desciption"/></strong></label>
                 <spring:message code="holder.work" var="work"/>
                 <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="${work}" path="certificate"/>
                 <small class="form-text text-muted">
-                    <spring:message code="maxSize"/>
+                    <spring:message code="registration.maxSize"/>
                 </small>
                 <form:errors path="certificate" cssClass="wrong"  element="p"></form:errors>
                 <c:if test="${wrongDesciption eq true}">
@@ -61,11 +61,11 @@
         <%--<c:if test="${noCertificate eq false}"> Ya completaste tu descripción </c:if>--%>
         <c:if test="${noEducation eq true}">
             <div>
-                <label for="exampleFormControlTextarea1"><strong><spring:message code="education"/></strong></label>
+                <label for="exampleFormControlTextarea1"><strong><spring:message code="registration.education"/></strong></label>
                 <spring:message code="holder.studies" var="studies"/>
                 <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="${studies}" path="education"/>
                 <small class="form-text text-muted">
-                    <spring:message code="maxSize"/>
+                    <spring:message code="registration.maxSize"/>
                 </small>
                 <form:errors path="education" cssClass="wrong"  element="p"></form:errors>
                 <c:if test="${wrongEducaction eq true}">
@@ -78,7 +78,7 @@
         <c:if test="${noLanguage eq true}">
             <div>
                 <div>
-                    <label for="languages"><strong><spring:message code="language"/></strong></label>
+                    <label for="languages"><strong><spring:message code="registration.language"/></strong></label>
                     <select class="custom-select" name="languages" id="languages" onchange="addInput(value, 'languageContainer', 'languages')">
                         <option value="no" label="Idioma" selected="Idioma"/>
                         <option value="Ingles" label="Ingles" />
@@ -96,7 +96,7 @@
                 <div>
                     <div>
                         <br>
-                        <label><spring:message code="languagesNo"/></label>
+                        <label><spring:message code="registration.languagesNo"/></label>
                         <div class="row container" id="languageContainer">
                         </div>
                     </div>
@@ -107,7 +107,7 @@
         <%--<c:if test="${noLanguage eq false}">Ya completaste los idiomas</c:if>--%>
         <div>
             <div>
-                <label for="specialty"><strong><spring:message code="specialty"/></strong></label>
+                <label for="specialty"><strong><spring:message code="registration.specialty"/></strong></label>
                 <select id="specialty" class="custom-select" cssStyle="cursor: pointer;" onchange="addInput(value, 'addedSpecialties', 'specialty')">
                     <option value="noSpecialty" label="Especialidades" selected="Especialidades"/>
                     <c:forEach items="${specialtyList}" var="specialty">
@@ -126,7 +126,7 @@
             <br>
             <div>
                 <br>
-                <label><spring:message code="specialtyNo"/></label>
+                <label><spring:message code="registration.specialtyNo"/></label>
                 <div id="addedSpecialties" class="row container">
                 </div>
             </div>
@@ -135,7 +135,7 @@
 
         <div>
             <div>
-                <label for="insurance"><strong><spring:message code="insurance"/></strong></label>
+                <label for="insurance"><strong><spring:message code="registration.insurance"/></strong></label>
                 <select id="insurance" class="custom-select" cssStyle="cursor: pointer;" onchange="myFunc(value)">
                     <option value="no" label="Prepaga" selected="Prepaga"/>
                     <c:forEach items="${insuranceList}" var="insuranceName">
@@ -144,10 +144,10 @@
                 </select>
                 <form:errors path="insurance" cssClass="wrong"  element="p"></form:errors>
                 <c:if test="${wrongInsurance eq true}">
-                    <p class="wrong"><spring:message code="wrongInsurance"/></p>
+                    <p class="wrong"><spring:message code="registration.wrongInsurance"/></p>
                 </c:if>
                 <c:if test="${wrongInsurancePlan eq true}">
-                    <p class="wrong"><spring:message code="wrongPlan"/></p>
+                    <p class="wrong"><spring:message code="registration.wrongPlan"/></p>
                 </c:if>
                 <c:if test="${medicalCareExists eq true}">
                     <p class="wrong"><spring:message code="error.medicalCareExists"/></p>
@@ -174,7 +174,7 @@
                 </div>
                 <div>
                     <br>
-                    <label><spring:message code="insurancesNo"/></label>
+                    <label><spring:message code="registration.insurancesNo"/></label>
                     <div id="addedInsurances" class="row container">
                     </div>
                 </div>
@@ -186,7 +186,7 @@
         </c:if>
         <div>
             <div>
-                <label><strong><spring:message code="workingHour"/></strong></label>
+                <label><strong><spring:message code="registration.workingHour"/></strong></label>
                 <c:if test="${wrongWorkingHour eq true}">
                     <p class="wrong"><spring:message code="error.workingHours"/></p>
                 </c:if>

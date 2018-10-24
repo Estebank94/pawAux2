@@ -32,7 +32,7 @@
 <div class="container">
     <br>
     <br>
-    <h2>¡<spring:message code="dropdown.doctorRegister"/>!</h2>
+    <h2><spring:message code="dropdown.doctorRegister"/></h2>
     <p><spring:message code="register.personalInfo"/>.</p>
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
@@ -40,7 +40,7 @@
     <form:form modelAttribute="personal" method="POST" action="${doctorRegistration}" accept-charset="ISO-8859-1">
         <div class="row">
             <div class="col">
-                <label for="exampleInputEmail1"><strong><spring:message code="name"/></strong></label>
+                <label for="exampleInputEmail1"><strong><spring:message code="registration.name"/></strong></label>
                 <spring:message code="holder.firstName" var="firstName"/>
                 <form:input type="text" class="form-control" placeholder="${firstName}" path="firstName"/>
                 <form:errors path="firstName" cssClass="wrong"  element="p"></form:errors>
@@ -49,7 +49,7 @@
                 </c:if>
             </div>
             <div class="col">
-                <label for="exampleInputEmail1"><strong>Apellido</strong></label>
+                <label for="exampleInputEmail1"><strong><spring:message code="registration.lastName"/></strong></label>
                 <spring:message code="holder.lastName" var="lastName"/>
                 <form:input type="text" class="form-control" placeholder="${lastName}" path="lastName"/>
                 <form:errors path="lastName" cssClass="wrong"  element="p"></form:errors>
@@ -60,7 +60,7 @@
         </div>
         <br>
         <div>
-            <label for="exampleInputEmail1"><strong><spring:message code="mail"/></strong></label>
+            <label for="exampleInputEmail1"><strong><spring:message code="registration.mail"/></strong></label>
             <spring:message code="holder.mail" var="mail"/>
             <form:input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="${mail}" path="email"/>
             <form:errors path="email" cssClass="wrong"  element="p"></form:errors>
@@ -74,12 +74,12 @@
         <br>
         <div class="row">
             <div class="col">
-                <label for="inputPassword5"><strong><spring:message code="password"/></strong></label>
+                <label for="inputPassword5"><strong><spring:message code="registration.password"/></strong></label>
                 <spring:message code="holder.password" var="password"/>
                 <form:input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" placeholder="${password}" path="password"/>
                 <form:errors path="password" cssClass="wrong"  element="p"></form:errors>
                 <small id="passwordHelpBlock" class="form-text text-muted">
-                    <spring:message code="password.message"/>
+                    <spring:message code="registration.password.message"/>
                 </small>
                 <c:if test="${noMatchingPassword eq true}">
                     <p class="wrong"><spring:message code="error.notmatching"/></p>
@@ -89,7 +89,7 @@
                 </c:if>
             </div>
             <div class="col">
-                <label for="inputPassword5"><strong><spring:message code="repeatPassword"/></strong></label>
+                <label for="inputPassword5"><strong><spring:message code="registration.repeatPassword"/></strong></label>
                 <spring:message code="holder.confirmationPass" var="confirmation"/>
                 <form:input type="password" id="inputPassword5" class="form-control" placeholder="${confirmation}" path="passwordConfirmation"/>
                 <form:errors path="passwordConfirmation" cssClass="wrong"  element="p"></form:errors>
@@ -97,11 +97,11 @@
         </div>
         <br>
         <div>
-            <label for="exampleInputEmail1"><strong><spring:message code="phone"/></strong></label>
+            <label for="exampleInputEmail1"><strong><spring:message code="registration.phone"/></strong></label>
             <spring:message code="holder.phone" var="phone"/>
             <form:input class="form-control" id="exampleInputEmail1"  placeholder="${phone}" path="phoneNumber"/>
             <small class="form-text text-muted">
-                <spring:message code="phone.hint"/>
+                <spring:message code="registration.phone.hint"/>
             </small>
             <form:errors path="phoneNumber" cssClass="wrong"  element="p"></form:errors>
             <c:if test="${wrongPhoneNumber eq true}">
@@ -110,7 +110,7 @@
         </div>
         <br>
         <div>
-            <label for="exampleInputEmail1"><strong><spring:message code="address"/></strong></label>
+            <label for="exampleInputEmail1"><strong><spring:message code="registration.address"/></strong></label>
             <spring:message code="holder.address" var="address"/>
             <form:input class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="${address}" path="address"/>
             <form:errors path="address" cssClass="wrong"  element="p"></form:errors>
@@ -120,10 +120,10 @@
         </div>
         <br>
         <div>
-            <label for="exampleFormControlSelect1"><strong><spring:message code="sex"/></strong></label>
+            <label for="exampleFormControlSelect1"><strong><spring:message code="registration.sex"/></strong></label>
             <form:select class="custom-select" id="exampleFormControlSelect1" path="sex">
-                <option value="F"><spring:message code="female"/></option>
-                <option value="M"><spring:message code="male"/></option>
+                <option value="F"><spring:message code="registration.female"/></option>
+                <option value="M"><spring:message code="registration.male"/></option>
             </form:select>
             <form:errors path="sex" cssClass="wrong"  element="p"></form:errors>
             <c:if test="${wrongSex eq true}">
@@ -132,7 +132,7 @@
         </div>
         <br>
         <div>
-            <label for="exampleInputEmail1"><strong><spring:message code="licence"/></strong></label>
+            <label for="exampleInputEmail1"><strong><spring:message code="registration.licence"/></strong></label>
             <spring:message code="holder.licence" var="licence"/>
             <form:input class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="${licence}" path="licence"/>
             <form:errors path="licence" cssClass="wrong"  element="p"></form:errors>
