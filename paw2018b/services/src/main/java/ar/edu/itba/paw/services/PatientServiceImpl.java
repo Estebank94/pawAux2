@@ -6,18 +6,19 @@ import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.models.InputValidation;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.*;
-import org.omg.CosNaming.NamingContextPackage.NotFoundHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class PatientServiceImpl implements PatientService {
 
     @Autowired
@@ -29,9 +30,13 @@ public class PatientServiceImpl implements PatientService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @PersistenceContext
+    private EntityManager em;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(PatientServiceImpl.class);
 
     @Override
+    @Transactional
     public Patient createPatient(String firstName, String lastName, String phoneNumber, String email, String password) throws RepeatedEmailException, NotValidFirstNameException, NotValidLastNameException, NotValidPhoneNumberException, NotValidEmailException, NotValidPasswordException, NotCreatePatientException {
         LOGGER.debug("PatientServiceImpl: createPatient");
         if (firstName == null){
@@ -221,14 +226,14 @@ public class PatientServiceImpl implements PatientService {
             throw new NotValidEmailException("PatientMail can't have more than 90 characters");
         }
         LOGGER.debug("Calling patientDao.findPatientByEmail(email)");
-        Optional<Patient> foundPatient = patientDao.findPatientByEmail(email);
-        if (!foundPatient.isPresent()){
+        Patient foundPatient = patientDao.findPatientByEmail(email);
+        if (foundPatient == null){
             LOGGER.debug("No patient found");
             throw new NotFoundPacientException("Patient was not found");
         }
-        LOGGER.debug("Patient found. Patient: {}", foundPatient.get());
-        LOGGER.debug("Patient name: {}", foundPatient.get().getFirstName());
-        return foundPatient.get();
+//        LOGGER.debug("Patient found. Patient: {}", foundPatient.get());
+//        LOGGER.debug("Patient name: {}", foundPatient.get().getFirstName());
+        return foundPatient;
         
     }
 
