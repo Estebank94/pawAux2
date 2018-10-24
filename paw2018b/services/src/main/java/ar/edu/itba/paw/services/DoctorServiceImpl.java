@@ -7,13 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.io.UrlResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sun.rmi.runtime.Log;
 
-import java.security.acl.LastOwnerException;
+import java.awt.*;
+
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +52,11 @@ public class DoctorServiceImpl implements DoctorService {
     public Optional<CompressedSearch> listDoctors() {
         LOGGER.debug("DoctorServiceImpl: listDoctors");
         return doctorDao.listDoctors();
+    }
+
+    @Override
+    public Boolean setProfilePicture(Integer doctorId, byte[] pixel){
+        return doctorDao.setProfilePicture(doctorId, pixel);
     }
 
     @Override

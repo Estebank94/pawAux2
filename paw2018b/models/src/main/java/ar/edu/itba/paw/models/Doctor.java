@@ -17,6 +17,7 @@ public class Doctor {
     String sex;
     String address;
     String avatar;
+    byte[] customProfilePicture;
     Set<String> specialty;
     Map<String, Set<String>> insurance;
     Integer id;
@@ -27,7 +28,7 @@ public class Doctor {
     List<Review> reviews;
 
     @Autowired
-    public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, Integer id, Description description, String phoneNumber, Map<DayOfWeek,List<WorkingHours>> workingHours) {
+    public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, Integer id, Description description, String phoneNumber, Map<DayOfWeek,List<WorkingHours>> workingHours, byte[] customProfilePicture) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.sex = sex;
@@ -39,6 +40,7 @@ public class Doctor {
         this.description = description;
         this.phoneNumber = phoneNumber;
         this.workingHours = workingHours;
+        this.customProfilePicture = customProfilePicture;
     }
 
     public Doctor(String firstName, String lastName, String sex, String avatar, String address, Integer id, String phoneNumber){
@@ -49,6 +51,14 @@ public class Doctor {
         this.avatar = avatar;
         this.id = id;
         this.phoneNumber = phoneNumber;
+    }
+
+    public byte[] getCustomProfilePicture() {
+        return customProfilePicture;
+    }
+
+    public void setCustomProfilePicture(byte[] customProfilePicture) {
+        this.customProfilePicture = customProfilePicture;
     }
 
     public String getPhoneNumber() {
