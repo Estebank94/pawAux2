@@ -155,13 +155,13 @@ public class FlowController {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				}
-				if (doctor.getDescription() != null){
-					if(doctor.getDescription().getLanguages() == null){
-						doctor.getDescription().getLanguages().contains("no");
-//					TODO buscar el no en el string y sacarlo. PARSERRRRR
-//					doctor.getDescription().getLanguages().remove("no");
-					}
-				}
+//				if (doctor.getDescription() != null){
+//					if(doctor.getDescription().getLanguages() == null){
+//						doctor.getDescription().getLanguages().contains("no");
+////					TODO buscar el no en el string y sacarlo. PARSERRRRR
+////					doctor.getDescription().getLanguages().remove("no");
+//					}
+//				}
 
 				boolean hasUserRole = false;
 				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

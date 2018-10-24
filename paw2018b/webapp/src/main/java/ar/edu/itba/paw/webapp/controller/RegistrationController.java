@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -372,6 +373,7 @@ public class RegistrationController {
         // generate session if one doesn't exist
         request.getSession();
         token.setDetails(new WebAuthenticationDetails(request));
+        /*todo: aca rompe, el authentication manager tira una exception*/
         Authentication authenticatedUser = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
         request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
