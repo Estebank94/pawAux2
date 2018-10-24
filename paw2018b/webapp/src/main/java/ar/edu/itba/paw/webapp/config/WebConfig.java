@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -38,6 +39,8 @@ import java.util.Properties;
 @EnableWebMvc
 @ComponentScan({ "ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.services", "ar.edu.itba.paw.persistence" })
 @Configuration
+/*TODO: VA ESTO? */
+@EnableTransactionManagement
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Value("/resources/schema.sql")
@@ -135,5 +138,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 			final EntityManagerFactory emf) {
 		return new JpaTransactionManager(emf);
 	}
+
 }
 
