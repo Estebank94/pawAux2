@@ -30,6 +30,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
                 .usingColumns("doctorId","clientid","appointmentDay", "appointmentTime","identifier")
         .usingGeneratedKeyColumns("id");
     }
+
     @Override
     public Optional<Appointment> createAppointment(Integer doctorId, Integer clientId, LocalDate appointmentDay, LocalTime appointmentTime) throws RepeatedAppointmentException{
         final Map<String,Object> entry = new HashMap<>();
