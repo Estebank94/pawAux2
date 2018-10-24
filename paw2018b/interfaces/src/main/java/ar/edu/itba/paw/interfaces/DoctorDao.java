@@ -18,6 +18,8 @@ public interface DoctorDao {
 
     Optional<CompressedSearch> findDoctors(Search search);
 
+    Boolean setProfilePicture(Integer doctorId, byte[] pixel);
+
     Optional<Doctor> findDoctorById(Integer id);
 
     Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, String licence,

@@ -24,6 +24,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -68,7 +70,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	public DataSource dataSource() {
 		final SimpleDriverDataSource ds = new SimpleDriverDataSource();
 		ds.setDriverClass(org.postgresql.Driver.class);
-		ds.setUrl("jdbc:postgresql://localhost:9091/");
+		ds.setUrl("jdbc:postgresql://localhost:9091/paw-2018b-06");
 //		ds.setUrl("jdbc:postgresql://10.16.1.110:5432/paw-2018b-06");
 		ds.setUsername("paw-2018b-06");
 		ds.setPassword("67wFYxljg");
@@ -127,6 +129,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		properties.put("mail.debug", "true");
 
 		return mailSender;
+	}
+
+	@Bean
+	public MultipartResolver multipartResolver() {
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+		multipartResolver.setMaxUploadSize((1024 * 1024) * 10);
+		return multipartResolver;
 	}
 
 	@Bean

@@ -13,6 +13,8 @@ public interface DoctorService {
 
    Optional<CompressedSearch> listDoctors();
 
+   Boolean setProfilePicture(Integer doctorId, byte[] pixel);
+
    Optional<CompressedSearch> findDoctors(Search search) throws NotValidSearchException;
 
    Optional<Doctor> findDoctorById(Integer id) throws NotFoundDoctorException, NotValidIDException;

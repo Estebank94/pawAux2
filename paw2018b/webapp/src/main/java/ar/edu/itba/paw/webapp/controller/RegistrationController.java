@@ -12,6 +12,8 @@ import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,10 +23,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.sound.midi.SysexMessage;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +59,9 @@ public class RegistrationController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @RequestMapping(value="/doctorRegistration", method = { RequestMethod.POST })
     public ModelAndView doctorRegistration (@Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors,HttpServletRequest request)
@@ -165,6 +168,31 @@ public class RegistrationController {
         final ModelAndView mav = new ModelAndView("registerSpecialist");
 
         return mav;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/profile-image/{doctorId}", method = RequestMethod.GET)
+    public byte[] avatar(@PathVariable(value = "doctorId") final Integer doctorId ) throws Exception {
+
+        byte[] bytes = doctorService.findDoctorById(doctorId).get().getCustomProfilePicture();
+        if(bytes != null){
+            return bytes;
+        }else{
+
+            Resource resource;
+
+            if(doctorService.findDoctorById(doctorId).get().getSex().equals("M")){
+                resource = applicationContext.getResource("/resource/defaultmen");
+            }else{
+                resource = applicationContext.getResource("/resource/defaultwomen");
+            }
+
+            long resourceLength = resource.contentLength();
+            byte[] defaultImage = new byte[(int) resourceLength];
+            resource.getInputStream().read(defaultImage);
+
+            return defaultImage;
+        }
     }
 
     @RequestMapping(value = "/doctorProfile", method = {RequestMethod.GET})
@@ -298,7 +326,6 @@ public class RegistrationController {
             medicalCareExists = doctor.containsPlan(insurance);
         }
 
-
         boolean doctorTime = false;
         if(doctor.getWorkingHours().keySet().isEmpty() && professionalForm.workingHoursList().isEmpty()){doctorTime = true; }
 
@@ -306,6 +333,24 @@ public class RegistrationController {
             return showDoctorProfile(professionalForm);
         }
 
+        MultipartFile file = professionalForm.getProfilePicture();
+
+        if( file != null && file.getSize() != 0 ){
+
+            String mimetype = file.getContentType();
+            String type = mimetype.split("/")[0];
+
+            if (!type.equals("image")) {
+                LOGGER.warn("File is not an image");
+            }else {
+                try {
+                    doctorService.setProfilePicture(doctor.getId(), file.getBytes());
+                } catch (IOException e) {
+                    LOGGER.warn("Could not upload image");
+                }   
+            }
+
+        }
 
         Description description = new Description(professionalForm.getCertificate(), professionalForm.getLanguages(), professionalForm.getEducation());
 

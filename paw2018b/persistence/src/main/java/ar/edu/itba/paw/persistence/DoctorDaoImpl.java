@@ -35,7 +35,7 @@ import java.util.*;
             jdbcInsert = new SimpleJdbcInsert(ds)
                     .withTableName("doctor")
                     .usingColumns("firstname","lastname","sex","phonenumber",
-                            "address","licence","avatar","district")
+                            "address","licence","avatar","district", "profilePicture")
                     .usingGeneratedKeyColumns("id");
         }
 
@@ -55,7 +55,7 @@ import java.util.*;
             Number doctorId = null;
             try{
                 doctorId = jdbcInsert.executeAndReturnKey(entry);
-                doctor = new Doctor(firstName,lastName,sex,address,avatar, doctorId.intValue(),phoneNumber);
+                doctor = new Doctor(firstName, lastName, sex, address, avatar, doctorId.intValue(), phoneNumber);
 
             }catch (DuplicateKeyException ex1){
                 throw new RepeatedLicenceException();
@@ -66,10 +66,21 @@ import java.util.*;
             return doctor;
         }
 
+        @Override
+        public Boolean setProfilePicture(Integer doctorId, byte[] pixel) {
+
+            if( jdbcTemplate.update("UPDATE doctor SET profilePicture = ? WHERE id = ?", pixel, doctorId) == 1 ) {
+                return true;
+            }
+
+            return false;
+
+        }
+
        @Override
         public Optional<CompressedSearch> listDoctors() {
             StringBuilder query = new StringBuilder();
-            query.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName,information.languages, information.certificate, information.education, phoneNumber,dayweek, starttime, finishtime ")
+            query.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName,information.languages, information.certificate, information.education, phoneNumber,dayweek, starttime, finishtime, profilePicture ")
                     .append("FROM doctor ")
                     .append("LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID ")
                     .append("LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  ")
@@ -95,7 +106,7 @@ import java.util.*;
         public Optional<CompressedSearch> findDoctors(Search search) {
 
             StringBuilder select = new StringBuilder();
-            select.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ,information.languages, information.certificate, information.education, phoneNumber,dayweek, starttime, finishtime ");
+            select.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName ,information.languages, information.certificate, information.education, phoneNumber,dayweek, starttime, finishtime, profilePicture ");
             select.append("FROM doctor ");
 
 
@@ -215,7 +226,7 @@ import java.util.*;
         public Optional<Doctor> findDoctorById(Integer id){
 
             StringBuilder select = new StringBuilder();
-            select.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName, information.languages, information.certificate, information.education, phoneNumber,dayweek, starttime, finishtime ");
+            select.append("SELECT doctor.id, avatar, firstName, lastName, sex, address, specialty.specialtyName, insurance.insuranceName, insurancePlan.insurancePlanName, information.languages, information.certificate, information.education, phoneNumber,dayweek, starttime, finishtime, profilePicture ");
             select.append("FROM doctor ");
             select.append("LEFT JOIN medicalCare ON doctor.id = medicalCare.doctorID ");
             select.append("LEFT JOIN insurancePlan ON medicalCare.insurancePlanID = insurancePlan.id  ");
@@ -390,7 +401,7 @@ import java.util.*;
                         }
 
                         Doctor doctor = new Doctor(rs.getString("firstName"), rs.getString("lastName"), rs.getString("sex"),
-                                rs.getString("address"), rs.getString("avatar"), specialty, insurancePlan, rs.getInt("id"), description, rs.getString("phoneNumber"),workingHours);
+                                rs.getString("address"), rs.getString("avatar"), specialty, insurancePlan, rs.getInt("id"), description, rs.getString("phoneNumber"),workingHours, rs.getBytes("profilePicture"));
 
                         compressedSearch.getDoctors().add(doctor);
                         compressedSearch.getSex().add(rs.getString("sex"));
