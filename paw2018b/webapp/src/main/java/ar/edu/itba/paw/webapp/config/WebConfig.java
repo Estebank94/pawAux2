@@ -39,7 +39,6 @@ import java.util.Properties;
 @EnableWebMvc
 @ComponentScan({ "ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.services", "ar.edu.itba.paw.persistence" })
 @Configuration
-/*TODO: VA ESTO? */
 @EnableTransactionManagement
 public class WebConfig extends WebMvcConfigurerAdapter {
 
