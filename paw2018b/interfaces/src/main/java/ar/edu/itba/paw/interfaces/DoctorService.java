@@ -23,7 +23,7 @@ public interface DoctorService {
 //                       String avatar, Set<String> specialty, Map<String, Set<String>> insurance,
 //                       List<WorkingHours> workingHours, Description description, String phoneNumber, String licence);
 
-   Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, String licence,
+   Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, Integer licence,
                               String avatar, String address) throws NotValidFirstNameException, NotValidLastNameException, NotValidPhoneNumberException, NotCreateDoctorException, RepeatedLicenceException, NotValidSexException, NotValidLicenceException, NotValidAddressException;
 //
    Optional<Doctor> setDoctorInfo(Integer doctorId, Set<Specialty> specialty, Set<Insurance> insurances, List<WorkingHours> workingHours, Description description) throws NotValidDoctorIdException, NotFoundDoctorException, NotValidSpecialtyException, NotValidWorkingHourException, NotValidInsuranceException, NotValidInsurancePlanException, NotValidDescriptionException, NotValidLanguagesException, NotValidCertificateException, NotValidEducationException;
