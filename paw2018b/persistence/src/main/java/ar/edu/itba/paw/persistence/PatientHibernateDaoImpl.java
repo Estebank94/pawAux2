@@ -2,11 +2,14 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.PatientDao;
 import ar.edu.itba.paw.models.Appointment;
+import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.RepeatedEmailException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,17 +32,27 @@ public class PatientHibernateDaoImpl implements PatientDao {
     private PasswordEncoder passwordEncoder;
 
     @Override
-//    @Transactional
     public Patient createPatient(String firstName, String lastName, String phoneNumber, String email, String password) throws RepeatedEmailException {
-        String finalpassword = passwordEncoder.encode(password);
-        final Patient patient = new Patient(firstName,lastName,phoneNumber, email, finalpassword);
-        em.persist(patient);
+//        todo: not sure if could be commented: String finalpassword = passwordEncoder.encode(password);
+        //try catch aca?
+        final Patient patient;
+        try{
+            patient = new Patient(firstName,lastName,phoneNumber, email, password);
+            em.persist(patient);
+        }catch (DataIntegrityViolationException exc2){
+            throw new RepeatedEmailException();
+        }catch (ConstraintViolationException exc3){
+            throw new RepeatedEmailException();
+        }
+        //todo: probar que esto no devuelve un null, utilizar un correctament optional
         return patient;
     }
 
     @Override
-    public Boolean setDoctorId(Integer patientId, Integer doctorId) throws NotFoundDoctorException, NotCreatePatientException {
-        return null;
+    public Boolean setDoctorId(Patient patient, Doctor doctor) throws NotFoundDoctorException, NotCreatePatientException {
+        em.merge(patient);
+        patient.setDoctor(doctor);
+        return true;
     }
 
     @Override
