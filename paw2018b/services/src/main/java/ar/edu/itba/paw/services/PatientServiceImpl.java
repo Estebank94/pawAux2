@@ -3,12 +3,15 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.DoctorDao;
 import ar.edu.itba.paw.interfaces.PatientDao;
 import ar.edu.itba.paw.interfaces.PatientService;
+import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.InputValidation;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.*;
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -129,6 +132,11 @@ public class PatientServiceImpl implements PatientService {
             throw new NotValidPhoneNumberException();
         }
 
+        if (patientDao.findPatientByEmail(email) != null){
+            LOGGER.debug("Repetead Mail");
+            throw new RepeatedEmailException();
+        }
+
         String finalpassword = passwordEncoder.encode(password);
         LOGGER.debug("patientDao.createPatient(firstName, lastName, phoneNumber, email, password)");
         LOGGER.debug("First Name: {}", firstName);
@@ -140,6 +148,10 @@ public class PatientServiceImpl implements PatientService {
         try{
             patient= patientDao.createPatient(firstName, lastName, phoneNumber, email, finalpassword);
         }catch (RepeatedEmailException exc1){
+            throw new RepeatedEmailException();
+        } catch (DataIntegrityViolationException exc2){
+            throw new RepeatedEmailException();
+        }catch (ConstraintViolationException exc3){
             throw new RepeatedEmailException();
         }
 
@@ -153,34 +165,34 @@ public class PatientServiceImpl implements PatientService {
 
     @Transactional
     @Override
-    public Boolean setDoctorId(Integer patientId, Integer doctorId) throws NotFoundDoctorException, NotValidPatientIdException, NotValidDoctorIdException, NotCreatePatientException {
+    public Boolean setDoctorId(Patient patient, Doctor doctor) throws NotFoundDoctorException, NotValidPatientIdException, NotValidDoctorIdException, NotCreatePatientException {
         LOGGER.debug("PatientServiceImpl: setDoctorId");
-        if (patientId == null){
-            LOGGER.debug("Patient ID: {} not found", patientId);
+        if (patient == null){
+            LOGGER.debug("Patient ID: {} not found", patient);
             throw new NotValidPatientIdException("patientId can't be null");
         }
-        if (patientId <= 0){
-            LOGGER.debug("Patient ID: {} is negative", patientId);
+        if (patient.getPatientId() <= 0){
+            LOGGER.debug("Patient ID: {} is negative", patient);
             throw new NotValidPatientIdException("PatientId can't be negative or zero");
         }
 
-        if (doctorId == null){
+        if (doctor == null){
             LOGGER.debug("Doctor ID is null");
             throw new NotValidDoctorIdException("DoctorId can't be null");
         }
-        if (doctorId <= 0){
-            LOGGER.debug("Doctor ID is negative. ID given: {}", doctorId);
+        if (doctor.getId() <= 0){
+            LOGGER.debug("Doctor ID is negative. ID given: {}", doctor);
             throw new NotValidDoctorIdException("DoctorId can't be negative or zero");
         }
         LOGGER.debug("Calling: doctorDao.findDoctorById(patientId).isPresent()");
-        LOGGER.debug("patientID: {}", patientId);
+        LOGGER.debug("patientID: {}", patient);
 
         LOGGER.debug("Calling patientDao.setDoctorId(patientId, doctorId)");
-        LOGGER.debug("patientID: {}", patientId);
-        LOGGER.debug("doctorId {}", doctorId);
+        LOGGER.debug("patientID: {}", patient);
+        LOGGER.debug("doctorId {}", doctor);
         Boolean ans;
         try {
-            ans = patientDao.setDoctorId(patientId,doctorId);
+            ans = patientDao.setDoctorId(patient,doctor);
         } catch (NotCreatePatientException e) {
             LOGGER.trace("Error on set Doctor Id");
             throw new NotCreatePatientException();
