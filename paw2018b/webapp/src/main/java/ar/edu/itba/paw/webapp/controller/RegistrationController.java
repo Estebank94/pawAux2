@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -171,7 +172,7 @@ public class RegistrationController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/profile-image/{doctorId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/profile-image/{doctorId}", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] avatar(@PathVariable(value = "doctorId") final Integer doctorId ) throws Exception {
 
         byte[] bytes = doctorService.findDoctorById(doctorId).get().getCustomProfilePicture();

@@ -121,7 +121,7 @@
             </c:if>
             <c:forEach items="${doctorList}" var="doctorListItem">
                 <div class="card card-doctor d-flex flex-row box"  onclick='window.location="<c:url value='/specialist/${doctorListItem.id}'/>"'>
-                    <img src=${doctorListItem.avatar} class="avatar">
+                    <img src="/profile-image/${doctorListItem.id}" class="avatar">
                     <div class="card-body">
                         <div class="card-text">
                             <c:set var="name" value="${doctorListItem.firstName}"/>
