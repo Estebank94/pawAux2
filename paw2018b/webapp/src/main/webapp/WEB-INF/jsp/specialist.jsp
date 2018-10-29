@@ -112,8 +112,8 @@
                             <div>
                                 <h3 class="doctor-name"><c:out value="${doctor.lastName}"/>, <c:out value="${doctor.firstName}"/></h3>
                                 <div class="row container">
-                                    <c:forEach items="${doctor.specialty}" var="doctorSpecialty">
-                                        <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty}"/></p>
+                                    <c:forEach items="${doctor.specialties}" var="doctorSpecialty">
+                                        <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty.speciality}"/></p>
                                     </c:forEach>
                                 </div>
                                 <p class="doctor-text"><i class="fas fa-phone" style="padding-right: 0.5em"></i><c:out value="${doctor.phoneNumber}"/></p>

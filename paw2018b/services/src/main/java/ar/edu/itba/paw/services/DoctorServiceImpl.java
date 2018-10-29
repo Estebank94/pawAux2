@@ -13,6 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sun.rmi.runtime.Log;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
+import javax.print.Doc;
 import java.security.acl.LastOwnerException;
 import java.sql.SQLException;
 import java.util.List;
@@ -39,6 +43,9 @@ public class DoctorServiceImpl implements DoctorService {
     @Autowired
     private WorkingHoursDao workingHoursDao;
 
+    @PersistenceContext
+    EntityManager em;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(DoctorServiceImpl.class);
 
     @Override
@@ -48,19 +55,18 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Optional<CompressedSearch> findDoctors(Search search) throws NotValidSearchException {
-        LOGGER.debug("DoctorServiceImpl: findDoctors");
-        if (search == null){
-            LOGGER.debug("Search can't bee null");
-            throw new NotValidSearchException("Search can't be null");
-        }
-        LOGGER.debug("Find Doctors with search: {}", search);
-        return doctorDao.findDoctors(search);
+    public List<Doctor> listDoctors(Search search) throws NotValidSearchException {
+        LOGGER.debug("DoctorServiceImpl: listDoctors");
+        return doctorDao.listDoctors(search);
     }
 
+
+
     @Override
+    @Transactional
     public Optional<Doctor> findDoctorById(Integer id) throws NotFoundDoctorException, NotValidIDException {
         LOGGER.debug("DoctorServiceImpl: findDoctorById");
+
         if (id == null ){
             LOGGER.debug("Doctor ID can't be null");
             throw new NotValidIDException("Doctor Id can't be null");
@@ -73,7 +79,11 @@ public class DoctorServiceImpl implements DoctorService {
 
         LOGGER.debug("Find doctor by ID");
         Optional<Doctor> thisdoctor =  doctorDao.findDoctorById(id);
+        thisdoctor.get().getWorkingHours().size();
+        thisdoctor.get().getAppointments().size();
 
+        Doctor doc = thisdoctor.get();
+        em.merge(doc);
         if (!thisdoctor.isPresent()){
             LOGGER.debug("The Doctor doesn't exist with ID number: {}", id);
             throw new NotFoundDoctorException("Doctor doesn't exist");
