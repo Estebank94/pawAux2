@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
 import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -39,12 +40,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         final Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_PATIENT"));
 
-        System.out.println(user.getDoctor().getId());
-        if(user.getDoctor().getId() != null && user.getDoctor().getId() != 0) {
+
+        if(user.getDoctor() != null && user.getDoctor().getId() != 0) {
             authorities.add(new SimpleGrantedAuthority("ROLE_DOCTOR"));
         }
 
-        return new org.springframework.security.core.userdetails.User(email, user.getPassword(), authorities);
+        return new User(email, user.getPassword(), authorities);
     }
 
 }

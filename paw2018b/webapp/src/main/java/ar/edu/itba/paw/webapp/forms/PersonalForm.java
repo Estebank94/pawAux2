@@ -44,15 +44,15 @@ public class PersonalForm {
     @NotEmpty(message = "Este campo es obligatorio. Por favor, elija una opcion")
     private String sex;
 
-    @Pattern(regexp = "^[0-9]*$", message = "Su numero de matricula solo puede contener numeros")
-    @Length(max=10, message = "Su numero de matricula no puede contener mas de 10 caracteres")
-    private String licence;
+//    @Pattern(regexp = "^[0-9]*$", message = "Su numero de matricula solo puede contener numeros")
+//    @Length(max=10, message = "Su numero de matricula no puede contener mas de 10 caracteres")
+    private Integer licence;
 
-    public String getLicence() {
+    public Integer getLicence() {
         return licence;
     }
 
-    public void setLicence(String licence) {
+    public void setLicence(Integer licence) {
         this.licence = licence;
     }
 

@@ -127,8 +127,10 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     }
 
     @Override
-    public Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, String licence, String avatar, String address) throws RepeatedLicenceException, NotCreateDoctorException {
-        return null;
+    public Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, Integer licence, String avatar, String address) throws RepeatedLicenceException, NotCreateDoctorException {
+        final Doctor doctor = new Doctor(firstName, lastName, phoneNumber, sex, licence, avatar, address);
+        em.persist(doctor);
+        return doctor;
     }
 
     @Override

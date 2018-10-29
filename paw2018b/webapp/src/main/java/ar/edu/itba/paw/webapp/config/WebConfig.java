@@ -137,5 +137,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 			final EntityManagerFactory emf) {
 		return new JpaTransactionManager(emf);
 	}
+
 }
 

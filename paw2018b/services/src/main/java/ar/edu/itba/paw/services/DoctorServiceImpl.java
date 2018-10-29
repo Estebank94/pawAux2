@@ -27,12 +27,14 @@ import java.util.Set;
 @Service("DoctorServiceImpl")
 public class DoctorServiceImpl implements DoctorService {
 
+    @PersistenceContext
+    private EntityManager em;
+
     @Autowired
     private DoctorDao doctorDao;
     
     @Autowired
     private SpecialtyDao specialtyDao;
-
 
     @Autowired
     private InsurancePlanDao insurancePlanDao;
@@ -95,7 +97,8 @@ public class DoctorServiceImpl implements DoctorService {
 
 
     @Override
-    public Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, String licence,
+    @Transactional
+    public Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, Integer licence,
                                String avatar, String address) throws NotValidFirstNameException, NotValidLastNameException, NotValidPhoneNumberException, NotCreateDoctorException, RepeatedLicenceException, NotValidSexException, NotValidLicenceException, NotValidAddressException {
         LOGGER.debug("DoctorServiceImpl: createDoctor");
         if (firstName == null){
@@ -172,19 +175,19 @@ public class DoctorServiceImpl implements DoctorService {
             LOGGER.debug("The Licence of a Doctor can't be null");
             throw new NotValidLicenceException("licence can't be null");
         }
-        if (licence.length() == 0){
+        if (licence <= 0){
             LOGGER.debug("The Licence of a Doctor can't have 0 characters");
             throw new NotValidLicenceException("licence can't be empty");
         }
 
-        if (licence.length() >= 10){
+        if (licence >= Integer.MAX_VALUE){
             LOGGER.debug("The Licence of a Doctor can't have more than 9 characters. The Licence given is: {}", licence);
             throw new NotValidLicenceException("licence can't have more than 10 characters");
         }
-        if (Integer.valueOf(licence) > Integer.MAX_VALUE){
-            LOGGER.debug("The Licence of a Doctor can't have more than 9 characters. The Licence given is: {}", licence);
-            throw new NotValidLicenceException("licence can't have more than 10 characters");
-        }
+//        if (Integer.valueOf(licence) > Integer.MAX_VALUE){
+//            LOGGER.debug("The Licence of a Doctor can't have more than 9 characters. The Licence given is: {}", licence);
+//            throw new NotValidLicenceException("licence can't have more than 10 characters");
+//        }
 
         if (address == null) {
             LOGGER.debug("The address of a Doctor can't be null");
