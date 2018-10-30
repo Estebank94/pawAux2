@@ -38,6 +38,14 @@ public class SpecialtyHibernateDaoImpl implements SpecialtyDao {
     }
 
     @Override
+    public Specialty findSpecialtyByName(String specialty) {
+        final TypedQuery<Specialty> query = em.createQuery("FROM Specialty " +
+                "WHERE speciality = :specialty ", Specialty.class);
+        query.setParameter("specialty", specialty);
+        return query.getSingleResult();
+    }
+
+    @Override
     public void addDoctorSpecialty(Doctor doctor, Specialty specialty) {
 
     }

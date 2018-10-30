@@ -45,8 +45,6 @@ public class DoctorServiceImpl implements DoctorService {
     @Autowired
     private WorkingHoursDao workingHoursDao;
 
-    @PersistenceContext
-    EntityManager em;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DoctorServiceImpl.class);
 

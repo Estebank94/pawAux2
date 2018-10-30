@@ -26,7 +26,7 @@ public class Doctor {
     String sex;
     String address;
     String avatar;
-    @ManyToMany(cascade = {CascadeType.ALL},
+    @ManyToMany(cascade = {CascadeType.PERSIST},
                 fetch = FetchType.EAGER
     )
     @JoinTable(
@@ -106,7 +106,12 @@ public class Doctor {
 //        this.phoneNumber = phoneNumber;
 //        this.workingHours = workingHours;
 //    }
-//
+
+    @Autowired
+    public Doctor(){
+
+    }
+
     public Doctor(String firstName, String lastName, String phoneNumber, String sex, Integer licence, String avatar, String address){
         this.firstName = firstName;
         this.lastName = lastName;

@@ -1,12 +1,14 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.DoctorDao;
+import ar.edu.itba.paw.interfaces.SpecialtyDao;
 import ar.edu.itba.paw.models.CompressedSearch;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Specialty;
 import ar.edu.itba.paw.models.exceptions.NotCreateDoctorException;
 import ar.edu.itba.paw.models.exceptions.RepeatedLicenceException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,9 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
     @PersistenceContext
     private EntityManager em;
+
+    @Autowired
+    private SpecialtyDao specialtyDao;
 
 //    @Override
 //    public Optional<CompressedSearch> listDoctors() {
@@ -93,9 +98,10 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 //            Root<Specialty> specialtyRoot = squery.from(Specialty.class);
 //            Join<Specialty, Doctor> join = root.join("specialties");
 
-            Set<Specialty>  specialtySet = new HashSet<>();
-            specialtySet.add(new Specialty(specialty.get()));
-            query.where(root.get("specialties").in(specialtySet));
+//            Set<Specialty>  specialtySet = new HashSet<>();
+//            specialtySet.add(new Specialty(specialty.get()));
+            Specialty specialtyObj = specialtyDao.findSpecialtyByName(specialty.get());
+            query.where(cb.isMember(specialtyObj, root.get("specialties")));
         }
 
         if (insurance.isPresent())
