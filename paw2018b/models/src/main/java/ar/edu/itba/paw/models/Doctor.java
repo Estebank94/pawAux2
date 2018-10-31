@@ -34,9 +34,10 @@ public class Doctor {
             joinColumns = {@JoinColumn(name = "doctorid", referencedColumnName="id")},
             inverseJoinColumns = {@JoinColumn(name = "specialtyid", referencedColumnName="id")}
     )
+
     Set<Specialty> specialties;
 
-    @ManyToMany(cascade = {CascadeType.ALL},
+    @ManyToMany(cascade = {CascadeType.PERSIST},
                 fetch = FetchType.EAGER
     )
     @JoinTable(
@@ -90,22 +91,6 @@ public class Doctor {
     public void setDistrict(String district) {
         this.district = district;
     }
-
-
-    //    @Autowired
-//    public Doctor(String firstName, String lastName, String sex, String address, String avatar, Set<String> specialty,Map<String, Set<String>> insurance, Integer id, Description description, String phoneNumber, Map<DayOfWeek,List<WorkingHours>> workingHours) {
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.sex = sex;
-//        this.address = address;
-//        this.avatar = avatar;
-//        this.specialty = specialty;
-//        this.insurance = insurance;
-//        this.id = id;
-//        this.description = description;
-//        this.phoneNumber = phoneNumber;
-//        this.workingHours = workingHours;
-//    }
 
 
     @Autowired
@@ -225,7 +210,7 @@ public class Doctor {
         for (int i = 0; i<15; i++){
             List<Appointment> aux = generateAppointments(today.plusDays(i));
             if(aux != null){
-                map.put(today.plusDays(i),generateAppointments(today.plusDays(i)));
+                map.put(today.plusDays(i),aux);
             }
         }
         return map;
@@ -234,7 +219,8 @@ public class Doctor {
     private List<WorkingHours> getWorkingHoursByDay(DayOfWeek dow){
         List<WorkingHours> ans = new ArrayList<>();
         for (WorkingHours wh: workingHours){
-            if (wh.getDayOfWeek().equals(dow)){
+            DayOfWeek day = DayOfWeek.of(wh.getDayOfWeek());
+            if (day.equals(dow)){
                 ans.add(wh);
             }
         }
@@ -432,6 +418,17 @@ public class Doctor {
 
     public void addInsurancePlans(List<InsurancePlan> plans){
         getInsurancePlans().addAll(plans);
+    }
+
+    public List<Insurance> getInsuranceListFromInsurancePlans(){
+        List<Insurance> list = new ArrayList<>();
+
+        for(InsurancePlan plan : getInsurancePlans()){
+            if(!list.contains(plan.getInsurance())){
+                list.add(plan.getInsurance());
+            }
+        }
+        return list.isEmpty() ? Collections.emptyList() : list;
     }
 
 }

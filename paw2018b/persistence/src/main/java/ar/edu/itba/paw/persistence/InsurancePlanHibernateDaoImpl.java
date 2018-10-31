@@ -45,6 +45,13 @@ public class InsurancePlanHibernateDaoImpl implements InsurancePlanDao {
         return insurancePlan;
     }
 
+    @Override
+    public InsurancePlan findInsurancePlanByPlanName(String name) {
+        final TypedQuery<InsurancePlan> query = em.createQuery("from InsurancePlan WHERE plan = :plan", InsurancePlan.class);
+        query.setParameter("plan", name);
+        return query.getSingleResult();
+    }
+
     private String parseInsurance(String insurance){
 
         char [] insuranceNameArray = insurance.toCharArray();

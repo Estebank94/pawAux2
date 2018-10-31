@@ -11,14 +11,6 @@ public class Search {
     private String sex = "ALL";
     private List<String> insurancePlan = null;
 
-//    public Search(String name, String specialty, String insurance, String sex, List<String> insurancePlan) {
-//        this.name = name;
-//        this.specialty = specialty;
-//        this.insurance = insurance;
-//        this.sex = sex;
-//        this.insurancePlan = insurancePlan;
-//    }
-
     public String getName() {
             return name;
     }

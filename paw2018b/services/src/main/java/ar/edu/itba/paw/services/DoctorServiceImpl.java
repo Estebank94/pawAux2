@@ -6,21 +6,13 @@ import ar.edu.itba.paw.models.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.rmi.runtime.Log;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
-import javax.print.Doc;
-import java.security.acl.LastOwnerException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -55,9 +47,12 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @Transactional
     public List<Doctor> listDoctors(Search search) throws NotValidSearchException {
         LOGGER.debug("DoctorServiceImpl: listDoctors");
-        return doctorDao.listDoctors(search);
+        List<Doctor> list = doctorDao.listDoctors(search);
+//        list.get(0).getInsurancePlans().size();
+        return list;
     }
 
 
@@ -81,6 +76,7 @@ public class DoctorServiceImpl implements DoctorService {
         Optional<Doctor> thisdoctor =  doctorDao.findDoctorById(id);
         thisdoctor.get().getWorkingHours().size();
         thisdoctor.get().getAppointments().size();
+//        thisdoctor.get().getInsurancePlans().size();
 
         Doctor doc = thisdoctor.get();
         em.merge(doc);

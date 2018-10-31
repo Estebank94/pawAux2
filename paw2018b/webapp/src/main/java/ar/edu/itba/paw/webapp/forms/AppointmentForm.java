@@ -1,14 +1,13 @@
 package ar.edu.itba.paw.webapp.forms;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 public class AppointmentForm {
 
     String day;
     String time;
 
+    public AppointmentForm() {
+
+    }
     public String getDay() {
         return day;
     }

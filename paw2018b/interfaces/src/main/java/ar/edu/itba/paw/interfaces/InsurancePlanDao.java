@@ -16,4 +16,6 @@ public interface InsurancePlanDao {
 
       InsurancePlan createInsurancePlan(Insurance insurance, String plan);
 
+      InsurancePlan findInsurancePlanByPlanName(String name);
+
 }
