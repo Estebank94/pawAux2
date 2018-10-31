@@ -16,9 +16,9 @@ public interface SpecialtyDao {
 
     Specialty findSpecialty(Specialty specialty);
 
+    Specialty findSpecialtyByName(String specialty);
+
     void addDoctorSpecialty(Doctor doctor, Specialty specialty);
-
-
 
 
 }

@@ -46,4 +46,19 @@ public class Specialty {
     public void setSpeciality(String speciality) {
         this.speciality = speciality;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Specialty specialty = (Specialty) o;
+
+        return speciality != null ? speciality.equals(specialty.speciality) : specialty.speciality == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return speciality != null ? speciality.hashCode() : 0;
+    }
 }

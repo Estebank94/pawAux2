@@ -15,7 +15,7 @@ public interface DoctorService {
 
    List<Doctor> listDoctors();
 
-   Optional<CompressedSearch> findDoctors(Search search) throws NotValidSearchException;
+   List<Doctor> listDoctors(Search search) throws NotValidSearchException;
 
    Optional<Doctor> findDoctorById(Integer id) throws NotFoundDoctorException, NotValidIDException;
 

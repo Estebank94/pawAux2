@@ -17,7 +17,7 @@ public interface DoctorDao {
 
     List<Doctor> listDoctors();
 
-    Optional<CompressedSearch> findDoctors(Search search);
+    List<Doctor> listDoctors(Search search);
 
     Optional<Doctor> findDoctorById(Integer id);
 
