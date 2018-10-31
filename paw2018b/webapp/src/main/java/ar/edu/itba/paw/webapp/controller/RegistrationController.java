@@ -106,9 +106,10 @@ public class RegistrationController {
                         personalForm.getSex(), personalForm.getLicence(), image, personalForm.getAddress());
                 Patient patient = patientService.createPatient(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(), personalForm.getEmail(),
                         personalForm.getPassword());
+
                 patientService.setDoctorId(patient, doctor);
 
-//                Send welcome email to new user
+                /*Send welcome email to new user*/
                 emailService.sendMessageWithAttachment(patient.getFirstName(), patient.getEmail(), "Bienvenido a Waldoc");
 
                 LOGGER.debug("Auto log in for: {}", patient.getPatientId());
@@ -250,6 +251,7 @@ public class RegistrationController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Patient patient = null;
         try {
+            /*si esta mal fijate de volver a poner un point aca*/
             patient = patientService.findPatientByEmail(authentication.getName());
         } catch (NotValidEmailException e) {
             e.printStackTrace();
@@ -258,7 +260,6 @@ public class RegistrationController {
         }
         Doctor doctor = null;
         try {
-            Integer doctorId = patient.getDoctor().getId();
             doctor = doctorService.findDoctorById(patient.getDoctor().getId()).get();
         } catch (NotFoundDoctorException e) {
             LOGGER.trace("Error 404");
@@ -278,13 +279,15 @@ public class RegistrationController {
 
         boolean specialtyExists = false;
         if(professionalForm.getSpecialty() != null){
+            /*rechequear si esto funciona bien porque cambiaron todos los tipos*/
            specialtyExists = doctor.containsSpecialty(professionalForm.getSpecialty());
         }
 
         boolean medicalCareExists = false;
         Set<Insurance> insurance = new HashSet<>();
-        if(professionalForm.getInsurance() != null || professionalForm.getInsurancePlans() != null){
-            medicalCareExists = doctor.containsPlan(professionalForm.getInsurancePlans());
+        /*professionalForm.getInsurancePlan() queda en null*/
+        if(professionalForm.getInsurance() != null || professionalForm.getInsurancePlan() != null){
+            medicalCareExists = doctor.containsPlan(professionalForm.getInsurancePlan());
         }
 
 
@@ -373,7 +376,6 @@ public class RegistrationController {
         // generate session if one doesn't exist
         request.getSession();
         token.setDetails(new WebAuthenticationDetails(request));
-        /*todo: aca rompe, el authentication manager tira una exception*/
         Authentication authenticatedUser = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
         request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());

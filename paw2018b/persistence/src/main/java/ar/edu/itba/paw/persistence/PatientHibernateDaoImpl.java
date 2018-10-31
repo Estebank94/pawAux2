@@ -50,8 +50,9 @@ public class PatientHibernateDaoImpl implements PatientDao {
 
     @Override
     public Boolean setDoctorId(Patient patient, Doctor doctor) throws NotFoundDoctorException, NotCreatePatientException {
-        em.merge(patient);
         patient.setDoctor(doctor);
+        em.merge(patient);
+        Doctor doctora = patient.getDoctor();
         return true;
     }
 
