@@ -35,7 +35,7 @@ public class ProfessionalForm {
     @NotNull(message = "Por favor, registre las obras sociales con las que trabaja")
     private List<String> insurance;
     @NotNull(message = "Por favor, indique los planes de la obra social seleccionada, o seleccione una")
-    private List<InsurancePlan> insurancePlans;
+    private List<String> insurancePlan;
     @NotNull(message = "Por favor, indique su especialidad")
     private Set<String> specialty;
 
@@ -215,12 +215,12 @@ public class ProfessionalForm {
         return WORKING_HOURS;
     }
 
-    public List<InsurancePlan> getInsurancePlans() {
-        return insurancePlans;
+    public List<String> getInsurancePlan() {
+        return insurancePlan;
     }
 
-    public void setInsurancePlans(List<InsurancePlan> insurancePlans) {
-        this.insurancePlans = insurancePlans;
+    public void setInsurancePlan(List<String> insurancePlan) {
+        this.insurancePlan = insurancePlan;
     }
 
     public Map<String, Set<String>> createMap(List<String> insurance, List<Set<String>> insurancePlan) {
@@ -263,6 +263,14 @@ public class ProfessionalForm {
             list.add(new Specialty(s));
         }
         return (list.isEmpty() ? Collections.emptySet() : list);
+    }
+
+    public List<InsurancePlan> getInsurancePlans(){
+        List<InsurancePlan> list = new ArrayList<>();
+        for(String s : getInsurancePlan()){
+            list.add(new InsurancePlan());
+        }
+        return (list.isEmpty() ? Collections.EMPTY_LIST : list);
     }
 
 }

@@ -106,6 +106,7 @@ public class Doctor {
         this.avatar = avatar;
         this.phoneNumber = phoneNumber;
     }
+    
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -392,16 +393,23 @@ public class Doctor {
         return false;
     }
 
-    public boolean containsPlan(List<InsurancePlan> plans){
+    public boolean containsPlan(List<String> plans){
 
-        for(InsurancePlan wantedPlan : plans){
-            for(InsurancePlan insurancePlan : insurancePlans){
-                if(wantedPlan.equals(insurancePlan)){
-                    return true;
-                }
+        for(String plan : plans){
+            if(getInsurancePlans().contains(plan)){
+                return true;
             }
         }
         return false;
+
+//        for(InsurancePlan wantedPlan : plans){
+//            for(InsurancePlan insurancePlan : insurancePlans){
+//                if(wantedPlan.equals(insurancePlan)){
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
     }
 
     public void addSpecialties(Set<Specialty> specialties){
