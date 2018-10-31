@@ -430,7 +430,6 @@ public class DoctorServiceImpl implements DoctorService {
     public Optional<Doctor> setDoctorSpecialty(Doctor doctor, Set<Specialty> specialty){
         LOGGER.debug("setDoctorSpecialty");
         doctorDao.setDoctorSpecialty(doctor, specialty);
-//        doctor.addSpecialties(specialty);
         return Optional.ofNullable(doctor);
     }
 
