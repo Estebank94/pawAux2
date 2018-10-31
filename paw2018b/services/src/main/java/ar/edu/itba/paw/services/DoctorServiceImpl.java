@@ -41,16 +41,22 @@ public class DoctorServiceImpl implements DoctorService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DoctorServiceImpl.class);
 
     @Override
-    public List<Doctor> listDoctors() {
+    public List<Doctor> listDoctors(int page) {
         LOGGER.debug("DoctorServiceImpl: listDoctors");
-        return doctorDao.listDoctors();
+        return doctorDao.listDoctors(page);
+    }
+
+    @Override
+    public int getLastPage(){
+        LOGGER.debug("DoctorServiceImpl: getLastPage");
+        return doctorDao.getLastPage();
     }
 
     @Override
     @Transactional
-    public List<Doctor> listDoctors(Search search) throws NotValidSearchException {
+    public List<Doctor> listDoctors(Search search, int page) throws NotValidSearchException {
         LOGGER.debug("DoctorServiceImpl: listDoctors");
-        List<Doctor> list = doctorDao.listDoctors(search);
+        List<Doctor> list = doctorDao.listDoctors(search, page);
 //        list.get(0).getInsurancePlans().size();
         return list;
     }

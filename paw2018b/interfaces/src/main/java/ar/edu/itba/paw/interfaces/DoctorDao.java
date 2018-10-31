@@ -11,10 +11,11 @@ import java.util.Set;
 
 public interface DoctorDao {
 
+    int getLastPage();
 
-    List<Doctor> listDoctors();
+    List<Doctor> listDoctors(int page);
 
-    List<Doctor> listDoctors(Search search);
+    List<Doctor> listDoctors(Search search, int page);
 
     Optional<Doctor> findDoctorById(Integer id);
 
