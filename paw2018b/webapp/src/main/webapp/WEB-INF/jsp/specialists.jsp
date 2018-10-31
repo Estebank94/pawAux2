@@ -159,18 +159,18 @@
                         <c:choose>
                             <c:when test="${insuranceMap.keySet().size() >= 1 && sexList.size() != 1}">
                                 <div>
-                                        <c:forEach items="${insuranceMap.keySet()}" var="key">
-                                            <%--<c:if test="${insurance.key.equals(search.insurance) }">--%>
-                                                <h4 class="sidebar-title">Plan Prepaga</h4>
-                                                    <div class="form-check">
-                                                        <b> ${insuranceMap.get(key)} <br> </b>
-                                                        <%--<c:forEach items="${insurance.key}">--%>
-                                                            <%--<form:checkboxes path="insurancePlan" items="${insurance}" delimiter="<br>" />--%>
-                                                        <%--</c:forEach>--%>
-                                                        <br>
-                                                    </div>
-                                            <%--</c:if>--%>
-                                        </c:forEach>
+                                    <c:forEach items="${insuranceMap.keySet()}" var="key">
+                                        <%--<c:if test="${insurance.key.equals(search.insurance) }">--%>
+                                        <h4 class="sidebar-title">Plan Prepaga</h4>
+                                        <div class="form-check">
+                                            <b> ${insuranceMap.get(key)} <br> </b>
+                                                <%--<c:forEach items="${insurance.key}">--%>
+                                                <%--<form:checkboxes path="insurancePlan" items="${insurance}" delimiter="<br>" />--%>
+                                                <%--</c:forEach>--%>
+                                            <br>
+                                        </div>
+                                        <%--</c:if>--%>
+                                    </c:forEach>
                                         <%--<hr class="hr-sidebar">--%>
                                     <div>
                                         <c:if test="${sexList.size() != 1}">

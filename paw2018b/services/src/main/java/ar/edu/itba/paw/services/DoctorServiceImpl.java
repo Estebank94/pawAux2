@@ -82,6 +82,7 @@ public class DoctorServiceImpl implements DoctorService {
         Optional<Doctor> thisdoctor =  doctorDao.findDoctorById(id);
         thisdoctor.get().getWorkingHours().size();
         thisdoctor.get().getAppointments().size();
+        thisdoctor.get().getInsurances().size();
 //        thisdoctor.get().getInsurancePlans().size();
 
         Doctor doc = thisdoctor.get();

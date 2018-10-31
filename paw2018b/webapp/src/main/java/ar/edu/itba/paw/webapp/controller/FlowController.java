@@ -147,7 +147,6 @@ public class FlowController {
 		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
 		mav.addObject("sexList", sex);
-//		mav.addObject("insuranceMap", insuranceMap);
 		mav.addObject("previousSearch", search);
 
 		return mav;
