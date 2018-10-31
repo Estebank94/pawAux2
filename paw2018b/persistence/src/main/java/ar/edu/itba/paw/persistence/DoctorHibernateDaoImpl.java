@@ -122,7 +122,6 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
     }
 
-
     @Override
     public Optional<Doctor> findDoctorById(Integer id) {
         Doctor doctor = em.find(Doctor.class, id);
@@ -143,4 +142,17 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     public Boolean isAnExistingLicence(Integer licence) {
         return null;
     }
+
+    public Boolean setDoctorSpecialty(Doctor doctor, Set<Specialty> specialty){
+
+        for(Specialty s : specialty){
+           s.setId(specialtyDao.findSpecialtyByName(s.getSpeciality()).getId());
+        }
+
+        doctor.setSpecialties(specialty);
+        em.merge(doctor);
+        return true;
+    }
+
+
 }

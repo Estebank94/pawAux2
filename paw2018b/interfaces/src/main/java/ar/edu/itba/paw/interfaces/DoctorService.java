@@ -33,4 +33,5 @@ public interface DoctorService {
    Optional<Doctor> setDoctorInsurancePlans(Doctor doctor,  List<InsurancePlan> insurancePlans);
 
    Optional<Doctor> setWorkingHours(Integer doctorId, List<WorkingHours> workingHours);
+
 }

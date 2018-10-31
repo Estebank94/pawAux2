@@ -426,11 +426,14 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @Transactional
     public Optional<Doctor> setDoctorSpecialty(Doctor doctor, Set<Specialty> specialty){
         LOGGER.debug("setDoctorSpecialty");
-        doctor.addSpecialties(specialty);
+        doctorDao.setDoctorSpecialty(doctor, specialty);
+//        doctor.addSpecialties(specialty);
         return Optional.ofNullable(doctor);
     }
+
 
     @Override
     public Optional<Doctor> setDoctorInsurancePlans(Doctor doctor,  List<InsurancePlan> insurancePlans) {

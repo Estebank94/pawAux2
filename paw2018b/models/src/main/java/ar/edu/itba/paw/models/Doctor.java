@@ -26,7 +26,7 @@ public class Doctor {
     String sex;
     String address;
     String avatar;
-    @ManyToMany(cascade = {CascadeType.PERSIST},
+    @ManyToMany(cascade = {CascadeType.ALL},
                 fetch = FetchType.EAGER
     )
     @JoinTable(

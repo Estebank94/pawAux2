@@ -33,7 +33,6 @@ public class PatientHibernateDaoImpl implements PatientDao {
 
     @Override
     public Patient createPatient(String firstName, String lastName, String phoneNumber, String email, String password) throws RepeatedEmailException {
-//        todo: not sure if could be commented: String finalpassword = passwordEncoder.encode(password);
         //try catch aca?
         final Patient patient;
         try{
@@ -44,7 +43,6 @@ public class PatientHibernateDaoImpl implements PatientDao {
         }catch (ConstraintViolationException exc3){
             throw new RepeatedEmailException();
         }
-        //todo: probar que esto no devuelve un null, utilizar un correctament optional
         return patient;
     }
 
@@ -52,7 +50,6 @@ public class PatientHibernateDaoImpl implements PatientDao {
     public Boolean setDoctorId(Patient patient, Doctor doctor) throws NotFoundDoctorException, NotCreatePatientException {
         patient.setDoctor(doctor);
         em.merge(patient);
-        Doctor doctora = patient.getDoctor();
         return true;
     }
 

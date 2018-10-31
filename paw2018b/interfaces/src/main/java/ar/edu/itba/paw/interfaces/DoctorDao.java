@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.interfaces;
 
-import ar.edu.itba.paw.models.Appointment;
-import ar.edu.itba.paw.models.CompressedSearch;
-import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.Search;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.NotCreateDoctorException;
 import ar.edu.itba.paw.models.exceptions.RepeatedLicenceException;
 
@@ -25,4 +22,6 @@ public interface DoctorDao {
                                String avatar, String address) throws RepeatedLicenceException, NotCreateDoctorException;
 
     Boolean isAnExistingLicence(Integer licence);
+
+    public Boolean setDoctorSpecialty(Doctor doctor, Set<Specialty> specialty);
 }
