@@ -45,4 +45,12 @@ public class Insurance {
     public void setName(String name) {
         this.name = name;
     }
+
+    public List<InsurancePlan> getPlans() {
+        return plans;
+    }
+
+    public void setPlans(List<InsurancePlan> plans) {
+        this.plans = plans;
+    }
 }

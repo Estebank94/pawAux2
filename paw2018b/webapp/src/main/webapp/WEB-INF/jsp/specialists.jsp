@@ -157,19 +157,19 @@
                     <%--<c:when test="${insuranceNameList.size() == 1 && sexList.size() != 1}">--%>
                         <hr class="hr-header-sidebar">
                         <c:choose>
-                            <c:when test="${insuranceNameList.size() >= 1 && sexList.size() != 1}">
+                            <c:when test="${insuranceMap.keySet().size() >= 1 && sexList.size() != 1}">
                                 <div>
-                                        <c:forEach items="${insuranceNameList}" var="insuranceNameList">
-                                            <c:if test="${insuranceNameList.key.equals(search.insurance) }">
+                                        <c:forEach items="${insuranceMap.keySet()}" var="key">
+                                            <%--<c:if test="${insurance.key.equals(search.insurance) }">--%>
                                                 <h4 class="sidebar-title">Plan Prepaga</h4>
                                                     <div class="form-check">
-                                                        <b> ${insuranceNameList.key} <br> </b>
-                                                        <c:forEach items="${insuranceNameList.key}">
-                                                            <form:checkboxes path="insurancePlan" items="${insuranceNameList.value}" delimiter="<br>" />
-                                                        </c:forEach>
+                                                        <b> ${insuranceMap.get(key)} <br> </b>
+                                                        <%--<c:forEach items="${insurance.key}">--%>
+                                                            <%--<form:checkboxes path="insurancePlan" items="${insurance}" delimiter="<br>" />--%>
+                                                        <%--</c:forEach>--%>
                                                         <br>
                                                     </div>
-                                            </c:if>
+                                            <%--</c:if>--%>
                                         </c:forEach>
                                         <%--<hr class="hr-sidebar">--%>
                                     <div>

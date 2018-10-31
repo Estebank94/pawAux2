@@ -30,3 +30,4 @@ $('#time').on('change', function() {
 });
 
 $('.specialist-select').select2({theme: 'bootstrap4'});
+$('.custom-select').select2({theme: 'bootstrap4'});

@@ -7,4 +7,6 @@ import ar.edu.itba.paw.models.Insurance;
  */
 public interface InsuranceDao {
     Insurance createInsurance(String name);
+
+    Insurance findInsuranceByName(String name);
 }

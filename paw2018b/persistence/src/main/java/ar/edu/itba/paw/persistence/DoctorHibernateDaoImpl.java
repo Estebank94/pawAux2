@@ -1,23 +1,18 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.DoctorDao;
+import ar.edu.itba.paw.interfaces.InsuranceDao;
+import ar.edu.itba.paw.interfaces.InsurancePlanDao;
 import ar.edu.itba.paw.interfaces.SpecialtyDao;
-import ar.edu.itba.paw.models.CompressedSearch;
-import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.Search;
-import ar.edu.itba.paw.models.Specialty;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.NotCreateDoctorException;
 import ar.edu.itba.paw.models.exceptions.RepeatedLicenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import javax.persistence.metamodel.Metamodel;
-import javax.print.Doc;
 import java.util.*;
 
 /**
@@ -32,19 +27,18 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     @Autowired
     private SpecialtyDao specialtyDao;
 
-//    @Override
-//    public Optional<CompressedSearch> listDoctors() {
-//        final TypedQuery<Doctor> query = em.createQuery("FROM doctor", Doctor.class);
-//        final List<Doctor> list = query.getResultList();
-//
-//        return list.isEmpty() ? null : list
-//    }
+    @Autowired
+    private InsuranceDao insuranceDao;
+
+    @Autowired
+    private InsurancePlanDao insurancePlanDao;
+
 
     @Override
     public List<Doctor> listDoctors() {
         final TypedQuery<Doctor> query = em.createQuery("FROM Doctor", Doctor.class);
         final List<Doctor> list = query.getResultList();
-        return list.isEmpty() ? null : list;
+        return list.isEmpty() ? Collections.emptyList() : list;
     }
 
     public List<Doctor> listDoctors(Search search) {
@@ -55,7 +49,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
         Optional<String> name = search.getName().equals("")? Optional.ofNullable(null):Optional.ofNullable(search.getName());
         Optional<String> specialty = search.getSpecialty().equals("noSpecialty")?Optional.ofNullable(null):Optional.ofNullable(search.getSpecialty());
-        Optional<String> insurance = search.getInsurance().matches("no")?Optional.ofNullable(null):Optional.ofNullable(search.getName());
+        Optional<String> insurance = search.getInsurance().matches("no")?Optional.ofNullable(null):Optional.ofNullable(search.getInsurance());
         Optional<String> sex = search.getSex().equals("ALL") || search.getSex().isEmpty() || search.getSex().equals("")?Optional.ofNullable(null): Optional.ofNullable(search.getSex());
         Optional<List<String>> insurancePlan;
 
@@ -81,43 +75,40 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
         if (name.isPresent())
         {
-
-            Metamodel m = em.getMetamodel();
-
 //            si pone % encontraria todos
             if(!name.get().equals("%")){
-                query.where(cb.like(root.get("firstName"), name.get()));
+                query.where(cb.like(cb.lower(root.get("firstName")), "%"+name.get().toLowerCase()+"%"));
 //                TODO find by lastname or second name
-//                query.where(cb.or(cb.like(root.get("lastName"), name.get())));
+//                query.where(cb.or(cb.like(cb.lower(root.get("lastName")), "%"+name.get().toLowerCase()+"%")));
             }
         }
 
         if (specialty.isPresent())
         {
-//            Subquery<Specialty> squery = query.subquery(Specialty.class);
-//            Root<Specialty> specialtyRoot = squery.from(Specialty.class);
-//            Join<Specialty, Doctor> join = root.join("specialties");
-
-//            Set<Specialty>  specialtySet = new HashSet<>();
-//            specialtySet.add(new Specialty(specialty.get()));
             Specialty specialtyObj = specialtyDao.findSpecialtyByName(specialty.get());
             query.where(cb.isMember(specialtyObj, root.get("specialties")));
         }
 
         if (insurance.isPresent())
         {
-            query.where(cb.equal(root.get("insurancePlans"), insurance.get()));
+            Insurance insuranceObj = insuranceDao.findInsuranceByName(insurance.get());
+            query.where(cb.isMember(insuranceObj, root.get("insurancePlans")));
         }
 
         if (sex.isPresent()){
             query.where(cb.equal(root.get("sex"), sex.get()));
         }
-
-//        query.where(cb.notEqual(root.get("specialties"), null));
-//        query.where(cb.notEqual(root.get("insurancePlans"), null));
+        if(insurancePlan.isPresent()){
+            for(String plan : insurancePlan.get()){
+                InsurancePlan insurancePlanObj = insurancePlanDao.findInsurancePlanByPlanName(plan);
+                query.where(cb.isMember(insurancePlanObj, root.get("insurancePlans")));
+            }
+        }
+//        TODO averiguar porque si descomento esto me tira could not extract resultset
+//        query.where(cb.isNotNull(root.get("specialties")));
+//        query.where(cb.isNotNull(root.get("insurancePlans")));
 
         List<Doctor> list = em.createQuery(query).getResultList();
-        list.size();
         return list.isEmpty() ? Collections.emptyList() : list;
 
     }

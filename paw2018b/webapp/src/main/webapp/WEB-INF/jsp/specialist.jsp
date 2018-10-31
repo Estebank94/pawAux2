@@ -131,7 +131,7 @@
                             <div class="row">
                                     <div class="col-sm-5">
                                         <label for="day"><spring:message code="specialist.appointmentDay" /></label>
-                                        <select class="custom-select" id="day" path="day" cssStyle="cursor: pointer;">
+                                        <select id="day" path="day" cssStyle="cursor: pointer;">
                                             <option value="no" selected>Elegí el Día</option>
                                             <c:forEach items="${appointmentsAvailable}" var="date">
                                                 <option value="${date.key}" label="${date.key}"><c:out value="${date.key}"/></option>
@@ -140,7 +140,7 @@
                                     </div>
                                 <div class="col-sm-5">
                                     <label for="time"><spring:message code="specialist.appointmentTime"/></label>
-                                    <select class="custom-select" disabled="false" id="time" path="time" cssStyle="cursor: pointer;">
+                                    <select disabled="false" id="time" path="time" cssStyle="cursor: pointer;">
                                         <option value="no" label="Elegi el Horario" selected>Elegí el Horario</option>
                                     <c:forEach items="${appointmentsAvailable}" var="date">
                                         <c:forEach items="${date.value}" var="listItem">
@@ -184,18 +184,25 @@
                         <br>
                     </c:if>
                     <h4><spring:message code="specialist.insurances" /></h4>
-                    <c:forEach items="${insuranceNameList}" var="insuranceNameList">
-                        <b><c:out value="${insuranceNameList.key}"/></b>
-                        </br>
-                        <c:forEach items="${insuranceNameList.key}" var="insurance">
-                            <c:forEach items="${insuranceNameList.value}" var="insurancePlan">
-                                <c:out value="${insurancePlan}"/>
-                                </br>
-                            </c:forEach>
+                    <br>
+                    <div class="row container">
+                        <c:forEach items="${doctor.insuranceListFromInsurancePlans}" var="insurance">
+                            <div class="card" style="width: 18rem; margin-right:8rem;">
+                                <div class="card-header">
+                                    <strong><c:out value="${insurance.name}"/></strong>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <c:forEach items="${doctor.insurancePlans}" var="plan">
+                                        <c:if test="${plan.insurance.name.equals(insurance.name)}">
+                                            <li class="list-group-item" style="max-height: 24rem"><c:out value="${plan.plan}"/></li>
+                                        </c:if>
+                                    </c:forEach>
+                                </ul>
+                            </div>
                         </c:forEach>
-                        </br>
-                    </c:forEach>
-                    <c:if test="${doctor.description.languages.size() != 0}">
+                    </div>
+                    </br>
+                    <c:if test="${doctor.description.languages.length() > 0}">
                         <h4><spring:message code="specialist.languages" /></h4>
                         <c:forEach items="${doctor.description.languages}" var="languages">
                             <c:out value="${languages}"/>
@@ -210,9 +217,13 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+<%--select2 dropdown--%>
+<%--<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>--%>
+<%--<script src="<c:url value="/resources/javascript/specialist.js"/>"></script>--%>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-<script src="<c:url value="/resources/javascript/specialist.js"/>"></script>
 
 </body>
 </html>

@@ -21,6 +21,7 @@ import ar.edu.itba.paw.interfaces.PatientService;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Controller
@@ -89,7 +90,7 @@ public class FlowController {
 		final ModelAndView mav = new ModelAndView("specialists");
 //		Optional<CompressedSearch> compressedSearch;
 //		compressedSearch = doctorService.findDoctors(theSearch);
-//		List<Doctor> doctorsList = null;
+		List<Doctor> doctorsList = doctorService.listDoctors(search);
 //		if(compressedSearch.isPresent()) {
 //			doctorsList = compressedSearch.get().getDoctors();
 //		}
@@ -126,13 +127,28 @@ public class FlowController {
 //		LOGGER.debug("GET specialtyList {}",  searchService.listSpecialtiesWithDoctors().get().toString());
 //		LOGGER.debug("GET sexList {}", compressedSearch.get().getSex().toString());
 //		LOGGER.debug("GET insuranceNameList {}", compressedSearch.get().getInsurance().toString());
-		mav.addObject("doctorList", doctorService.listDoctors(search));
+
+		List<String> sex = new ArrayList<>();
+		List<Insurance> insurance = new ArrayList<>();
+		List<InsurancePlan> insurancePlans = new ArrayList<>();
+
+		for(Doctor doctor : doctorsList){
+			for(InsurancePlan plan : doctor.getInsurancePlans()){
+				if(!insurance.contains(plan.getInsurance())){
+					insurance.add(plan.getInsurance());
+				}
+			}
+			if(sex.size() < 2 && !sex.contains(doctor.getSex())){
+				sex.add(doctor.getSex());
+			}
+		}
+
+		mav.addObject("doctorList", doctorsList);
 		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
-//		mav.addObject("sexList", compressedSearch.get().getSex());
-//		mav.addObject("insuranceNameList", compressedSearch.get().getInsurance());
+		mav.addObject("sexList", sex);
+//		mav.addObject("insuranceMap", insuranceMap);
 		mav.addObject("previousSearch", search);
-
 
 		return mav;
 	}
@@ -176,6 +192,8 @@ public class FlowController {
 //				mav.addObject("workingHoursTest", doctor.getWorkingHours());
 //				TODO: AGREGAR FUNCION QUE BUSCA INSURANCE USANDO LOS INSURANCE PLANS
 				mav.addObject("insuranceNameList", doctor.getInsurancePlans());
+				List<WorkingHours> wh = doctor.getWorkingHours();
+				Map<LocalDate, List<Appointment>> appointments = doctor.getAvailableAppointments();
 				mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
 				mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 				mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
@@ -214,6 +232,11 @@ public class FlowController {
 			return new ModelAndView("404");
 		}
 		try {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+			//convert String to LocalDate
+			String day = appointmentForm.getDay();
+			LocalDate localDate = LocalDate.parse(appointmentForm.getDay(), formatter);
 			appointmentService.createAppointment(appointmentForm.getDay(), appointmentForm.getTime(), patient, doctor);
 		} catch (RepeatedAppointmentException e) {
 			LOGGER.debug("The appointment has just been taken");
