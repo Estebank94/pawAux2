@@ -448,13 +448,10 @@ public class DoctorServiceImpl implements DoctorService {
 //    }
 
     @Override
-    public Optional<Doctor> setWorkingHours(Integer doctorId, List<WorkingHours> workingHours){
+    @Transactional
+    public Optional<Doctor> setWorkingHours(Doctor doctor, List<WorkingHours> workingHours){
         LOGGER.debug("setWorkingHours");
-        Optional<Doctor> doctorOptional = doctorDao.findDoctorById(doctorId);
-        Doctor doctor = doctorOptional.get();
-        doctor.setWorkingHours(workingHours);
-//        workingHoursDao.addWorkingHour(doctor.getId(), workingHours);
-        workingHoursDao.addWorkingHour(workingHours);
+        doctorDao.setWorkingHours(doctor, workingHours);
         return Optional.ofNullable(doctor);
     }
 

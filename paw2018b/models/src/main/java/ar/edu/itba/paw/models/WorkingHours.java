@@ -12,6 +12,7 @@ public class WorkingHours{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(name = "dayweek")
     private Integer dayOfWeek;
     private String startTime;

@@ -23,5 +23,7 @@ public interface DoctorDao {
 
     Boolean isAnExistingLicence(Integer licence);
 
-    public Boolean setDoctorSpecialty(Doctor doctor, Set<Specialty> specialty);
+    Boolean setDoctorSpecialty(Doctor doctor, Set<Specialty> specialty);
+
+    Boolean setWorkingHours(Doctor doctor, List<WorkingHours> workingHours);
 }

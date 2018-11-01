@@ -134,6 +134,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         return null;
     }
 
+    @Override
     public Boolean setDoctorSpecialty(Doctor doctor, Set<Specialty> specialty){
 
         for(Specialty s : specialty){
@@ -144,6 +145,22 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         em.merge(doctor);
         return true;
     }
+
+    public Boolean setWorkingHours(Doctor doctor, List<WorkingHours> workingHours){
+        doctor.addWorkingHours(workingHours);
+        workingHours.stream().forEach(workingHour -> workingHour.setDoctor(doctor));
+        em.merge(doctor);
+        return true;
+    }
+
+
+
+
+
+
+
+
+
 
 
 }

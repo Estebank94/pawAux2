@@ -47,7 +47,8 @@ public class Doctor {
     )
     List<InsurancePlan> insurancePlans;
     String phoneNumber;
-    @OneToMany(mappedBy = "doctor")
+
+    @OneToMany(mappedBy = "doctor", cascade = {CascadeType.ALL})
     List<WorkingHours> workingHours;
 
 
@@ -66,6 +67,10 @@ public class Doctor {
 
     public void setWorkingHours(List<WorkingHours> workingHours) {
         this.workingHours = workingHours;
+    }
+
+    public void addWorkingHours(Collection<WorkingHours> workingHours) {
+        this.workingHours.addAll(workingHours);
     }
 
     public Patient getPatient() {

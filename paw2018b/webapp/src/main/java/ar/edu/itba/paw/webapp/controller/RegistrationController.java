@@ -302,7 +302,6 @@ public class RegistrationController {
         }
 
 
-
         Description description = new Description(professionalForm.getCertificate(), professionalForm.getLanguages(), professionalForm.getEducation());
 
         List<WorkingHours> workingHours = professionalForm.workingHoursList();
@@ -312,11 +311,12 @@ public class RegistrationController {
             doctorService.setDoctorSpecialty(doctor, professionalForm.getSpecialties());
             if(insurance != null){
                 LOGGER.debug("SET Doctor's insurance to DB");
+                /*TODO: falta setear esto en la base de datos*/
                 doctorService.setDoctorInsurancePlans(doctor, professionalForm.getInsurancePlans());
             }
             if(workingHours != null){
                 LOGGER.debug("SET Doctor's workingHours to DB");
-                doctorService.setWorkingHours(doctor.getId(), workingHours);
+                doctorService.setWorkingHours(doctor, workingHours);
             }
         }else{
             //can't have description values in null;
