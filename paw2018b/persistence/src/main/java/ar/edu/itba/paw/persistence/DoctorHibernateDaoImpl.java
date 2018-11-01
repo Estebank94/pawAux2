@@ -21,6 +21,8 @@ import java.util.*;
 @Repository
 public class DoctorHibernateDaoImpl implements DoctorDao {
 
+    private static int PAGESIZE = 10;
+
     @PersistenceContext
     private EntityManager em;
 
@@ -35,13 +37,23 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
 
     @Override
-    public List<Doctor> listDoctors() {
+    public List<Doctor> listDoctors(int page) {
         final TypedQuery<Doctor> query = em.createQuery("FROM Doctor", Doctor.class);
+        query.setFirstResult(PAGESIZE*(page));
+        query.setMaxResults(PAGESIZE);
         final List<Doctor> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
     }
 
-    public List<Doctor> listDoctors(Search search) {
+    @Override
+    public int getLastPage(){
+        int pageSize = PAGESIZE;
+        Number amount = (Number)em.createQuery("SELECT COUNT(*) FROM Doctor",Number.class).getSingleResult();
+        int lastPageNumber = (int) (Math.ceil(amount.intValue() / pageSize));
+        return lastPageNumber;
+    }
+
+    public List<Doctor> listDoctors(Search search, int page) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Doctor> query = cb.createQuery(Doctor.class);
@@ -108,7 +120,12 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 //        query.where(cb.isNotNull(root.get("specialties")));
 //        query.where(cb.isNotNull(root.get("insurancePlans")));
 
-        List<Doctor> list = em.createQuery(query).getResultList();
+        TypedQuery<Doctor> typedQuery = em.createQuery(query);
+        typedQuery.setFirstResult(PAGESIZE*(page));
+        typedQuery.setMaxResults(PAGESIZE);
+        List<Doctor> list = typedQuery.getResultList();
+
+//        List<Doctor> list = em.createQuery(query).getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
 
     }

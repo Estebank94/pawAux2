@@ -82,23 +82,23 @@
 <div class="navbar-search sticky-top">
 <%--action="${postPath}--%>
     <c:url value="/processForm" var="processForm"/>
-<form:form action="${processForm}" method="GET" modelAttribute="search" accept-charset="ISO-8859-1">
-    <div id="search-bar" class="input-group container">
-        <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del médico" class="form-control" path="name"/>
-        <form:select class="custom-select specialist-select" id="specialty" path="specialty" cssStyle="cursor: pointer;">
-            <form:option value="noSpecialty" label="Especialidad" selected="Especialidad"/>
-            <form:options items="${specialtyList}" itemValue="name" itemLabel="name" />
-        </form:select>
-            <%--<form:input type="text" aria-label="Buscar por especialidad" placeholder="Buscar por especialidad" class="form-control" path="specialty"/>--%>
-        <form:select class="custom-select specialist-select" id="insurance" path="insurance" cssStyle="cursor: pointer;">
-            <form:option value="no" label="Prepaga" selected="Prepaga"/>
-            <form:options items="${insuranceList}" itemValue="name" itemLabel="name" />
-        </form:select>
-        <div class="input-group-append">
-            <input type="submit" class="btn btn-outline-light" value="Buscar" path="submit"/>
+    <form:form action="${processForm}" method="GET" modelAttribute="search" accept-charset="ISO-8859-1">
+        <div id="search-bar" class="input-group container">
+            <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del médico" class="form-control" path="name"/>
+            <form:select class="custom-select specialist-select" id="specialty" path="specialty" cssStyle="cursor: pointer;">
+                <form:option value="noSpecialty" label="Especialidad" selected="Especialidad"/>
+                <form:options items="${specialtyList}" itemValue="name" itemLabel="name" />
+            </form:select>
+                <%--<form:input type="text" aria-label="Buscar por especialidad" placeholder="Buscar por especialidad" class="form-control" path="specialty"/>--%>
+            <form:select class="custom-select specialist-select" id="insurance" path="insurance" cssStyle="cursor: pointer;">
+                <form:option value="no" label="Prepaga" selected="Prepaga"/>
+                <form:options items="${insuranceList}" itemValue="name" itemLabel="name" />
+            </form:select>
+            <div class="input-group-append">
+                <input type="submit" class="btn btn-outline-light" value="Buscar" path="submit"/>
+            </div>
         </div>
-    </div>
-</form:form>
+    </form:form>
     </div>
 
 <div class="container">
@@ -140,7 +140,7 @@
                                     </div>
                                 <div class="col-sm-5">
                                     <label for="time"><spring:message code="specialist.appointmentTime"/></label>
-                                    <select disabled="false" id="time" path="time" cssStyle="cursor: pointer;">
+                                    <select class="custom-select" disabled="false" id="time" path="time" cssStyle="cursor: pointer;">
                                         <option value="no" label="Elegi el Horario" selected>Elegí el Horario</option>
                                     <c:forEach items="${appointmentsAvailable}" var="date">
                                         <c:forEach items="${date.value}" var="listItem">
@@ -184,18 +184,15 @@
                         <br>
                     </c:if>
                     <h4><spring:message code="specialist.insurances" /></h4>
-                    <br>
                     <div class="row container">
                         <c:forEach items="${doctor.insuranceListFromInsurancePlans}" var="insurance">
-                            <div class="card" style="width: 18rem; margin-right:8rem;">
+                            <div class="card col-sm-3" style="margin-right:2rem; padding-left: 0; padding-right: 0;">
                                 <div class="card-header">
                                     <strong><c:out value="${insurance.name}"/></strong>
                                 </div>
                                 <ul class="list-group list-group-flush">
-                                    <c:forEach items="${doctor.insurancePlans}" var="plan">
-                                        <c:if test="${plan.insurance.name.equals(insurance.name)}">
-                                            <li class="list-group-item" style="max-height: 24rem"><c:out value="${plan.plan}"/></li>
-                                        </c:if>
+                                    <c:forEach items="${doctor.getInsurancePlansFromInsurance(insurance)}" var="plan">
+                                        <li class="list-group-item" style="max-height: 24rem"><c:out value="${plan.plan}"/></li>
                                     </c:forEach>
                                 </ul>
                             </div>

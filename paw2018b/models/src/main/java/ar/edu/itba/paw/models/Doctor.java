@@ -1,6 +1,10 @@
 package ar.edu.itba.paw.models;
 
 import ar.edu.itba.paw.App;
+import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.JoinColumnOrFormula;
+import org.hibernate.annotations.JoinColumnsOrFormulas;
+import org.hibernate.annotations.JoinFormula;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
@@ -34,7 +38,6 @@ public class Doctor {
             joinColumns = {@JoinColumn(name = "doctorid", referencedColumnName="id")},
             inverseJoinColumns = {@JoinColumn(name = "specialtyid", referencedColumnName="id")}
     )
-
     Set<Specialty> specialties;
 
     @ManyToMany(cascade = {CascadeType.PERSIST},
@@ -46,6 +49,16 @@ public class Doctor {
             inverseJoinColumns = {@JoinColumn(name="insuranceplanid", referencedColumnName="id")}
     )
     List<InsurancePlan> insurancePlans;
+
+
+//    @ManyToMany
+//    @JoinColumnsOrFormulas({
+//            @JoinColumnOrFormula(formula=@JoinFormula(value="(\"SELECT DISTINCT insurance.id\\n\" +\n" +
+//                    "            \"FROM doctor, medicalCare, insurancePlan, insurance\\n\" +\n" +
+//                    "            \"WHERE medicalCare.doctorid = doctor.id AND insurancePlan.id = medicalCare.insuranceplanid AND insurancePlan.insuranceid = insurance.id AND doctor.id=+"+id+"+"\")", referencedColumnName="id")),
+//    })
+//    List<Insurance> insurances;
+
     String phoneNumber;
 
     @OneToMany(mappedBy = "doctor", cascade = {CascadeType.ALL})
@@ -61,7 +74,6 @@ public class Doctor {
     @OneToOne(mappedBy="doctor")
     Description description;
 
-//  Agregue estos porque estaban en la tabla y no en el model
     Integer licence;
     String district;
 
@@ -191,6 +203,14 @@ public class Doctor {
 
     public void setInsurancePlans(List<InsurancePlan> insurancePlans) {
         this.insurancePlans = insurancePlans;
+    }
+
+    public List<Insurance> getInsurances() {
+        return insurances;
+    }
+
+    public void setInsurances(List<Insurance> insurances) {
+        this.insurances = insurances;
     }
 
     @Override
@@ -431,6 +451,17 @@ public class Doctor {
         for(InsurancePlan plan : getInsurancePlans()){
             if(!list.contains(plan.getInsurance())){
                 list.add(plan.getInsurance());
+            }
+        }
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
+    public List<InsurancePlan> getInsurancePlansFromInsurance(Insurance insurance){
+        List<InsurancePlan> list = new ArrayList<>();
+
+        for(InsurancePlan plan : getInsurancePlans()){
+            if(plan.getInsurance().equals(insurance) && !list.contains(plan)){
+                list.add(plan);
             }
         }
         return list.isEmpty() ? Collections.emptyList() : list;

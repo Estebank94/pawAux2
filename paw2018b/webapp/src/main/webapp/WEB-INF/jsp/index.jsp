@@ -92,7 +92,7 @@
     <div class="container padding-top-big padding-bottom-big">
         <p class="jumbotron-subtitle"><spring:message code="brand.slogan" /></p>
         <div class="navbar-search-home">
-            <c:url value="/processForm" var="processForm"/>
+            <c:url value="/processForm/0" var="processForm"/>
             <form:form action="${processForm}" method="POST" modelAttribute="search" accept-charset="ISO-8859-1">
                 <div class="input-group container">
                     <form:input type="text" aria-label="Buscar por nombre del médico" placeholder="Nombre del médico" class="form-control" path="name"/>

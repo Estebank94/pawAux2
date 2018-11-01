@@ -83,14 +83,14 @@ public class FlowController {
 		return mav;
 	}
 
-	@RequestMapping("/processForm")
-	public ModelAndView processForm(@ModelAttribute("search") Search search) throws NotValidSearchException {
+	@RequestMapping("/processForm/{page}")
+	public ModelAndView processForm(@ModelAttribute("search") Search search, @PathVariable("page") Integer page) throws NotValidSearchException {
 //		LOGGER.debug("Calling: ProcessForm");
 //
 		final ModelAndView mav = new ModelAndView("specialists");
 //		Optional<CompressedSearch> compressedSearch;
 //		compressedSearch = doctorService.findDoctors(theSearch);
-		List<Doctor> doctorsList = doctorService.listDoctors(search);
+		List<Doctor> doctorsList = doctorService.listDoctors(search, page);
 //		if(compressedSearch.isPresent()) {
 //			doctorsList = compressedSearch.get().getDoctors();
 //		}
@@ -147,7 +147,6 @@ public class FlowController {
 		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
 		mav.addObject("sexList", sex);
-//		mav.addObject("insuranceMap", insuranceMap);
 		mav.addObject("previousSearch", search);
 
 		return mav;

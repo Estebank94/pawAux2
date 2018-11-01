@@ -12,10 +12,11 @@ import java.util.Set;
 
 public interface DoctorService {
 
+   int getLastPage();
 
-   List<Doctor> listDoctors();
+   List<Doctor> listDoctors(int page);
 
-   List<Doctor> listDoctors(Search search) throws NotValidSearchException;
+   List<Doctor> listDoctors(Search search, int page) throws NotValidSearchException;
 
    Optional<Doctor> findDoctorById(Integer id) throws NotFoundDoctorException, NotValidIDException;
 
