@@ -149,6 +149,24 @@
                     </div>
                 </div>
             </c:forEach>
+            </br>
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <c:forEach var="page" begin="${0}" end="${totalPages}">
+                        <c:if test="${currentPage == page}">
+                            <li class="page-item active">
+                              <span class="page-link">
+                                ${page}
+                              </span>
+                            </li>
+                        </c:if>
+                        <c:if test="${currentPage != page}">
+                            <%--TODO MARTINA pone bien el link de la href--%>
+                            <li class="page-item"><a class="page-link" href="http://localhost:8080/processForm/${page}">${page}</a></li>
+                        </c:if>
+                    </c:forEach>
+                </ul>
+            </nav>
         </div>
         <div class="col-md-3">
             <div class="sidebar-nav-fixed pull-right affix">

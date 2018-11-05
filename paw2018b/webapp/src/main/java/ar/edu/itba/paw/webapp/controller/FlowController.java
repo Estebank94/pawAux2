@@ -1,11 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.AppointmentService;
-import ar.edu.itba.paw.interfaces.DoctorService;
-import ar.edu.itba.paw.interfaces.SearchService;
+import ar.edu.itba.paw.interfaces.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.forms.AppointmentForm;
+import ar.edu.itba.paw.webapp.forms.ReviewForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ar.edu.itba.paw.interfaces.PatientService;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -44,7 +42,10 @@ public class FlowController {
 
 	@Autowired
 	private AppointmentService appointmentService;
-	
+
+	@Autowired
+	private ReviewService reviewService;
+
 	@RequestMapping("/")
 	public ModelAndView index() throws NotFoundDoctorException, NotValidIDException {
 		LOGGER.debug("Starting Waldoc ... ");
@@ -142,7 +143,8 @@ public class FlowController {
 				sex.add(doctor.getSex());
 			}
 		}
-
+		mav.addObject("totalPages", doctorService.getLastPage());
+		mav.addObject("currentPage", page);
 		mav.addObject("doctorList", doctorsList);
 		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
 		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
@@ -154,7 +156,8 @@ public class FlowController {
 
 	@RequestMapping(value = "/specialist/{doctorId}", method = { RequestMethod.GET})
     public ModelAndView doctorDescription(@PathVariable Integer doctorId, @ModelAttribute("search") Search search,
-										  @ModelAttribute("appointment") AppointmentForm appointmentForm){
+										  @ModelAttribute("appointment") AppointmentForm appointmentForm,
+										  @ModelAttribute("review") ReviewForm reviewForm){
 		LOGGER.debug("DoctorDesciption. DoctorID = {}", doctorId);
 			final ModelAndView mav = new ModelAndView("specialist");
 			try {
@@ -212,7 +215,8 @@ public class FlowController {
 
     @RequestMapping(value = "/specialist/{doctorId}", method = {RequestMethod.POST})
 	public ModelAndView doctorDescriptionPost(@PathVariable Integer doctorId, @ModelAttribute("search") Search search,
-											  @ModelAttribute("appointment")AppointmentForm appointmentForm) throws NotFoundDoctorException, NotValidIDException {
+											  @ModelAttribute("appointment")AppointmentForm appointmentForm,
+												@ModelAttribute("review")ReviewForm reviewForm) throws NotFoundDoctorException, NotValidIDException {
 
 		Doctor doctor = doctorService.findDoctorById(doctorId).get();
 
@@ -220,48 +224,85 @@ public class FlowController {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-		Patient patient = null;
-		try {
-			patient = patientService.findPatientByEmail(authentication.getName());
-		} catch (NotValidEmailException e) {
-			LOGGER.trace("404 error");
-			return new ModelAndView("404");
-		} catch (NotFoundPacientException e) {
-			LOGGER.trace("404 error");
-			return new ModelAndView("404");
-		}
-		try {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//		Patient patient = null;
+//		try {
+//			patient = patientService.findPatientByEmail(authentication.getName());
+//		} catch (NotValidEmailException e) {
+//			LOGGER.trace("404 error");
+//			return new ModelAndView("404");
+//		} catch (NotFoundPacientException e) {
+//			LOGGER.trace("404 error");
+//			return new ModelAndView("404");
+//		}
+//		try {
+//			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//
+//			//convert String to LocalDate
+//			String day = appointmentForm.getDay();
+//			LocalDate localDate = LocalDate.parse(appointmentForm.getDay(), formatter);
+//			appointmentService.createAppointment(appointmentForm.getDay(), appointmentForm.getTime(), patient, doctor);
+//		} catch (RepeatedAppointmentException e) {
+//			LOGGER.debug("The appointment has just been taken");
+//			return doctorDescription(doctorId,search,appointmentForm, reviewForm).addObject("appointmentTaken", true);
+//		} catch (NotCreatedAppointmentException e) {
+//			LOGGER.trace("404 error");
+//			return new ModelAndView("404");
+//		} catch (NotValidDoctorIdException e) {
+//			LOGGER.trace("404 error");
+//			return new ModelAndView("404");
+//		} catch (NotValidAppointmentDayException e) {
+//			LOGGER.trace("404 error");
+//			return new ModelAndView("404");
+//		} catch (NotValidAppointmentTimeException e) {
+//			LOGGER.trace("404 error");
+//			return new ModelAndView("404");
+//		} catch (NotValidPatientIdException e) {
+//			LOGGER.trace("404 error");
+//			return new ModelAndView("404");
+//		}
 
-			//convert String to LocalDate
-			String day = appointmentForm.getDay();
-			LocalDate localDate = LocalDate.parse(appointmentForm.getDay(), formatter);
-			appointmentService.createAppointment(appointmentForm.getDay(), appointmentForm.getTime(), patient, doctor);
-		} catch (RepeatedAppointmentException e) {
-			LOGGER.debug("The appointment has just been taken");
-			return doctorDescription(doctorId,search,appointmentForm).addObject("appointmentTaken", true);
-		} catch (NotCreatedAppointmentException e) {
-			LOGGER.trace("404 error");
-			return new ModelAndView("404");
-		} catch (NotValidDoctorIdException e) {
-			LOGGER.trace("404 error");
-			return new ModelAndView("404");
-		} catch (NotValidAppointmentDayException e) {
-			LOGGER.trace("404 error");
-			return new ModelAndView("404");
-		} catch (NotValidAppointmentTimeException e) {
-			LOGGER.trace("404 error");
-			return new ModelAndView("404");
-		} catch (NotValidPatientIdException e) {
-			LOGGER.trace("404 error");
-			return new ModelAndView("404");
-		}
+//		TODO fix null from form
+		Review review = new Review(5, "Muy Bueno!", doctor, "hola", "hola");
+		reviewService.createReview(review);
+
 
 		ModelAndView mav = new ModelAndView("appointmentSuccess");
 		mav.addObject("doctor", doctor);
-		mav.addObject("appointmentDay", appointmentForm.getDay());
-		mav.addObject("appointmentTime", appointmentForm.getTime());
+//		mav.addObject("appointmentDay", appointmentForm.getDay());
+//		mav.addObject("appointmentTime", appointmentForm.getTime());
 		return mav;
 	}
+
+//	@RequestMapping(value = "/specialist/{doctorId}", method = {RequestMethod.POST})
+//	public ModelAndView doctorReviewPost(@PathVariable Integer doctorId, @ModelAttribute("search") Search search,
+//											  @ModelAttribute("review")ReviewForm reviewForm) throws NotFoundDoctorException, NotValidIDException {
+//
+//		Doctor doctor = doctorService.findDoctorById(doctorId).get();
+//
+//		/*TODO: check validation for try catch*/
+//
+//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//		Patient patient = null;
+//		try {
+//			patient = patientService.findPatientByEmail(authentication.getName());
+//		} catch (NotValidEmailException e) {
+//			LOGGER.trace("404 error");
+//			return new ModelAndView("404");
+//		} catch (NotFoundPacientException e) {
+//			LOGGER.trace("404 error");
+//			return new ModelAndView("404");
+//		}
+//
+//
+//		Review review = new Review(reviewForm.getStars(), reviewForm.getDescription(), doctor, patient.getFirstName(), patient.getLastName());
+//		reviewService.createReview(review);
+//
+//
+/////		Hacer que te haga refresh la pagina
+//		ModelAndView mav = new ModelAndView("appointmentSuccess");
+//		mav.addObject("doctor", doctor);
+//		return mav;
+//	}
 
 }

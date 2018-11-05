@@ -2,7 +2,7 @@
  * Created by estebankramer on 30/09/2018.
  */
 
-alert("Hola");
+// alert("Hola");
 
 $(function() {
     $('#day').on('change', function() {

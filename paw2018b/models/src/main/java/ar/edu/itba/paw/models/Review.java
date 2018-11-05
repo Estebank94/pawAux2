@@ -1,30 +1,46 @@
 package ar.edu.itba.paw.models;
 
+import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Table
+@Entity(name = "review")
 public class Review {
     private Integer stars;
-    private LocalDateTime dateTime;
+    private String dayTime;
     private String description;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name="doctorid")
+    private Doctor doctor;
+
     private String reviewerFirstName;
     private String reviewerLastName;
 
-    public Review(Integer stars, LocalDateTime dateTime, String description, Integer id, String reviewerFirstName, String reviewerLastName) {
+    public Review(){
+
+    }
+
+    public Review(Integer stars, String description, Doctor doctor, String reviewerFirstName, String reviewerLastName){
         this.stars = stars;
-        this.dateTime = dateTime;
+        this.dayTime = LocalDate.now().toString();
         this.description = description;
-        this.id = id;
+        this.doctor = doctor;
         this.reviewerFirstName = reviewerFirstName;
         this.reviewerLastName = reviewerLastName;
     }
 
-    public Review(Integer stars, LocalDateTime dateTime, String description, Integer id) {
-        this.stars = stars;
-        this.dateTime = dateTime;
-        this.description = description;
-        this.id = id;
-     }
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
 
     public String getDescription() {
         return description;
@@ -50,12 +66,27 @@ public class Review {
         this.stars = stars;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public String getDayTime() {
+        return dayTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDayTime(String dateTime) {
+        this.dayTime = dayTime;
     }
 
+    public String getReviewerFirstName() {
+        return reviewerFirstName;
+    }
+
+    public void setReviewerFirstName(String reviewerFirstName) {
+        this.reviewerFirstName = reviewerFirstName;
+    }
+
+    public String getReviewerLastName() {
+        return reviewerLastName;
+    }
+
+    public void setReviewerLastName(String reviewerLastName) {
+        this.reviewerLastName = reviewerLastName;
+    }
 }

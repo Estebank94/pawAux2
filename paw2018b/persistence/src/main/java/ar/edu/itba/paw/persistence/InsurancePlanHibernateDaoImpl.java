@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -50,6 +51,14 @@ public class InsurancePlanHibernateDaoImpl implements InsurancePlanDao {
         final TypedQuery<InsurancePlan> query = em.createQuery("from InsurancePlan WHERE plan = :plan", InsurancePlan.class);
         query.setParameter("plan", name);
         return query.getSingleResult();
+    }
+
+    @Override
+    public List<InsurancePlan> findAllInsurancePlansByInsurance(Insurance insurance) {
+        final TypedQuery<InsurancePlan> query = em.createQuery("FROM InsurancePlan WHERE insurance = :insurance", InsurancePlan.class);
+        query.setParameter("insurance", insurance);
+        List<InsurancePlan> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
     }
 
     private String parseInsurance(String insurance){

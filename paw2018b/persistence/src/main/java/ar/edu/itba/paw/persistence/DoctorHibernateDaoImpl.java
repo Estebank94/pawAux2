@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.DoctorDao;
-import ar.edu.itba.paw.interfaces.InsuranceDao;
-import ar.edu.itba.paw.interfaces.InsurancePlanDao;
-import ar.edu.itba.paw.interfaces.SpecialtyDao;
+import ar.edu.itba.paw.interfaces.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.NotCreateDoctorException;
 import ar.edu.itba.paw.models.exceptions.RepeatedLicenceException;
@@ -35,6 +32,9 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     @Autowired
     private InsurancePlanDao insurancePlanDao;
 
+    @Autowired
+    private ReviewDao reviewDao;
+
 
     @Override
     public List<Doctor> listDoctors(int page) {
@@ -48,7 +48,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     @Override
     public int getLastPage(){
         int pageSize = PAGESIZE;
-        Number amount = (Number)em.createQuery("SELECT COUNT(*) FROM Doctor",Number.class).getSingleResult();
+        Number amount = em.createQuery("SELECT COUNT(*) FROM Doctor",Number.class).getSingleResult();
         int lastPageNumber = (int) (Math.ceil(amount.intValue() / pageSize));
         return lastPageNumber;
     }
@@ -104,7 +104,16 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         if (insurance.isPresent())
         {
             Insurance insuranceObj = insuranceDao.findInsuranceByName(insurance.get());
-            query.where(cb.isMember(insuranceObj, root.get("insurancePlans")));
+            List<InsurancePlan> insurancePlans = insurancePlanDao.findAllInsurancePlansByInsurance(insuranceObj);
+            boolean first = true;
+            for(InsurancePlan plan : insurancePlans){
+                if(first){
+                    query.where(cb.isMember(plan, root.get("insurancePlans")));
+                } else {
+                    query.where(cb.or(cb.isMember(plan, root.get("insurancePlans"))));
+                }
+                first = false;
+            }
         }
 
         if (sex.isPresent()){

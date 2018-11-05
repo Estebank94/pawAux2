@@ -50,15 +50,6 @@ public class Doctor {
     )
     List<InsurancePlan> insurancePlans;
 
-
-//    @ManyToMany
-//    @JoinColumnsOrFormulas({
-//            @JoinColumnOrFormula(formula=@JoinFormula(value="(\"SELECT DISTINCT insurance.id\\n\" +\n" +
-//                    "            \"FROM doctor, medicalCare, insurancePlan, insurance\\n\" +\n" +
-//                    "            \"WHERE medicalCare.doctorid = doctor.id AND insurancePlan.id = medicalCare.insuranceplanid AND insurancePlan.insuranceid = insurance.id AND doctor.id=+"+id+"+"\")", referencedColumnName="id")),
-//    })
-//    List<Insurance> insurances;
-
     String phoneNumber;
 
     @OneToMany(mappedBy = "doctor", cascade = {CascadeType.ALL})
@@ -67,7 +58,10 @@ public class Doctor {
 
     @OneToMany(mappedBy = "doctor")
     Set<Appointment> appointments;
-//    List<Review> reviews;
+
+    @OneToMany(mappedBy = "doctor")
+    List<Review> reviews;
+
     @OneToOne(mappedBy="doctor")
     Patient patient;
 
@@ -76,6 +70,14 @@ public class Doctor {
 
     Integer licence;
     String district;
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
 
     public void setWorkingHours(List<WorkingHours> workingHours) {
         this.workingHours = workingHours;
@@ -123,7 +125,6 @@ public class Doctor {
         this.avatar = avatar;
         this.phoneNumber = phoneNumber;
     }
-    
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -205,13 +206,6 @@ public class Doctor {
         this.insurancePlans = insurancePlans;
     }
 
-    public List<Insurance> getInsurances() {
-        return insurances;
-    }
-
-    public void setInsurances(List<Insurance> insurances) {
-        this.insurances = insurances;
-    }
 
     @Override
     public boolean equals(Object o) {
