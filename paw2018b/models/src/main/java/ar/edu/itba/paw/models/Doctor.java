@@ -71,6 +71,9 @@ public class Doctor {
     Integer licence;
     String district;
 
+    @OneToMany(mappedBy="doctor", cascade = {CascadeType.PERSIST})
+    List<Favorite> favorites;
+
     public List<Review> getReviews() {
         return reviews;
     }
@@ -461,6 +464,13 @@ public class Doctor {
         return list.isEmpty() ? Collections.emptyList() : list;
     }
 
+    public List<Favorite> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<Favorite> favorites) {
+        this.favorites = favorites;
+    }
 }
 
 

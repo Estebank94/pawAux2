@@ -46,6 +46,9 @@ public class FlowController {
 	@Autowired
 	private ReviewService reviewService;
 
+	@Autowired
+	private FavoriteService favoriteService;
+
 	@RequestMapping("/")
 	public ModelAndView index() throws NotFoundDoctorException, NotValidIDException {
 		LOGGER.debug("Starting Waldoc ... ");
@@ -190,6 +193,13 @@ public class FlowController {
 						mav.addObject("doctorID", doctor.getId());
 					}
 				}
+//				Patient patient = patientService.findPatientByEmail(authentication.getName());
+//				Favorite favorite = new Favorite();
+//				favorite.setId(2);
+//				favorite.setDoctor(doctor);
+//				favorite.setPatient(patient);
+//				favoriteService.addFavorite(favorite);
+
 				mav.addObject("doctor", doctor);
 //				mav.addObject("workingHoursTest", doctor.getWorkingHours());
 //				TODO: AGREGAR FUNCION QUE BUSCA INSURANCE USANDO LOS INSURANCE PLANS

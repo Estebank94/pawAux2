@@ -27,6 +27,9 @@ public class Patient {
     @JoinColumn(name = "doctorid")
     private Doctor doctor;
 
+    @OneToMany(mappedBy="patient", cascade = {CascadeType.PERSIST})
+    List<Favorite> favorites;
+
 
     public Patient( String firstName, String lastName, String phoneNumber, String email, String password) {
         this.id = null;
@@ -157,7 +160,21 @@ public class Patient {
         }
         return appointments;
 
-
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public List<Favorite> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<Favorite> favorites) {
+        this.favorites = favorites;
+    }
 }

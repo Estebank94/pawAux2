@@ -119,6 +119,7 @@
                                 <p class="doctor-text"><i class="fas fa-phone" style="padding-right: 0.5em"></i><c:out value="${doctor.phoneNumber}"/></p>
                                 <%--<p class="doctor-text"><i class="far fa-clock" style="padding-right: 0.5em"></i>${doctor.workingHours}</p>--%>
                                 <p class="doctor-text"><i class="fas fa-map-marker-alt" style="padding-right: 0.5em"></i><c:out value="${doctor.address}"/>, CABA</p>
+                                <button type="button" class="btn btn-danger">Agregar a Favoritos</button>
                             </div>
                         </div>
                     </div>
