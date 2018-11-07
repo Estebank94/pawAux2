@@ -55,7 +55,6 @@
                             <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:#ffffff !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
                                 <button class="dropdown-item" type="submit">Cerrar Sesion</button>
-                                    <%--ARREGLAR !!! hay que arreglar el dropdown se ve por abajo del search form--%>
                                 <security:authorize access="hasRole('ROLE_DOCTOR')">
                                     <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="/doctorPanel"/>'">
                                         <spring:message code="dropdown.viewProfile"/>
@@ -122,7 +121,7 @@
                                 <p class="doctor-text"><i class="fas fa-phone" style="padding-right: 0.5em"></i><c:out value="${doctor.phoneNumber}"/></p>
                                 <%--<p class="doctor-text"><i class="far fa-clock" style="padding-right: 0.5em"></i>${doctor.workingHours}</p>--%>
                                 <p class="doctor-text"><i class="fas fa-map-marker-alt" style="padding-right: 0.5em"></i><c:out value="${doctor.address}"/>, CABA</p>
-                                <%--<button type="button" class="btn btn-danger">Agregar a Favoritos</button>--%>
+                                <%--<button type="button" class="btn btn-danger">Cancelar turno</button>--%>
                             </div>
                         </div>
                     </div>

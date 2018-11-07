@@ -5,12 +5,14 @@ import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
 import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
+import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,7 +30,8 @@ public class PatientPanelController {
     PatientService patientService;
 
     @RequestMapping("/patientPanel")
-    public ModelAndView patientPanel(){
+    /*cambiar el model and attribute*/
+    public ModelAndView patientPanel(@ModelAttribute("professional")ProfessionalForm professionalForm){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
