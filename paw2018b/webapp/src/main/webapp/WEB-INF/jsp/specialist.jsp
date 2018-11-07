@@ -234,17 +234,17 @@
                     <form:form modelAttribute="review" method="POST" action="${specialist_id}" id="review">
                         <div class="form-group">
                             <label for="stars">Estrellas</label>
-                            <select class="form-control" id="stars" path="stars">
+                            <form:select class="form-control" id="stars" path="stars">
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>
                                 <option>4</option>
                                 <option>5</option>
-                            </select>
+                            </form:select>
                         </div>
                         <div class="form-group">
                             <label for="description">Describí tu experiencia</label>
-                            <textarea class="form-control" id="description" path="description" rows="3"></textarea>
+                            <form:textarea class="form-control" id="description" path="description" rows="3"/>
                         </div>
                         <button type="submit" class="btn btn-primary mb-2">Enviar Reseña</button>
                     </form:form>

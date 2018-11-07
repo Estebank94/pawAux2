@@ -229,45 +229,46 @@ public class FlowController {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-//		Patient patient = null;
-//		try {
-//			patient = patientService.findPatientByEmail(authentication.getName());
-//		} catch (NotValidEmailException e) {
-//			LOGGER.trace("404 error");
-//			return new ModelAndView("404");
-//		} catch (NotFoundPacientException e) {
-//			LOGGER.trace("404 error");
-//			return new ModelAndView("404");
-//		}
-//		try {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//
-//			//convert String to LocalDate
+		Patient patient = null;
+		try {
+			patient = patientService.findPatientByEmail(authentication.getName());
+		} catch (NotValidEmailException e) {
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		} catch (NotFoundPacientException e) {
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		}
+		try {
 			String day = appointmentForm.getDay();
-			LocalDate localDate = LocalDate.parse(appointmentForm.getDay(), formatter);
-//			appointmentService.createAppointment(appointmentForm.getDay(), appointmentForm.getTime(), patient, doctor);
-//		} catch (RepeatedAppointmentException e) {
-//			LOGGER.debug("The appointment has just been taken");
-//			return doctorDescription(doctorId,search,appointmentForm, reviewForm).addObject("appointmentTaken", true);
-//		} catch (NotCreatedAppointmentException e) {
-//			LOGGER.trace("404 error");
-//			return new ModelAndView("404");
-//		} catch (NotValidDoctorIdException e) {
-//			LOGGER.trace("404 error");
-//			return new ModelAndView("404");
-//		} catch (NotValidAppointmentDayException e) {
-//			LOGGER.trace("404 error");
-//			return new ModelAndView("404");
-//		} catch (NotValidAppointmentTimeException e) {
-//			LOGGER.trace("404 error");
-//			return new ModelAndView("404");
-//		} catch (NotValidPatientIdException e) {
-//			LOGGER.trace("404 error");
-//			return new ModelAndView("404");
-//		}
+			if(appointmentForm.getDay() != null && appointmentForm.getTime() != null) {
+				appointmentService.createAppointment(appointmentForm.getDay(), appointmentForm.getTime(), patient, doctor);
+			}
+		} catch (RepeatedAppointmentException e) {
+			LOGGER.debug("The appointment has just been taken");
+			return doctorDescription(doctorId,search,appointmentForm, reviewForm).addObject("appointmentTaken", true);
+		} catch (NotCreatedAppointmentException e) {
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		} catch (NotValidDoctorIdException e) {
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		} catch (NotValidAppointmentDayException e) {
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		} catch (NotValidAppointmentTimeException e) {
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		} catch (NotValidPatientIdException e) {
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		}
 
 //		TODO fix null from form
-		Review review = new Review(5, "Muy Bueno!", doctor, "hola", "hola");
+//		Review review = new Review(5, "Muy Bueno!", doctor, "hola", "hola");
+//		reviewService.createReview(review);
+
+		Review review = new Review(reviewForm.getStars(), reviewForm.getDescription(), doctor, patient.getFirstName(), patient.getLastName());
 		reviewService.createReview(review);
 
 
