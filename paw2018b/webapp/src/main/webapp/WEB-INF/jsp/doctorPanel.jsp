@@ -51,8 +51,8 @@
                                 <p class="doctor-specialty"><spring:message code="welcome"/></p>
                                 <h3 class="doctor-name">Dr. <c:out value="${doctor.lastName}"/>, <c:out value="${doctor.firstName}"/></h3>
                                 <div class="row container">
-                                    <c:forEach items="${doctor.specialty}" var="doctorSpecialty">
-                                        <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty}"/></p>
+                                    <c:forEach items="${doctor.specialties}" var="doctorSpecialty">
+                                        <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty.speciality}"/></p>
                                     </c:forEach>
                                 </div>
                                 <br>
