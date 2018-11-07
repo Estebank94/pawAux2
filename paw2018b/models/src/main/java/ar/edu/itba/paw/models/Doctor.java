@@ -322,9 +322,10 @@ public class Doctor {
         LocalTime now = LocalTime.now();
 
         for (Appointment appointmentIterator: appointments){
-            if (LocalDate.parse(appointmentIterator.getAppointmentDay()).isAfter(today)){
+            if (LocalDate.parse(appointmentIterator.getAppointmentDay()).isAfter(today) && appointmentIterator.getAppointmentCancelled() == false){
                 returnSet.add(appointmentIterator);
-            } else if (LocalDate.parse(appointmentIterator.getAppointmentDay()).isEqual(today) && LocalTime.parse(appointmentIterator.getAppointmentTime()).isAfter(now)){
+            } else if (LocalDate.parse(appointmentIterator.getAppointmentDay()).isEqual(today) && LocalTime.parse(appointmentIterator.getAppointmentTime()).isAfter(now)
+                    && appointmentIterator.getAppointmentCancelled() == false){
                 returnSet.add(appointmentIterator);
             }
         }

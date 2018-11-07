@@ -14,4 +14,9 @@ import java.util.Optional;
 public interface AppointmentDao {
     Appointment createAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) throws Exception;
 
+    void cancelAppointment(Appointment appointment);
+
+    Optional<Appointment> findAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) throws Exception;
+
+    void undoCancelAppointment(Appointment appointment);
 }

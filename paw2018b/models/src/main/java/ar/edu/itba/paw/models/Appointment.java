@@ -16,9 +16,13 @@ public class Appointment implements Comparable<Appointment>{
 //    private LocalTime appointmentTime;
     private String appointmentDay;
     private String appointmentTime;
+
+    private Boolean appointmentCancelled;
+
     @ManyToOne
     @JoinColumn(name="clientid")
     private Patient patient;
+
     @ManyToOne
     @JoinColumn(name="doctorid")
     private Doctor doctor;
@@ -28,17 +32,28 @@ public class Appointment implements Comparable<Appointment>{
         this.appointmentTime = appointmentTime;
         this.patient = patient;
         this.doctor = doctor;
+        this.appointmentCancelled = false;
+    }
+
+    public Appointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor, Boolean appointmentCancelled) {
+        this.appointmentDay = appointmentDay;
+        this.appointmentTime = appointmentTime;
+        this.patient = patient;
+        this.doctor = doctor;
+        this.appointmentCancelled = appointmentCancelled;
     }
 
     public Appointment(String appointmentDay, String appointmentTime) {
         this.appointmentDay = appointmentDay;
         this.appointmentTime = appointmentTime;
+        this.appointmentCancelled = false;
     }
 
     public Appointment(String appointmentDay, String appointmentTime, Patient patient) {
         this.appointmentDay = appointmentDay;
         this.appointmentTime = appointmentTime;
         this.patient = patient;
+        this.appointmentCancelled = false;
     }
 
     @Autowired
@@ -126,6 +141,14 @@ public class Appointment implements Comparable<Appointment>{
 
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
+    }
+
+    public Boolean getAppointmentCancelled() {
+        return appointmentCancelled;
+    }
+
+    public void setAppointmentCancelled(Boolean appointmentCancelled) {
+        this.appointmentCancelled = appointmentCancelled;
     }
 }
 
