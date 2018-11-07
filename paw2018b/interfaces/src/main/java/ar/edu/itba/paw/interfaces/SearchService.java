@@ -1,6 +1,9 @@
 package ar.edu.itba.paw.interfaces;
 
+import ar.edu.itba.paw.models.Insurance;
+import ar.edu.itba.paw.models.InsurancePlan;
 import ar.edu.itba.paw.models.ListItem;
+import ar.edu.itba.paw.models.Specialty;
 
 import java.util.List;
 import java.util.Map;
@@ -11,15 +14,13 @@ import java.util.Optional;
  */
 
 public interface SearchService {
-    Optional<List<ListItem>> listInsurances();
+    List<Insurance> listInsurances();
 
-    Optional<List<ListItem>> listInsurancesWithDoctors();
+//    Optional<List<ListItem>> listInsurancesWithDoctors();
 
-    Optional<List<ListItem>> listZones();
+    List<Specialty> listSpecialties();
 
-    Optional<List<ListItem>> listSpecialties();
+//    Optional<List<ListItem>> listSpecialtiesWithDoctors();
 
-    Optional<List<ListItem>> listSpecialtiesWithDoctors();
-
-    Optional<Map<String, List<String>>> listInsurancePlan();
+    List<InsurancePlan> listInsurancePlans();
 }

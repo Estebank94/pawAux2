@@ -83,21 +83,21 @@
 <div class="navbar-search sticky-top">
     <%--action="${postPath}--%>
     <form:form action="processForm" method="GET" modelAttribute="search" accept-charset="ISO-8859-1">
-    <div id="search-bar" class="input-group container">
-        <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del médico" class="form-control" path="name"/>
-        <form:select class="custom-select" id="specialty" path="specialty" cssStyle="cursor: pointer;">
-            <form:option value="noSpecialty" label="Especialidad" selected="Especialidad"/>
-            <form:options items="${specialtyList}" itemValue="name" itemLabel="name" />
-        </form:select>
-        <%--<form:input type="text" aria-label="Buscar por especialidad" placeholder="Buscar por especialidad" class="form-control" path="specialty"/>--%>
-        <form:select class="custom-select" id="insurance" path="insurance" cssStyle="cursor: pointer;">
-            <form:option value="no" label="Prepaga" selected="Prepaga"/>
-            <form:options items="${insuranceList}" itemValue="name" itemLabel="name" />
-        </form:select>
-        <div class="input-group-append">
-            <input type="submit" class="btn btn-outline-light" value="Buscar" path="submit"/>
+        <div id="search-bar" class="input-group container">
+            <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del médico" class="form-control" path="name"/>
+            <form:select class="custom-select specialist-select" id="specialty" path="specialty" cssStyle="cursor: pointer;">
+                <form:option value="noSpecialty" label="Especialidad" selected="Especialidad"/>
+                <form:options items="${specialtyList}" itemValue="speciality" itemLabel="speciality" />
+            </form:select>
+                <%--<form:input type="text" aria-label="Buscar por especialidad" placeholder="Buscar por especialidad" class="form-control" path="specialty"/>--%>
+            <form:select class="custom-select specialist-select" id="insurance" path="insurance" cssStyle="cursor: pointer;">
+                <form:option value="no" label="Prepaga" selected="Prepaga"/>
+                <form:options items="${insuranceList}" itemValue="name" itemLabel="name" />
+            </form:select>
+            <div class="input-group-append">
+                <input type="submit" class="btn btn-outline-light" value="Buscar" path="submit"/>
+            </div>
         </div>
-    </div>
 </div>
 
 
@@ -173,15 +173,15 @@
                     <%--<c:when test="${insuranceNameList.size() == 1 && sexList.size() != 1}">--%>
                         <hr class="hr-header-sidebar">
                         <c:choose>
-                            <c:when test="${insuranceMap.keySet().size() >= 1 && sexList.size() != 1}">
+                            <c:when test="${insuranceMap.keySet().size() >= 1 || sexList.size() != 1}">
                                 <div>
                                     <c:forEach items="${insuranceMap.keySet()}" var="key">
                                         <%--<c:if test="${insurance.key.equals(search.insurance) }">--%>
                                         <h4 class="sidebar-title">Plan Prepaga</h4>
                                         <div class="form-check">
                                             <b> ${insuranceMap.get(key)} <br> </b>
-                                                <%--<c:forEach items="${insurance.key}">--%>
-                                                <%--<form:checkboxes path="insurancePlan" items="${insurance}" delimiter="<br>" />--%>
+                                                <%--<c:forEach items="${insurance.key}" var="insurance">--%>
+                                                    <%--<form:checkboxes path="insurancePlan" items="${insurance}" delimiter="<br>" />--%>
                                                 <%--</c:forEach>--%>
                                             <br>
                                         </div>
@@ -189,7 +189,7 @@
                                     </c:forEach>
                                         <%--<hr class="hr-sidebar">--%>
                                     <div>
-                                        <c:if test="${sexList.size() != 1}">
+                                        <c:if test="${sexList.size() > 1}">
                                             <h4 class="sidebar-title">Sexo</h4>
                                             <div class="form-check">
                                                 <form:radiobutton path="sex" value="ALL"/> Todos <br>
@@ -204,10 +204,10 @@
                                 </div>
                             </c:when>
                             <c:otherwise>
-                            <div class="center-horizontal">
-                                <i class="fas fa-exclamation-triangle center-horizontal" style="color:#CECECE; font-size: 36px; margin-bottom: 16px; margin-top: 16px "></i>
-                                <p><spring:message code="filter.notApplicable" /></p>
-                            </div>
+                                <div class="center-horizontal">
+                                    <i class="fas fa-exclamation-triangle center-horizontal" style="color:#CECECE; font-size: 36px; margin-bottom: 16px; margin-top: 16px "></i>
+                                    <p><spring:message code="filter.notApplicable" /></p>
+                                </div>
                             </c:otherwise>
                         </c:choose>
                 </form:form>
