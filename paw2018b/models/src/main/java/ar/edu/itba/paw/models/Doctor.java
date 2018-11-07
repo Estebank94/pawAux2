@@ -250,17 +250,27 @@ public class Doctor {
     }
 
     private List<Appointment> generateAppointments(LocalDate date) {
+
+        LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
+
         List<WorkingHours> workingHours = getWorkingHoursByDay(date.getDayOfWeek());
 
         List<Appointment> list = new ArrayList<>();
         Set<Appointment> futureAppointments = getFutureAppointments();
         boolean flag;
         int i;
+        boolean validAppointment;
+
         if(workingHours != null){
             for (WorkingHours workingHoursIterator: workingHours){
                 flag = true;
                 for (i = 0; flag; i++){
-                    if (LocalTime.parse(workingHoursIterator.getStartTime()).plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).isAfter(LocalTime.parse(workingHoursIterator.getFinishTime())) || (LocalTime.parse(workingHoursIterator.getStartTime()).plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).compareTo(LocalTime.parse(workingHoursIterator.getFinishTime())) == 0)){
+                    validAppointment = false;
+                    if (LocalTime.parse(workingHoursIterator.getStartTime()).plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i)
+                            .isAfter(LocalTime.parse(workingHoursIterator.getFinishTime()))
+                            || (LocalTime.parse(workingHoursIterator.getStartTime()).plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i)
+                            .compareTo(LocalTime.parse(workingHoursIterator.getFinishTime())) == 0)){
                         flag = false;
                     } else{
 
@@ -268,10 +278,18 @@ public class Doctor {
                         String formattedDate = date.format(dateFormatter);
 
                         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-                        String formattedTime = LocalTime.parse(workingHoursIterator.getStartTime()).plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).format(timeFormatter);
+
+                        LocalTime appointmentTime = LocalTime.parse(workingHoursIterator.getStartTime()).plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i);
+                        String formattedTime = appointmentTime.format(timeFormatter);
+
+                        if (date.isAfter(today)){
+                            validAppointment = true;
+                        } else if(date.isEqual(today) && appointmentTime.isAfter(now)){
+                            validAppointment = true;
+                        }
 
                         Appointment dateAppointment = new Appointment(formattedDate,formattedTime, patient);
-                        if (!futureAppointments.contains(dateAppointment)){
+                        if (!futureAppointments.contains(dateAppointment) && validAppointment){
                             list.add(dateAppointment);
                         }
                     }
