@@ -481,3 +481,45 @@ h2
 a {
   color: #257CBF;
 }
+
+.heart {
+  cursor: pointer;
+  height: 64px;
+  width: 64px;
+  background-image:url( 'https://abs.twimg.com/a/1446542199/img/t1/web_heart_animation.png');
+  background-position: left;
+  background-repeat:no-repeat;
+  background-size:2900%;
+}
+
+.heart:hover {
+  background-position:right;
+}
+
+.heart-added {
+  cursor: pointer;
+  height: 64px;
+  width: 64px;
+  background-image:url( 'https://abs.twimg.com/a/1446542199/img/t1/web_heart_animation.png');
+  background-position: right;
+  background-repeat:no-repeat;
+  background-size:2900%;
+}
+
+.is_animating {
+  animation: heart-burst .8s steps(28) 1;
+}
+
+.is_disanimating {
+  animation: heart-unburst .8s steps(28) 1;
+}
+
+@keyframes heart-burst {
+  from {background-position:left;}
+  to { background-position:right;}
+}
+
+@keyframes heart-unburst {
+  from {background-position:right;}
+  to { background-position:left;}
+}

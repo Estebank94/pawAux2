@@ -130,20 +130,18 @@
                                     <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty.speciality}"/></p>
                                 </c:forEach>
                             </div>
-                            <br>
+                            <c:if test="${doctorListItem.reviews.size() == 0}">
+                                <br>
+                            </c:if>
+                            <c:if test="${doctorListItem.reviews.size() > 0}">
+                                <div style="margin-top:8px; margin-bottom:8px;" class="container row">
+                                    <c:forEach begin = "1" end = "${doctorListItem.calculateAverageRating()}">
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                    </c:forEach>
+                                </div>
+                            </c:if>
                             <p class="doctor-text">${doctorListItem.description.certificate}</p>
-                            <%--<div class="row container">--%>
-                                <%--<i class="fas fa-star star-yellow"></i>--%>
-                                <%--<i class="fas fa-star star-yellow"></i>--%>
-                                <%--<i class="fas fa-star star-yellow"></i>--%>
-                                <%--<i class="fas fa-star star-yellow"></i>--%>
-                                <%--<i class="fas fa-star star-grey"></i>--%>
-                            <%--</div>--%>
-                            <%--<p class="doctor-text">"Muy buena atención, muy puntual"</p>--%>
                             <br>
-                            <%--
-                            <p class="doctor-text"><i class="far fa-clock"></i> ${doctorListItem.workingHours} </p>
-                            --%>
                             <p class="doctor-text"><i class="fas fa-map-marker-alt"></i> ${doctorListItem.address}, CABA</p>
                         </div>
                     </div>
@@ -212,70 +210,6 @@
                             </div>
                             </c:otherwise>
                         </c:choose>
-                    <%--</c:when>--%>
-
-                <%--</c:choose>--%>
-
-                    <%--<hr class="hr-sidebar">--%>
-                    <%--<div>--%>
-                    <%--<h4 class="sidebar-title">Estrellas</h4>--%>
-                    <%--<div class="form-check">--%>
-                    <%--<input class="form-check-input" type="checkbox" value="" id="defaultCheck1" checked>--%>
-                    <%--<label class="form-check-label" for="defaultCheck1">--%>
-                    <%--Todas--%>
-                    <%--</label>--%>
-                    <%--</div>--%>
-                    <%--<div class="form-check">--%>
-                    <%--<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">--%>
-                    <%--<label class="form-check-label" for="defaultCheck1">--%>
-                    <%--<div class="row star-container">--%>
-                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                    <%--</div>--%>
-                    <%--</label>--%>
-                    <%--</div>--%>
-                    <%--<div class="form-check">--%>
-                    <%--<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">--%>
-                    <%--<label class="form-check-label" for="defaultCheck1">--%>
-                    <%--<div class="row star-container">--%>
-                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                    <%--</div>--%>
-                    <%--</label>--%>
-                    <%--</div>--%>
-                    <%--<div class="form-check">--%>
-                    <%--<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">--%>
-                    <%--<label class="form-check-label" for="defaultCheck1">--%>
-                    <%--<div class="row star-container">--%>
-                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                    <%--</div>--%>
-                    <%--</label>--%>
-                    <%--</div>--%>
-                    <%--<div class="form-check">--%>
-                    <%--<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">--%>
-                    <%--<label class="form-check-label" for="defaultCheck1">--%>
-                    <%--<div class="row star-container">--%>
-                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                    <%--</div>--%>
-                    <%--</label>--%>
-                    <%--</div>--%>
-                    <%--<div class="form-check">--%>
-                    <%--<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">--%>
-                    <%--<label class="form-check-label" for="defaultCheck1">--%>
-                    <%--<div class="row star-container">--%>
-                    <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                    <%--</div>--%>
-                    <%--</label>--%>
-                    <%--</div>--%>
-                    <%--</div>--%>
                 </form:form>
             </div>
     </div>

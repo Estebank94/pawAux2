@@ -1,13 +1,13 @@
 package ar.edu.itba.paw.models;
 
 import ar.edu.itba.paw.App;
-import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.JoinColumnOrFormula;
-import org.hibernate.annotations.JoinColumnsOrFormulas;
-import org.hibernate.annotations.JoinFormula;
+import org.hibernate.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -60,6 +60,7 @@ public class Doctor {
     Set<Appointment> appointments;
 
     @OneToMany(mappedBy = "doctor")
+    @LazyCollection(LazyCollectionOption.FALSE)
     List<Review> reviews;
 
     @OneToOne(mappedBy="doctor")
@@ -527,6 +528,15 @@ public class Doctor {
             }
         }
         return retList;
+    }
+
+    public int calculateAverageRating(){
+        int sum = 0;
+        for(Review review : getReviews()){
+            sum+=review.getStars();
+        }
+        sum/=getReviews().size();
+        return Math.round(sum);
     }
 
 }

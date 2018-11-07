@@ -89,9 +89,8 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         {
 //            si pone % encontraria todos
             if(!name.get().equals("%")){
-                query.where(cb.like(cb.lower(root.get("firstName")), "%"+name.get().toLowerCase()+"%"));
-//                TODO find by lastname or second name
-//                query.where(cb.or(cb.like(cb.lower(root.get("lastName")), "%"+name.get().toLowerCase()+"%")));
+                query.where(cb.or(cb.like(cb.lower(root.get("firstName")), "%"+name.get().toLowerCase()+"%"),
+                            (cb.like(cb.lower(root.get("lastName")), "%"+name.get().toLowerCase()+"%"))));
             }
         }
 

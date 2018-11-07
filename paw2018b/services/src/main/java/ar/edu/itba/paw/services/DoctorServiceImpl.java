@@ -57,6 +57,9 @@ public class DoctorServiceImpl implements DoctorService {
     public List<Doctor> listDoctors(Search search, int page) throws NotValidSearchException {
         LOGGER.debug("DoctorServiceImpl: listDoctors");
         List<Doctor> list = doctorDao.listDoctors(search, page);
+//        if(!list.isEmpty()){
+//            list.get(0).getReviews();
+//        }
 //        list.get(0).getInsurancePlans().size();
         return list;
     }

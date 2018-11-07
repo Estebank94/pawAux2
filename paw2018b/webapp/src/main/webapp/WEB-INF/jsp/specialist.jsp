@@ -110,7 +110,10 @@
                         <img class="avatar big" src=<c:out value="${doctor.avatar}"/>>
                         <div class="doctor-info-container">
                             <div>
-                                <h3 class="doctor-name"><c:out value="${doctor.lastName}"/>, <c:out value="${doctor.firstName}"/></h3>
+                                <div class="row">
+                                    <h3 class="doctor-name center-vertical" style="margin-left: 16px"><c:out value="${doctor.lastName}"/>, <c:out value="${doctor.firstName}"/></h3>
+                                    <div class="heart"></div>
+                                </div>
                                 <div class="row container">
                                     <c:forEach items="${doctor.specialties}" var="doctorSpecialty">
                                         <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty.speciality}"/></p>
@@ -119,7 +122,7 @@
                                 <p class="doctor-text"><i class="fas fa-phone" style="padding-right: 0.5em"></i><c:out value="${doctor.phoneNumber}"/></p>
                                 <%--<p class="doctor-text"><i class="far fa-clock" style="padding-right: 0.5em"></i>${doctor.workingHours}</p>--%>
                                 <p class="doctor-text"><i class="fas fa-map-marker-alt" style="padding-right: 0.5em"></i><c:out value="${doctor.address}"/>, CABA</p>
-                                <button type="button" class="btn btn-danger">Agregar a Favoritos</button>
+                                <%--<button type="button" class="btn btn-danger">Agregar a Favoritos</button>--%>
                             </div>
                         </div>
                     </div>
