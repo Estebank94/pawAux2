@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.models;
 
+import com.sun.istack.internal.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -20,6 +22,7 @@ public class Patient {
     private String phoneNumber;
     private String email;
     private String password;
+
     @OneToMany(mappedBy = "patient")
     private Set<Appointment> appointments;
 
@@ -60,7 +63,6 @@ public class Patient {
 
     @Autowired
     public Patient(){
-
     }
 
     public Integer getPatientId() {
@@ -141,7 +143,6 @@ public class Patient {
             }
         }
         return returnSet;
-
     }
 
     public Map<LocalDate, List<Appointment>> appointmentsMap (){
@@ -177,4 +178,44 @@ public class Patient {
     public void setFavorites(List<Favorite> favorites) {
         this.favorites = favorites;
     }
+
+    @NotNull
+    private LocalDateTime getAppointmentDateTime (Appointment ap){
+        LocalDate appointementDay = LocalDate.parse(ap.getAppointmentDay());
+        return appointementDay.atTime(LocalTime.parse(ap.getAppointmentTime()));
+    }
+
+    private void addAppointmentInOrderToList(List<Appointment> list, Appointment appointment, LocalDateTime appointmentDateTime){
+        if (list.isEmpty()){
+            list.add(appointment);
+            return;
+        }
+        int index;
+        for (index = 0 ; index < list.size() ; index++ ){
+            if (appointmentDateTime.isAfter(getAppointmentDateTime(list.get(index)))){
+                list.add(index, appointment);
+                return;
+            }
+        }
+        list.add(list.size() - 1, appointment );
+        return;
+    }
+
+    public List<Appointment> getHistoricalAppointments(){
+        LocalDateTime currentAppointmentTime;
+
+        Set<Appointment> appointments = getAppointments();
+        List<Appointment> retList = new LinkedList<>();
+
+        LocalDateTime now = LocalDateTime.now();
+
+        for (Appointment appointmentIterator: appointments){
+            currentAppointmentTime = getAppointmentDateTime(appointmentIterator);
+            if (currentAppointmentTime.isBefore(now)){
+                addAppointmentInOrderToList(retList, appointmentIterator, currentAppointmentTime);
+            }
+        }
+        return retList;
+    }
+
 }
