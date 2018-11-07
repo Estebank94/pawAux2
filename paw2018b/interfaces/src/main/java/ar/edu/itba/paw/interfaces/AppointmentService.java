@@ -13,4 +13,5 @@ import java.util.Optional;
 public interface AppointmentService {
     Appointment createAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) throws RepeatedAppointmentException, NotCreatedAppointmentException, NotValidDoctorIdException, NotValidAppointmentDayException, NotValidAppointmentTimeException, NotFoundDoctorException, NotValidPatientIdException;
 
+    private Boolean cancelAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor);
 }

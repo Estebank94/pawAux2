@@ -134,13 +134,13 @@
                                 <br>
                             </c:if>
 
-                            <%--<c:if test="${doctorListItem.reviews.size() > 0}">--%>
-                                <%--<div style="margin-top:8px; margin-bottom:8px;" class="container row">--%>
-                                    <%--<c:forEach begin = "1" end = "${doctorListItem.calculateAverageRating()}">--%>
-                                        <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                                    <%--</c:forEach>--%>
-                                <%--</div>--%>
-                            <%--</c:if>--%>
+                            <c:if test="${doctorListItem.reviews.size() > 0}">
+                                <div style="margin-top:8px; margin-bottom:8px;" class="container row">
+                                    <c:forEach begin = "1" end = "${doctorListItem.calculateAverageRating()}">
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                    </c:forEach>
+                                </div>
+                            </c:if>
 
                             <p class="doctor-text">${doctorListItem.description.certificate}</p>
                             <br>
@@ -152,17 +152,17 @@
             </br>
             <nav aria-label="...">
                 <ul class="pagination">
-                    <c:forEach var="page" begin="${0}" end="${totalPages}">
-                        <c:if test="${currentPage == page}">
+                    <c:forEach var="page" begin="${1}" end="${totalPages-1}">
+                        <c:if test="${currentPage+1 == page}">
                             <li class="page-item active">
-                              <span class="page-link">
+                              <span class="page-link" style="background-color: #257CBF; border-color: transparent;">
                                 ${page}
                               </span>
                             </li>
                         </c:if>
-                        <c:if test="${currentPage != page}">
+                        <c:if test="${currentPage+1 != page}">
                             <%--TODO MARTINA pone bien el link de la href--%>
-                            <li class="page-item"><a class="page-link" href="http://localhost:8080/processForm/${page}">${page}</a></li>
+                            <li class="page-item"><a class="page-link" style="color: #257CBF;" href="/processForm/${page-1}">${page}</a></li>
                         </c:if>
                     </c:forEach>
                 </ul>

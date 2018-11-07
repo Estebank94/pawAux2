@@ -57,4 +57,29 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
         return appointment;
     }
+
+    @Transactional(rollbackFor = SQLException.class)
+    @Override
+    private Boolean cancelAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor){
+        LOGGER.debug("AppointmentServiceImpl: cancelAppointment");
+        Boolean ans = true;
+
+        Appointment appointment = null;
+        Optional<Appointment> app = Optional.empty();
+        try {
+            app = appointmentDao.findAppointment(appointmentDay, appointmentTime, patient, doctor);
+        } catch (NoResultException e){
+            ans = false;
+        } catch (Exception e){
+            ans = false;
+        }
+        try {
+            if (ans){
+                appointmentDao.cancelAppointment(app.get());
+            }
+        }catch (Exception e) {
+            ans = false;
+        }
+        return ans;
+    }
 }
