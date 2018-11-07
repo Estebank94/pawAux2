@@ -179,14 +179,14 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         return true;
     }
 
-
-
-
-
-
-
-
-
+    public Boolean setDoctorInsurances(Doctor doctor, List<InsurancePlan> insurancePlans){
+        doctor.addInsurancePlans(insurancePlans);
+        for(InsurancePlan i : insurancePlans){
+            i.setId(insurancePlanDao.findInsurancePlanByPlanName(i.getPlan()).getId());
+        }
+        em.merge(doctor);
+        return true;
+    }
 
 
 }

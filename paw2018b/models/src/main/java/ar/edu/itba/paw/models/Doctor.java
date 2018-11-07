@@ -1,16 +1,10 @@
 package ar.edu.itba.paw.models;
 
-import ar.edu.itba.paw.App;
-import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.JoinColumnOrFormula;
-import org.hibernate.annotations.JoinColumnsOrFormulas;
-import org.hibernate.annotations.JoinFormula;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -356,38 +350,6 @@ public class Doctor {
         return  appointments;
     }
 
-    public String getMonth(Integer monthVal){
-        String month = "";
-
-        switch (monthVal){
-            case 1: month = "Enero";
-                break;
-            case 2: month = "Febrero";
-                break;
-            case 3: month = "Marzo";
-                break;
-            case 4: month = "Abril";
-                break;
-            case 5: month = "Mayo";
-                break;
-            case 6: month = "Junio";
-                break;
-            case 7: month = "Julio";
-                break;
-            case 8: month = "Agosto";
-                break;
-            case 9: month = "Septiembre";
-                break;
-            case 10: month = "Octubre";
-                break;
-            case 11: month = "Noviembre";
-                break;
-            case 12: month = "Diciembre";
-                break;
-        }
-        return month;
-    }
-
     public Set<DayOfWeek> emptyWorkingHours(){
         Set<DayOfWeek> days = new HashSet<>();
         for(DayOfWeek day : DayOfWeek.values()){
@@ -423,23 +385,10 @@ public class Doctor {
             }
         }
         return false;
-
-//        for(InsurancePlan wantedPlan : plans){
-//            for(InsurancePlan insurancePlan : insurancePlans){
-//                if(wantedPlan.equals(insurancePlan)){
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
-    }
-
-    public void addSpecialties(Set<Specialty> specialties){
-        getSpecialties().addAll(specialties);
     }
 
     public void addInsurancePlans(List<InsurancePlan> plans){
-        getInsurancePlans().addAll(plans);
+        this.insurancePlans.addAll(plans);
     }
 
     public List<Insurance> getInsuranceListFromInsurancePlans(){

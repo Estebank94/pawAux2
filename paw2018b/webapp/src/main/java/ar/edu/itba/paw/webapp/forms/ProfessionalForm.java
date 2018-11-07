@@ -268,7 +268,7 @@ public class ProfessionalForm {
     public List<InsurancePlan> getInsurancePlans(){
         List<InsurancePlan> list = new ArrayList<>();
         for(String s : getInsurancePlan()){
-            list.add(new InsurancePlan());
+            list.add(new InsurancePlan(s));
         }
         return (list.isEmpty() ? Collections.EMPTY_LIST : list);
     }
