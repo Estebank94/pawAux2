@@ -107,7 +107,7 @@
             <div class="card-body">
                 <div class="card-text">
                     <div class="row">
-                        <img class="avatar big" src=<c:out value="/profile-image/${doctor.id"/>>
+                        <img class="avatar big" src=<c:out value="/profile-image/${doctor.id}"/>>
                         <div class="doctor-info-container">
                             <div>
                                 <div class="row">
