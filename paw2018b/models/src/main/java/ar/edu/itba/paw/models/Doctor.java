@@ -1,17 +1,17 @@
 package ar.edu.itba.paw.models;
 
+import org.hibernate.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-/**
- * Created by estebankramer on 31/08/2018.
- */
 
 @Entity
 @Table(name = "doctor")
@@ -54,6 +54,7 @@ public class Doctor {
     Set<Appointment> appointments;
 
     @OneToMany(mappedBy = "doctor")
+    @LazyCollection(LazyCollectionOption.FALSE)
     List<Review> reviews;
 
     @OneToOne(mappedBy="doctor")
@@ -244,17 +245,27 @@ public class Doctor {
     }
 
     private List<Appointment> generateAppointments(LocalDate date) {
+
+        LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
+
         List<WorkingHours> workingHours = getWorkingHoursByDay(date.getDayOfWeek());
 
         List<Appointment> list = new ArrayList<>();
         Set<Appointment> futureAppointments = getFutureAppointments();
         boolean flag;
         int i;
+        boolean validAppointment;
+
         if(workingHours != null){
             for (WorkingHours workingHoursIterator: workingHours){
                 flag = true;
                 for (i = 0; flag; i++){
-                    if (LocalTime.parse(workingHoursIterator.getStartTime()).plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).isAfter(LocalTime.parse(workingHoursIterator.getFinishTime())) || (LocalTime.parse(workingHoursIterator.getStartTime()).plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).compareTo(LocalTime.parse(workingHoursIterator.getFinishTime())) == 0)){
+                    validAppointment = false;
+                    if (LocalTime.parse(workingHoursIterator.getStartTime()).plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i)
+                            .isAfter(LocalTime.parse(workingHoursIterator.getFinishTime()))
+                            || (LocalTime.parse(workingHoursIterator.getStartTime()).plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i)
+                            .compareTo(LocalTime.parse(workingHoursIterator.getFinishTime())) == 0)){
                         flag = false;
                     } else{
 
@@ -262,10 +273,18 @@ public class Doctor {
                         String formattedDate = date.format(dateFormatter);
 
                         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-                        String formattedTime = LocalTime.parse(workingHoursIterator.getStartTime()).plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i).format(timeFormatter);
+
+                        LocalTime appointmentTime = LocalTime.parse(workingHoursIterator.getStartTime()).plusMinutes(WorkingHours.APPOINTMENTTIME_TIME * i);
+                        String formattedTime = appointmentTime.format(timeFormatter);
+
+                        if (date.isAfter(today)){
+                            validAppointment = true;
+                        } else if(date.isEqual(today) && appointmentTime.isAfter(now)){
+                            validAppointment = true;
+                        }
 
                         Appointment dateAppointment = new Appointment(formattedDate,formattedTime, patient);
-                        if (!futureAppointments.contains(dateAppointment)){
+                        if (!futureAppointments.contains(dateAppointment) && validAppointment){
                             list.add(dateAppointment);
                         }
                     }
@@ -420,6 +439,55 @@ public class Doctor {
     public void setFavorites(List<Favorite> favorites) {
         this.favorites = favorites;
     }
+
+
+    private LocalDateTime getAppointmentDateTime (Appointment ap){
+        LocalDate appointementDay = LocalDate.parse(ap.getAppointmentDay());
+        return appointementDay.atTime(LocalTime.parse(ap.getAppointmentTime()));
+    }
+
+    private void addAppointmentInOrderToList(List<Appointment> list, Appointment appointment, LocalDateTime appointmentDateTime){
+        if (list.isEmpty()){
+            list.add(appointment);
+            return;
+        }
+        int index;
+        for (index = 0 ; index < list.size() ; index++ ){
+            if (appointmentDateTime.isAfter(getAppointmentDateTime(list.get(index)))){
+                list.add(index, appointment);
+                return;
+            }
+        }
+        list.add(list.size() - 1, appointment );
+        return;
+    }
+
+    public List<Appointment> getHistoricalAppointments(){
+        LocalDateTime currentAppointmentTime;
+
+        Set<Appointment> appointments = getAppointments();
+        List<Appointment> retList = new LinkedList<>();
+
+        LocalDateTime now = LocalDateTime.now();
+
+        for (Appointment appointmentIterator: appointments){
+            currentAppointmentTime = getAppointmentDateTime(appointmentIterator);
+            if (currentAppointmentTime.isBefore(now)){
+                addAppointmentInOrderToList(retList, appointmentIterator, currentAppointmentTime);
+            }
+        }
+        return retList;
+    }
+
+    public int calculateAverageRating(){
+        int sum = 0;
+        for(Review review : getReviews()){
+            sum+=review.getStars();
+        }
+        sum/=getReviews().size();
+        return Math.round(sum);
+    }
+
 }
 
 

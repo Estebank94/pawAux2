@@ -35,3 +35,19 @@ $('#time').on('change', function() {
 
 $('.specialist-select').select2({theme: 'bootstrap4'});
 // $('.custom-select').select2({theme: 'bootstrap4'});
+
+$(".heart").on('click touchstart', function(){
+    $(this).toggleClass('is_animating');
+});
+
+$(".heart-added").on('click touchstart', function(){
+    $(this).toggleClass('heart-added');
+});
+
+/*when the animation is over, remove the class*/
+$(".heart").on('animationend', function(){
+    $(this).toggleClass('is_animating');
+    $(this).toggleClass('heart-added');
+    $(this).toggleClass('heart');
+
+});
