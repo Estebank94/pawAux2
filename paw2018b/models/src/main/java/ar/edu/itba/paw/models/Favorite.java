@@ -22,14 +22,21 @@ public class Favorite {
     @JoinColumn(name = "patientid")
     private Patient patient;
 
+    private Boolean favoriteCancelled;
+
+    public Favorite(Doctor doctor, Patient patient, Boolean favoriteCancelled) {
+        this.doctor = doctor;
+        this.patient = patient;
+        this.favoriteCancelled = favoriteCancelled;
+    }
 
     public Favorite(){
-
     }
 
     public Favorite(Doctor doctor, Patient patient){
         this.doctor = doctor;
         this.patient = patient;
+        this.favoriteCancelled = false;
     }
 
     public int getId() {
@@ -55,4 +62,8 @@ public class Favorite {
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
+
+    public Boolean getFavoriteCancelled() { return favoriteCancelled; }
+
+    public void setFavoriteCancelled(Boolean favoriteCancelled) { this.favoriteCancelled = favoriteCancelled; }
 }
