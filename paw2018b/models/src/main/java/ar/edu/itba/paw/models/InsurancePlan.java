@@ -32,6 +32,11 @@ public class InsurancePlan {
 
     }
 
+
+    public InsurancePlan(String plan){
+        this.plan = plan;
+    }
+
     public Integer getId() {
         return id;
     }

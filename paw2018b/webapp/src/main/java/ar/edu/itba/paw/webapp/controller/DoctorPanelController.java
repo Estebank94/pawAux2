@@ -83,7 +83,8 @@ public class DoctorPanelController {
                 mav.addObject("professionalIncomplete", true);
             }
             /*agregar información*/
-            else if(doctor.getDescription().getEducation() == null
+            else if(doctor.getDescription() == null
+                    || doctor.getDescription().getEducation() == null
                     || doctor.getDescription().getLanguages().contains(null)
                     || doctor.getDescription().getCertificate() == null){
                mav.addObject("addInfo", true);

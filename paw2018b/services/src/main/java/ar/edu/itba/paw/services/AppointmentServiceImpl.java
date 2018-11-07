@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.NoResultException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -33,7 +34,20 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Appointment createAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) throws RepeatedAppointmentException, NotCreatedAppointmentException, NotValidDoctorIdException, NotValidAppointmentDayException, NotValidAppointmentTimeException, NotFoundDoctorException, NotValidPatientIdException {
         LOGGER.debug("AppointmentServiceImpl: CreateAppointment");
 
-        Appointment appointment;
+        Appointment appointment = null;
+        Optional<Appointment> app = Optional.empty();
+        try{
+            app = appointmentDao.findAppointment(appointmentDay, appointmentTime, patient, doctor);
+        }catch (NoResultException e){
+
+        }catch (Exception e){
+
+        }
+        if (app.isPresent()){
+            appointmentDao.undoCancelAppointment(app.get());
+            return app.get();
+        }
+
         try{
            appointment =  appointmentDao.createAppointment(appointmentDay, appointmentTime, patient, doctor);
         } catch (RepeatedAppointmentException e) {

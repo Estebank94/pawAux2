@@ -251,7 +251,6 @@ public class RegistrationController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Patient patient = null;
         try {
-            /*si esta mal fijate de volver a poner un point aca*/
             patient = patientService.findPatientByEmail(authentication.getName());
         } catch (NotValidEmailException e) {
             e.printStackTrace();
@@ -279,13 +278,11 @@ public class RegistrationController {
 
         boolean specialtyExists = false;
         if(professionalForm.getSpecialty() != null){
-            /*rechequear si esto funciona bien porque cambiaron todos los tipos*/
            specialtyExists = doctor.containsSpecialty(professionalForm.getSpecialty());
         }
 
         boolean medicalCareExists = false;
         Set<Insurance> insurance = new HashSet<>();
-        /*professionalForm.getInsurancePlan() queda en null*/
         if(professionalForm.getInsurance() != null || professionalForm.getInsurancePlan() != null){
             medicalCareExists = doctor.containsPlan(professionalForm.getInsurancePlan());
         }
@@ -295,9 +292,6 @@ public class RegistrationController {
         if(doctor.getWorkingHours().isEmpty() && professionalForm.workingHoursList().isEmpty()){doctorTime = true; }
 
         if(errors.hasErrors() /* || doctorTime ||specialtyExists || medicalCareExists*/){
-            if(doctorTime) System.out.println("doctorTime");
-            if(specialtyExists) System.out.println("specialtyExists");
-            if(medicalCareExists) System.out.println("medicalCareExists");
             return showDoctorProfile(professionalForm);
         }
 
@@ -306,7 +300,7 @@ public class RegistrationController {
 
         List<WorkingHours> workingHours = professionalForm.workingHoursList();
 
-        //when no description is available, just set one field
+        /* when no description is available, just set one field */
         if(withInfo){
             doctorService.setDoctorSpecialty(doctor, professionalForm.getSpecialties());
             if(insurance != null){
@@ -319,7 +313,9 @@ public class RegistrationController {
                 doctorService.setWorkingHours(doctor, workingHours);
             }
         }else{
-            //can't have description values in null;
+
+            /* can't have description values in null */
+
             LOGGER.debug("SET full Doctor's information to DB");
             try {
                 Doctor doctorProfessional = doctorService.setDoctorInfo(patient.getDoctor().getId(), professionalForm.getSpecialties(), insurance,workingHours ,description).get();
@@ -374,7 +370,8 @@ public class RegistrationController {
         String password = patient.getPassword();
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
-        // generate session if one doesn't exist
+
+        /* generate session if one doesn't exist */
         request.getSession();
         token.setDetails(new WebAuthenticationDetails(request));
         Authentication authenticatedUser = authenticationManager.authenticate(token);
@@ -423,7 +420,7 @@ public class RegistrationController {
                 LOGGER.debug("AutoLogIn of patient with ID: {}", patient.getPatientId());
                 authenticateUserAndSetSession(patient, ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
 
-//                Send welcome email to new user
+                /* Send welcome email to new user */
                 emailService.sendMessageWithAttachment(patient.getFirstName(), patient.getEmail(), "Bienvenido a Waldoc");
 
                 mav.addObject("search", new Search());

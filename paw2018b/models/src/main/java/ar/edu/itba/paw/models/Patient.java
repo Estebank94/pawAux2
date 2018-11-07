@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.models;
 
 import com.sun.istack.internal.NotNull;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
@@ -24,6 +26,7 @@ public class Patient {
     private String password;
 
     @OneToMany(mappedBy = "patient")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Set<Appointment> appointments;
 
     @OneToOne

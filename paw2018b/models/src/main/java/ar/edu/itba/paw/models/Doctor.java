@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.models;
 
-import ar.edu.itba.paw.App;
 import org.hibernate.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,9 +13,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-/**
- * Created by estebankramer on 31/08/2018.
- */
 
 @Entity
 @Table(name = "doctor")
@@ -57,6 +52,7 @@ public class Doctor {
 
 
     @OneToMany(mappedBy = "doctor")
+    @LazyCollection(LazyCollectionOption.FALSE)
     Set<Appointment> appointments;
 
     @OneToMany(mappedBy = "doctor")
@@ -326,9 +322,10 @@ public class Doctor {
         LocalTime now = LocalTime.now();
 
         for (Appointment appointmentIterator: appointments){
-            if (LocalDate.parse(appointmentIterator.getAppointmentDay()).isAfter(today)){
+            if (LocalDate.parse(appointmentIterator.getAppointmentDay()).isAfter(today) && appointmentIterator.getAppointmentCancelled() == false){
                 returnSet.add(appointmentIterator);
-            } else if (LocalDate.parse(appointmentIterator.getAppointmentDay()).isEqual(today) && LocalTime.parse(appointmentIterator.getAppointmentTime()).isAfter(now)){
+            } else if (LocalDate.parse(appointmentIterator.getAppointmentDay()).isEqual(today) && LocalTime.parse(appointmentIterator.getAppointmentTime()).isAfter(now)
+                    && appointmentIterator.getAppointmentCancelled() == false){
                 returnSet.add(appointmentIterator);
             }
         }
@@ -375,38 +372,6 @@ public class Doctor {
         return  appointments;
     }
 
-    public String getMonth(Integer monthVal){
-        String month = "";
-
-        switch (monthVal){
-            case 1: month = "Enero";
-                break;
-            case 2: month = "Febrero";
-                break;
-            case 3: month = "Marzo";
-                break;
-            case 4: month = "Abril";
-                break;
-            case 5: month = "Mayo";
-                break;
-            case 6: month = "Junio";
-                break;
-            case 7: month = "Julio";
-                break;
-            case 8: month = "Agosto";
-                break;
-            case 9: month = "Septiembre";
-                break;
-            case 10: month = "Octubre";
-                break;
-            case 11: month = "Noviembre";
-                break;
-            case 12: month = "Diciembre";
-                break;
-        }
-        return month;
-    }
-
     public Set<DayOfWeek> emptyWorkingHours(){
         Set<DayOfWeek> days = new HashSet<>();
         for(DayOfWeek day : DayOfWeek.values()){
@@ -442,23 +407,10 @@ public class Doctor {
             }
         }
         return false;
-
-//        for(InsurancePlan wantedPlan : plans){
-//            for(InsurancePlan insurancePlan : insurancePlans){
-//                if(wantedPlan.equals(insurancePlan)){
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
-    }
-
-    public void addSpecialties(Set<Specialty> specialties){
-        getSpecialties().addAll(specialties);
     }
 
     public void addInsurancePlans(List<InsurancePlan> plans){
-        getInsurancePlans().addAll(plans);
+        this.insurancePlans.addAll(plans);
     }
 
     public List<Insurance> getInsuranceListFromInsurancePlans(){

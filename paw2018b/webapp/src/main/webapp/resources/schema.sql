@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS appointment(
     appointmentDay varchar(10),
     appointmentTime VARCHAR (10),
     identifier VARCHAR (30),
+    appointmentCancelled BOOLEAN,
     id SERIAL PRIMARY KEY,
     FOREIGN KEY (doctorId) REFERENCES doctor(id) ON DELETE CASCADE ,
     FOREIGN KEY (clientId) REFERENCES patient(id) ON DELETE CASCADE

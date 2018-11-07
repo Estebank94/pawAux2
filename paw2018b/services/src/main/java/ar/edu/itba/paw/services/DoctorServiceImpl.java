@@ -440,9 +440,10 @@ public class DoctorServiceImpl implements DoctorService {
 
 
     @Override
+    @Transactional
     public Optional<Doctor> setDoctorInsurancePlans(Doctor doctor,  List<InsurancePlan> insurancePlans) {
-        doctor.addInsurancePlans(insurancePlans);
-        return Optional.of(doctor);
+        doctorDao.setDoctorInsurances(doctor, insurancePlans);
+        return Optional.ofNullable(doctor);
     }
 
 //    @Override
@@ -463,8 +464,6 @@ public class DoctorServiceImpl implements DoctorService {
         doctorDao.setWorkingHours(doctor, workingHours);
         return Optional.ofNullable(doctor);
     }
-
-
 
 }
 
