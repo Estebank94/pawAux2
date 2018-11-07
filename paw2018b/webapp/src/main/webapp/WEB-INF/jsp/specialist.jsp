@@ -107,11 +107,7 @@
             <div class="card-body">
                 <div class="card-text">
                     <div class="row">
-<<<<<<< HEAD
                         <img class="avatar big" src=<c:out value="/profile-image/${doctor.id}"/>/>
-=======
-                        <img class="avatar big" src=<c:out value="/profile-image/${doctor.id}"/>>
->>>>>>> 849476af5f7818630711c040eab4e50ecdcec9b5
                         <div class="doctor-info-container">
                             <div>
                                 <div class="row">
