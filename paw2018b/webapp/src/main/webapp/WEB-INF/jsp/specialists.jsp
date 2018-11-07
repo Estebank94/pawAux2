@@ -134,13 +134,13 @@
                                 <br>
                             </c:if>
 
-                            <%--<c:if test="${doctorListItem.reviews.size() > 0}">--%>
-                                <%--<div style="margin-top:8px; margin-bottom:8px;" class="container row">--%>
-                                    <%--<c:forEach begin = "1" end = "${doctorListItem.calculateAverageRating()}">--%>
-                                        <%--<i class="fas fa-star star-yellow star-small"></i>--%>
-                                    <%--</c:forEach>--%>
-                                <%--</div>--%>
-                            <%--</c:if>--%>
+                            <c:if test="${doctorListItem.reviews.size() > 0}">
+                                <div style="margin-top:8px; margin-bottom:8px;" class="container row">
+                                    <c:forEach begin = "1" end = "${doctorListItem.calculateAverageRating()}">
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                    </c:forEach>
+                                </div>
+                            </c:if>
 
                             <p class="doctor-text">${doctorListItem.description.certificate}</p>
                             <br>
