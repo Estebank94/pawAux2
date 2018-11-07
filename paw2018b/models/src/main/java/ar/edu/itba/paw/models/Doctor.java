@@ -52,6 +52,7 @@ public class Doctor {
 
 
     @OneToMany(mappedBy = "doctor")
+    @LazyCollection(LazyCollectionOption.FALSE)
     Set<Appointment> appointments;
 
     @OneToMany(mappedBy = "doctor")

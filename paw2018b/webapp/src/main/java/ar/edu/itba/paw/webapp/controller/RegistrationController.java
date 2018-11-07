@@ -84,9 +84,9 @@ public class RegistrationController {
 
             final ModelAndView mav = new ModelAndView("registerSpecialist2");
             mav.addObject("professional", new ProfessionalForm());
-            mav.addObject("insuranceList", searchService.listInsurances().get());
-            mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
-            mav.addObject("specialtyList", searchService.listSpecialties().get());
+            mav.addObject("insuranceList", searchService.listInsurances());
+            mav.addObject("insurancePlan", searchService.listInsurancePlans());
+            mav.addObject("specialtyList", searchService.listSpecialties());
             mav.addObject("noLanguage", true);
             mav.addObject("noEducation", true);
             mav.addObject("noCertificate", true);
@@ -173,9 +173,9 @@ public class RegistrationController {
         LOGGER.debug("RegistrationController: showDoctorProfile");
         final ModelAndView mav = new ModelAndView("registerSpecialist2");
 
-        mav.addObject("insuranceList", searchService.listInsurances().get());
-        mav.addObject("insurancePlan", searchService.listInsurancePlan().get());
-        mav.addObject("specialtyList", searchService.listSpecialties().get());
+        mav.addObject("insuranceList", searchService.listInsurances());
+        mav.addObject("insurancePlan", searchService.listInsurancePlans());
+        mav.addObject("specialtyList", searchService.listSpecialties());
         mav.addObject("wrongInsurancePlan",false)
                 .addObject("wrongCertificate",false)
                 .addObject("wrongWorkingHour",false)
@@ -356,8 +356,9 @@ public class RegistrationController {
 
         final ModelAndView mav = new ModelAndView("index");
         mav.addObject("search", new Search());
-        mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
-        mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
+//        TODO LIST ONLY INSURANCES AND SPECIALTIES WITH DOCTORS
+        mav.addObject("insuranceList", searchService.listInsurances());
+        mav.addObject("specialtyList", searchService.listSpecialties());
 
         return mav;
     }
@@ -423,8 +424,8 @@ public class RegistrationController {
                 emailService.sendMessageWithAttachment(patient.getFirstName(), patient.getEmail(), "Bienvenido a Waldoc");
 
                 mav.addObject("search", new Search());
-                mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
-                mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
+                mav.addObject("insuranceList", searchService.listInsurances());
+                mav.addObject("specialtyList", searchService.listSpecialties());
 
                 return mav;
             } catch (NotValidLastNameException e) {

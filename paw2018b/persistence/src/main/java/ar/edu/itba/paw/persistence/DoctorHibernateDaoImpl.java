@@ -87,11 +87,8 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
         if (name.isPresent())
         {
-//            si pone % encontraria todos
-            if(!name.get().equals("%")){
-                query.where(cb.or(cb.like(cb.lower(root.get("firstName")), "%"+name.get().toLowerCase()+"%"),
-                            (cb.like(cb.lower(root.get("lastName")), "%"+name.get().toLowerCase()+"%"))));
-            }
+            query.where(cb.or(cb.like(cb.lower(root.get("firstName")), "%"+name.get().toLowerCase()+"%"),
+                    (cb.like(cb.lower(root.get("lastName")), "%"+name.get().toLowerCase()+"%"))));
         }
 
         if (specialty.isPresent())
@@ -133,7 +130,6 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         typedQuery.setMaxResults(PAGESIZE);
         List<Doctor> list = typedQuery.getResultList();
 
-//        List<Doctor> list = em.createQuery(query).getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
 
     }
@@ -141,9 +137,6 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     @Override
     public Optional<Doctor> findDoctorById(Integer id) {
         Doctor doctor = em.find(Doctor.class, id);
-//        final TypedQuery<Doctor> query = em.createQuery("FROM Doctor where id = :id", Doctor.class);
-//        query.setParameter("id", id);
-//        Doctor doctor = query.getSingleResult();
         return Optional.ofNullable(doctor);
     }
 

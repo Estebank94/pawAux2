@@ -87,7 +87,7 @@
             <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del médico" class="form-control" path="name"/>
             <form:select class="custom-select specialist-select" id="specialty" path="specialty" cssStyle="cursor: pointer;">
                 <form:option value="noSpecialty" label="Especialidad" selected="Especialidad"/>
-                <form:options items="${specialtyList}" itemValue="name" itemLabel="name" />
+                <form:options items="${specialtyList}" itemValue="speciality" itemLabel="speciality" />
             </form:select>
                 <%--<form:input type="text" aria-label="Buscar por especialidad" placeholder="Buscar por especialidad" class="form-control" path="specialty"/>--%>
             <form:select class="custom-select specialist-select" id="insurance" path="insurance" cssStyle="cursor: pointer;">

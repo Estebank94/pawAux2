@@ -54,8 +54,8 @@ public class FlowController {
 		LOGGER.debug("Starting Waldoc ... ");
 		final ModelAndView mav = new ModelAndView("index");
 		mav.addObject("search", new Search());
-		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
-		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
+		mav.addObject("insuranceList", searchService.listInsurances());
+		mav.addObject("specialtyList", searchService.listSpecialties());
 
 		boolean hasUserRole = false;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -88,11 +88,10 @@ public class FlowController {
 
 	@RequestMapping("/processForm/{page}")
 	public ModelAndView processForm(@ModelAttribute("search") Search search, @PathVariable("page") Integer page) throws NotValidSearchException {
-//		LOGGER.debug("Calling: ProcessForm");
+		LOGGER.debug("Calling: ProcessForm");
 //
 		final ModelAndView mav = new ModelAndView("specialists");
-//		Optional<CompressedSearch> compressedSearch;
-//		compressedSearch = doctorService.findDoctors(theSearch);
+
 		List<Doctor> doctorsList = doctorService.listDoctors(search, page);
 //		if(compressedSearch.isPresent()) {
 //			doctorsList = compressedSearch.get().getDoctors();
@@ -104,26 +103,26 @@ public class FlowController {
 //			theSearch.setInsurance("no");
 //			theSearch.setSpecialty("");
 //		}
-//		boolean hasUserRole = false;
-//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-//
-//			hasUserRole = authentication.getAuthorities().stream()
-//					.anyMatch(r -> r.getAuthority().equals("ROLE_DOCTOR"));
-//			if(hasUserRole){
-//				Patient patient = null;
-//				try {
-//					patient = patientService.findPatientByEmail(authentication.getName());
-//				} catch (NotValidEmailException e) {
-//					LOGGER.trace("404 error");
-//					return new ModelAndView("404");
-//				} catch (NotFoundPacientException e) {
-//					LOGGER.trace("404 error");
-//					return new ModelAndView("404");
-//				}
-//				mav.addObject("doctorID", patient.getDoctor().getId());
-//			}
-//		}
+		boolean hasUserRole = false;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+
+			hasUserRole = authentication.getAuthorities().stream()
+					.anyMatch(r -> r.getAuthority().equals("ROLE_DOCTOR"));
+			if(hasUserRole){
+				Patient patient = null;
+				try {
+					patient = patientService.findPatientByEmail(authentication.getName());
+				} catch (NotValidEmailException e) {
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				} catch (NotFoundPacientException e) {
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				}
+				mav.addObject("doctorID", patient.getDoctor().getId());
+			}
+		}
 //
 //		LOGGER.debug("GET DoctorList {}", doctorsList.toString());
 //		LOGGER.debug("GET ListInsurance {}", searchService.listInsurancesWithDoctors().get().toString());
@@ -148,10 +147,11 @@ public class FlowController {
 		mav.addObject("totalPages", doctorService.getLastPage());
 		mav.addObject("currentPage", page);
 		mav.addObject("doctorList", doctorsList);
-		mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
-		mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
+		mav.addObject("insuranceList", searchService.listInsurances());
+		mav.addObject("specialtyList", searchService.listSpecialties());
 		mav.addObject("sexList", sex);
-		mav.addObject("previousSearch", search);
+		mav.addObject("insuranceList", searchService.listInsurances());
+		mav.addObject("specialtyList", searchService.listSpecialties());
 
 		return mav;
 	}
@@ -202,8 +202,9 @@ public class FlowController {
 				List<WorkingHours> wh = doctor.getWorkingHours();
 				Map<LocalDate, List<Appointment>> appointments = doctor.getAvailableAppointments();
 				mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
-				mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
-				mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
+//				TODO insurances And specialties with doctors
+				mav.addObject("insuranceList", searchService.listInsurances());
+				mav.addObject("specialtyList", searchService.listSpecialties());
 				mav.addObject("appointmentTaken",false);
 			} catch (NotFoundException e) {
 				LOGGER.trace("404 error");
@@ -278,8 +279,8 @@ public class FlowController {
 		}else{
 			mav = new ModelAndView("specialist");
 			mav.addObject("doctor", doctor);
-			mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
-			mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
+			mav.addObject("insuranceList", searchService.listInsurances());
+			mav.addObject("specialtyList", searchService.listSpecialties());
 			mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
 		}
 

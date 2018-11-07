@@ -2,7 +2,10 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.SearchDao;
 import ar.edu.itba.paw.interfaces.SearchService;
+import ar.edu.itba.paw.models.Insurance;
+import ar.edu.itba.paw.models.InsurancePlan;
 import ar.edu.itba.paw.models.ListItem;
+import ar.edu.itba.paw.models.Specialty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,34 +25,29 @@ public class SearchServiceImpl implements SearchService {
     private SearchDao searchDao;
 
     @Override
-    public Optional<List<ListItem>> listInsurances() {
+    public List<Insurance> listInsurances() {
         return searchDao.listInsurances();
     }
 
-    @Override
-    public Optional<List<ListItem>> listInsurancesWithDoctors() {
-        return searchDao.listInsurancesWithDoctors();
-    }
+//    @Override
+//    public List<ListItem>> listInsurancesWithDoctors() {
+//        return searchDao.listInsurancesWithDoctors();
+//    }
 
-    @Transactional
+//    @Transactional
+//    @Override
+//    public Optional<List<ListItem>> listSpecialtiesWithDoctors() {
+//        return searchDao.listSpecialtiesWithDoctors();
+//    }
+//
     @Override
-    public Optional<List<ListItem>> listSpecialtiesWithDoctors() {
-        return searchDao.listSpecialtiesWithDoctors();
-    }
-
-    @Override
-    public Optional<List<ListItem>> listZones() {
-        return null;
-    }
-
-    @Override
-    public Optional<List<ListItem>> listSpecialties() {
+    public List<Specialty> listSpecialties() {
         return searchDao.listSpecialties();
     }
 
     @Override
-    public Optional<Map<String, List<String>>> listInsurancePlan() {
-        return searchDao.listInsurancePlan();
+    public List<InsurancePlan> listInsurancePlans() {
+        return searchDao.listInsurancePlans();
     }
 
 
