@@ -489,6 +489,46 @@ public class Doctor {
     public void setFavorites(List<Favorite> favorites) {
         this.favorites = favorites;
     }
+
+
+    private LocalDateTime getAppointmentDateTime (Appointment ap){
+        LocalDate appointementDay = LocalDate.parse(ap.getAppointmentDay());
+        return appointementDay.atTime(LocalTime.parse(ap.getAppointmentTime()));
+    }
+
+    private void addAppointmentInOrderToList(List<Appointment> list, Appointment appointment, LocalDateTime appointmentDateTime){
+        if (list.isEmpty()){
+            list.add(appointment);
+            return;
+        }
+        int index;
+        for (index = 0 ; index < list.size() ; index++ ){
+            if (appointmentDateTime.isAfter(getAppointmentDateTime(list.get(index)))){
+                list.add(index, appointment);
+                return;
+            }
+        }
+        list.add(list.size() - 1, appointment );
+        return;
+    }
+
+    public List<Appointment> getHistoricalAppointments(){
+        LocalDateTime currentAppointmentTime;
+
+        Set<Appointment> appointments = getAppointments();
+        List<Appointment> retList = new LinkedList<>();
+
+        LocalDateTime now = LocalDateTime.now();
+
+        for (Appointment appointmentIterator: appointments){
+            currentAppointmentTime = getAppointmentDateTime(appointmentIterator);
+            if (currentAppointmentTime.isBefore(now)){
+                addAppointmentInOrderToList(retList, appointmentIterator, currentAppointmentTime);
+            }
+        }
+        return retList;
+    }
+
 }
 
 
