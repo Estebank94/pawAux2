@@ -62,13 +62,9 @@
                     <div>
                         <div style="padding-top: 20px; padding-left: 20px; padding-right: 20px;">
                             <div class="media">
-                                <div class="media-left">
-                                    <i class="fas fa-exclamation-triangle" style="color:#CECECE; font-size: 24px; float: left; padding-right: 16px"></i>
-                                </div>
-                                <div class="media-body">
-                                    <h3><spring:message code="patient.noAppointments" /></h3>
-                                    <p><spring:message code="patient.noAppointmentsSub" /></p>
-                                </div>
+                                <img class="center-img" src="/resources/images/noAppointments.png">
+                                <h3><spring:message code="patient.noAppointments" /></h3>
+                                <p><spring:message code="patient.noAppointmentsSub" /></p>
                             </div>
                         </div>
                     </div>
@@ -87,9 +83,9 @@
                                     <div class="center-vertical">
                                         <div>
                                             <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
-                                            <h5><b><c:out value="${listItems.doctorLastName}"/></b>,  <c:out value="${listItems.doctorFirstName}"/></h5>
-                                                <p style="margin-bottom: 0rem"><strong><spring:message code="phone"/>:</strong> <c:out value="${listItems.doctorPhonenumber}"/></p>
-                                                <p><strong><spring:message code="address"/>:</strong> <c:out value="${listItems.doctorAddress}"/></p>
+                                            <h5><b><c:out value="${listItems.doctor.lastName}"/></b>,  <c:out value="${listItems.doctor.firstName}"/></h5>
+                                                <p style="margin-bottom: 0rem"><strong><spring:message code="phone"/>:</strong> <c:out value="${listItems.doctor.phoneNumber}"/></p>
+                                                <p><strong><spring:message code="address"/>:</strong> <c:out value="${listItems.doctor.address}"/></p>
                                         </div>
                                     </div>
                                 </div>
