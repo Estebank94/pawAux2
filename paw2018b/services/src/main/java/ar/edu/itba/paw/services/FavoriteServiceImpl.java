@@ -53,4 +53,27 @@ public class FavoriteServiceImpl implements FavoriteService {
 
         return;
     }
+
+    @Override
+    @Transactional
+    public void removeFavorite(Doctor doctor, Patient patient){
+        Optional<Favorite> favorite;
+
+        try {
+            favorite = favoriteDao.findFavorite(doctor, patient);
+        } catch (NoResultException e){
+            return;
+        } catch (Exception e){
+            return;
+        }
+
+        if (favorite.isPresent()){
+            try {
+                favoriteDao.removeFavorite(favorite.get());
+            } catch (Exception e){
+                return;
+            }
+        }
+        return;
+    }
 }

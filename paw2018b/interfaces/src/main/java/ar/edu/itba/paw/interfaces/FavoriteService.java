@@ -8,4 +8,6 @@ import ar.edu.itba.paw.models.Patient;
  */
 public interface FavoriteService {
     public void addFavorite(Doctor doctor, Patient patient);
+
+    public void removeFavorite(Doctor doctor, Patient patient);
 }
