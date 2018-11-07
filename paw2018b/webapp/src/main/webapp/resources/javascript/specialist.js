@@ -13,6 +13,7 @@ $(function() {
         }
         else{
             $('#time').prop('disabled', false);
+            // $('#time').val('no');
             $('#time option').hide().filter(function() {
                 return this.value.indexOf( val + '_' ) === 0;
             })
@@ -33,4 +34,4 @@ $('#time').on('change', function() {
 });
 
 $('.specialist-select').select2({theme: 'bootstrap4'});
-$('.custom-select').select2({theme: 'bootstrap4'});
+// $('.custom-select').select2({theme: 'bootstrap4'});

@@ -194,11 +194,7 @@ public class FlowController {
 					}
 				}
 //				Patient patient = patientService.findPatientByEmail(authentication.getName());
-//				Favorite favorite = new Favorite();
-//				favorite.setId(2);
-//				favorite.setDoctor(doctor);
-//				favorite.setPatient(patient);
-//				favoriteService.addFavorite(favorite);
+//				favoriteService.addFavorite(doctor, patient);
 
 				mav.addObject("doctor", doctor);
 //				mav.addObject("workingHoursTest", doctor.getWorkingHours());

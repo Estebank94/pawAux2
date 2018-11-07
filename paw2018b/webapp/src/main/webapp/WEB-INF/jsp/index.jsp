@@ -135,7 +135,7 @@
         <div>
             <div class="list-home-right">
                 <h3><spring:message code="explanation.chooseTitle" /></h3>
-                <p><spring:message code="explanation.chooseSubtitle" />.</p>
+                <p><spring:message code="explanation.chooseSubtitle" /></p>
             </div>
         </div>
     </div>

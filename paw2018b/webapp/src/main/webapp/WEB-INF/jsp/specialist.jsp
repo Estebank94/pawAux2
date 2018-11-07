@@ -187,7 +187,7 @@
                     <h4><spring:message code="specialist.insurances" /></h4>
                     <div class="row container">
                         <c:forEach items="${doctor.insuranceListFromInsurancePlans}" var="insurance">
-                            <div class="card col-sm-3" style="margin-right:2rem; padding-left: 0; padding-right: 0;">
+                            <div class="card col-sm-3" style="margin-right:2rem; padding-left: 0; padding-right: 0; margin-top:8px;">
                                 <div class="card-header">
                                     <strong><c:out value="${insurance.name}"/></strong>
                                 </div>
@@ -210,20 +210,23 @@
                     </c:if>
                 </div>
                 <hr>
+                <c:if test="${doctor.reviews.size() > 0}">
                 <div>
                     <h4>Reseñas</h4>
                     <br>
                     <c:forEach items="${doctor.reviews}" var="review">
+                        <p style="margin-bottom: 1rem"><strong><c:out value="${review.reviewerFirstName} ${review.reviewerLastName}"/></strong></p>
                         <div class="container row">
                             <c:forEach begin = "1" end = "${review.stars}">
                                 <i class="fas fa-star star-yellow star-small"></i>
                             </c:forEach>
                         </div>
-                        <c:out value="${review.description}"/>
-                        <hr>
+                        <p><c:out value="${review.description}"/></p>
+                        <hr style="margin-top:8px; margin-bottom: 8px;">
                     </c:forEach>
                     <br>
                 </div>
+                </c:if>
                 <div>
                     <h4>Dejá tu Reseña</h4>
                     <br>
