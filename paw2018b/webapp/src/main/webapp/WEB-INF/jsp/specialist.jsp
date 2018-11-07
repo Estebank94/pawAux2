@@ -81,7 +81,7 @@
 
 <div class="navbar-search sticky-top">
 <%--action="${postPath}--%>
-    <c:url value="/processForm" var="processForm"/>
+    <c:url value="/processForm/${page}" var="processForm"/>
     <form:form action="${processForm}" method="GET" modelAttribute="search" accept-charset="ISO-8859-1">
         <div id="search-bar" class="input-group container">
             <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del médico" class="form-control" path="name"/>

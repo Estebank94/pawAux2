@@ -72,7 +72,6 @@ public class FlowController {
 					LOGGER.debug("The User Logged in is a DOCTOR with ID: {}", doctor.getId());
 				}catch (NotFoundDoctorException ex1){
 					LOGGER.trace("404 error");
-					/*aca esta llegando cuando toco en el registrationController waldoc*/
 					return new ModelAndView("404");
 				} catch (NotFoundPacientException e) {
 					LOGGER.trace("404 error");
@@ -241,11 +240,11 @@ public class FlowController {
 //			return new ModelAndView("404");
 //		}
 //		try {
-//			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 //
 //			//convert String to LocalDate
-//			String day = appointmentForm.getDay();
-//			LocalDate localDate = LocalDate.parse(appointmentForm.getDay(), formatter);
+			String day = appointmentForm.getDay();
+			LocalDate localDate = LocalDate.parse(appointmentForm.getDay(), formatter);
 //			appointmentService.createAppointment(appointmentForm.getDay(), appointmentForm.getTime(), patient, doctor);
 //		} catch (RepeatedAppointmentException e) {
 //			LOGGER.debug("The appointment has just been taken");
