@@ -3,6 +3,7 @@
 package ar.edu.itba.paw.services;
 
 
+import ar.edu.itba.paw.App;
 import ar.edu.itba.paw.interfaces.AppointmentDao;
 import ar.edu.itba.paw.interfaces.DoctorDao;
 import ar.edu.itba.paw.models.Appointment;
@@ -47,6 +48,10 @@ public class AppointmentServiceImplTest {
     private static final Integer DOC_ID = 1;
     private static final Integer PATIENT_ID = 5;
 
+    private Doctor doctor;
+    private Patient patient;
+    private Appointment appointment;
+
 //    @Rule
 //    public MockitoRule rule = MockitoJUnit.rule();
 //
@@ -58,15 +63,6 @@ public class AppointmentServiceImplTest {
 
     @Autowired
     private AppointmentServiceImpl appointmentServiceImpl;
-
-    @Autowired
-    private Doctor doctor;
-
-    @Autowired
-    private Patient patient;
-
-    @Autowired
-    private Appointment appointment;
 
     @Autowired
     private AppointmentDao appointmentDao;
@@ -81,20 +77,6 @@ public class AppointmentServiceImplTest {
 
         jdbcTemplate = new JdbcTemplate(ds);
 //        MockitoAnnotations.initMocks(this);
-        doctor = Mockito.mock(Doctor.class);
-        patient = Mockito.mock(Patient.class);
-        when(appointment.getAppointmentDay()).thenReturn(DATE.toString());
-        when(appointment.getAppointmentTime()).thenReturn(TIME.toString());
-        when(appointment.getPatient()).thenReturn(patient);
-        when(appointment.getDoctor()).thenReturn(doctor);
-        when(patient.getId()).thenReturn(PATIENT_ID);
-        when(doctor.getId()).thenReturn(DOC_ID);
-
-        try {
-            when(appointmentDao.createAppointment(DATE.toString(), TIME.toString(), patient, doctor)).thenReturn(appointment);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -106,6 +88,18 @@ public class AppointmentServiceImplTest {
 
     @Test
     public void testCreateAppointment() throws Exception {
+
+        doctor = Mockito.mock(Doctor.class);
+        patient = Mockito.mock(Patient.class);
+        appointment = Mockito.mock(Appointment.class);
+        when(appointment.getAppointmentDay()).thenReturn(DATE.toString());
+        when(appointment.getAppointmentTime()).thenReturn(TIME.toString());
+        when(appointment.getPatient()).thenReturn(patient);
+        when(appointment.getDoctor()).thenReturn(doctor);
+        when(patient.getId()).thenReturn(PATIENT_ID);
+        when(doctor.getId()).thenReturn(DOC_ID);
+        when(appointmentDao.findAppointment(DATE.toString(), TIME.toString(), patient, doctor)).thenReturn(Optional.empty());
+        when(appointmentDao.createAppointment(DATE.toString(), TIME.toString(), patient, doctor)).thenReturn(appointment);
 
         final Appointment appointment = appointmentServiceImpl.createAppointment(DATE.toString(), TIME.toString(), patient, doctor);
 
