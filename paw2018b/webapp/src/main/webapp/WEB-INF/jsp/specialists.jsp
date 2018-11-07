@@ -162,7 +162,7 @@
                         </c:if>
                         <c:if test="${currentPage+1 != page}">
                             <%--TODO MARTINA pone bien el link de la href--%>
-                            <li class="page-item"><a class="page-link" style="color: #257CBF;" href="/processForm/${page}">${page}</a></li>
+                            <li class="page-item"><a class="page-link" style="color: #257CBF;" href="/processForm/${page-1}">${page}</a></li>
                         </c:if>
                     </c:forEach>
                 </ul>
