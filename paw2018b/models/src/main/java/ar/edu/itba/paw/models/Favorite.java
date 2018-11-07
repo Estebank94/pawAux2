@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 
 /**
@@ -19,6 +21,7 @@ public class Favorite {
     @ManyToOne
     @JoinColumn(name = "patientid")
     private Patient patient;
+
 
     public Favorite(){
 

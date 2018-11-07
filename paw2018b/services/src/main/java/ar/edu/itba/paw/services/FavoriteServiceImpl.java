@@ -2,7 +2,9 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.FavoriteDao;
 import ar.edu.itba.paw.interfaces.FavoriteService;
+import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Favorite;
+import ar.edu.itba.paw.models.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +20,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     @Transactional
-    public void addFavorite(Favorite favorite) {
-        favoriteDao.addFavorite(favorite);
+    public void addFavorite(Doctor doctor, Patient patient) {
+        favoriteDao.addFavorite(doctor, patient);
     }
 }
