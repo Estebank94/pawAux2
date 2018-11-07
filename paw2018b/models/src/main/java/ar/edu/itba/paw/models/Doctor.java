@@ -24,7 +24,7 @@ public class Doctor {
     String lastName;
     String sex;
     String address;
-    String avatar;
+    byte[] profilePicture;
     @ManyToMany(cascade = {CascadeType.ALL},
                 fetch = FetchType.EAGER
     )
@@ -117,12 +117,12 @@ public class Doctor {
 
     }
 
-    public Doctor(String firstName, String lastName, String phoneNumber, String sex, Integer licence, String avatar, String address){
+    public Doctor(String firstName, String lastName, String phoneNumber, String sex, Integer licence, byte[] profilePicture, String address){
         this.firstName = firstName;
         this.lastName = lastName;
         this.sex = sex;
         this.address = address;
-        this.avatar = avatar;
+        this.profilePicture = profilePicture;
         this.phoneNumber = phoneNumber;
     }
 
@@ -166,8 +166,8 @@ public class Doctor {
         return address;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public byte[] getProfilePicture() {
+        return profilePicture;
     }
 
     public Integer getId() {
@@ -190,8 +190,8 @@ public class Doctor {
         this.address = address;
     }
 
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
+    public void setProfilePicture(byte[] profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public void setId(Integer id) {

@@ -12,7 +12,10 @@ import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,10 +25,7 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.sound.midi.SysexMessage;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.util.*;
 
@@ -57,6 +58,9 @@ public class RegistrationController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @RequestMapping(value="/doctorRegistration", method = { RequestMethod.POST })
     public ModelAndView doctorRegistration (@Valid @ModelAttribute("personal") PersonalForm personalForm, final BindingResult errors,HttpServletRequest request)
@@ -101,9 +105,9 @@ public class RegistrationController {
             mav.addObject("cancelButton", true);
 
             try {
-                String image = personalForm.getSex().equals("M") ? "https://i.imgur.com/au1zFvG.jpg" : "https://i.imgur.com/G66Hh4D.jpg";
+//                String image = personalForm.getSex().equals("M") ? "https://i.imgur.com/au1zFvG.jpg" : "https://i.imgur.com/G66Hh4D.jpg";
                 Doctor doctor = doctorService.createDoctor(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(),
-                        personalForm.getSex(), personalForm.getLicence(), image, personalForm.getAddress());
+                        personalForm.getSex(), personalForm.getLicence(), null, personalForm.getAddress());
                 Patient patient = patientService.createPatient(personalForm.getFirstName(), personalForm.getLastName(), personalForm.getPhoneNumber(), personalForm.getEmail(),
                         personalForm.getPassword());
 
@@ -243,6 +247,32 @@ public class RegistrationController {
         return mav;
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/profile-image/{doctorId}", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    public byte[] avatar(@PathVariable(value = "doctorId") final Integer doctorId ) throws Exception {
+
+        byte[] bytes = doctorService.findDoctorById(doctorId).get().getProfilePicture();
+        if(bytes != null){
+            return bytes;
+        }else{
+
+            Resource resource;
+
+            if(doctorService.findDoctorById(doctorId).get().getSex().equals("M")){
+                resource = applicationContext.getResource("/resource/defaultmen");
+            }else{
+                resource = applicationContext.getResource("/resource/defaultwomen");
+            }
+
+            long resourceLength = resource.contentLength();
+            byte[] defaultImage = new byte[(int) resourceLength];
+            resource.getInputStream().read(defaultImage);
+
+            return defaultImage;
+        }
+    }
+
+
     @RequestMapping(value = "/doctorProfile", method = {RequestMethod.POST})
     public ModelAndView doctorProfile ( @Valid @ModelAttribute("professional") ProfessionalForm professionalForm, final BindingResult errors){
 
@@ -295,6 +325,24 @@ public class RegistrationController {
             return showDoctorProfile(professionalForm);
         }
 
+        MultipartFile file = professionalForm.getAvatar();
+
+        if( file != null && file.getSize() != 0 ){
+
+            String mimetype = file.getContentType();
+            String type = mimetype.split("/")[0];
+
+            if (!type.equals("image")) {
+                LOGGER.warn("File is not an image");
+            }else {
+                try {
+                    doctorService.setDoctorAvatar(doctor, file.getBytes());
+                } catch (IOException e) {
+                    LOGGER.warn("Could not upload image");
+                }
+            }
+
+        }
 
         Description description = new Description(professionalForm.getCertificate(), professionalForm.getLanguages(), professionalForm.getEducation());
 

@@ -141,7 +141,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     }
 
     @Override
-    public Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, Integer licence, String avatar, String address) throws RepeatedLicenceException, NotCreateDoctorException {
+    public Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, Integer licence, byte[] avatar, String address) throws RepeatedLicenceException, NotCreateDoctorException {
         final Doctor doctor = new Doctor(firstName, lastName, phoneNumber, sex, licence, avatar, address);
         em.persist(doctor);
         return doctor;
@@ -167,6 +167,13 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     public Boolean setWorkingHours(Doctor doctor, List<WorkingHours> workingHours){
         doctor.addWorkingHours(workingHours);
         workingHours.stream().forEach(workingHour -> workingHour.setDoctor(doctor));
+        em.merge(doctor);
+        return true;
+    }
+
+    @Override
+    public Boolean setDoctorAvatar(Doctor doctor, byte[] avatar) {
+        doctor.setProfilePicture(avatar);
         em.merge(doctor);
         return true;
     }

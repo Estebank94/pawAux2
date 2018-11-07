@@ -102,7 +102,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     @Transactional
     public Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, Integer licence,
-                               String avatar, String address) throws NotValidFirstNameException, NotValidLastNameException, NotValidPhoneNumberException, NotCreateDoctorException, RepeatedLicenceException, NotValidSexException, NotValidLicenceException, NotValidAddressException {
+                               byte[] avatar, String address) throws NotValidFirstNameException, NotValidLastNameException, NotValidPhoneNumberException, NotCreateDoctorException, RepeatedLicenceException, NotValidSexException, NotValidLicenceException, NotValidAddressException {
         LOGGER.debug("DoctorServiceImpl: createDoctor");
         if (firstName == null){
             LOGGER.debug("The First Name of a Doctor can't be null");
@@ -438,6 +438,13 @@ public class DoctorServiceImpl implements DoctorService {
         return Optional.ofNullable(doctor);
     }
 
+    @Override
+    @Transactional
+    public Optional<Doctor> setDoctorAvatar(Doctor doctor, byte[] avatar) {
+        LOGGER.debug("setDoctorAvatar");
+        doctorDao.setDoctorAvatar(doctor, avatar);
+        return Optional.ofNullable(doctor);
+    }
 
     @Override
     @Transactional
