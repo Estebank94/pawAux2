@@ -224,9 +224,8 @@ public class Doctor {
         return Objects.hash(getId());
     }
 
-
     public Map<LocalDate, List<Appointment>>getAvailableAppointments(){
-        Map<LocalDate, List<Appointment>> map = new HashMap<>();
+        Map<LocalDate, List<Appointment>> map = new TreeMap<>();
         LocalDate today = LocalDate.now();
 
         for (int i = 0; i<15; i++){
@@ -235,6 +234,7 @@ public class Doctor {
                 map.put(today.plusDays(i),aux);
             }
         }
+
         return map;
     }
 
