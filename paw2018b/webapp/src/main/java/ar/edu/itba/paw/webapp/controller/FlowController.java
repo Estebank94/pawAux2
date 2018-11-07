@@ -224,6 +224,7 @@ public class FlowController {
 												@ModelAttribute("review")ReviewForm reviewForm) throws NotFoundDoctorException, NotValidIDException {
 
 		Doctor doctor = doctorService.findDoctorById(doctorId).get();
+		boolean appointment = false;
 
 		/*TODO: check validation for try catch*/
 
@@ -240,8 +241,8 @@ public class FlowController {
 			return new ModelAndView("404");
 		}
 		try {
-			String day = appointmentForm.getDay();
 			if(appointmentForm.getDay() != null && appointmentForm.getTime() != null) {
+				appointment = true;
 				appointmentService.createAppointment(appointmentForm.getDay(), appointmentForm.getTime(), patient, doctor);
 			}
 		} catch (RepeatedAppointmentException e) {
@@ -264,51 +265,26 @@ public class FlowController {
 			return new ModelAndView("404");
 		}
 
-//		TODO fix null from form
-//		Review review = new Review(5, "Muy Bueno!", doctor, "hola", "hola");
-//		reviewService.createReview(review);
 
 		Review review = new Review(reviewForm.getStars(), reviewForm.getDescription(), doctor, patient.getFirstName(), patient.getLastName());
 		reviewService.createReview(review);
 
+		ModelAndView mav;
+		if(appointment){
+			mav = new ModelAndView("appointmentSuccess");
+			mav.addObject("doctor", doctor);
+			mav.addObject("appointmentDay", appointmentForm.getDay());
+			mav.addObject("appointmentTime", appointmentForm.getTime());
+		}else{
+			mav = new ModelAndView("specialist");
+			mav.addObject("doctor", doctor);
+			mav.addObject("insuranceList", searchService.listInsurancesWithDoctors().get());
+			mav.addObject("specialtyList", searchService.listSpecialtiesWithDoctors().get());
+			mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
+		}
 
-		ModelAndView mav = new ModelAndView("appointmentSuccess");
-		mav.addObject("doctor", doctor);
-//		mav.addObject("appointmentDay", appointmentForm.getDay());
-//		mav.addObject("appointmentTime", appointmentForm.getTime());
 		return mav;
 	}
 
-//	@RequestMapping(value = "/specialist/{doctorId}", method = {RequestMethod.POST})
-//	public ModelAndView doctorReviewPost(@PathVariable Integer doctorId, @ModelAttribute("search") Search search,
-//											  @ModelAttribute("review")ReviewForm reviewForm) throws NotFoundDoctorException, NotValidIDException {
-//
-//		Doctor doctor = doctorService.findDoctorById(doctorId).get();
-//
-//		/*TODO: check validation for try catch*/
-//
-//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//		Patient patient = null;
-//		try {
-//			patient = patientService.findPatientByEmail(authentication.getName());
-//		} catch (NotValidEmailException e) {
-//			LOGGER.trace("404 error");
-//			return new ModelAndView("404");
-//		} catch (NotFoundPacientException e) {
-//			LOGGER.trace("404 error");
-//			return new ModelAndView("404");
-//		}
-//
-//
-//		Review review = new Review(reviewForm.getStars(), reviewForm.getDescription(), doctor, patient.getFirstName(), patient.getLastName());
-//		reviewService.createReview(review);
-//
-//
-/////		Hacer que te haga refresh la pagina
-//		ModelAndView mav = new ModelAndView("appointmentSuccess");
-//		mav.addObject("doctor", doctor);
-//		return mav;
-//	}
 
 }
