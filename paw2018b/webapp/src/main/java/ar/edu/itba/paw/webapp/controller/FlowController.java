@@ -266,9 +266,11 @@ public class FlowController {
 			return new ModelAndView("404");
 		}
 
+		if(reviewForm.getStars() != null && reviewForm.getDescription() != null){
+			Review review = new Review(reviewForm.getStars(), reviewForm.getDescription(), doctor, patient.getFirstName(), patient.getLastName());
+			reviewService.createReview(review);
+		}
 
-		Review review = new Review(reviewForm.getStars(), reviewForm.getDescription(), doctor, patient.getFirstName(), patient.getLastName());
-		reviewService.createReview(review);
 
 		ModelAndView mav;
 		if(appointment){

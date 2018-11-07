@@ -13,6 +13,8 @@ public interface DoctorDao {
 
     int getLastPage();
 
+    Boolean setDoctorAvatar(Doctor doctor, byte[] avatar);
+
     List<Doctor> listDoctors(int page);
 
     List<Doctor> listDoctors(Search search, int page);
@@ -20,7 +22,7 @@ public interface DoctorDao {
     Optional<Doctor> findDoctorById(Integer id);
 
     Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, Integer licence,
-                               String avatar, String address) throws RepeatedLicenceException, NotCreateDoctorException;
+                               byte[] avatar, String address) throws RepeatedLicenceException, NotCreateDoctorException;
 
     Boolean isAnExistingLicence(Integer licence);
 

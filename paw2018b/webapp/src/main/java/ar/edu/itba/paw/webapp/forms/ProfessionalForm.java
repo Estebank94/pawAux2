@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.WorkingHours;
 import com.sun.corba.se.spi.orbutil.threadpool.Work;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
@@ -22,7 +23,7 @@ public class ProfessionalForm {
             "21:00", "22:00","23:00"};
 
 
-    private String avatar;
+    private MultipartFile avatar;
 
     @Length(max=250, message = "Cantidad de caracteres incorrecto. Su nombre debe contener entre 3 y 45 caracteres")
     private String certificate;
@@ -171,11 +172,11 @@ public class ProfessionalForm {
         this.specialty = specialty;
     }
 
-    public String getAvatar() {
+    public MultipartFile getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(String avatar) {
+    public void setAvatar(MultipartFile avatar) {
         this.avatar = avatar;
     }
 
