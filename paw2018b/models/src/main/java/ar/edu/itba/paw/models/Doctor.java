@@ -231,7 +231,7 @@ public class Doctor {
 
         for (int i = 0; i<15; i++){
             List<Appointment> aux = generateAppointments(today.plusDays(i));
-            if(aux != null){
+            if(!aux.isEmpty()){
                 map.put(today.plusDays(i),aux);
             }
         }

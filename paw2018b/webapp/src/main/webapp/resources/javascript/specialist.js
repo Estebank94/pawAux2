@@ -13,7 +13,7 @@ $(function() {
         }
         else{
             $('#time').prop('disabled', false);
-            // $('#time').val('no');
+            $('#time').val('no');
             $('#time option').hide().filter(function() {
                 return this.value.indexOf( val + '_' ) === 0;
             })
