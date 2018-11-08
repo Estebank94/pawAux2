@@ -5,40 +5,31 @@ import ar.edu.itba.paw.models.Patient;
 
 public class CancelAppointmentForm {
 
-    Doctor doctor;
-    Patient patient;
-    String appointmentDay;
-    String appointmentTime;
+    Integer doctorid;
+    String day;
+    String time;
 
-    public Doctor getDoctor() {
-        return doctor;
+    public Integer getDoctorid() {
+        return doctorid;
     }
 
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
+    public void setDoctorid(Integer doctorid) {
+        this.doctorid = doctorid;
     }
 
-    public Patient getPatient() {
-        return patient;
+    public String getDay() {
+        return day;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setDay(String day) {
+        this.day = day;
     }
 
-    public String getAppointmentDay() {
-        return appointmentDay;
+    public String getTime() {
+        return time;
     }
 
-    public void setAppointmentDay(String appointmentDay) {
-        this.appointmentDay = appointmentDay;
-    }
-
-    public String getAppointmentTime() {
-        return appointmentTime;
-    }
-
-    public void setAppointmentTime(String appointmentTime) {
-        this.appointmentTime = appointmentTime;
+    public void setTime(String time) {
+        this.time = time;
     }
 }

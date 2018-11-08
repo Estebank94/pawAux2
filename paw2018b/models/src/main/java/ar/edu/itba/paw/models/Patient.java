@@ -221,4 +221,13 @@ public class Patient {
         return retList;
     }
 
+    public Boolean isFavorite(Doctor doctor){
+        for(Favorite favorite : favorites){
+            if(favorite.getDoctor().equals(doctor)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

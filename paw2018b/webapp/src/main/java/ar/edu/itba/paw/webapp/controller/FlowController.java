@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.forms.AppointmentForm;
+import ar.edu.itba.paw.webapp.forms.FavoriteForm;
 import ar.edu.itba.paw.webapp.forms.ReviewForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -189,6 +190,7 @@ public class FlowController {
 							.anyMatch(r -> r.getAuthority().equals("ROLE_DOCTOR"));
 					if(hasUserRole){
 						Patient patient = patientService.findPatientByEmail(authentication.getName());
+						mav.addObject("user", patient);
 						mav.addObject("doctorID", doctor.getId());
 					}
 				}
@@ -222,7 +224,10 @@ public class FlowController {
     @RequestMapping(value = "/specialist/{doctorId}", method = {RequestMethod.POST})
 	public ModelAndView doctorDescriptionPost(@PathVariable Integer doctorId, @ModelAttribute("search") Search search,
 											  @ModelAttribute("appointment")AppointmentForm appointmentForm,
-												@ModelAttribute("review")ReviewForm reviewForm) throws NotFoundDoctorException, NotValidIDException {
+											  @ModelAttribute("review")ReviewForm reviewForm,
+											  @ModelAttribute("favorite") FavoriteForm favoriteForm)
+											  throws NotFoundDoctorException, NotValidIDException, NotFoundPacientException,
+												NotValidPatientIdException, NotCreatePatientException {
 
 		Doctor doctor = doctorService.findDoctorById(doctorId).get();
 		boolean appointment = false;
@@ -269,6 +274,15 @@ public class FlowController {
 		if(reviewForm.getStars() != null && reviewForm.getDescription() != null){
 			Review review = new Review(reviewForm.getStars(), reviewForm.getDescription(), doctor, patient.getFirstName(), patient.getLastName());
 			reviewService.createReview(review);
+		}
+
+		if(favoriteForm.getAction() != null){
+			if(favoriteForm.getAction().equals("add")){
+				favoriteService.addFavorite(doctor, patient);
+			} else {
+				favoriteService.removeFavorite(doctor, patient);
+			}
+
 		}
 
 

@@ -93,8 +93,8 @@
                                                     <div class="center-vertical">
                                                         <div>
                                                                 <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
-                                                                <h5><b><c:out value="${listItems.clientLastName}"/></b>,  <c:out value="${listItems.clientFirstName}"/></h5>
-                                                                <p><strong><spring:message code="phone"/>:</strong> <c:out value="${listItems.clientPhonenumbe}"/></p>
+                                                                <h5><b><c:out value="${listItems.patient.lastName}"/></b>,  <c:out value="${listItems.patient.firstName}"/></h5>
+                                                                <p><strong><spring:message code="phone"/>:</strong> <c:out value="${listItems.patient.phoneNumber}"/></p>
                                                         </div>
                                                     </div>
                                                 </div>

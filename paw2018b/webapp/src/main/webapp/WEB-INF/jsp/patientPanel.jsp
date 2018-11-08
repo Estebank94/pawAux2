@@ -77,20 +77,25 @@
                         </h3>
                         <br>
                         <c:forEach items="${appointment.value}" var="listItems">
-                            <div>
-                                <div class="row" style="margin: 3px">
-                                        <%--<img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">--%>
-                                    <div class="center-vertical">
-                                        <div>
-                                            <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
-                                            <h5><b><c:out value="${listItems.doctor.lastName}"/></b>,  <c:out value="${listItems.doctor.firstName}"/></h5>
+                            <c:if test="${!listItems.appointmentCancelled}">
+                                <div>
+                                    <div class="row" style="margin: 3px">
+                                            <%--<img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">--%>
+                                        <div class="center-vertical">
+                                            <div>
+                                                <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
+                                                <h5><b><c:out value="${listItems.doctor.lastName}"/></b>,  <c:out value="${listItems.doctor.firstName}"/></h5>
                                                 <p style="margin-bottom: 0rem"><strong><spring:message code="phone"/>:</strong> <c:out value="${listItems.doctor.phoneNumber}"/></p>
                                                 <p><strong><spring:message code="address"/>:</strong> <c:out value="${listItems.doctor.address}"/></p>
+                                                <form:form modelAttribute="appointment" method="POST" action="${specialist_id}" id="appointment">
+                                                    <div onclick="cancelAppointment('${listItems.doctor.id}','${listItems.appointmentDay}', '${listItems.appointmentTime}')">Cancelar Turno</div>
+                                                </form:form>
+                                            </div>
                                         </div>
                                     </div>
+                                    <hr class="hr-header-sidebar">
                                 </div>
-                                <hr class="hr-header-sidebar">
-                            </div>
+                            </c:if>
                             <br>
                         </c:forEach>
                     </div>
@@ -102,6 +107,7 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="<c:url value="/resources/javascript/patientPanel.js"/>"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>

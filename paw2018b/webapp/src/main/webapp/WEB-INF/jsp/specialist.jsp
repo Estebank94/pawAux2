@@ -111,7 +111,20 @@
                             <div>
                                 <div class="row">
                                     <h3 class="doctor-name center-vertical" style="margin-left: 16px"><c:out value="${doctor.lastName}"/>, <c:out value="${doctor.firstName}"/></h3>
-                                    <div class="heart"></div>
+                                    <security:authorize access="isAuthenticated()">
+                                        <c:if test="${user.isFavorite(doctor)}">
+                                            <div class="heart-added"></div>
+                                        </c:if>
+                                        <c:if test="${!user.isFavorite(doctor)}">
+                                            <form:form modelAttribute="favorite" method="POST" action="${specialist_id}" id="favorite">
+                                                <div class="heart" onclick="addFavorite()"></div>
+                                                <%--<div class="heart" onclick="addFavorite('${user.id}', '${doctor.id}')"></div>--%>
+                                            </form:form>
+
+
+                                        </c:if>
+                                    </security:authorize>
+
                                 </div>
                                 <div class="row container">
                                     <c:forEach items="${doctor.specialties}" var="doctorSpecialty">
