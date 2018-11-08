@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS doctor (
   avatar varchar(100) UNIQUE,
   id IDENTITY PRIMARY KEY,
   workingHours varchar(100),
-  district varchar (50)
+  district varchar (50),
+  profilePicture blob
 );
 
 CREATE TABLE IF NOT EXISTS insurance (
