@@ -18,7 +18,7 @@ public interface DoctorService {
 
    List<Doctor> listDoctors(int page);
 
-   List<Doctor> listDoctors(Search search, int page) throws NotValidSearchException;
+   List<Doctor> listDoctors(Search search, int page) throws NotValidSearchException, NotValidPageException;
 
    Optional<Doctor> findDoctorById(Integer id) throws NotFoundDoctorException, NotValidIDException;
 

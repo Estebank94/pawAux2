@@ -54,8 +54,18 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     @Transactional
-    public List<Doctor> listDoctors(Search search, int page) throws NotValidSearchException {
+    public List<Doctor> listDoctors(Search search, int page) throws NotValidSearchException, NotValidPageException {
         LOGGER.debug("DoctorServiceImpl: listDoctors");
+
+        if (page < 0){
+            LOGGER.debug("Page can't be negative");
+            throw new NotValidPageException("Page can't be negative");
+        }
+        if (page >= Integer.MAX_VALUE){
+            LOGGER.debug("Page can't be greater than the biggest number");
+            throw new NotValidPageException("Page can't be greater than the biggest number");
+        }
+
         List<Doctor> list = doctorDao.listDoctors(search, page);
 //        if(!list.isEmpty()){
 //            list.get(0).getReviews();
