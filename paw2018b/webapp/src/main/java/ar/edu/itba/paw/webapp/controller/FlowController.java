@@ -69,7 +69,7 @@ public class FlowController {
 				Patient patient;
 				try {
 					patient = patientService.findPatientByEmail(authentication.getName());
-					doctor = doctorService.findDoctorById(patient.getDoctor().getId()).get();
+					doctor = doctorService.findDoctorById(String.valueOf(patient.getDoctor().getId())).get();
 					LOGGER.debug("The User Logged in is a DOCTOR with ID: {}", doctor.getId());
 				}catch (NotFoundDoctorException ex1){
 					LOGGER.trace("404 error");
@@ -170,9 +170,10 @@ public class FlowController {
 	}
 
 	@RequestMapping(value = "/specialist/{doctorId}", method = { RequestMethod.GET})
-    public ModelAndView doctorDescription(@PathVariable Integer doctorId, @ModelAttribute("search") Search search,
+    public ModelAndView doctorDescription(@PathVariable String doctorId, @ModelAttribute("search") Search search,
 										  @ModelAttribute("appointment") AppointmentForm appointmentForm,
 										  @ModelAttribute("review") ReviewForm reviewForm){
+
 		LOGGER.debug("DoctorDesciption. DoctorID = {}", doctorId);
 			final ModelAndView mav = new ModelAndView("specialist");
 			try {
@@ -241,7 +242,7 @@ public class FlowController {
 											  throws NotFoundDoctorException, NotValidIDException, NotFoundPacientException,
 												NotValidPatientIdException, NotCreatePatientException {
 
-		Doctor doctor = doctorService.findDoctorById(doctorId).get();
+		Doctor doctor = doctorService.findDoctorById(String.valueOf(doctorId)).get();
 		boolean appointment = false;
 
 		/*TODO: check validation for try catch*/
@@ -265,7 +266,7 @@ public class FlowController {
 			}
 		} catch (RepeatedAppointmentException e) {
 			LOGGER.debug("The appointment has just been taken");
-			return doctorDescription(doctorId,search,appointmentForm, reviewForm).addObject("appointmentTaken", true);
+			return doctorDescription(String.valueOf(doctorId),search,appointmentForm, reviewForm).addObject("appointmentTaken", true);
 		} catch (NotCreatedAppointmentException e) {
 			LOGGER.trace("404 error");
 			return new ModelAndView("404");

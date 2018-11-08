@@ -85,7 +85,7 @@ public class PatientPanelController {
 
 
         if(form.getDay() != null){
-            Optional<Doctor> doctor = doctorService.findDoctorById(form.getDoctorid());
+            Optional<Doctor> doctor = doctorService.findDoctorById(String.valueOf(form.getDoctorid()));
             appointmentService.cancelAppointment(form.getDay(), form.getTime(), patient, doctor.get());
         }
 

@@ -20,7 +20,7 @@ public interface DoctorService {
 
    List<Doctor> listDoctors(Search search, String pageAsString) throws NotValidSearchException, NotValidPageException;
 
-   Optional<Doctor> findDoctorById(Integer id) throws NotFoundDoctorException, NotValidIDException;
+   Optional<Doctor> findDoctorById(String id) throws NotFoundDoctorException, NotValidIDException;
 
 //   Doctor createDoctor(String firstName, String lastName, String sex, String address,
 //                       String avatar, Set<String> specialty, Map<String, Set<String>> insurance,

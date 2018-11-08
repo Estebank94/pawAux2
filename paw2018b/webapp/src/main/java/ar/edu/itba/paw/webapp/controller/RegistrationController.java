@@ -200,7 +200,7 @@ public class RegistrationController {
         }
         Doctor doctor = null;
         try {
-            doctor = doctorService.findDoctorById(patient.getDoctor().getId()).get();
+            doctor = doctorService.findDoctorById(String.valueOf(patient.getDoctor().getId())).get();
         } catch (NotFoundDoctorException e) {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
@@ -251,14 +251,14 @@ public class RegistrationController {
     @RequestMapping(value = "/profile-image/{doctorId}", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] avatar(@PathVariable(value = "doctorId") final Integer doctorId ) throws Exception {
 
-        byte[] bytes = doctorService.findDoctorById(doctorId).get().getProfilePicture();
+        byte[] bytes = doctorService.findDoctorById(String.valueOf(doctorId)).get().getProfilePicture();
         if(bytes != null){
             return bytes;
         }else{
 
             Resource resource;
 
-            if(doctorService.findDoctorById(doctorId).get().getSex().equals("M")){
+            if(doctorService.findDoctorById(String.valueOf(doctorId)).get().getSex().equals("M")){
                 resource = applicationContext.getResource("/resource/defaultmen");
             }else{
                 resource = applicationContext.getResource("/resource/defaultwomen");
@@ -289,7 +289,7 @@ public class RegistrationController {
         }
         Doctor doctor = null;
         try {
-            doctor = doctorService.findDoctorById(patient.getDoctor().getId()).get();
+            doctor = doctorService.findDoctorById(String.valueOf(patient.getDoctor().getId())).get();
         } catch (NotFoundDoctorException e) {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");

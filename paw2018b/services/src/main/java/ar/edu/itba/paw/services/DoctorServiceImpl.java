@@ -55,17 +55,27 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     @Transactional
     public List<Doctor> listDoctors(Search search, String pageAsString) throws NotValidSearchException, NotValidPageException {
-
         LOGGER.debug("DoctorServiceImpl: listDoctors");
+
+        if (pageAsString == null){
+            LOGGER.debug("Page can't be null");
+            throw new NotValidPageException("Page can't be null");
+        }
+
         if (!pageAsString.matches("[0-9]+")){
             LOGGER.debug("Page must be integer");
             throw new NotValidPageException("Page must be integer");
         }
 
+        if (String.valueOf(Integer.MAX_VALUE).length() < pageAsString.length()){
+            LOGGER.debug("Doctor ID can't have more than "+ String.valueOf(Integer.MAX_VALUE).length() + " numbers. " +
+                    "The ID given is: {}", pageAsString);
+        }
+
         int pageAsInt = Integer.parseInt(pageAsString);
 
         if (pageAsInt < 0){
-            LOGGER.debug("Page can't be negative");
+            LOGGER.debug("Page can't be a negative number. The page given is: {}", pageAsInt);
             throw new NotValidPageException("Page can't be negative");
         }
         if (pageAsInt >= Integer.MAX_VALUE){
@@ -84,21 +94,36 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     @Transactional
-    public Optional<Doctor> findDoctorById(Integer id) throws NotFoundDoctorException, NotValidIDException {
+    public Optional<Doctor> findDoctorById(String idAsString) throws NotFoundDoctorException, NotValidIDException {
         LOGGER.debug("DoctorServiceImpl: findDoctorById");
 
-        if (id == null ){
+        if (idAsString == null ){
             LOGGER.debug("Doctor ID can't be null");
             throw new NotValidIDException("Doctor Id can't be null");
         }
 
-        if (id < 0){
-            LOGGER.debug("Doctor ID can't be a negative number. The ID given is: {}", id);
+        if (!idAsString.matches("[0-9]+")){
+            LOGGER.debug("Doctor ID must be Integer");
+            throw new NotValidIDException("Doctor ID must be Integer");
+        }
+
+        if (String.valueOf(Integer.MAX_VALUE).length() < idAsString.length()){
+            LOGGER.debug("Doctor ID can't have more than "+ String.valueOf(Integer.MAX_VALUE).length() + " numbers. " +
+                    "The ID given is: {}", idAsString);
+        }
+
+        int idAsInt = Integer.parseInt(idAsString);
+
+        if (idAsInt < 0){
+            LOGGER.debug("Doctor ID can't be a negative number. The ID given is: {}", idAsInt);
             throw new NotValidIDException("Doctor Id can't be negative");
+        }
+        if (idAsInt >= Integer.MAX_VALUE ){
+            LOGGER.debug("Doctor ID can't be bigger than bigger number. The ID given is: {}", idAsInt);
         }
 
         LOGGER.debug("Find doctor by ID");
-        Optional<Doctor> thisdoctor =  doctorDao.findDoctorById(id);
+        Optional<Doctor> thisdoctor =  doctorDao.findDoctorById(idAsInt);
         thisdoctor.get().getWorkingHours().size();
         thisdoctor.get().getAppointments().size();
         thisdoctor.get().getReviews().size();
@@ -106,10 +131,10 @@ public class DoctorServiceImpl implements DoctorService {
         Doctor doc = thisdoctor.get();
         em.merge(doc);
         if (!thisdoctor.isPresent()){
-            LOGGER.debug("The Doctor doesn't exist with ID number: {}", id);
+            LOGGER.debug("The Doctor doesn't exist with ID number: {}", idAsInt);
             throw new NotFoundDoctorException("Doctor doesn't exist");
         }
-        LOGGER.debug("Doctor with ID: {} found", id);
+        LOGGER.debug("Doctor with ID: {} found", idAsInt);
         LOGGER.debug("Doctor is: {}", thisdoctor);
         return thisdoctor;
     }

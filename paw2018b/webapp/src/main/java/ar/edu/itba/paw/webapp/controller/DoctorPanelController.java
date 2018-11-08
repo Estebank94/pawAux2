@@ -63,7 +63,7 @@ public class DoctorPanelController {
 
         Doctor doctor = null;
         try {
-            doctor = doctorService.findDoctorById(doctorId).get();
+            doctor = doctorService.findDoctorById(String.valueOf(doctorId)).get();
         } catch (NotFoundDoctorException e) {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
