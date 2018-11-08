@@ -108,8 +108,8 @@
                 <select id="specialty" class="custom-select" cssStyle="cursor: pointer;" onchange="addInput(value, 'addedSpecialties', 'specialty')">
                     <option value="noSpecialty" label="Especialidades" selected="Especialidades"/>
                     <c:forEach items="${specialtyList}" var="specialty">
-                    <option value="${specialty.name}" label="${specialty.name}">
-                        </c:forEach>
+                        <option value="${specialty.speciality}" label="${specialty.speciality}">
+                    </c:forEach>
                 </select>
                     <%--FALTA AGREGAR VALIDACION--%>
                 <form:errors path="specialty" class="wrong"  element="p"></form:errors>
