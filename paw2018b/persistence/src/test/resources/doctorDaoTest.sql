@@ -8,7 +8,18 @@ CREATE TABLE IF NOT EXISTS doctor (
   avatar varchar(100) UNIQUE,
   id IDENTITY PRIMARY KEY,
   workingHours varchar(100),
-  district varchar (50)
+  district varchar (50),
+  profilePicture blob
+);
+
+CREATE TABLE IF NOT EXISTS patient(
+    doctorId INTEGER,
+    firstname VARCHAR(50),
+    lastname VARCHAR(50),
+    phonenumber VARCHAR(20),
+    email VARCHAR(90) UNIQUE,
+    password VARCHAR(72),
+    id IDENTITY PRIMARY KEY
 );
 
 CREATE TABLE IF NOT EXISTS insurance (
@@ -43,6 +54,9 @@ CREATE TABLE IF NOT EXISTS doctorSpecialty(
 );
 
 CREATE TABLE IF NOT EXISTS review(
+  daytime varchar(20),
+  reviewerfirstname varchar(12),
+  reviewerlastname varchar(12),
   description varchar(100),
   stars integer,
   doctorID integer,
@@ -65,6 +79,18 @@ CREATE TABLE IF NOT EXISTS workingHour(
     dayweek integer,
     id IDENTITY PRIMARY KEY,
     FOREIGN KEY (doctorId) REFERENCES doctor(id)
+);
+
+CREATE TABLE IF NOT EXISTS appointment(
+    doctorId integer,
+    clientId integer,
+    appointmentDay varchar(10),
+    appointmentTime VARCHAR (10),
+    identifier VARCHAR (30),
+    appointmentcancelled boolean,
+    id IDENTITY PRIMARY KEY,
+    FOREIGN KEY (doctorId) REFERENCES doctor(id),
+    FOREIGN KEY (clientId) REFERENCES patient(id)
 );
 
 INSERT INTO doctor (firstName, lastName, sex, phoneNumber, address, licence, avatar, id, district)
