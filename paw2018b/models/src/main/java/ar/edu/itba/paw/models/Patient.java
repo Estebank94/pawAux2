@@ -214,10 +214,13 @@ public class Patient {
         LocalDateTime now = LocalDateTime.now();
 
         for (Appointment appointmentIterator: appointments){
-            currentAppointmentTime = getAppointmentDateTime(appointmentIterator);
-            if (currentAppointmentTime.isBefore(now)){
-                addAppointmentInOrderToList(retList, appointmentIterator, currentAppointmentTime);
+            if (!appointmentIterator.getAppointmentCancelled()) {
+                currentAppointmentTime = getAppointmentDateTime(appointmentIterator);
+                if (currentAppointmentTime.isBefore(now)) {
+                    addAppointmentInOrderToList(retList, appointmentIterator, currentAppointmentTime);
+                }
             }
+
         }
         return retList;
     }
@@ -231,4 +234,14 @@ public class Patient {
         return false;
     }
 
+    public List<Doctor> getFavoriteDoctors(){
+        List<Favorite> fav = getFavorites();
+        List<Doctor> ans = new ArrayList<>();
+        for (Favorite favoriteIterator : fav){
+            if (!favoriteIterator.getFavoriteCancelled()){
+                ans.add(favoriteIterator.getDoctor());
+            }
+        }
+        return ans;
+    }
 }
