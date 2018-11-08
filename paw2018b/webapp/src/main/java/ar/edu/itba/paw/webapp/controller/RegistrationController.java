@@ -177,9 +177,9 @@ public class RegistrationController {
         LOGGER.debug("RegistrationController: showDoctorProfile");
         final ModelAndView mav = new ModelAndView("registerSpecialist2");
 
-        mav.addObject("insuranceList", searchService.listInsurances());
-        mav.addObject("insurancePlan", searchService.listInsurancePlans());
-        mav.addObject("specialtyList", searchService.listSpecialties());
+        mav.addObject("insurances", searchService.listInsurances());
+        mav.addObject("insurancePlans", searchService.listInsurancePlans());
+        mav.addObject("specialties", searchService.listSpecialties());
         mav.addObject("wrongInsurancePlan",false)
                 .addObject("wrongCertificate",false)
                 .addObject("wrongWorkingHour",false)

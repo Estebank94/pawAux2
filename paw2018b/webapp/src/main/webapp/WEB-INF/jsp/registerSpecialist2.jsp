@@ -132,8 +132,8 @@
                 <label for="insurance"><strong><spring:message code="insurance"/></strong></label>
                 <select id="insurance" class="custom-select" cssStyle="cursor: pointer;" onchange="myFunc(value)">
                     <option value="no" label="Prepaga" selected="Prepaga"/>
-                    <c:forEach items="${insuranceList}" var="insuranceName">
-                        <option value="${insuranceName.name}" label="${insuranceName.name}"/>
+                    <c:forEach items="${insurances}" var="insurance">
+                        <option value="${insurance.name}" label="${insurance.name}"/>
                     </c:forEach>
                 </select>
                 <form:errors path="insurance" class="wrong"  element="p"></form:errors>
@@ -147,16 +147,15 @@
             <br>
             <div>
                 <div>
+                    <%--TODO FIX INSURANCE--%>
                     <div id="insuranceContainer">
-                        <c:forEach items="${insurancePlan}" var="insurancePlanList">
-                            <c:forEach items="${insurancePlanList.key}" var="insurancePlansName">
-                                <div class="${insurancePlanList.key}" style="display: none">
-                                    <c:forEach  items="${insurancePlanList.value}" var="insurancePlanValue">
-                                        <input type="checkbox" id="insurancePlan" value="${insurancePlanValue}" label="${insurancePlanValue}">${insurancePlanValue}
-                                        </br>
-                                    </c:forEach>
-                                </div>
-                            </c:forEach>
+                        <c:forEach items="${insurances}" var="insurance">
+                            <div class="${insurance.name}" style="display: none">
+                                <c:forEach items="${insurance.plans}" var="plan">
+                                    <input type="checkbox" id="insurancePlan" value="${plan.plan}" label="${plan.plan}">${plan.plan}
+                                    </br>
+                                </c:forEach>
+                            </div>
                         </c:forEach>
                     </div>
                     <br>
@@ -198,7 +197,7 @@
                             <select class="custom-select" id="monEndWorkingHour" disabled="true" onchange="addEndWorkingHour(value, 'mon')">
                                 <option value="no" label="Fin" selected="Fin"/>
                                 <c:forEach items="${professional.workingHours}" var="workingHour">
-                                <option value="${workingHour}" label="${workingHour}">
+                                    <option value="${workingHour}" label="${workingHour}">
                                     </c:forEach>
                             </select>
                                 <%--<form:errors path="workingHoursEnd" class="wrong"  element="p"></form:errors>--%>
