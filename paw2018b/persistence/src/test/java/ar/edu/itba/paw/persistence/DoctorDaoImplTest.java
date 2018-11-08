@@ -86,6 +86,14 @@ public class DoctorDaoImplTest {
         assertEquals(DOCTOR_QUANTITY_BEFORE + 1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "doctor"));
     }
 
+    @Test
+    public void testFindById() {
+        Optional<Doctor> doctor = doctorDao.findDoctorById(DOCTOR_ID);
+
+        assertTrue(doctor.isPresent());
+        assertEquals(DOCTOR_ID, doctor.get().getId());
+    }
+
 //    @Test
 //    public void testFindByName() {
 //        final Search searchByName = new Search();
