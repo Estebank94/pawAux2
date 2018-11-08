@@ -60,7 +60,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Transactional(rollbackFor = SQLException.class)
     @Override
-    private Boolean cancelAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor){
+    public Boolean cancelAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor){
         LOGGER.debug("AppointmentServiceImpl: cancelAppointment");
         Boolean ans = true;
 

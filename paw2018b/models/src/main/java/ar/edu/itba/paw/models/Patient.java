@@ -154,8 +154,8 @@ public class Patient {
         Set<Appointment> all = getFutureAppointments();
 
         for(Appointment appoint : all){
-            if(appointments.containsKey(appoint.getAppointmentDay())){
-                appointments.get(appoint.getAppointmentDay()).add(appoint);
+            if(appointments.containsKey(LocalDate.parse(appoint.getAppointmentDay()))){
+                appointments.get(LocalDate.parse(appoint.getAppointmentDay())).add(appoint);
             }else{
                 List<Appointment> list = new ArrayList<>();
                 list.add(appoint);
