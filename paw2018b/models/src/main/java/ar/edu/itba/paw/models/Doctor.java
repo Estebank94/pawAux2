@@ -474,9 +474,11 @@ public class Doctor {
         LocalDateTime now = LocalDateTime.now();
 
         for (Appointment appointmentIterator: appointments){
-            currentAppointmentTime = getAppointmentDateTime(appointmentIterator);
-            if (currentAppointmentTime.isBefore(now)){
-                addAppointmentInOrderToList(retList, appointmentIterator, currentAppointmentTime);
+            if (!appointmentIterator.getAppointmentCancelled()) {
+                currentAppointmentTime = getAppointmentDateTime(appointmentIterator);
+                if (currentAppointmentTime.isBefore(now)) {
+                    addAppointmentInOrderToList(retList, appointmentIterator, currentAppointmentTime);
+                }
             }
         }
         return retList;
