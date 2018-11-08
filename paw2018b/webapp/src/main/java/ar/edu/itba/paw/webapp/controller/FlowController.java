@@ -88,18 +88,22 @@ public class FlowController {
 	}
 
 	@RequestMapping("/processForm/{page}")
-	public ModelAndView processForm(@ModelAttribute("search") Search search, @PathVariable("page") Integer page) throws NotValidSearchException {
+	public ModelAndView processForm(@ModelAttribute("search") Search search, @PathVariable("page") String page) throws NotValidSearchException {
 		LOGGER.debug("Calling: ProcessForm");
-
 
 		final ModelAndView mav = new ModelAndView("specialists");
 		List<Doctor> doctorsList;
+
 		try	{
 			doctorsList = doctorService.listDoctors(search, page);
 		} catch (NotValidPageException e) {
 			LOGGER.trace("404 error");
 			return new ModelAndView("404");
 		}
+		//catch (NullPointerException e){
+		//	LOGGER.trace("404 error");
+		//	return new ModelAndView("404");
+		//}
 
 
 // if(compressedSearch.isPresent()) {
