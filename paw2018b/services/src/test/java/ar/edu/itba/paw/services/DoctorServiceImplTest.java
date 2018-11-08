@@ -1,91 +1,95 @@
-//package ar.edu.itba.paw.services;
-//
-//import ar.edu.itba.paw.models.*;
-//import org.junit.After;
-//import org.junit.Before;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.mockito.Mockito;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.jdbc.core.JdbcTemplate;
-//import org.springframework.test.context.ContextConfiguration;
-//import org.springframework.test.context.jdbc.Sql;
-//import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-//import org.springframework.test.jdbc.JdbcTestUtils;
-//
-//import javax.sql.DataSource;
-//
-//import java.time.DayOfWeek;
-//import java.time.LocalTime;
-//import java.util.*;
-//
-//import static org.junit.Assert.*;
-//import static org.mockito.Mockito.when;
-//
-//@Sql("classpath:ServiceTest.sql")
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(classes = TestConfig.class)
-//public class DoctorServiceImplTest {
-//
-//    @Autowired
-//    private DoctorServiceImpl doctorServiceImpl;
-//
-//    private Doctor doctor, doctor2, doctor3;
-//    private WorkingHours workingHours;
-//    private Description description;
-//    private Search search;
-//
-//    private static final String DOC_NAME = "Roberto Nicolas Agustin";
-//    private static final String DOC_SECOND_NAME = "Nicolas";
-//    private static final Integer DOC_ID = 1;
-//    private static final String DOC_SPECIALTY = "NUTRICIÓN";
-//    private static final String DOC_INSURANCE = "Accord";
-//    private static final String DOC_INSURANCE_PLAN_AS_STRING = "('Accord Salud')";
-//    private static final String DOC_INSURANCE_PLAN = "Accord Salud";
-//    private static final String DOC_SEX = "M";
-//
-//    private static final String NEW_DOC_NAME = "Marlon Jay";
-//    private static final String NEW_DOC_LASTNAME = "Brando";
-//    private static final String NEW_DOC_PHONE = "47771234";
-//    private static final String NEW_DOC_SEX = "M";
-//    private static final String NEW_DOC_LICENSE = "2020";
-//    private static final String NEW_DOC_AVATAR = "https://d1cesmq0xhh7we.cloudfront.net/cb5ddc05-1d68-48ca-a8ff-baba8239be85circle_medium__v1__.png";
-//    private static final String NEW_DOC_ADDRESS = "Cabildo 650";
-//
-//    private static final int DOCTOR_QUANTITY_BEFORE = 3;
-//
-//    private static final DayOfWeek DAY_OF_WEEK = DayOfWeek.FRIDAY;
-//    private static final LocalTime START = LocalTime.of(9, 10, 50);
-//    private static final LocalTime END = LocalTime.of(11, 45, 20);
-//    private static final String CERTIFICATE = "BACHELOR";
-//    private static final String EDUCATION = "ITBA";
-//
-//    @Autowired
-//    private DataSource ds;
-//
-//    private JdbcTemplate jdbcTemplate;
-//
-//    @Before
-//    public void setUp() {
-//
-//        jdbcTemplate = new JdbcTemplate(ds);
-//
-//        doctor = Mockito.mock(Doctor.class);
-//        doctor2 = Mockito.mock(Doctor.class);
-//        doctor3 = Mockito.mock(Doctor.class);
-//        search = Mockito.mock(Search.class);
-//        when(doctor.getId()).thenReturn(1);
-//        when(doctor2.getId()).thenReturn(2);
-//        when(doctor3.getId()).thenReturn(3);
-//
-//    }
-//
-//    @After
-//    public void tearDown(){
-//        JdbcTestUtils.deleteFromTables(jdbcTemplate, "workingHour", "medicalCare", "doctorSpecialty", "doctor", "insurancePlan", "insurance",
-//                "Specialty", "review", "information", "appointment", "patient");
-//    }
-//
+package ar.edu.itba.paw.services;
+
+import ar.edu.itba.paw.interfaces.DoctorDao;
+import ar.edu.itba.paw.models.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.jdbc.JdbcTestUtils;
+
+import javax.sql.DataSource;
+
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.*;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
+
+@Sql("classpath:ServiceTest.sql")
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestConfig.class)
+public class DoctorServiceImplTest {
+
+    @Autowired
+    private DoctorServiceImpl doctorServiceImpl;
+
+    private Doctor doctor, doctor2, doctor3, createDoctor;
+    private WorkingHours workingHours;
+    private Description description;
+    private Search search;
+
+    private static final String DOC_NAME = "Roberto Nicolas Agustin";
+    private static final String DOC_SECOND_NAME = "Nicolas";
+    private static final Integer DOC_ID = 1;
+    private static final String DOC_SPECIALTY = "NUTRICIÓN";
+    private static final String DOC_INSURANCE = "Accord";
+    private static final String DOC_INSURANCE_PLAN_AS_STRING = "('Accord Salud')";
+    private static final String DOC_INSURANCE_PLAN = "Accord Salud";
+    private static final String DOC_SEX = "M";
+
+    private static final String NEW_DOC_NAME = "Marlon Jay";
+    private static final String NEW_DOC_LASTNAME = "Brando";
+    private static final String NEW_DOC_PHONE = "47771234";
+    private static final String NEW_DOC_SEX = "M";
+    private static final Integer NEW_DOC_LICENSE = 2020;
+    private static final String NEW_DOC_AVATAR = "https://d1cesmq0xhh7we.cloudfront.net/cb5ddc05-1d68-48ca-a8ff-baba8239be85circle_medium__v1__.png";
+    private static final String NEW_DOC_ADDRESS = "Cabildo 650";
+
+    private static final int DOCTOR_QUANTITY_BEFORE = 3;
+
+    private static final DayOfWeek DAY_OF_WEEK = DayOfWeek.FRIDAY;
+    private static final LocalTime START = LocalTime.of(9, 10, 50);
+    private static final LocalTime END = LocalTime.of(11, 45, 20);
+    private static final String CERTIFICATE = "BACHELOR";
+    private static final String EDUCATION = "ITBA";
+
+    @Autowired
+    private DoctorDao doctorDao;
+
+    @Autowired
+    private DataSource ds;
+
+    private JdbcTemplate jdbcTemplate;
+
+    @Before
+    public void setUp() {
+
+        jdbcTemplate = new JdbcTemplate(ds);
+
+        doctor = Mockito.mock(Doctor.class);
+        doctor2 = Mockito.mock(Doctor.class);
+        doctor3 = Mockito.mock(Doctor.class);
+        search = Mockito.mock(Search.class);
+        when(doctor.getId()).thenReturn(1);
+        when(doctor2.getId()).thenReturn(2);
+        when(doctor3.getId()).thenReturn(3);
+
+    }
+
+    @After
+    public void tearDown(){
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "workingHour", "medicalCare", "doctorSpecialty", "doctor", "insurancePlan", "insurance",
+                "Specialty", "review", "information", "appointment", "patient");
+    }
+
 //    @Test
 //    public void testList() {
 //
@@ -139,22 +143,31 @@
 //       assertEquals(doctor.getId(), filteredById.get().getId());
 //
 //    }
-//
-//    @Test
-//    public void testCreate() throws Exception {
-//
-//        Doctor newDoctor = doctorServiceImpl.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, NEW_DOC_ADDRESS, NEW_DOC_AVATAR);
-//
-//        assertNotNull(newDoctor);
-//        assertEquals(NEW_DOC_NAME, newDoctor.getFirstName());
-//        assertEquals(NEW_DOC_LASTNAME, newDoctor.getLastName());
-//        assertEquals(NEW_DOC_PHONE, newDoctor.getPhoneNumber());
-//        assertEquals(NEW_DOC_SEX, newDoctor.getSex());
+
+    @Test
+    public void testCreate() throws Exception {
+
+        createDoctor = Mockito.mock(Doctor.class);
+        when(doctorDao.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, null, NEW_DOC_ADDRESS)).thenReturn(createDoctor);
+        when(createDoctor.getFirstName()).thenReturn(NEW_DOC_NAME);
+        when(createDoctor.getLastName()).thenReturn(NEW_DOC_LASTNAME);
+        when(createDoctor.getPhoneNumber()).thenReturn(NEW_DOC_PHONE);
+        when(createDoctor.getSex()).thenReturn(NEW_DOC_SEX);
+        when(createDoctor.getLicence()).thenReturn(NEW_DOC_LICENSE);
+        when(createDoctor.getAddress()).thenReturn(NEW_DOC_ADDRESS);
+
+        Doctor newDoctor = doctorServiceImpl.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, null, NEW_DOC_ADDRESS);
+
+        assertNotNull(newDoctor);
+        assertEquals(NEW_DOC_NAME, newDoctor.getFirstName());
+        assertEquals(NEW_DOC_LASTNAME, newDoctor.getLastName());
+        assertEquals(NEW_DOC_PHONE, newDoctor.getPhoneNumber());
+        assertEquals(NEW_DOC_SEX, newDoctor.getSex());
 //        assertEquals(NEW_DOC_AVATAR, newDoctor.getAvatar());
-//        assertEquals(NEW_DOC_ADDRESS, newDoctor.getAddress());
+        assertEquals(NEW_DOC_ADDRESS, newDoctor.getAddress());
 //        assertEquals(DOCTOR_QUANTITY_BEFORE + 1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "doctor"));
-//
-//    }
+
+    }
 //
 //    @Test
 //    public void testSetDoctorInfo() throws Exception{
@@ -242,4 +255,4 @@
 //
 //    }
 //
-//}
+}
