@@ -85,7 +85,7 @@ public class DoctorPanelController {
             /*agregar información*/
             else if(doctor.getDescription() == null
                     || doctor.getDescription().getEducation() == null
-                    || doctor.getDescription().getLanguages().contains(null)
+//                    || doctor.getDescription().getLanguages().contains(null)
                     || doctor.getDescription().getCertificate() == null){
                mav.addObject("addInfo", true);
             }
@@ -96,6 +96,8 @@ public class DoctorPanelController {
             mav.addObject("doctor", doctor);
             Map<LocalDate, List<Appointment>> patientAppointment = patient.appointmentsMap();
             mav.addObject("patientAppointments", patientAppointment);
+            List<Appointment> doctorHistoricalAppointments = doctor.getHistoricalAppointments();
+            mav.addObject("doctorHistoricalAppointments", doctorHistoricalAppointments);
 
 
         }else{
