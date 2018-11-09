@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
+import ar.edu.itba.paw.models.Favorite;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
@@ -85,7 +86,7 @@ public class DoctorPanelController {
             /*agregar información*/
             else if(doctor.getDescription() == null
                     || doctor.getDescription().getEducation() == null
-                    || doctor.getDescription().getLanguages().contains(null)
+                    || doctor.getDescription().getLanguages() == null
                     || doctor.getDescription().getCertificate() == null){
                mav.addObject("addInfo", true);
             }
@@ -96,7 +97,12 @@ public class DoctorPanelController {
             mav.addObject("doctor", doctor);
             Map<LocalDate, List<Appointment>> patientAppointment = patient.appointmentsMap();
             mav.addObject("patientAppointments", patientAppointment);
-
+            List<Appointment> doctorHistoricalAppointments = doctor.getHistoricalAppointments();
+            mav.addObject("doctorHistoricalAppointments", doctorHistoricalAppointments);
+            List<Appointment> patientHistoricalAppointments = patient.getHistoricalAppointments();
+            mav.addObject("patientHistoricalAppointments", patientHistoricalAppointments);
+            List<Doctor> favoritesDoctor = patient.getFavoriteDoctors();
+            mav.addObject("favoritesDoctors", favoritesDoctor);
 
         }else{
             /*TODO CHECK IF THE ID IS A REAL DOCTOR*/

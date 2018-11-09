@@ -75,6 +75,9 @@
                         <li class="nav-item">
                             <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"><spring:message code="doctor.patientAppointment"/></a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="history-doc-app-tab" data-toggle="tab" href="#docprofile" role="tab" aria-controls="profile" aria-selected="false"><spring:message code="doctor.historyAppointment"/></a>
+                        </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -135,6 +138,31 @@
                             </c:forEach>
                         </div>
                         <%--<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>--%>
+
+                        <div class="tab-pane fade" id="docprofile" role="tabpanel" aria-labelledby="home-tab">
+                            <br>
+                            <c:forEach items="${doctorHistoricalAppointments}" var="appointment">
+                                <c:if test="${appointment.appointmentCancelled eq false}">
+                                    <div style="margin-left: 16px; margin-right: 16px;">
+                                        <div>
+                                            <div class="row" style="margin: 3px">
+                                                    <%--<img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">--%>
+                                                <div class="center-vertical">
+                                                    <div>
+                                                        <p style="margin-bottom: 0px"><c:out value="${appointment.appointmentDay}"/> <c:out value="${appointment.appointmentTime}"/></p>
+                                                        <h5><b><c:out value="${appointment.patient.lastName}"/></b>,  <c:out value="${appointment.patient.firstName}"/></h5>
+                                                        <p><strong><spring:message code="phone"/>:</strong> <c:out value="${appointment.patient.phoneNumber}"/></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr class="hr-header-sidebar">
+                                        </div>
+                                        <br>
+                                    </div>
+                                </c:if>
+                            </c:forEach>
+                        </div>
+
                     </div>
                 </div>
             </div>

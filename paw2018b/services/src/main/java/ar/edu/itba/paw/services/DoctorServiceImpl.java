@@ -127,6 +127,9 @@ public class DoctorServiceImpl implements DoctorService {
         thisdoctor.get().getWorkingHours().size();
         thisdoctor.get().getAppointments().size();
         thisdoctor.get().getReviews().size();
+        thisdoctor.get().getDescription().getLanguages();
+        thisdoctor.get().getDescription().getCertificate();
+        thisdoctor.get().getDescription().getEducation();
 
         Doctor doc = thisdoctor.get();
         em.merge(doc);
