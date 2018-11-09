@@ -69,16 +69,29 @@
                 <br>
                 <div>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <%-- Appointments as Doctor Tab--%>
                         <li class="nav-item">
                             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><spring:message code="doctor.appointment"/></a>
                         </li>
+                        <%-- Appointments as Patient Tab --%>
                         <li class="nav-item">
                             <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"><spring:message code="doctor.patientAppointment"/></a>
                         </li>
+                        <%-- Historical Appointments as Doctor --%>
                         <li class="nav-item">
-                            <a class="nav-link" id="history-doc-app-tab" data-toggle="tab" href="#docprofile" role="tab" aria-controls="profile" aria-selected="false"><spring:message code="doctor.historyAppointment"/></a>
+                            <a class="nav-link" id="history-doc-app-tab" data-toggle="tab" href="#doc-his" role="tab" aria-controls="profile" aria-selected="false"><spring:message code="doctor.historyAppointment"/></a>
                         </li>
+                        <%-- Historical Appointments as Patient --%>
+                        <li class="nav-item">
+                            <a class="nav-link" id="history-pac-app-tab" data-toggle="tab" href="#pac-his" role="tab" aria-controls="profile" aria-selected="false"><spring:message code="doctor.patientHistoryAppointment"/></a>
+                        </li>
+                        <%-- Favorite Doctors --%>
+                        <li class="nav-item">
+                            <a class="nav-link" id="favorite-doctors-tab" data-toggle="tab" href="#fav-doc" role="tab" aria-controls="profile" aria-selected="false"><spring:message code="patient.favoriteDoctors"/></a>
+                        </li>
+
                     </ul>
+                    <%-- Appointments as Doctor --%>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                             <br>
@@ -108,6 +121,7 @@
                                     </div>
                             </c:forEach>
                         </div>
+                        <%-- Appointments as Patient --%>
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <br>
                             <c:forEach items="${patientAppointments}" var="appointment">
@@ -138,8 +152,8 @@
                             </c:forEach>
                         </div>
                         <%--<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>--%>
-
-                        <div class="tab-pane fade" id="docprofile" role="tabpanel" aria-labelledby="home-tab">
+                        <%-- Historical Appointments as Doctor --%>
+                        <div class="tab-pane fade" id="doc-his" role="tabpanel" aria-labelledby="home-tab">
                             <br>
                             <c:forEach items="${doctorHistoricalAppointments}" var="appointment">
                                 <c:if test="${appointment.appointmentCancelled eq false}">
@@ -162,7 +176,85 @@
                                 </c:if>
                             </c:forEach>
                         </div>
+                        <%-- Historical Appointments as Patient--%>
+                        <div class="tab-pane fade" id="pac-his" role="tabpanel" aria-labelledby="profile-tab">
+                            <br>
+                            <c:forEach items="${patientHistoricalAppointments}" var="appointment">
+                                <c:if test="${appointment.appointmentCancelled eq false}">
+                                    <div style="margin-left: 16px; margin-right: 16px;">
+                                        <div>
+                                            <div class="row" style="margin: 3px">
+                                                    <%--<img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_xh_2017.jpg" class="avatar medium">--%>
+                                                <div class="center-vertical">
+                                                    <div>
+                                                        <p style="margin-bottom: 0px"><c:out value="${appointment.appointmentDay}"/> <c:out value="${appointment.appointmentTime}"/></p>
+                                                        <h5><b><c:out value="${appointment.doctor.lastName}"/></b>,  <c:out value="${appointment.doctor.firstName}"/></h5>
+                                                        <p style="margin-bottom: 0rem;"><strong><spring:message code="phone"/>:</strong> <c:out value="${appointment.doctor.phoneNumber}"/></p>
+                                                        <p><strong><spring:message code="address"/>:</strong> <c:out value="${appointment.doctor.address}"/></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr class="hr-header-sidebar">
+                                        </div>
+                                        <br>
+                                    </div>
 
+                                </c:if>
+                            </c:forEach>
+                        </div>
+                        <%-- Favorite Doctors--%>
+                        <div class="tab-pane fade" id="fav-doc" role="tabpanel" aria-labelledby="profile-tab">
+                            <br>
+                            <c:forEach items="${favoritesDoctors}" var="doctor">
+                                <div class="card card-doctor d-flex flex-x row box" onclick='window.location="<c:url value='/specialist/${doctor.id}'/>"'>
+                                    <img src="/profile-image/${doctor.id}" class="avatar">
+                                    <div class="card-body">
+                                        <h3 class="doctor-name">${doctor.lastName}, ${doctor.firstName}</h3>
+                                        <div class="row-container">
+                                             <c:forEach items="${doctor.specialties}" var="doctorSpecialty">
+                                                 <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty.speciality}"/></p>
+                                             </c:forEach>
+                                        </div>
+                                        <c:if test="${doctor.reviews.size() == 0}">
+                                            <br>
+                                        </c:if>
+                                        <c:if test="${doctorListItem.reviews.size() > 0}">
+                                            <div style="margin-top:8px; margin-bottom:8px;" class="container row">
+                                                <c:forEach begin = "1" end = "${doctorListItem.calculateAverageRating()}">
+                                                    <i class="fas fa-star star-yellow star-small"></i>
+                                                </c:forEach>
+                                            </div>
+                                        </c:if>
+                                    </div>
+
+                                </div>
+                            </c:forEach>
+                               <%--
+                                <div style="margin-left: 16px; margin-right: 16px;">
+                                    <h3>
+                                        <c:out value="${appointment.key.dayOfMonth}"/>-<c:out value="${appointment.key.monthValue}"/>-<c:out value="${appointment.key.year}"/>
+                                    </h3>
+                                    <br>
+                                    <c:forEach items="${appointment.value}" var="listItems">
+                                        <div>
+                                            <div class="row" style="margin: 3px">
+                                                <div class="center-vertical">
+                                                    <div>
+                                                        <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
+                                                        <h5><b><c:out value="${listItems.doctorLastName}"/></b>,  <c:out value="${listItems.doctorFirstName}"/></h5>
+                                                        <p style="margin-bottom: 0rem;"><strong><spring:message code="phone"/>:</strong> <c:out value="${listItems.doctorPhonenumber}"/></p>
+                                                        <p><strong><spring:message code="address"/>:</strong> <c:out value="${listItems.doctorAddress}"/></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr class="hr-header-sidebar">
+                                        </div>
+                                        <br>
+                                    </c:forEach>
+                                </div>
+                            </c:forEach>
+                            --%>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -34,6 +34,7 @@ public class Patient {
     private Doctor doctor;
 
     @OneToMany(mappedBy="patient", cascade = {CascadeType.PERSIST})
+    @LazyCollection(LazyCollectionOption.FALSE)
     List<Favorite> favorites;
 
 
