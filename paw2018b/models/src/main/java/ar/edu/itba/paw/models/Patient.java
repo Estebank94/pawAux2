@@ -229,7 +229,11 @@ public class Patient {
     public Boolean isFavorite(Doctor doctor){
         for(Favorite favorite : favorites){
             if(favorite.getDoctor().equals(doctor)){
-                return true;
+                if (favorite.getFavoriteCancelled()){
+                    return false;
+                } else {
+                    return true;
+                }
             }
         }
         return false;

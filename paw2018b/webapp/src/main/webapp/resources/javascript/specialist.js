@@ -56,3 +56,8 @@ function addFavorite() {
     $('#favorite').append('<input type="hidden" name="action" value="add" id="action"/>');
     $( "#favorite" ).submit();
 }
+
+function removeFavorite() {
+    $('#favorite').append('<input type="hidden" name="action" value="remove" id="action"/>');
+    $("#favorite").submit();
+}
