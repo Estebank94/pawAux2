@@ -19,7 +19,7 @@ import javax.sql.DataSource;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
-@Sql("classpath:ServiceTest.sql")
+//@Sql("classpath:ServiceTest.sql")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 public class PatientServiceImplTest {
@@ -44,23 +44,23 @@ public class PatientServiceImplTest {
     @Autowired
     private PatientDao patientDao;
 
-    @Autowired
-    private DataSource ds;
+//    @Autowired
+//    private DataSource ds;
+//
+//    private JdbcTemplate jdbcTemplate;
 
-    private JdbcTemplate jdbcTemplate;
-
-    @Before
-    public void setUp() {
-
-        jdbcTemplate = new JdbcTemplate(ds);
-
-    }
-
-    @After
-    public void tearDown(){
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "workingHour", "medicalCare", "doctorSpecialty", "doctor", "insurancePlan", "insurance",
-                "Specialty", "review", "information", "appointment", "patient");
-    }
+//    @Before
+//    public void setUp() {
+//
+//        jdbcTemplate = new JdbcTemplate(ds);
+//
+//    }
+//
+//    @After
+//    public void tearDown(){
+//        JdbcTestUtils.deleteFromTables(jdbcTemplate, "workingHour", "medicalCare", "doctorSpecialty", "doctor", "insurancePlan", "insurance",
+//                "Specialty", "review", "information", "appointment", "patient");
+//    }
 
     @Test
     public void testCreatePatient() throws Exception {
