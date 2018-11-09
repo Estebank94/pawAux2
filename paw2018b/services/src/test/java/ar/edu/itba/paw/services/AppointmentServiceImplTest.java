@@ -38,7 +38,6 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
-@Sql("classpath:ServiceTest.sql")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 public class AppointmentServiceImplTest {
@@ -67,24 +66,24 @@ public class AppointmentServiceImplTest {
     @Autowired
     private AppointmentDao appointmentDao;
 
-    @Autowired
-    private DataSource ds;
+//    @Autowired
+//    private DataSource ds;
 
-    private JdbcTemplate jdbcTemplate;
+//    private JdbcTemplate jdbcTemplate;
 
-    @Before
-    public void setUp() {
-
-        jdbcTemplate = new JdbcTemplate(ds);
+//    @Before
+//    public void setUp() {
+//
+//        jdbcTemplate = new JdbcTemplate(ds);
 //        MockitoAnnotations.initMocks(this);
+//
+//    }
 
-    }
-
-    @After
-    public void tearDown(){
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "appointment", "workingHour", "medicalCare", "doctorSpecialty", "doctor", "insurancePlan", "insurance",
-                "Specialty", "review", "information", "patient");
-    }
+//    @After
+//    public void tearDown(){
+//        JdbcTestUtils.deleteFromTables(jdbcTemplate, "appointment", "workingHour", "medicalCare", "doctorSpecialty", "doctor", "insurancePlan", "insurance",
+//                "Specialty", "review", "information", "patient");
+//    }
 
     @Test
     public void testCreateAppointment() throws Exception {

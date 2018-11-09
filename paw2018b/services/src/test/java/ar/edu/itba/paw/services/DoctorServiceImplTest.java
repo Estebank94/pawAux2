@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,7 +14,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.sql.DataSource;
 
 import java.time.DayOfWeek;
@@ -21,9 +27,10 @@ import java.time.LocalTime;
 import java.util.*;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@Sql("classpath:ServiceTest.sql")
+//@Sql("classpath:ServiceTest.sql")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 public class DoctorServiceImplTest {
@@ -35,6 +42,8 @@ public class DoctorServiceImplTest {
     private WorkingHours workingHours;
     private Description description;
     private Search search;
+    private Specialty specialty;
+    private Insurance insurance;
 
     private static final String DOC_NAME = "Roberto Nicolas Agustin";
     private static final String DOC_SECOND_NAME = "Nicolas";
@@ -60,19 +69,32 @@ public class DoctorServiceImplTest {
     private static final LocalTime END = LocalTime.of(11, 45, 20);
     private static final String CERTIFICATE = "BACHELOR";
     private static final String EDUCATION = "ITBA";
+    private static final String LANGUAGE = "English";
 
     @Autowired
     private DoctorDao doctorDao;
 
-    @Autowired
-    private DataSource ds;
+//    @Autowired
+//    private EntityManagerFactory emf;
 
-    private JdbcTemplate jdbcTemplate;
+//    @Autowired
+//    private EntityManager em;
+//
+//    @Mock
+//    private EntityTransaction et;
+//
+//    @Autowired
+//    private PlatformTransactionManager platformTransactionManager;
+
+//    @Autowired
+//    private DataSource ds;
+//
+//    private JdbcTemplate jdbcTemplate;
 
     @Before
     public void setUp() {
 
-        jdbcTemplate = new JdbcTemplate(ds);
+//        jdbcTemplate = new JdbcTemplate(ds);
 
         doctor = Mockito.mock(Doctor.class);
         doctor2 = Mockito.mock(Doctor.class);
@@ -86,8 +108,8 @@ public class DoctorServiceImplTest {
 
     @After
     public void tearDown(){
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "workingHour", "medicalCare", "doctorSpecialty", "doctor", "insurancePlan", "insurance",
-                "Specialty", "review", "information", "appointment", "patient");
+//        JdbcTestUtils.deleteFromTables(jdbcTemplate, "workingHour", "medicalCare", "doctorSpecialty", "doctor", "insurancePlan", "insurance",
+//                "Specialty", "review", "information", "appointment", "patient");
     }
 
 //    @Test
@@ -135,12 +157,20 @@ public class DoctorServiceImplTest {
 //    }
 //
 //    @Test
+//    @Transactional
 //    public void testFindById() throws Exception{
 //
-//        Optional<Doctor> filteredById = filteredById = doctorServiceImpl.findDoctorById(DOC_ID);
+//        when(doctorDao.findDoctorById(DOC_ID)).thenReturn(Optional.of(doctor));
+//        Mockito.when(em.getTransaction()).thenReturn(et);
+////        Mockito.when(em.isJoinedToTransaction()).thenReturn(true);
+////        Mockito.when(em.isOpen()).thenReturn(true);
+////        Mockito.when(em.merge(doctorDao.findDoctorById(Integer.parseInt(DOC_ID.toString())).get())).thenReturn(doctor);
+//        Mockito.when(emf.createEntityManager()).thenReturn(em);
+//
+//        Optional<Doctor> filteredById =  doctorServiceImpl.findDoctorById(DOC_ID.toString());
 //
 //        assertTrue(filteredById.isPresent());
-//       assertEquals(doctor.getId(), filteredById.get().getId());
+//        assertEquals(doctor.getId(), filteredById.get().getId());
 //
 //    }
 
@@ -168,40 +198,45 @@ public class DoctorServiceImplTest {
 //        assertEquals(DOCTOR_QUANTITY_BEFORE + 1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "doctor"));
 
     }
-//
-//    @Test
-//    public void testSetDoctorInfo() throws Exception{
-//
-//        workingHours = Mockito.mock(WorkingHours.class);
-//        description = Mockito.mock(Description.class);
-//
-//        when(workingHours.getStartTime()).thenReturn(START);
-//        when(workingHours.getFinishTime()).thenReturn(END);
-//        when(workingHours.getDayOfWeek()).thenReturn(DAY_OF_WEEK);
-//        when(description.getCertificate()).thenReturn(CERTIFICATE);
-//        when(description.getEducation()).thenReturn(EDUCATION);
-//
-//        Set<String> specialtySet = new HashSet<>();
-//        specialtySet.add(DOC_SPECIALTY);
-//        Set<String> insurancePlanSet = new HashSet<>();
-//        insurancePlanSet.add(DOC_INSURANCE_PLAN);
-//        Map<String, Set<String>> insuranceMap = new HashMap<>();
-//        insuranceMap.put(DOC_INSURANCE, insurancePlanSet);
-//        List<WorkingHours> workingHoursList = new ArrayList<>();
-//        workingHoursList.add(workingHours);
-//        Map<DayOfWeek, List<WorkingHours>> workingHoursMap = new HashMap<>();
-//        workingHoursMap.put(DAY_OF_WEEK, workingHoursList);
-//
-//        final Optional<Doctor> setDoctor = doctorServiceImpl.setDoctorInfo(DOC_ID, specialtySet, insuranceMap, workingHoursList, description);
-//
-//        assertTrue(setDoctor.isPresent());
-//        assertEquals(DOC_ID, setDoctor.get().getId());
-//        assertTrue(setDoctor.get().getInsurance().containsKey(DOC_INSURANCE));
-//        assertTrue(setDoctor.get().getInsurance().containsValue(insurancePlanSet));
-//        assertTrue(setDoctor.get().containsSpecialty(specialtySet));
-//        assertEquals(description, setDoctor.get().getDescription());
-//
-//    }
+
+    @Test
+    public void testSetDoctorInfo() throws Exception{
+
+        Set<Specialty> specialtySet = new HashSet<>();
+        specialtySet.add(specialty);
+        Set<Insurance> insurances = new HashSet<>();
+        insurances.add(insurance);
+        Set<String> insurancePlanSet = new HashSet<>();
+        insurancePlanSet.add(DOC_INSURANCE_PLAN);
+        Map<String, Set<String>> insuranceMap = new HashMap<>();
+        insuranceMap.put(DOC_INSURANCE, insurancePlanSet);
+        List<WorkingHours> workingHoursList = new ArrayList<>();
+        workingHoursList.add(workingHours);
+        Map<DayOfWeek, List<WorkingHours>> workingHoursMap = new HashMap<>();
+        workingHoursMap.put(DAY_OF_WEEK, workingHoursList);
+
+        workingHours = Mockito.mock(WorkingHours.class);
+        description = Mockito.mock(Description.class);
+        specialty = Mockito.mock(Specialty.class);
+        insurance = Mockito.mock(Insurance.class);
+
+        when(doctorDao.findDoctorById(DOC_ID)).thenReturn(Optional.of(doctor));
+        when(doctor.getSpecialties()).thenReturn(specialtySet);
+        when(workingHours.getStartTime()).thenReturn(START.toString());
+        when(workingHours.getFinishTime()).thenReturn(END.toString());
+        when(workingHours.getDayOfWeek()).thenReturn(DAY_OF_WEEK.getValue());
+        when(description.getCertificate()).thenReturn(CERTIFICATE);
+        when(description.getEducation()).thenReturn(EDUCATION);
+        when(description.getLanguages()).thenReturn(LANGUAGE);
+        when(specialty.getSpeciality()).thenReturn(DOC_SPECIALTY);
+        when(insurance.getName()).thenReturn(DOC_INSURANCE);
+
+        final Optional<Doctor> setDoctor = doctorServiceImpl.setDoctorInfo(DOC_ID, specialtySet, insurances, workingHoursList, description);
+
+        assertTrue(setDoctor.isPresent());
+        assertEquals(DOC_ID, setDoctor.get().getId());
+
+    }
 //
 //    @Test
 //    public void testSetDoctorInsurance() {
