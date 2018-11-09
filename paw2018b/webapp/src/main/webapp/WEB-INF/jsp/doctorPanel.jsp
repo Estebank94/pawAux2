@@ -229,31 +229,6 @@
 
                                 </div>
                             </c:forEach>
-                               <%--
-                                <div style="margin-left: 16px; margin-right: 16px;">
-                                    <h3>
-                                        <c:out value="${appointment.key.dayOfMonth}"/>-<c:out value="${appointment.key.monthValue}"/>-<c:out value="${appointment.key.year}"/>
-                                    </h3>
-                                    <br>
-                                    <c:forEach items="${appointment.value}" var="listItems">
-                                        <div>
-                                            <div class="row" style="margin: 3px">
-                                                <div class="center-vertical">
-                                                    <div>
-                                                        <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
-                                                        <h5><b><c:out value="${listItems.doctorLastName}"/></b>,  <c:out value="${listItems.doctorFirstName}"/></h5>
-                                                        <p style="margin-bottom: 0rem;"><strong><spring:message code="phone"/>:</strong> <c:out value="${listItems.doctorPhonenumber}"/></p>
-                                                        <p><strong><spring:message code="address"/>:</strong> <c:out value="${listItems.doctorAddress}"/></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr class="hr-header-sidebar">
-                                        </div>
-                                        <br>
-                                    </c:forEach>
-                                </div>
-                            </c:forEach>
-                            --%>
                         </div>
                     </div>
                 </div>

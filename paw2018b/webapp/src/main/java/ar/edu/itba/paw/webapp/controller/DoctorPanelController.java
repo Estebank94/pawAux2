@@ -101,15 +101,8 @@ public class DoctorPanelController {
             mav.addObject("doctorHistoricalAppointments", doctorHistoricalAppointments);
             List<Appointment> patientHistoricalAppointments = patient.getHistoricalAppointments();
             mav.addObject("patientHistoricalAppointments", patientHistoricalAppointments);
-
             List<Doctor> favoritesDoctor = patient.getFavoriteDoctors();
-            System.out.println();
-            System.out.println();
-            System.out.printf("hay favoriteDoctors" + favoritesDoctor.size());
-            System.out.println();
-            System.out.println();
             mav.addObject("favoritesDoctors", favoritesDoctor);
-            LOGGER.debug("hay favoriteDoctors" + favoritesDoctor.size());
 
         }else{
             /*TODO CHECK IF THE ID IS A REAL DOCTOR*/
