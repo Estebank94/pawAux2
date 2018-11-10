@@ -110,6 +110,7 @@ public class DoctorServiceImpl implements DoctorService {
         if (String.valueOf(Integer.MAX_VALUE).length() < idAsString.length()){
             LOGGER.debug("Doctor ID can't have more than "+ String.valueOf(Integer.MAX_VALUE).length() + " numbers. " +
                     "The ID given is: {}", idAsString);
+            throw new NotValidIDException("Id number");
         }
 
         int idAsInt = Integer.parseInt(idAsString);
@@ -154,9 +155,10 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     @Transactional
-    public Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, Integer licence,
+    public Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, String licence,
                                byte[] avatar, String address) throws NotValidFirstNameException, NotValidLastNameException, NotValidPhoneNumberException, NotCreateDoctorException, RepeatedLicenceException, NotValidSexException, NotValidLicenceException, NotValidAddressException {
         LOGGER.debug("DoctorServiceImpl: createDoctor");
+
         if (firstName == null){
             LOGGER.debug("The First Name of a Doctor can't be null");
             throw new NotValidFirstNameException("firstName can't be null");
@@ -231,19 +233,28 @@ public class DoctorServiceImpl implements DoctorService {
             LOGGER.debug("The Licence of a Doctor can't be null");
             throw new NotValidLicenceException("licence can't be null");
         }
-        if (licence <= 0){
+
+        if (!licence.matches("[0-9]+")){
+            LOGGER.debug("The licence of a Doctor only can have numbers");
+            throw new NotValidLicenceException("The licence of a Doctor only can have numbers");
+        }
+
+        if (String.valueOf(Integer.MAX_VALUE).length() < licence.length()){
+            LOGGER.debug("Licence can't have more than "+ String.valueOf(Integer.MAX_VALUE).length()+ " digits. " +
+            "The licence given is: {}",licence);
+            throw new NotValidLicenceException("Licence is bigger than biggert licence");
+        }
+        int licenceAsInt = Integer.parseInt(licence);
+
+        if (licenceAsInt <= 0){
             LOGGER.debug("The Licence of a Doctor can't have 0 characters");
             throw new NotValidLicenceException("licence can't be empty");
         }
 
-        if (licence >= Integer.MAX_VALUE){
+        if (licenceAsInt >= Integer.MAX_VALUE){
             LOGGER.debug("The Licence of a Doctor can't have more than 9 characters. The Licence given is: {}", licence);
             throw new NotValidLicenceException("licence can't have more than 10 characters");
         }
-//        if (Integer.valueOf(licence) > Integer.MAX_VALUE){
-//            LOGGER.debug("The Licence of a Doctor can't have more than 9 characters. The Licence given is: {}", licence);
-//            throw new NotValidLicenceException("licence can't have more than 10 characters");
-//        }
 
         if (address == null) {
             LOGGER.debug("The address of a Doctor can't be null");
@@ -267,13 +278,13 @@ public class DoctorServiceImpl implements DoctorService {
         LOGGER.debug("Doctor's Last Name: {}", lastName);
         LOGGER.debug("Doctor's Phone Number: {}", phoneNumber);
         LOGGER.debug("Doctor's Sex: {}", sex);
-        LOGGER.debug("Doctor's Licence: {}", licence);
+        LOGGER.debug("Doctor's Licence: {}", licenceAsInt);
         LOGGER.debug("Doctor's Avatar: {}", avatar);
         LOGGER.debug("Doctor's Address: {}", address);
         Doctor doctor;
 
         try {
-            doctor = doctorDao.createDoctor(firstName, lastName, phoneNumber, sex, licence, avatar, address);
+            doctor = doctorDao.createDoctor(firstName, lastName, phoneNumber, sex, licenceAsInt, avatar, address);
         } catch (NotCreateDoctorException e) {
             throw new NotCreateDoctorException();
         } catch (RepeatedLicenceException e) {
