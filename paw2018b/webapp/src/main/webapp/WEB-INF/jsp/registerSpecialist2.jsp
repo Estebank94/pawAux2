@@ -109,7 +109,7 @@
                 <label for="specialty"><strong><spring:message code="registration.specialty"/></strong></label>
                 <select id="specialty" class="custom-select" cssStyle="cursor: pointer;" onchange="addInput(value, 'addedSpecialties', 'specialty')">
                     <option value="noSpecialty" label="Especialidades" selected="Especialidades"/>
-                    <c:forEach items="${specialtyList}" var="specialty">
+                    <c:forEach items="${specialties}" var="specialty">
                         <option value="${specialty.speciality}" label="${specialty.speciality}">
                     </c:forEach>
                 </select>

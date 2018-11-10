@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
@@ -19,6 +21,7 @@ public class Insurance {
     private String name;
 
     @OneToMany(mappedBy = "insurance")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<InsurancePlan> plans;
 
     public Insurance(String name){

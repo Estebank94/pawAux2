@@ -88,9 +88,8 @@ public class RegistrationController {
 
             final ModelAndView mav = new ModelAndView("registerSpecialist2");
             mav.addObject("professional", new ProfessionalForm());
-            mav.addObject("insuranceList", searchService.listInsurances());
-            mav.addObject("insurancePlan", searchService.listInsurancePlans());
-            mav.addObject("specialtyList", searchService.listSpecialties());
+            mav.addObject("insurances", searchService.listInsurances());
+            mav.addObject("specialties", searchService.listSpecialties());
             mav.addObject("noLanguage", true);
             mav.addObject("noEducation", true);
             mav.addObject("noCertificate", true);
@@ -178,7 +177,6 @@ public class RegistrationController {
         final ModelAndView mav = new ModelAndView("registerSpecialist2");
 
         mav.addObject("insurances", searchService.listInsurances());
-        mav.addObject("insurancePlans", searchService.listInsurancePlans());
         mav.addObject("specialties", searchService.listSpecialties());
         mav.addObject("wrongInsurancePlan",false)
                 .addObject("wrongCertificate",false)

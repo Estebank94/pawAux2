@@ -113,12 +113,12 @@
                                     <c:set var="lastName" value="${doctor.lastName}"/>
                                     <h3 class="doctor-name"><spring:message argumentSeparator=";" htmlEscape="false" arguments="${name}; ${lastName}" code="general.doctorName"/></h3>
                                     <security:authorize access="isAuthenticated()">
-                                        <c:if test="${user.isFavorite(doctor)}">
+                                        <c:if test="${isFavorite}">
                                             <form:form modelAttribute="favorite" method="POST" action="${specialist_id}" id="favorite">
                                                 <div class="heart-added" onclick="removeFavorite()"></div>
                                             </form:form>
                                         </c:if>
-                                        <c:if test="${!user.isFavorite(doctor)}">
+                                        <c:if test="${!isFavorite}">
                                             <form:form modelAttribute="favorite" method="POST" action="${specialist_id}" id="favorite">
                                                 <div class="heart" onclick="addFavorite()"></div>
                                                 <%--<div class="heart" onclick="addFavorite('${user.id}', '${doctor.id}')"></div>--%>

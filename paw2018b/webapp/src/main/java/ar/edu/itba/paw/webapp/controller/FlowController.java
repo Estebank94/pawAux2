@@ -220,6 +220,17 @@ public class FlowController {
 						Patient patient = patientService.findPatientByEmail(authentication.getName());
 						mav.addObject("user", patient);
 						mav.addObject("doctorID", doctor.getId());
+						boolean isFavorite = patient.isFavorite(doctor);
+						System.out.println(isFavorite);
+
+					}
+					hasUserRole = authentication.getAuthorities().stream()
+							.anyMatch(r -> r.getAuthority().equals("ROLE_PATIENT"));
+					if(hasUserRole){
+						Patient patient = patientService.findPatientByEmail(authentication.getName());
+						mav.addObject("user", patient);
+						mav.addObject("isFavorite", patient.isFavorite(doctor));
+
 					}
 				}
 //				Patient patient = patientService.findPatientByEmail(authentication.getName());
