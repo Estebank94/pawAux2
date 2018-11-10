@@ -58,7 +58,7 @@ public class DoctorServiceImplTest {
     private static final String NEW_DOC_LASTNAME = "Brando";
     private static final String NEW_DOC_PHONE = "47771234";
     private static final String NEW_DOC_SEX = "M";
-    private static final Integer NEW_DOC_LICENSE = 2020;
+    private static final String NEW_DOC_LICENSE = String.valueOf(2020);
     private static final String NEW_DOC_AVATAR = "https://d1cesmq0xhh7we.cloudfront.net/cb5ddc05-1d68-48ca-a8ff-baba8239be85circle_medium__v1__.png";
     private static final String NEW_DOC_ADDRESS = "Cabildo 650";
 
@@ -178,12 +178,12 @@ public class DoctorServiceImplTest {
     public void testCreate() throws Exception {
 
         createDoctor = Mockito.mock(Doctor.class);
-        when(doctorDao.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, null, NEW_DOC_ADDRESS)).thenReturn(createDoctor);
+        when(doctorDao.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, Integer.parseInt(NEW_DOC_LICENSE), null, NEW_DOC_ADDRESS)).thenReturn(createDoctor);
         when(createDoctor.getFirstName()).thenReturn(NEW_DOC_NAME);
         when(createDoctor.getLastName()).thenReturn(NEW_DOC_LASTNAME);
         when(createDoctor.getPhoneNumber()).thenReturn(NEW_DOC_PHONE);
         when(createDoctor.getSex()).thenReturn(NEW_DOC_SEX);
-        when(createDoctor.getLicence()).thenReturn(NEW_DOC_LICENSE);
+       // when(createDoctor.getLicence()).thenReturn(NEW_DOC_LICENSE);
         when(createDoctor.getAddress()).thenReturn(NEW_DOC_ADDRESS);
 
         Doctor newDoctor = doctorServiceImpl.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, NEW_DOC_LICENSE, null, NEW_DOC_ADDRESS);
