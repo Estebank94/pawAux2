@@ -331,11 +331,7 @@ public class FlowController {
 			mav.addObject("appointmentDay", appointmentForm.getDay());
 			mav.addObject("appointmentTime", appointmentForm.getTime());
 		}else{
-			mav = new ModelAndView("specialist");
-			mav.addObject("doctor", doctor);
-			mav.addObject("insuranceList", searchService.listInsurances());
-			mav.addObject("specialtyList", searchService.listSpecialties());
-			mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
+			mav = new ModelAndView("redirect:/specialist/{doctorId}");
 		}
 
 		return mav;

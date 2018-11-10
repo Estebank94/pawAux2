@@ -79,7 +79,6 @@
 </nav>
 
 <div class="navbar-search sticky-top">
-<%--action="${postPath}--%>
     <c:url value="/processForm/0" var="processForm"/>
     <form:form action="${processForm}" method="GET" modelAttribute="search" accept-charset="ISO-8859-1">
         <div id="search-bar" class="input-group container">
