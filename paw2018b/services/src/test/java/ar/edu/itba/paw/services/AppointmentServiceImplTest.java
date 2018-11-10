@@ -3,7 +3,6 @@
 package ar.edu.itba.paw.services;
 
 
-import ar.edu.itba.paw.App;
 import ar.edu.itba.paw.interfaces.AppointmentDao;
 import ar.edu.itba.paw.interfaces.DoctorDao;
 import ar.edu.itba.paw.models.Appointment;
