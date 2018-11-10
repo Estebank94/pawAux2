@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.InsurancePlan;
 import ar.edu.itba.paw.models.Specialty;
 import ar.edu.itba.paw.models.WorkingHours;
 import com.sun.corba.se.spi.orbutil.threadpool.Work;
+import com.sun.xml.internal.fastinfoset.util.CharArray;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
@@ -269,12 +270,33 @@ public class ProfessionalForm {
     public List<InsurancePlan> getInsurancePlans(){
         List<InsurancePlan> list = new ArrayList<>();
         for(String s : getInsurancePlan()){
-            list.add(new InsurancePlan(s));
+            List<String> plans = insuranceParser(s);
+            for(String p : plans){
+                list.add(new InsurancePlan(p));
+            }
         }
         return (list.isEmpty() ? Collections.EMPTY_LIST : list);
     }
 
+    /* Esto me deberia devolver un List de Strings de 2 */
+    private List<String> insuranceParser(String insurancePlan){
+        List<String> l = new ArrayList<>();
+        StringBuilder s = new StringBuilder();
+        char[] c = insurancePlan.toCharArray();
+
+        for(int i = 0; i<insurancePlan.length(); i++){
+            if(c[i] == ','){
+                l.add(s.toString());
+                s = new StringBuilder();
+            }else {
+                s.append(c[i]);
+            }
+        }
+        l.add(s.toString());
+        return l;
+    }
 }
+
 
 
 //    WorkingHours(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime finishTime )
