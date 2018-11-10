@@ -12,19 +12,19 @@ public class PersonalForm {
 
     @Length(min=3, max=45, message = "Cantidad de caracteres incorrecto. Su nombre debe contener entre 3 y 45 caracteres")
     @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su nombre")
-    @Pattern(regexp = "^[a-zA-Z\\s]*$", message = "Su nombre no puede contener simbolos que no sean letras y espacios")
+    @Pattern(regexp = "^[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]*$", message = "Su nombre no puede contener simbolos que no sean letras y especios")
     private String firstName;
 
     @Length(min=2, max=45, message = "Cantidad de caracteres incorrecto. Su apellido debe contener entre 2 y 45 caracteres")
     @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su apellido")
-    @Pattern(regexp = "^[a-zA-Z\\s]*$", message = "Su apellido no puede contener simbolos que no sean letras y espacios")
+    @Pattern(regexp = "^[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]*$", message = "Su nombre no puede contener simbolos que no sean letras y especios")
     private String lastName;
 
     @Email(message = "El email ingresado es invalido. Por favor, ingrese un email valido")
     @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su email")
     private String email;
 
-    @Length(min=6, max=10, message = "Cantidad de caracteres incorrecto. Su contraseña debe contener entre 6 y 10 caracteres")
+    @Length(min=6, max=55, message = "Cantidad de caracteres incorrecto. Su contraseña debe contener entre 6 y 55 caracteres y un número")
     @NotEmpty(message = "Este campo es obligatorio.Por favor, ingrese una contraseña")
     @Pattern(regexp = "[a-zA-Z0-9]+", message = "Su contraseña debe contener al menos un número. Por favor, reingrese una contraseña valida")
     private String password;
