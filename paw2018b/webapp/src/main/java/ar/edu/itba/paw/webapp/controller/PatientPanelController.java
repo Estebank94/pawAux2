@@ -65,8 +65,6 @@ public class PatientPanelController {
         mav.addObject("patientAppointments", patientAppointment);
         List<Appointment> patientHistoricalAppointments = patient.getHistoricalAppointments();
         mav.addObject("patientHistoricalAppointments",patientHistoricalAppointments);
-        List<Doctor> favoritesDoctors = patient.getFavoriteDoctors();
-        mav.addObject("favoritesDoctors", favoritesDoctors);
 
         return mav;
     }

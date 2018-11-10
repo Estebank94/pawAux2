@@ -114,42 +114,125 @@
     </div>
 </div>
 
-<div class="container">
-    <div class="margin-big">
-        <p class="jumbotron-subtitle"><spring:message code="explanation.title" /></p>
-        <p class="jumbotron-text"><spring:message code="explanation.subtitle" /></p>
-    </div>
+<security:authorize access="!isAuthenticated()">
+    <div class="container">
+        <div class="margin-big">
+            <p class="jumbotron-subtitle"><spring:message code="explanation.title" /></p>
+            <p class="jumbotron-text"><spring:message code="explanation.subtitle" /></p>
+        </div>
 
-    <div class="d-flex flex-row margin-bottom-medium">
-        <img src="https://i.imgur.com/StIDems.jpg" class="image-rectangle">
-        <div>
-            <div class="list-home">
-                <h3><spring:message code="explanation.searchTitle" /></h3>
-                <p class="doctor-text"><spring:message code="explanation.searchSubtitle" /></p>
+        <div class="d-flex flex-row margin-bottom-medium">
+            <img src="https://i.imgur.com/StIDems.jpg" class="image-rectangle">
+            <div>
+                <div class="list-home">
+                    <h3><spring:message code="explanation.searchTitle" /></h3>
+                    <p class="doctor-text"><spring:message code="explanation.searchSubtitle" /></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-row-reverse margin-bottom-medium">
+            <img src="https://i.imgur.com/N7X4FiE.jpg" class="image-rectangle-right">
+            <div>
+                <div class="list-home-right">
+                    <h3><spring:message code="explanation.chooseTitle" /></h3>
+                    <p><spring:message code="explanation.chooseSubtitle" /></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-row margin-bottom-medium">
+            <img src="https://i.imgur.com/yjHKj1P.jpg" class="image-rectangle">
+            <div>
+                <div class="list-home">
+                    <h3><spring:message code="explanation.reserveTitle" /></h3>
+                    <p><spring:message code="explanation.reserveSubtitle" /></p>
+                </div>
             </div>
         </div>
     </div>
+</security:authorize>
+<security:authorize access="isAuthenticated()">
+    <c:if test="${patient.favorites.size() > 0}">
+        <div class="container">
+            <div class="margin-big">
+                <p class="jumbotron-subtitle">¿Te sentis mal?</p>
+                <p class="jumbotron-text">Tranquilo, tus medicos favoritos estan para ayudarte.</p>
+            </div>
+            <c:forEach items="${patient.favorites}" var="favorite">
+                <div class="card card-doctor d-flex flex-row box"  onclick='window.location="<c:url value='/specialist/${favorite.doctor.id}'/>"'>
+                    <img src="/profile-image/${favorite.doctor.id}" class="avatar">
+                    <div class="card-body">
+                        <div class="card-text">
+                            <h3 class="doctor-name">${favorite.doctor.lastName}, ${favorite.doctor.firstName}</h3>
+                            <div class="row container">
+                                <c:forEach items="${favorite.doctor.specialties}" var="doctorSpecialty">
+                                    <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty.speciality}"/></p>
+                                </c:forEach>
+                            </div>
+                            <c:if test="${favorite.doctor.reviews.size() == 0}">
+                                <br>
+                            </c:if>
 
-    <div class="d-flex flex-row-reverse margin-bottom-medium">
-        <img src="https://i.imgur.com/N7X4FiE.jpg" class="image-rectangle-right">
-        <div>
-            <div class="list-home-right">
-                <h3><spring:message code="explanation.chooseTitle" /></h3>
-                <p><spring:message code="explanation.chooseSubtitle" /></p>
+                            <c:if test="${favorite.doctor.reviews.size() > 0}">
+                                <div style="margin-top:8px; margin-bottom:8px;" class="container row">
+                                    <c:forEach begin = "1" end = "${favorite.doctor.calculateAverageRating()}">
+                                        <i class="fas fa-star star-yellow star-small"></i>
+                                    </c:forEach>
+                                </div>
+                            </c:if>
+
+                            <p class="doctor-text">${favorite.doctor.description.certificate}</p>
+                            <br>
+                            <p class="doctor-text"><i class="fas fa-map-marker-alt"></i> ${favorite.doctor.address}, CABA</p>
+                        </div>
+                    </div>
+                </div>
+            </c:forEach>
+            <br>
+            <br>
+        </div>
+    </c:if>
+    <c:if test="${patient.favorites.size() == 0}">
+        <div class="container">
+            <div class="margin-big">
+                <p class="jumbotron-subtitle"><spring:message code="explanation.title" /></p>
+                <p class="jumbotron-text"><spring:message code="explanation.subtitle" /></p>
+            </div>
+
+            <div class="d-flex flex-row margin-bottom-medium">
+                <img src="https://i.imgur.com/StIDems.jpg" class="image-rectangle">
+                <div>
+                    <div class="list-home">
+                        <h3><spring:message code="explanation.searchTitle" /></h3>
+                        <p class="doctor-text"><spring:message code="explanation.searchSubtitle" /></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-row-reverse margin-bottom-medium">
+                <img src="https://i.imgur.com/N7X4FiE.jpg" class="image-rectangle-right">
+                <div>
+                    <div class="list-home-right">
+                        <h3><spring:message code="explanation.chooseTitle" /></h3>
+                        <p><spring:message code="explanation.chooseSubtitle" /></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-row margin-bottom-medium">
+                <img src="https://i.imgur.com/yjHKj1P.jpg" class="image-rectangle">
+                <div>
+                    <div class="list-home">
+                        <h3><spring:message code="explanation.reserveTitle" /></h3>
+                        <p><spring:message code="explanation.reserveSubtitle" /></p>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </c:if>
 
-    <div class="d-flex flex-row margin-bottom-medium">
-        <img src="https://i.imgur.com/yjHKj1P.jpg" class="image-rectangle">
-        <div>
-            <div class="list-home">
-                <h3><spring:message code="explanation.reserveTitle" /></h3>
-                <p><spring:message code="explanation.reserveSubtitle" /></p>
-            </div>
-        </div>
-    </div>
-</div>
+</security:authorize>
 
 <!--<div class="footer-grey">
   <div class="container">
