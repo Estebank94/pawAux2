@@ -320,7 +320,7 @@ public class RegistrationController {
         boolean doctorTime = false;
         if(doctor.getWorkingHours().isEmpty() && professionalForm.workingHoursList().isEmpty()){ doctorTime = true; }
 
-        if(errors.hasErrors() /* || doctorTime ||specialtyExists || medicalCareExists*/){
+        if(errors.hasErrors()  || doctorTime /*specialtyExists || medicalCareExists*/){
             return showDoctorProfile(professionalForm);
         }
 
@@ -352,7 +352,6 @@ public class RegistrationController {
             doctorService.setDoctorSpecialty(doctor, professionalForm.getSpecialties());
             if(insurance != null){
                 LOGGER.debug("SET Doctor's insurance to DB");
-                /*TODO: falta setear esto en la base de datos*/
                 doctorService.setDoctorInsurancePlans(doctor, professionalForm.getInsurancePlans());
             }
             if(workingHours != null){
