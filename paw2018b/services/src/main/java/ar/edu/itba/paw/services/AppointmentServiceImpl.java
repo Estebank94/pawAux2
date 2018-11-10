@@ -29,7 +29,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DoctorServiceImpl.class);
 
-    @Transactional(rollbackFor= SQLException.class)
+    @Transactional/*(rollbackFor= SQLException.class)*/
     @Override
     public Appointment createAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) throws RepeatedAppointmentException, NotCreatedAppointmentException, NotValidDoctorIdException, NotValidAppointmentDayException, NotValidAppointmentTimeException, NotFoundDoctorException, NotValidPatientIdException {
         LOGGER.debug("AppointmentServiceImpl: CreateAppointment");
