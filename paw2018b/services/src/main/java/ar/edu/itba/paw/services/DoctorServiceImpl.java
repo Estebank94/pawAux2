@@ -337,35 +337,34 @@ public class DoctorServiceImpl implements DoctorService {
 //            doctorSpecialtyDao.addDoctorSpecialtyList(doctor.getId(),specialty.get());
 //        }
 //
-//        if (workingHours == null){
-//            LOGGER.debug("The Working Hours of a Doctor can't be null. Doctor ID: {}", doctorId);
-//            throw new NotValidWorkingHourException("The Working Hours list can't be null");
-//        }
-//        for (WorkingHours wh: workingHours){
-//            if (wh == null){
-//                LOGGER.debug("The Working Hour list contains a null working hour. Day: {}", wh.getDayOfWeek());
-//                throw new NotValidWorkingHourException("The Working Hours list contains a null working hour");
-//            }
-//            if (wh.getFinishTime() == null){
-//                LOGGER.debug("The Finish Time on {} is null. There can't be a null finish time", wh.getDayOfWeek());
-//                throw new NotValidWorkingHourException("Finish Time from a Working Hour is null");
-//            }
-//            if (wh.getStartTime() == null) {
-//                LOGGER.debug("The Start Time on {} is null. There can't be a null starting time", wh.getDayOfWeek());
-//                throw new NotValidWorkingHourException("StartTime from a Working Hour is null");
-//            }
-//            if (wh.getDayOfWeek() == null){
-//                LOGGER.debug("There is a null DayOfWeek. The working hour is {}", wh);
-//                throw new NotValidWorkingHourException("DayOfWeek from a working hour is null");
-//            }
-//        }
-//        LOGGER.debug("Set working hours to Doctor with ID: {}", doctorId);
-//        doctor.setWorkingHours(workingHours);
-//        LOGGER.debug("Add working hours to DAO");
-//        LOGGER.debug("Doctor with ID: {}", doctor.getId());
-//        LOGGER.debug("Doctor's working hours {}", workingHours);
-////        workingHoursDao.addWorkingHour(doctor.getId(), workingHours);
-//        workingHoursDao.addWorkingHour( workingHours);
+        if (workingHours == null){
+            LOGGER.debug("The Working Hours of a Doctor can't be null. Doctor ID: {}", doctorId);
+            throw new NotValidWorkingHourException("The Working Hours list can't be null");
+        }
+        for (WorkingHours wh: workingHours){
+            if (wh == null){
+                LOGGER.debug("The Working Hour list contains a null working hour. Day: {}", wh.getDayOfWeek());
+                throw new NotValidWorkingHourException("The Working Hours list contains a null working hour");
+            }
+            if (wh.getFinishTime() == null){
+                LOGGER.debug("The Finish Time on {} is null. There can't be a null finish time", wh.getDayOfWeek());
+                throw new NotValidWorkingHourException("Finish Time from a Working Hour is null");
+            }
+            if (wh.getStartTime() == null) {
+                LOGGER.debug("The Start Time on {} is null. There can't be a null starting time", wh.getDayOfWeek());
+                throw new NotValidWorkingHourException("StartTime from a Working Hour is null");
+            }
+            if (wh.getDayOfWeek() == null){
+                LOGGER.debug("There is a null DayOfWeek. The working hour is {}", wh);
+                throw new NotValidWorkingHourException("DayOfWeek from a working hour is null");
+            }
+        }
+        LOGGER.debug("Set working hours to Doctor with ID: {}", doctorId);
+        //doctor.setWorkingHours(workingHours);
+        LOGGER.debug("Add working hours to DAO");
+        LOGGER.debug("Doctor with ID: {}", doctor.getId());
+        LOGGER.debug("Doctor's working hours {}", workingHours);
+        //workingHoursDao.addWorkingHour( workingHours);
 
 //        if (insurance == null){
 //            LOGGER.debug("The insurance map of the doctor with ID: {} is null", doctorId);
