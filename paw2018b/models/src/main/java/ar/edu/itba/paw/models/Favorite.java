@@ -22,7 +22,7 @@ public class Favorite {
     @JoinColumn(name = "patientid")
     private Patient patient;
 
-    private Boolean favoriteCancelled;
+    private boolean favoriteCancelled;
 
     public Favorite(Doctor doctor, Patient patient, Boolean favoriteCancelled) {
         this.doctor = doctor;

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
+import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Optional;
 
@@ -28,8 +29,8 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FavoriteServiceImpl.class);
 
+    @Transactional(rollbackFor = SQLException.class)
     @Override
-    @Transactional
     public void addFavorite(Doctor doctor, Patient patient) throws NotCreatedFavoriteException {
         LOGGER.debug("FavoriteServiceImpl: addFavorite");
 
@@ -57,8 +58,8 @@ public class FavoriteServiceImpl implements FavoriteService {
         return;
     }
 
+    @Transactional(rollbackFor = SQLException.class)
     @Override
-    @Transactional
     public void removeFavorite(Doctor doctor, Patient patient) throws NotRemoveFavoriteException {
         Optional<Favorite> favorite;
         Favorite fav = null;
