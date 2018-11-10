@@ -82,7 +82,8 @@
 
 <div class="navbar-search sticky-top">
     <%--action="${postPath}--%>
-    <form:form action="processForm" method="GET" modelAttribute="search" accept-charset="ISO-8859-1">
+    <c:url value="/processForm/0" var="processForm"/>
+    <form:form action="${processForm}" method="GET" modelAttribute="search" accept-charset="ISO-8859-1">
         <div id="search-bar" class="input-group container">
             <form:input type="text" aria-label="Buscar por especialista" placeholder="Buscar por nombre del médico" class="form-control" path="name"/>
             <form:select class="custom-select specialist-select" id="specialty" path="specialty" cssStyle="cursor: pointer;">
@@ -199,8 +200,8 @@
                                                 <form:radiobutton path="sex" value="ALL"/> Todos <br>
                                                 <c:forEach items="${sexList}" var="sex">
                                                     <form:radiobutton path="sex" value="${sex}"/>
-                                                    <c:if test="${sex.equals('M')}"><spring:message code="male"/><br></c:if>
-                                                    <c:if test="${sex.equals('F')}"><spring:message code="female"/><br></c:if>
+                                                    <c:if test="${sex.equals('M')}"><spring:message code="registration.male"/><br></c:if>
+                                                    <c:if test="${sex.equals('F')}"><spring:message code="registration.female"/><br></c:if>
                                                 </c:forEach>
                                             </div>
                                         </c:if>
