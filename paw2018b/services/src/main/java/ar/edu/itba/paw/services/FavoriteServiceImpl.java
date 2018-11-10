@@ -4,6 +4,8 @@ import ar.edu.itba.paw.interfaces.FavoriteDao;
 import ar.edu.itba.paw.interfaces.FavoriteService;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Favorite;
+import ar.edu.itba.paw.models.exceptions.NotCreatedFavoriteException;
+import ar.edu.itba.paw.models.exceptions.NotRemoveFavoriteException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ar.edu.itba.paw.models.Patient;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Optional;
 
 /**
@@ -27,7 +30,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     @Transactional
-    public void addFavorite(Doctor doctor, Patient patient) {
+    public void addFavorite(Doctor doctor, Patient patient) throws NotCreatedFavoriteException {
         LOGGER.debug("FavoriteServiceImpl: addFavorite");
 
         Favorite favorite = null;
@@ -48,7 +51,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         try{
             favoriteDao.addFavorite(doctor, patient);
         } catch (Exception e){
-            throw e;
+            throw new NotCreatedFavoriteException();
         }
 
         return;
@@ -56,20 +59,20 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     @Transactional
-    public void removeFavorite(Doctor doctor, Patient patient){
+    public void removeFavorite(Doctor doctor, Patient patient) throws NotRemoveFavoriteException {
         Optional<Favorite> favorite;
-
+        Favorite fav = null;
         try {
             favorite = favoriteDao.findFavorite(doctor, patient);
         } catch (NoResultException e){
             return;
         } catch (Exception e){
-            return;
+            throw new NotRemoveFavoriteException();
         }
 
         if (favorite.isPresent()){
             try {
-                favoriteDao.removeFavorite(favorite.get());
+               favoriteDao.removeFavorite(favorite.get());
             } catch (Exception e){
                 return;
             }

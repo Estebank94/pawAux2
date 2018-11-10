@@ -291,9 +291,19 @@ public class FlowController {
 
 		if(favoriteForm.getAction() != null){
 			if(favoriteForm.getAction().equals("add")){
-				favoriteService.addFavorite(doctor, patient);
+				try {
+					favoriteService.addFavorite(doctor, patient);
+				} catch (NotCreatedFavoriteException e) {
+					LOGGER.trace("404 Error");
+					return new ModelAndView("404");
+				}
 			} else {
-				favoriteService.removeFavorite(doctor, patient);
+				try {
+					favoriteService.removeFavorite(doctor, patient);
+				} catch (NotRemoveFavoriteException e) {
+					LOGGER.trace("404 Error");
+					return new ModelAndView("404");
+				}
 			}
 
 		}

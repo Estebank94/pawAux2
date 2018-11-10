@@ -66,4 +66,9 @@ public class Favorite {
     public Boolean getFavoriteCancelled() { return favoriteCancelled; }
 
     public void setFavoriteCancelled(Boolean favoriteCancelled) { this.favoriteCancelled = favoriteCancelled; }
+
+    public void removeFavorite(){
+        setFavoriteCancelled(true);
+        return;
+    }
 }

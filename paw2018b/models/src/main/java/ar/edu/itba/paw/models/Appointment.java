@@ -150,5 +150,8 @@ public class Appointment implements Comparable<Appointment>{
     public void setAppointmentCancelled(Boolean appointmentCancelled) {
         this.appointmentCancelled = appointmentCancelled;
     }
+    public void cancelAppointment(){
+        setAppointmentCancelled(true);
+    }
 }
 

@@ -29,13 +29,13 @@ public class FavoriteHibernateDaoImpl implements FavoriteDao {
 
     @Override
     public void removeFavorite(Favorite favorite) throws Exception{
-        favorite.setFavoriteCancelled(true);
+        favorite.removeFavorite();
         em.persist(favorite);
     }
 
     @Override
     public Optional<Favorite> findFavorite (Doctor doctor, Patient patient) throws  Exception{
-        final TypedQuery<Favorite> query = em.createQuery("from Favorite as f WHERE f.Doctor = :doctor AND f.patient = :Patient", Favorite.class);
+        final TypedQuery<Favorite> query = em.createQuery("from Favorite as f WHERE f.doctor = :doctor AND f.patient = :patient", Favorite.class);
         query.setParameter("patient", patient);
         query.setParameter("doctor", doctor);
         return Optional.ofNullable(query.getSingleResult());
