@@ -208,7 +208,8 @@ public class RegistrationController {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
         }
-        doctor.getDescription().getLanguages();
+
+
         doctor.getSpecialties().remove(null);
         doctor.getInsurancePlans().remove(null);
 
@@ -229,8 +230,8 @@ public class RegistrationController {
         if(emptyWorkingHours.contains(DayOfWeek.SATURDAY)){mav.addObject("EmptySaturday", true);}
         else{mav.addObject("EmptySaturday", false);}
 
-        if(doctor.getDescription().getLanguages() == null && doctor.getDescription().getEducation() == null &&
-                doctor.getDescription().getCertificate() == null && doctor.getSpecialties().isEmpty() && doctor.getInsurancePlans().isEmpty()){
+
+        if(doctor.getDescription() == null  && doctor.getSpecialties().isEmpty() && doctor.getInsurancePlans().isEmpty()){
             mav.addObject("noLanguage", true);
             mav.addObject("noEducation", true);
             mav.addObject("noCertificate", true);
@@ -319,7 +320,7 @@ public class RegistrationController {
 
 
         boolean doctorTime = false;
-        if(doctor.getWorkingHours().isEmpty() && professionalForm.workingHoursList().isEmpty()){doctorTime = true; }
+        if(doctor.getWorkingHours().isEmpty() && professionalForm.workingHoursList().isEmpty()){ doctorTime = true; }
 
         if(errors.hasErrors() /* || doctorTime ||specialtyExists || medicalCareExists*/){
             return showDoctorProfile(professionalForm);
@@ -453,7 +454,7 @@ public class RegistrationController {
         if (errors.hasErrors() || !patientForm.matchingPasswords(patientForm.getPassword(), patientForm.getPasswordConfirmation())
             /* || patientService.findPatientByEmail(personalForm.getEmail()) != null*/) {
             if (!patientForm.matchingPasswords(patientForm.getPassword(), patientForm.getPasswordConfirmation())) {
-                /*TODO: this doesn't show the error message*/
+
                 showPatientRegistration(patientForm, "wrongPassword");
             }/*else if(patientService.findPatientByEmail(personalForm.getEmail()) != null){
                 showDoctorRegistration(personalForm).addObject("userExists", true);
