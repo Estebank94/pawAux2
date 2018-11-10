@@ -207,7 +207,7 @@ public class FlowController {
 				if (!(authentication instanceof AnonymousAuthenticationToken)) {
 
 					hasUserRole = authentication.getAuthorities().stream()
-							.anyMatch(r -> r.getAuthority().equals("ROLE_DOCTOR"));
+							.anyMatch(r -> r.getAuthority().equals("ROLE_PATIENT"));
 					if(hasUserRole){
 						Patient patient = patientService.findPatientByEmail(authentication.getName());
 						mav.addObject("user", patient);

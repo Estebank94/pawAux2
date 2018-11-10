@@ -51,10 +51,18 @@
                     <c:if test="${param.logout != null}">
                         <c:redirect><c:url value="/"/></c:redirect>
                     </c:if>
+                    <input type="submit" class="btn btn-primary custom-btn center-horizontal" value="Iniciar Sesión"/>
                     <br>
-                    <input type="submit" class="btn btn-primary custom-btn" value="Iniciar Sesión"/>
                     <%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>--%>
                 </form:form>
+                <div class="center-horizontal">
+                    <spring:message code="login.question"/>
+                    <div class="center-horizontal">
+                        <a href="<c:url value="/patientRegistration"/>"><spring:message code="dropdown.patientRegister"/></a> <spring:message code="login.or"/>
+                        <a href="<c:url value="/doctorRegistration"/>"><spring:message code="dropdown.doctorRegister"/></a>
+                    </div>
+                </div>
+
             </div>
         </div>
 
