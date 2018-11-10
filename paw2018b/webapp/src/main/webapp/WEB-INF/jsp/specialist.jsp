@@ -15,7 +15,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Waldoc</title>
+    <title><spring:message code="brand.name"/></title>
     <meta name="description" content="Roughly 155 characters">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css" />">
@@ -110,7 +110,9 @@
                         <div class="doctor-info-container">
                             <div>
                                 <div class="row">
-                                    <h3 class="doctor-name center-vertical" style="margin-left: 16px"><c:out value="${doctor.lastName}"/>, <c:out value="${doctor.firstName}"/></h3>
+                                    <c:set var="name" value="${doctor.firstName}"/>
+                                    <c:set var="lastName" value="${doctor.lastName}"/>
+                                    <h3 class="doctor-name"><spring:message argumentSeparator=";" htmlEscape="false" arguments="${name}; ${lastName}" code="general.doctorName"/></h3>
                                     <security:authorize access="isAuthenticated()">
                                         <c:if test="${user.isFavorite(doctor)}">
                                             <form:form modelAttribute="favorite" method="POST" action="${specialist_id}" id="favorite">

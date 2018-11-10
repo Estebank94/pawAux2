@@ -95,7 +95,8 @@
             <c:url value="/processForm/0" var="processForm"/>
             <form:form action="${processForm}" method="POST" modelAttribute="search" accept-charset="ISO-8859-1">
                 <div class="input-group container">
-                    <form:input type="text" aria-label="Buscar por nombre del médico" placeholder="Nombre del médico" class="form-control" path="name"/>
+                    <spring:message code="holder.doctorName" var="name"/>
+                    <form:input type="text" aria-label="Buscar por nombre del médico" placeholder="${name}" class="form-control" path="name"/>
                     <form:select class="custom-select" id="speciality" path="specialty" cssStyle="cursor: pointer;">
                         <form:option value="noSpecialty" label="Especialidad" selected="Especialidad"/>
                         <form:options items="${specialtyList}" itemValue="speciality" itemLabel="speciality" />

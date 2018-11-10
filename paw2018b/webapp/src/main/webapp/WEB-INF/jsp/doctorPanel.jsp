@@ -49,7 +49,9 @@
                         <div class="doctor-info-container">
                             <div>
                                 <p class="doctor-specialty"><spring:message code="welcome"/></p>
-                                <h3 class="doctor-name">Dr. <c:out value="${doctor.lastName}"/>, <c:out value="${doctor.firstName}"/></h3>
+                                <c:set var="name" value="${doctor.firstName}"/>
+                                <c:set var="lastName" value="${doctor.lastName}"/>
+                                <h3 class="doctor-name">Dr. <spring:message code="general.doctorName" arguments="${name}; ${lastName}" htmlEscape="false" argumentSeparator=";"/></h3>
                                 <div class="row container">
                                     <c:forEach items="${doctor.specialties}" var="doctorSpecialty">
                                         <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty.speciality}"/></p>
@@ -57,7 +59,7 @@
                                 </div>
                                 <br>
                                 <c:if test="${professionalIncomplete eq true}">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="window.location='<c:url value="/doctorProfile"/>'"><i class="fas fa-cog"></i><spring:message code="complete"/></button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="window.location='<c:url value="/doctorProfile"/>'"><i class="fas fa-cog"></i> <spring:message code="complete"/></button>
                                 </c:if>
                                 <c:if test="${addInfo eq true}">
                                     <button type="button" class="btn btn-outline-secondary" onclick="window.location='<c:url value="/doctorProfile"/>'"><i class="fas fa-cog"></i> <spring:message code="addInfo"/></button>
@@ -109,8 +111,10 @@
                                                     <div class="center-vertical">
                                                         <div>
                                                                 <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
-                                                                <h5><b><c:out value="${listItems.patient.lastName}"/></b>,  <c:out value="${listItems.patient.firstName}"/></h5>
-                                                                <p><strong><spring:message code="phone"/>:</strong> <c:out value="${listItems.patient.phoneNumber}"/></p>
+                                                            <c:set var="name" value="${listItems.patient.firstName}"/>
+                                                            <c:set var="lastName" value="${listItems.patient.lastName}"/>
+                                                            <h5><spring:message code="general.doctorName" arguments="${name}; ${lastName}" htmlEscape="false" argumentSeparator=";"/></h5>
+                                                                <p><strong><spring:message code="registration.phone"/>:</strong> <c:out value="${listItems.patient.phoneNumber}"/></p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -138,7 +142,9 @@
                                                 <div class="center-vertical">
                                                     <div>
                                                         <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
-                                                        <h5><b><c:out value="${listItems.doctorLastName}"/></b>,  <c:out value="${listItems.doctorFirstName}"/></h5>
+                                                        <c:set var="name" value="${listItems.doctorFirstName}"/>
+                                                        <c:set var="lastName" value="${listItems.doctorLastName}"/>
+                                                        <h5><spring:message code="general.doctorName" arguments="${name}; ${lastName}" htmlEscape="false" argumentSeparator=";"/></h5>
                                                         <p style="margin-bottom: 0rem;"><strong><spring:message code="phone"/>:</strong> <c:out value="${listItems.doctorPhonenumber}"/></p>
                                                         <p><strong><spring:message code="address"/>:</strong> <c:out value="${listItems.doctorAddress}"/></p>
                                                     </div>
@@ -165,7 +171,7 @@
                                                     <div>
                                                         <p style="margin-bottom: 0px"><c:out value="${appointment.appointmentDay}"/> <c:out value="${appointment.appointmentTime}"/></p>
                                                         <h5><b><c:out value="${appointment.patient.lastName}"/></b>,  <c:out value="${appointment.patient.firstName}"/></h5>
-                                                        <p><strong><spring:message code="phone"/>:</strong> <c:out value="${appointment.patient.phoneNumber}"/></p>
+                                                        <p><strong><spring:message code="registration.phone"/>:</strong> <c:out value="${appointment.patient.phoneNumber}"/></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -189,8 +195,8 @@
                                                     <div>
                                                         <p style="margin-bottom: 0px"><c:out value="${appointment.appointmentDay}"/> <c:out value="${appointment.appointmentTime}"/></p>
                                                         <h5><b><c:out value="${appointment.doctor.lastName}"/></b>,  <c:out value="${appointment.doctor.firstName}"/></h5>
-                                                        <p style="margin-bottom: 0rem;"><strong><spring:message code="phone"/>:</strong> <c:out value="${appointment.doctor.phoneNumber}"/></p>
-                                                        <p><strong><spring:message code="address"/>:</strong> <c:out value="${appointment.doctor.address}"/></p>
+                                                        <p style="margin-bottom: 0rem;"><strong><spring:message code="registration.phone"/>:</strong> <c:out value="${appointment.doctor.phoneNumber}"/></p>
+                                                        <p><strong><spring:message code="registration.address"/>:</strong> <c:out value="${appointment.doctor.address}"/></p>
                                                     </div>
                                                 </div>
                                             </div>

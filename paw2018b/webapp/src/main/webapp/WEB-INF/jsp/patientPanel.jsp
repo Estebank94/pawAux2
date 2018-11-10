@@ -104,9 +104,11 @@
                                                     <div class="center-vertical">
                                                         <div>
                                                             <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
-                                                            <h5><b><c:out value="${listItems.doctor.lastName}"/></b>,  <c:out value="${listItems.doctor.firstName}"/></h5>
-                                                            <p style="margin-bottom: 0rem"><strong><spring:message code="phone"/>:</strong> <c:out value="${listItems.doctor.phoneNumber}"/></p>
-                                                            <p><strong><spring:message code="address"/>:</strong> <c:out value="${listItems.doctor.address}"/></p>
+                                                            <c:set var="name" value="${doctorListItem.firstName}"/>
+                                                            <c:set var="lastName" value="${doctorListItem.lastName}"/>
+                                                            <h5><spring:message code="general.doctorName" arguments="${name}; ${lastName}" htmlEscape="false" argumentSeparator=";"/></h5>
+                                                            <p style="margin-bottom: 0rem"><strong><spring:message code="registration.phone"/>:</strong> <c:out value="${listItems.doctor.phoneNumber}"/></p>
+                                                            <p><strong><spring:message code="registration.address"/>:</strong> <c:out value="${listItems.doctor.address}"/></p>
                                                             <form:form modelAttribute="appointment" method="POST" action="${specialist_id}" id="appointment">
                                                                 <div onclick="cancelAppointment('${listItems.doctor.id}','${listItems.appointmentDay}', '${listItems.appointmentTime}')">Cancelar Turno</div>
                                                             </form:form>
@@ -137,8 +139,8 @@
                                                 <div>
                                                     <p style="margin-bottom: 0px"><c:out value="${appointment.appointmentDay}"/> <c:out value="${appointment.appointmentTime}"/></p>
                                                     <h5><b><c:out value="${appointment.doctor.lastName}"/></b>,  <c:out value="${appointment.doctor.firstName}"/></h5>
-                                                    <p style="margin-bottom: 0rem;"><strong><spring:message code="phone"/>:</strong> <c:out value="${appointment.doctor.phoneNumber}"/></p>
-                                                    <p><strong><spring:message code="address"/>:</strong> <c:out value="${appointment.doctor.address}"/></p>
+                                                    <p style="margin-bottom: 0rem;"><strong><spring:message code="registration.phone"/>:</strong> <c:out value="${appointment.doctor.phoneNumber}"/></p>
+                                                    <p><strong><spring:message code="registration.address"/>:</strong> <c:out value="${appointment.doctor.address}"/></p>
                                                 </div>
                                             </div>
                                         </div>
