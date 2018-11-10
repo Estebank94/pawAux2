@@ -75,8 +75,9 @@
                         </li>
                     </ul>
 
-                    <%-- Future Appointments --%>
                     <div class="tab-content" id="myTabContent">
+
+                        <%-- Future Appointments --%>
                         <div class="tab-pane fade show active" id="appointments" role="tabpanel" aria-labelledby="app-tab">
                             <c:if test="${patientAppointments.size() == 0}">
                                 <div>
@@ -122,11 +123,9 @@
                                     </c:forEach>
                                 </div>
                             </c:forEach>
-
                         </div>
-                    </div>
-                        <%-- Historical Appointments --%>
 
+                    <%-- Historical Appointments--%>
                     <div class="tab-pane fade" id="historical-appointments" role="tabpanel" aria-labelledby="history-pac-app">
                         <br>
                         <c:forEach items="${patientHistoricalAppointments}" var="appointment">
@@ -143,42 +142,48 @@
                                                     <p><strong><spring:message code="registration.address"/>:</strong> <c:out value="${appointment.doctor.address}"/></p>
                                                 </div>
                                             </div>
+                                            </div>
+                                            <hr class="hr-header-sidebar">
                                         </div>
-                                        <hr class="hr-header-sidebar">
-                                    </div>
-                                    <br>
-                                </div>
-
-                            </c:if>
-                        </c:forEach>
-                    </div>
-                        <%-- Favorite Doctors--%>
-                    <div class="tab-pane fade" id="fav-doc" role="tabpanel" aria-labelledby="favorite-doctors-tab">
-                        <br>
-                        <c:forEach items="${favoritesDoctors}" var="doctor">
-                            <div class="card card-doctor d-flex flex-x row box" onclick='window.location="<c:url value='/specialist/${doctor.id}'/>"'>
-                                <img src="/profile-image/${doctor.id}" class="avatar">
-                                <div class="card-body">
-                                    <h3 class="doctor-name">${doctor.lastName}, ${doctor.firstName}</h3>
-                                    <div class="row-container">
-                                        <c:forEach items="${doctor.specialties}" var="doctorSpecialty">
-                                            <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty.speciality}"/></p>
-                                        </c:forEach>
-                                    </div>
-                                    <c:if test="${doctor.reviews.size() == 0}">
                                         <br>
-                                    </c:if>
-                                    <c:if test="${doctorListItem.reviews.size() > 0}">
-                                        <div style="margin-top:8px; margin-bottom:8px;" class="container row">
-                                            <c:forEach begin = "1" end = "${doctorListItem.calculateAverageRating()}">
-                                                <i class="fas fa-star star-yellow star-small"></i>
-                                            </c:forEach>
-                                        </div>
-                                    </c:if>
-                                </div>
+                                    </div>
+                                </c:if>
+                            </c:forEach>
+                        </div>
+                        <%-- Favorite Doctors--%>
+                        <div class="tab-pane fade" id="fav-doc" role="tabpanel" aria-labelledby="favorite-doctors-tab">
+                            <br>
+                            <c:forEach items="${patient.favorites}" var="favorite">
+                                <div class="card card-doctor d-flex flex-row box"  onclick='window.location="<c:url value='/specialist/${favorite.doctor.id}'/>"'>
+                                    <img src="/profile-image/${favorite.doctor.id}" class="avatar">
+                                    <div class="card-body">
+                                        <div class="card-text">
+                                            <h3 class="doctor-name">${favorite.doctor.lastName}, ${favorite.doctor.firstName}</h3>
+                                            <div class="row container">
+                                                <c:forEach items="${favorite.doctor.specialties}" var="doctorSpecialty">
+                                                    <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty.speciality}"/></p>
+                                                </c:forEach>
+                                            </div>
+                                            <c:if test="${favorite.doctor.reviews.size() == 0}">
+                                                <br>
+                                            </c:if>
 
-                            </div>
-                        </c:forEach>
+                                            <c:if test="${favorite.doctor.reviews.size() > 0}">
+                                                <div style="margin-top:8px; margin-bottom:8px;" class="container row">
+                                                    <c:forEach begin = "1" end = "${favorite.doctor.calculateAverageRating()}">
+                                                        <i class="fas fa-star star-yellow star-small"></i>
+                                                    </c:forEach>
+                                                </div>
+                                            </c:if>
+
+                                            <p class="doctor-text">${favorite.doctor.description.certificate}</p>
+                                            <br>
+                                            <p class="doctor-text"><i class="fas fa-map-marker-alt"></i> ${favorite.doctor.address}, CABA</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </div>
                     </div>
                 </div>
             </div>

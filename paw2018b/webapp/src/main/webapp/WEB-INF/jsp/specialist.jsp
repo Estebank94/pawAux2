@@ -244,28 +244,30 @@
                     <br>
                 </div>
                 </c:if>
-                <div>
-                    <h4>Dejá tu Reseña</h4>
-                    <br>
-                    <c:url var="specialist_id"  value="/specialist/${doctor.id}" />
-                    <form:form modelAttribute="review" method="POST" action="${specialist_id}" id="review">
-                        <div class="form-group">
-                            <label for="stars">Estrellas</label>
-                            <form:select class="form-control" id="stars" path="stars">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                            </form:select>
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Describí tu experiencia</label>
-                            <form:textarea class="form-control" id="description" path="description" rows="3"/>
-                        </div>
-                        <button type="submit" class="btn btn-primary mb-2">Enviar Reseña</button>
-                    </form:form>
-                </div>
+                <security:authorize access="isAuthenticated()">
+                    <div>
+                        <h4>Dejá tu Reseña</h4>
+                        <br>
+                        <c:url var="specialist_id"  value="/specialist/${doctor.id}" />
+                        <form:form modelAttribute="review" method="POST" action="${specialist_id}" id="review">
+                            <div class="form-group">
+                                <label for="stars">Estrellas</label>
+                                <form:select class="form-control" id="stars" path="stars">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </form:select>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Describí tu experiencia</label>
+                                <form:textarea class="form-control" id="description" path="description" rows="3"/>
+                            </div>
+                            <button type="submit" class="btn btn-primary mb-2">Enviar Reseña</button>
+                        </form:form>
+                    </div>
+                </security:authorize>
             </div>
         </div>
     </div>

@@ -83,6 +83,21 @@ public class FlowController {
 				}
 				mav.addObject("doctorID", doctor.getId());
 			}
+			hasUserRole = authentication.getAuthorities().stream()
+					.anyMatch(r -> r.getAuthority().equals("ROLE_PATIENT"));
+			if(hasUserRole){
+				Patient patient;
+				try {
+					patient = patientService.findPatientByEmail(authentication.getName());
+				} catch (NotFoundPacientException e) {
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				} catch (NotValidEmailException e) {
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				}
+				mav.addObject("patient", patient);
+			}
 		}
 		return mav;
 	}
