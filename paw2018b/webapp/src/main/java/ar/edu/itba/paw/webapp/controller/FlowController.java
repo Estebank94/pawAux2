@@ -159,15 +159,8 @@ public class FlowController {
 //		LOGGER.debug("GET insuranceNameList {}", compressedSearch.get().getInsurance().toString());
 
 		List<String> sex = new ArrayList<>();
-		List<Insurance> insurance = new ArrayList<>();
-		List<InsurancePlan> insurancePlans = new ArrayList<>();
 
 		for(Doctor doctor : doctorsList){
-			for(InsurancePlan plan : doctor.getInsurancePlans()){
-				if(!insurance.contains(plan.getInsurance())){
-					insurance.add(plan.getInsurance());
-				}
-			}
 			if(sex.size() < 2 && !sex.contains(doctor.getSex())){
 				sex.add(doctor.getSex());
 			}
@@ -175,10 +168,9 @@ public class FlowController {
 		mav.addObject("totalPages", doctorService.getLastPage());
 		mav.addObject("currentPage", page);
 		mav.addObject("doctorList", doctorsList);
-		mav.addObject("insuranceList", searchService.listInsurances());
-		mav.addObject("specialtyList", searchService.listSpecialties());
-		mav.addObject("sexList", sex);
-		mav.addObject("insuranceList", searchService.listInsurances());
+		mav.addObject("sexes", sex);
+		mav.addObject("insurances", searchService.listInsurances());
+		mav.addObject("searchInsurance", search.getInsurance());
 		mav.addObject("specialtyList", searchService.listSpecialties());
 
 		return mav;
