@@ -63,6 +63,10 @@ public class PatientPanelController {
         mav.addObject("patient", patient);
         Map<LocalDate, List<Appointment>> patientAppointment = patient.appointmentsMap();
         mav.addObject("patientAppointments", patientAppointment);
+        List<Appointment> patientHistoricalAppointments = patient.getHistoricalAppointments();
+        mav.addObject("patientHistoricalAppointments",patientHistoricalAppointments);
+        List<Doctor> favoritesDoctors = patient.getFavoriteDoctors();
+        mav.addObject("favoritesDoctors", favoritesDoctors);
 
         return mav;
     }
@@ -93,6 +97,10 @@ public class PatientPanelController {
         mav.addObject("patient", patient);
         Map<LocalDate, List<Appointment>> patientAppointment = patient.appointmentsMap();
         mav.addObject("patientAppointments", patientAppointment);
+        List<Appointment> patientHistoricalAppointments = patient.getHistoricalAppointments();
+        mav.addObject("patientHistoricalAppointments",patientHistoricalAppointments);
+        List<Doctor> favoritesDoctors = patient.getFavoriteDoctors();
+        mav.addObject("favoritesDoctors", favoritesDoctors);
 
         return mav;
 

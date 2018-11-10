@@ -58,48 +58,126 @@
                         </div>
                     </div>
                 </div>
-                <c:if test="${patientAppointments.size() == 0}">
-                    <div>
-                        <div style="padding-top: 20px; padding-left: 20px; padding-right: 20px;">
-                            <div class="media">
-                                <img class="center-img" src="/resources/images/noAppointments.png">
-                                <h3><spring:message code="patient.noAppointments" /></h3>
-                                <p><spring:message code="patient.noAppointmentsSub" /></p>
-                            </div>
-                        </div>
-                    </div>
-                </c:if>
-                <c:forEach items="${patientAppointments}" var="appointment">
-                    <div style="margin-left: 16px; margin-right: 16px;">
-                        <h3>
-                                <%--<c:out value="${appointment.key}"></c:out>--%>
-                            <c:out value="${appointment.key.dayOfMonth}"/>-<c:out value="${appointment.key.monthValue}"/>-<c:out value="${appointment.key.year}"/>
-                        </h3>
-                        <br>
-                        <c:forEach items="${appointment.value}" var="listItems">
-                            <c:if test="${!listItems.appointmentCancelled}">
+                <br>
+                <div>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <%-- Future Appointments --%>
+                        <li class="nav-item">
+                            <a class="nav-link active" id="app-tab" data-toggle="tab" href="#appointments" role="tab" aria-controls="appointments" aria-selected="true"><spring:message code="patient.appointments"/></a>
+                        </li>
+                        <%-- Historical Appointments --%>
+                        <li class="nav-item">
+                            <a class="nav-link" id="history-pac-app" data-toggle="tab" href="#historical-appointments" role="tab" aria-controls="historical-appointments" aria-selected="false"><spring:message code="patient.historical"/></a>
+                        </li>
+                        <%-- Favorite Doctors --%>
+                        <li class="nav-item">
+                            <a class="nav-link" id="favorite-doctors-tab" data-toggle="tab" href="#fav-doc" role="tab" aria-controls="profile" aria-selected="false"><spring:message code="patient.favoriteDoctors"/></a>
+                        </li>
+                    </ul>
+
+                    <%-- Future Appointments --%>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="appointments" role="tabpanel" aria-labelledby="app-tab">
+                            <c:if test="${patientAppointments.size() == 0}">
                                 <div>
-                                    <div class="row" style="margin: 3px">
-                                            <%--<img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">--%>
-                                        <div class="center-vertical">
-                                            <div>
-                                                <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
-                                                <h5><b><c:out value="${listItems.doctor.lastName}"/></b>,  <c:out value="${listItems.doctor.firstName}"/></h5>
-                                                <p style="margin-bottom: 0rem"><strong><spring:message code="phone"/>:</strong> <c:out value="${listItems.doctor.phoneNumber}"/></p>
-                                                <p><strong><spring:message code="address"/>:</strong> <c:out value="${listItems.doctor.address}"/></p>
-                                                <form:form modelAttribute="appointment" method="POST" action="${specialist_id}" id="appointment">
-                                                    <div onclick="cancelAppointment('${listItems.doctor.id}','${listItems.appointmentDay}', '${listItems.appointmentTime}')">Cancelar Turno</div>
-                                                </form:form>
-                                            </div>
+                                    <div style="padding-top: 20px; padding-left: 20px; padding-right: 20px;">
+                                        <div class="media">
+                                            <img class="center-img" src="/resources/images/noAppointments.png">
+                                            <h3><spring:message code="patient.noAppointments" /></h3>
+                                            <p><spring:message code="patient.noAppointmentsSub" /></p>
                                         </div>
                                     </div>
-                                    <hr class="hr-header-sidebar">
                                 </div>
                             </c:if>
-                            <br>
+                            <c:forEach items="${patientAppointments}" var="appointment">
+                                <div style="margin-left: 16px; margin-right: 16px;">
+                                    <h3>
+                                            <%--<c:out value="${appointment.key}"></c:out>--%>
+                                        <c:out value="${appointment.key.dayOfMonth}"/>-<c:out value="${appointment.key.monthValue}"/>-<c:out value="${appointment.key.year}"/>
+                                    </h3>
+                                    <br>
+                                    <c:forEach items="${appointment.value}" var="listItems">
+                                        <c:if test="${!listItems.appointmentCancelled}">
+                                            <div>
+                                                <div class="row" style="margin: 3px">
+                                                        <%--<img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">--%>
+                                                    <div class="center-vertical">
+                                                        <div>
+                                                            <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
+                                                            <h5><b><c:out value="${listItems.doctor.lastName}"/></b>,  <c:out value="${listItems.doctor.firstName}"/></h5>
+                                                            <p style="margin-bottom: 0rem"><strong><spring:message code="phone"/>:</strong> <c:out value="${listItems.doctor.phoneNumber}"/></p>
+                                                            <p><strong><spring:message code="address"/>:</strong> <c:out value="${listItems.doctor.address}"/></p>
+                                                            <form:form modelAttribute="appointment" method="POST" action="${specialist_id}" id="appointment">
+                                                                <div onclick="cancelAppointment('${listItems.doctor.id}','${listItems.appointmentDay}', '${listItems.appointmentTime}')">Cancelar Turno</div>
+                                                            </form:form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr class="hr-header-sidebar">
+                                            </div>
+                                        </c:if>
+                                        <br>
+                                    </c:forEach>
+                                </div>
+                            </c:forEach>
+
+                        </div>
+                    </div>
+                        <%-- Historical Appointments --%>
+
+                    <div class="tab-pane fade" id="historical-appointments" role="tabpanel" aria-labelledby="history-pac-app">
+                        <br>
+                        <c:forEach items="${patientHistoricalAppointments}" var="appointment">
+                            <c:if test="${appointment.appointmentCancelled eq false}">
+                                <div style="margin-left: 16px; margin-right: 16px;">
+                                    <div>
+                                        <div class="row" style="margin: 3px">
+                                                <%--<img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_xh_2017.jpg" class="avatar medium">--%>
+                                            <div class="center-vertical">
+                                                <div>
+                                                    <p style="margin-bottom: 0px"><c:out value="${appointment.appointmentDay}"/> <c:out value="${appointment.appointmentTime}"/></p>
+                                                    <h5><b><c:out value="${appointment.doctor.lastName}"/></b>,  <c:out value="${appointment.doctor.firstName}"/></h5>
+                                                    <p style="margin-bottom: 0rem;"><strong><spring:message code="phone"/>:</strong> <c:out value="${appointment.doctor.phoneNumber}"/></p>
+                                                    <p><strong><spring:message code="address"/>:</strong> <c:out value="${appointment.doctor.address}"/></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="hr-header-sidebar">
+                                    </div>
+                                    <br>
+                                </div>
+
+                            </c:if>
                         </c:forEach>
                     </div>
-                </c:forEach>
+                        <%-- Favorite Doctors--%>
+                    <div class="tab-pane fade" id="fav-doc" role="tabpanel" aria-labelledby="favorite-doctors-tab">
+                        <br>
+                        <c:forEach items="${favoritesDoctors}" var="doctor">
+                            <div class="card card-doctor d-flex flex-x row box" onclick='window.location="<c:url value='/specialist/${doctor.id}'/>"'>
+                                <img src="/profile-image/${doctor.id}" class="avatar">
+                                <div class="card-body">
+                                    <h3 class="doctor-name">${doctor.lastName}, ${doctor.firstName}</h3>
+                                    <div class="row-container">
+                                        <c:forEach items="${doctor.specialties}" var="doctorSpecialty">
+                                            <p class="doctor-specialty" style="padding-right: 2em"><c:out value="${doctorSpecialty.speciality}"/></p>
+                                        </c:forEach>
+                                    </div>
+                                    <c:if test="${doctor.reviews.size() == 0}">
+                                        <br>
+                                    </c:if>
+                                    <c:if test="${doctorListItem.reviews.size() > 0}">
+                                        <div style="margin-top:8px; margin-bottom:8px;" class="container row">
+                                            <c:forEach begin = "1" end = "${doctorListItem.calculateAverageRating()}">
+                                                <i class="fas fa-star star-yellow star-small"></i>
+                                            </c:forEach>
+                                        </div>
+                                    </c:if>
+                                </div>
+
+                            </div>
+                        </c:forEach>
+                    </div>
                 </div>
             </div>
         </div>
