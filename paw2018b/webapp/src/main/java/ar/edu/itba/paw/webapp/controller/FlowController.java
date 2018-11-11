@@ -50,6 +50,9 @@ public class FlowController {
 	@Autowired
 	private FavoriteService favoriteService;
 
+	@Autowired
+	private InsuranceService insuranceService;
+
 	@RequestMapping("/")
 	public ModelAndView index() throws NotFoundDoctorException, NotValidIDException {
 		LOGGER.debug("Starting Waldoc ... ");
@@ -155,12 +158,15 @@ public class FlowController {
 				sexes.add(doctor.getSex());
 			}
 		}
+
+		if(!search.getInsurance().equals("no")){
+			mav.addObject("searchInsurance", insuranceService.getInsuranceByName(search.getInsurance()));
+		}
 		mav.addObject("totalPages", doctorService.getLastPage(search));
 		mav.addObject("currentPage", page);
 		mav.addObject("doctorList", doctorsList);
 		mav.addObject("sexes", sexes);
 		mav.addObject("insurances", searchService.listInsurances());
-		mav.addObject("searchInsurance", search.getInsurance());
 		mav.addObject("specialtyList", searchService.listSpecialties());
 		mav.addObject("qName", search.getName().replace(" ","+"));
 		mav.addObject("qInsurance", search.getInsurance().replace(" ","+"));

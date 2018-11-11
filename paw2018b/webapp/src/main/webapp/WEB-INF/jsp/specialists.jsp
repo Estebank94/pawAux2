@@ -179,20 +179,19 @@
                     <%--<c:when test="${insuranceNameList.size() == 1 && sexList.size() != 1}">--%>
                         <hr class="hr-header-sidebar">
                         <c:choose>
-                            <c:when test="${insurances.size() >= 1 || sexes.size() != 1}">
+                            <c:when test="${search.insurance != 'no' || sexes.size() != 1}">
                                 <div>
-                                    <h4 class="sidebar-title">Plan Prepaga</h4>
-                                    <c:forEach items="${insurances}" var="insurance">
-                                        <div class="form-check">
-                                            <b> ${insurance.name} <br> </b>
-                                                <form:checkboxes path="insurancePlan" items="${insurance.plans}" itemValue="plan" itemLabel="plan" delimiter="<br>" />
-                                            <br>
-                                        </div>
-                                        <%--</c:if>--%>
-                                    </c:forEach>
+                                    <c:if test="${search.insurance != 'no'}">
+                                        <h4 class="sidebar-title">Plan Prepaga</h4>
+                                            <div class="form-check">
+                                                <b> ${searchInsurance.name} <br> </b>
+                                                    <form:checkboxes path="insurancePlan" items="${searchInsurance.plans}" itemValue="plan" itemLabel="plan" delimiter="<br>" />
+                                                <br>
+                                            </div>
+                                    </c:if>
                                         <%--<hr class="hr-sidebar">--%>
                                     <div>
-                                        <c:if test="${sexes.size() > 1}">
+                                        <c:if test="${sexes.size() > 1 }">
                                             <h4 class="sidebar-title">Sexo</h4>
                                             <div class="form-check">
                                                 <form:radiobutton path="sex" value="ALL"/> Todos <br>

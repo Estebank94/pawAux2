@@ -15,16 +15,6 @@ public class Search {
             return name;
     }
 
-    public String getSimilarToName() {
-
-        StringBuilder nameBuilder = new StringBuilder();
-        nameBuilder.append("%");
-        nameBuilder.append(name.toLowerCase());
-        nameBuilder.append("%");
-
-        return nameBuilder.toString();
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -51,13 +41,6 @@ public class Search {
 
     public void setInsurance(String insurance) { this.insurance = insurance; }
 
-    public String[] splitName(String name){
-
-//        https://stackoverflow.com/questions/7899525/how-to-split-a-string-by-space/7899558
-
-        String[] answer = name.split("\\s+");
-        return answer;
-    }
 
     public String getSex() {
         return sex;
@@ -73,17 +56,5 @@ public class Search {
 
     public void setInsurancePlan(List<String> insurancePlan) {
         this.insurancePlan = insurancePlan;
-    }
-
-    public String getInsurancePlanAsString()
-    {
-       List<String> list = getInsurancePlan();
-       String ans = "";
-       for (int i = 0; i < list.size() - 1 ; i ++)
-       {
-           ans = ans  +"'"+ list.get(i)+"'" + ",";
-       }
-       ans = "(" + ans +"'" +list.get(list.size() - 1) + "')";
-       return ans;
     }
 }
