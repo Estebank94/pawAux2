@@ -9,20 +9,15 @@ public class Search {
     private String location = "";
     private String insurance = "no";
     private String sex = "ALL";
+
+    private String insuranceWithInsurancePlan = "no";
+
     private List<String> insurancePlan = null;
+
+    private List<String> days = null;
 
     public String getName() {
             return name;
-    }
-
-    public String getSimilarToName() {
-
-        StringBuilder nameBuilder = new StringBuilder();
-        nameBuilder.append("%");
-        nameBuilder.append(name.toLowerCase());
-        nameBuilder.append("%");
-
-        return nameBuilder.toString();
     }
 
     public void setName(String name) {
@@ -51,13 +46,6 @@ public class Search {
 
     public void setInsurance(String insurance) { this.insurance = insurance; }
 
-    public String[] splitName(String name){
-
-//        https://stackoverflow.com/questions/7899525/how-to-split-a-string-by-space/7899558
-
-        String[] answer = name.split("\\s+");
-        return answer;
-    }
 
     public String getSex() {
         return sex;
@@ -75,15 +63,19 @@ public class Search {
         this.insurancePlan = insurancePlan;
     }
 
-    public String getInsurancePlanAsString()
-    {
-       List<String> list = getInsurancePlan();
-       String ans = "";
-       for (int i = 0; i < list.size() - 1 ; i ++)
-       {
-           ans = ans  +"'"+ list.get(i)+"'" + ",";
-       }
-       ans = "(" + ans +"'" +list.get(list.size() - 1) + "')";
-       return ans;
+    public String getInsuranceWithInsurancePlan() {
+        return insuranceWithInsurancePlan;
+    }
+
+    public void setInsuranceWithInsurancePlan(String insuranceWithInsurancePlan) {
+        this.insuranceWithInsurancePlan = insuranceWithInsurancePlan;
+    }
+
+    public List<String> getDays() {
+        return days;
+    }
+
+    public void setDays(List<String> days) {
+        this.days = days;
     }
 }

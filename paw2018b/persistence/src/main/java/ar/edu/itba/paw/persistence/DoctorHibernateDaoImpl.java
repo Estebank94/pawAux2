@@ -45,14 +45,6 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         return list.isEmpty() ? Collections.emptyList() : list;
     }
 
-    @Override
-    public int getLastPage(){
-        int pageSize = PAGESIZE;
-        Number amount = em.createQuery("SELECT COUNT(*) FROM Doctor",Number.class).getSingleResult();
-        int lastPageNumber = (int) (Math.ceil(amount.intValue() / pageSize));
-        return lastPageNumber;
-    }
-
     public List<Doctor> listDoctors(Search search, int page) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -133,6 +125,85 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         return list.isEmpty() ? Collections.emptyList() : list;
 
     }
+
+    @Override
+    public Long getLastPage(Search search) {
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> query = cb.createQuery(Long.class);
+        Root<Doctor> root = query.from(Doctor.class);
+
+        Optional<String> name = search.getName().equals("")? Optional.ofNullable(null):Optional.ofNullable(search.getName());
+        Optional<String> specialty = search.getSpecialty().equals("noSpecialty")?Optional.ofNullable(null):Optional.ofNullable(search.getSpecialty());
+        Optional<String> insurance = search.getInsurance().matches("no")?Optional.ofNullable(null):Optional.ofNullable(search.getInsurance());
+        Optional<String> sex = search.getSex().equals("ALL") || search.getSex().isEmpty() || search.getSex().equals("")?Optional.ofNullable(null): Optional.ofNullable(search.getSex());
+        Optional<List<String>> insurancePlan;
+
+        if (search.getInsurancePlan() != null)
+        {
+            boolean hasAll = false;
+            for (String insurancePlanIterator : search.getInsurancePlan()){
+                if (insurancePlanIterator.equals("ALL")) {
+                    hasAll = true;
+                }
+            }
+            if (hasAll || search.getInsurancePlan().size() == 0)
+            {
+                insurancePlan = Optional.ofNullable(null);
+            } else {
+                insurancePlan =Optional.ofNullable(search.getInsurancePlan());
+            }
+        } else {
+            insurancePlan = Optional.ofNullable(null);
+        }
+
+        query.select(cb.count(root));
+
+        if (name.isPresent())
+        {
+            query.where(cb.or(cb.like(cb.lower(root.get("firstName")), "%"+name.get().toLowerCase()+"%"),
+                    (cb.like(cb.lower(root.get("lastName")), "%"+name.get().toLowerCase()+"%"))));
+        }
+
+        if (specialty.isPresent())
+        {
+            Specialty specialtyObj = specialtyDao.findSpecialtyByName(specialty.get());
+            query.where(cb.isMember(specialtyObj, root.get("specialties")));
+        }
+
+        if (insurance.isPresent())
+        {
+            Insurance insuranceObj = insuranceDao.findInsuranceByName(insurance.get());
+            List<InsurancePlan> insurancePlans = insurancePlanDao.findAllInsurancePlansByInsurance(insuranceObj);
+            boolean first = true;
+            for(InsurancePlan plan : insurancePlans){
+                if(first){
+                    query.where(cb.isMember(plan, root.get("insurancePlans")));
+                } else {
+                    query.where(cb.or(cb.isMember(plan, root.get("insurancePlans"))));
+                }
+                first = false;
+            }
+        }
+
+        if (sex.isPresent()){
+            query.where(cb.equal(root.get("sex"), sex.get()));
+        }
+        if(insurancePlan.isPresent()){
+            for(String plan : insurancePlan.get()){
+                InsurancePlan insurancePlanObj = insurancePlanDao.findInsurancePlanByPlanName(plan);
+                query.where(cb.isMember(insurancePlanObj, root.get("insurancePlans")));
+            }
+        }
+//        TODO averiguar porque si descomento esto me tira could not extract resultset
+//        query.where(cb.isNotNull(root.get("specialties")));
+//        query.where(cb.isNotNull(root.get("insurancePlans")));
+
+        TypedQuery<Long> typedQuery = em.createQuery(query);
+        return typedQuery.getSingleResult() / PAGESIZE;
+
+    }
+
 
     @Override
     public Optional<Doctor> findDoctorById(Integer id) {

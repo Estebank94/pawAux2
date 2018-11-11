@@ -93,7 +93,7 @@
                 <%--<form:input type="text" aria-label="Buscar por especialidad" placeholder="Buscar por especialidad" class="form-control" path="specialty"/>--%>
             <form:select class="custom-select specialist-select" id="insurance" path="insurance" cssStyle="cursor: pointer;">
                 <form:option value="no" label="Prepaga" selected="Prepaga"/>
-                <form:options items="${insuranceList}" itemValue="name" itemLabel="name" />
+                <form:options items="${insurances}" itemValue="name" itemLabel="name" />
             </form:select>
             <div class="input-group-append">
                 <input type="submit" class="btn btn-outline-light" value="Buscar" path="submit"/>
@@ -153,23 +153,24 @@
                 </div>
             </c:forEach>
             </br>
-            <nav aria-label="...">
-                <ul class="pagination">
-                    <c:forEach var="page" begin="${1}" end="${totalPages-1}">
-                        <c:if test="${currentPage+1 == page}">
-                            <li class="page-item active">
+            <c:if test="${totalPages > 0}">
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <c:forEach var="page" begin="${1}" end="${totalPages-1}">
+                            <c:if test="${currentPage+1 == page}">
+                                <li class="page-item active">
                               <span class="page-link" style="background-color: #257CBF; border-color: transparent;">
-                                ${page}
+                                      ${page}
                               </span>
-                            </li>
-                        </c:if>
-                        <c:if test="${currentPage+1 != page}">
-                            <%--TODO MARTINA pone bien el link de la href--%>
-                            <li class="page-item"><a class="page-link" style="color: #257CBF;" href="/processForm/${page-1}">${page}</a></li>
-                        </c:if>
-                    </c:forEach>
-                </ul>
-            </nav>
+                                </li>
+                            </c:if>
+                            <c:if test="${currentPage+1 != page}">
+                                <li class="page-item"><a class="page-link" style="color: #257CBF;" href="/processForm/${page-1}?name=&specialty=${qSpecialty}&insurance=${qInsurance}&_insurancePlan=no&sex=${qSex}">${page}</a></li>
+                            </c:if>
+                        </c:forEach>
+                    </ul>
+                </nav>
+            </c:if>
         </div>
         <div class="col-md-3">
             <div class="sidebar-nav-fixed pull-right affix">
@@ -178,23 +179,19 @@
                     <%--<c:when test="${insuranceNameList.size() == 1 && sexList.size() != 1}">--%>
                         <hr class="hr-header-sidebar">
                         <c:choose>
-                            <c:when test="${insuranceMap.keySet().size() >= 1 || sexList.size() != 1}">
+                            <c:when test="${search.insurance != 'no' || sexes.size() != 1}">
                                 <div>
-                                    <c:forEach items="${insuranceMap.keySet()}" var="key">
-                                        <%--<c:if test="${insurance.key.equals(search.insurance) }">--%>
+                                    <c:if test="${search.insurance != 'no'}">
                                         <h4 class="sidebar-title">Plan Prepaga</h4>
-                                        <div class="form-check">
-                                            <b> ${insuranceMap.get(key)} <br> </b>
-                                                <%--<c:forEach items="${insurance.key}" var="insurance">--%>
-                                                    <%--<form:checkboxes path="insurancePlan" items="${insurance}" delimiter="<br>" />--%>
-                                                <%--</c:forEach>--%>
-                                            <br>
-                                        </div>
-                                        <%--</c:if>--%>
-                                    </c:forEach>
+                                            <div class="form-check">
+                                                <b> ${searchInsurance.name} <br> </b>
+                                                    <form:checkboxes path="insurancePlan" items="${searchInsurance.plans}" itemValue="plan" itemLabel="plan" delimiter="<br>" />
+                                                <br>
+                                            </div>
+                                    </c:if>
                                         <%--<hr class="hr-sidebar">--%>
                                     <div>
-                                        <c:if test="${sexList.size() > 1}">
+                                        <c:if test="${sexes.size() > 1 }">
                                             <h4 class="sidebar-title">Sexo</h4>
                                             <div class="form-check">
                                                 <form:radiobutton path="sex" value="ALL"/> Todos <br>

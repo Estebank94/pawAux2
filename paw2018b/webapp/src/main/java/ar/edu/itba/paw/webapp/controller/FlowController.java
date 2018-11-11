@@ -50,6 +50,9 @@ public class FlowController {
 	@Autowired
 	private FavoriteService favoriteService;
 
+	@Autowired
+	private InsuranceService insuranceService;
+
 	@RequestMapping("/")
 	public ModelAndView index() throws NotFoundDoctorException, NotValidIDException {
 		LOGGER.debug("Starting Waldoc ... ");
@@ -115,22 +118,12 @@ public class FlowController {
 			LOGGER.trace("404 error");
 			return new ModelAndView("404");
 		}
-		//catch (NullPointerException e){
-		//	LOGGER.trace("404 error");
-		//	return new ModelAndView("404");
-		//}
+		catch (NullPointerException e){
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		}
 
 
-// if(compressedSearch.isPresent()) {
-//			doctorsList = compressedSearch.get().getDoctors();
-//		}
-//		else {
-//			doctorsList = doctorService.listDoctors();
-//			mav.addObject("notFound", "no");
-//			theSearch.setName("");
-//			theSearch.setInsurance("no");
-//			theSearch.setSpecialty("");
-//		}
 		boolean hasUserRole = false;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
@@ -158,28 +151,27 @@ public class FlowController {
 //		LOGGER.debug("GET sexList {}", compressedSearch.get().getSex().toString());
 //		LOGGER.debug("GET insuranceNameList {}", compressedSearch.get().getInsurance().toString());
 
-		List<String> sex = new ArrayList<>();
-		List<Insurance> insurance = new ArrayList<>();
-		List<InsurancePlan> insurancePlans = new ArrayList<>();
+		List<String> sexes = new ArrayList<>();
 
 		for(Doctor doctor : doctorsList){
-			for(InsurancePlan plan : doctor.getInsurancePlans()){
-				if(!insurance.contains(plan.getInsurance())){
-					insurance.add(plan.getInsurance());
-				}
-			}
-			if(sex.size() < 2 && !sex.contains(doctor.getSex())){
-				sex.add(doctor.getSex());
+			if(sexes.size() < 2 && !sexes.contains(doctor.getSex())){
+				sexes.add(doctor.getSex());
 			}
 		}
-		mav.addObject("totalPages", doctorService.getLastPage());
+
+		if(!search.getInsurance().equals("no")){
+			mav.addObject("searchInsurance", insuranceService.getInsuranceByName(search.getInsurance()));
+		}
+		mav.addObject("totalPages", doctorService.getLastPage(search));
 		mav.addObject("currentPage", page);
 		mav.addObject("doctorList", doctorsList);
-		mav.addObject("insuranceList", searchService.listInsurances());
+		mav.addObject("sexes", sexes);
+		mav.addObject("insurances", searchService.listInsurances());
 		mav.addObject("specialtyList", searchService.listSpecialties());
-		mav.addObject("sexList", sex);
-		mav.addObject("insuranceList", searchService.listInsurances());
-		mav.addObject("specialtyList", searchService.listSpecialties());
+		mav.addObject("qName", search.getName().replace(" ","+"));
+		mav.addObject("qInsurance", search.getInsurance().replace(" ","+"));
+		mav.addObject("qSpecialty", search.getSpecialty().replace(" ","+"));
+		mav.addObject("qSex", search.getSex());
 
 		return mav;
 	}

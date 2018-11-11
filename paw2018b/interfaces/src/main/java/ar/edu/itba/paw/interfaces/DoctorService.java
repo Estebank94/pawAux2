@@ -12,7 +12,7 @@ import java.util.Set;
 
 public interface DoctorService {
 
-   int getLastPage();
+   Long getLastPage(Search search);
 
    Optional<Doctor> setDoctorAvatar(Doctor doctor, byte[] avatar);
 
