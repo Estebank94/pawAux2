@@ -32,8 +32,8 @@
 <div class="container">
     <br>
     <br>
-    <h2><spring:message code="dropdown.doctorRegister"/></h2>
-    <p><spring:message code="register.personalInfo"/>.</p>
+    <h2><spring:message code="title.doctorRegister"/></h2>
+    <p><spring:message code="subtitle.personalInfo"/>.</p>
 
     <hr style="border-top: 1px solid #D8D8D8 !important;">
     <c:url value="/doctorRegistration" var="doctorRegistration"/>

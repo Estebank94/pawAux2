@@ -44,7 +44,7 @@
         </c:if>
         <c:if test="${noCertificate eq true}">
             <div>
-                <label for="exampleFormControlTextarea1"><strong><spring:message code="registration.desciption"/></strong></label>
+                <label for="exampleFormControlTextarea1"><strong><spring:message code="registration.description"/></strong></label>
                 <spring:message code="holder.work" var="work"/>
                 <form:textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="${work}" path="certificate"/>
                 <small class="form-text text-muted">
