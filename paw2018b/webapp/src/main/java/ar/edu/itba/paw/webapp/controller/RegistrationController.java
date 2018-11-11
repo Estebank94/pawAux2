@@ -358,6 +358,9 @@ public class RegistrationController {
                 LOGGER.debug("SET Doctor's workingHours to DB");
                 doctorService.setWorkingHours(doctor, workingHours);
             }
+            if(description != null){
+                doctorService.setDescription(doctor, description);
+            }
         }else{
 
             /* can't have description values in null */

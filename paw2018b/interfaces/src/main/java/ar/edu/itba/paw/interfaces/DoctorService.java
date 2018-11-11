@@ -37,4 +37,6 @@ public interface DoctorService {
 
    Optional<Doctor> setWorkingHours(Doctor doctor, List<WorkingHours> workingHours);
 
+   Optional<Doctor> setDescription(Doctor doctor, Description description);
+
 }

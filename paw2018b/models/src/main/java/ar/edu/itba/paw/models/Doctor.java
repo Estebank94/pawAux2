@@ -62,7 +62,7 @@ public class Doctor {
     @OneToOne(mappedBy="doctor")
     Patient patient;
 
-    @OneToOne(mappedBy="doctor")
+    @OneToOne(mappedBy="doctor", cascade = {CascadeType.ALL})
     Description description;
 
     Integer licence;

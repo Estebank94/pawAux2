@@ -516,22 +516,18 @@ public class DoctorServiceImpl implements DoctorService {
         return Optional.ofNullable(doctor);
     }
 
-//    @Override
-//    public Optional<Doctor> setDoctorInsurance(Integer doctorId,  Set<Insurance> insurances){
-//        LOGGER.debug("setDoctorInsurance");
-//        Optional<Doctor> doctorOptional = doctorDao.findDoctorById(doctorId);
-//        Doctor doctor = doctorOptional.get();
-//        List<InsurancePlan> insurancesPlans = insurancePlanDao.getInsurancePlansFromAllInsurances(insurances);
-//        medicalcareDao.addMedicalCare(doctor.getId(), insurancesPlan);
-//        doctor.setInsurance(insurance);
-//        return Optional.ofNullable(doctor);
-//    }
-
     @Override
     @Transactional
     public Optional<Doctor> setWorkingHours(Doctor doctor, List<WorkingHours> workingHours){
         LOGGER.debug("setWorkingHours");
         doctorDao.setWorkingHours(doctor, workingHours);
+        return Optional.ofNullable(doctor);
+    }
+
+    @Override
+    @Transactional
+    public Optional<Doctor> setDescription(Doctor doctor, Description description){
+        doctorDao.setDoctorDescription(doctor, description);
         return Optional.ofNullable(doctor);
     }
 

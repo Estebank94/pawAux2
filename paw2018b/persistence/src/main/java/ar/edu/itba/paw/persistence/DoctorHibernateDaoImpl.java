@@ -187,5 +187,12 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         return true;
     }
 
+    public Boolean setDoctorDescription(Doctor doctor, Description description){
+        doctor.setDescription(description);
+        description.setDoctor(doctor);
+        em.merge(doctor);
+        return true;
+    }
+
 
 }

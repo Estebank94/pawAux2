@@ -31,4 +31,6 @@ public interface DoctorDao {
     Boolean setWorkingHours(Doctor doctor, List<WorkingHours> workingHours);
 
     Boolean setDoctorInsurances(Doctor doctor, List<InsurancePlan> insurancePlans);
+
+    Boolean setDoctorDescription(Doctor doctor, Description description);
 }
