@@ -43,7 +43,7 @@
                     </div>
                     <br>
                     <div>
-                        <label><input name="j_rememberme" type="checkbox"/><spring:message code="login.remember_me"/></label>
+                        <label><input name="j_rememberme" type="checkbox"/> <spring:message code="login.remember_me"/></label>
                     </div>
                     <c:if test="${param.error != null}">
                         <p class="wrong"><spring:message code="login.invalid"/></p>

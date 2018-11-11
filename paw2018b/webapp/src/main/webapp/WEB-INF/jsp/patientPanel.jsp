@@ -37,7 +37,6 @@
                         <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:white !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
                             <button class="dropdown-item" type="submit"><spring:message code="logout.message"/></button>
-                                <%--<button class="dropdown-item" type="button">Registrate como especialista</button>--%>
                         </div>
                     </div>
                 </form:form>
