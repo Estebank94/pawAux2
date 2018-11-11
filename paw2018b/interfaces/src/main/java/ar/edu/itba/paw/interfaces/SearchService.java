@@ -23,4 +23,6 @@ public interface SearchService {
 //    Optional<List<ListItem>> listSpecialtiesWithDoctors();
 
     List<InsurancePlan> listInsurancePlans();
+
+    List<String> getFutureDays();
 }

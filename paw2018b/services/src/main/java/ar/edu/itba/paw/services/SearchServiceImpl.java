@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -50,5 +52,16 @@ public class SearchServiceImpl implements SearchService {
         return searchDao.listInsurancePlans();
     }
 
+    @Override
+    public List<String> getFutureDays() {
+        List<String> ret = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        String day = null;
+        for (int i = 0; i < 7; i++){
+            day = new String (today.plusDays(i).toString());
+            ret.add(day);
+        }
+        return ret;
+    }
 
 }
