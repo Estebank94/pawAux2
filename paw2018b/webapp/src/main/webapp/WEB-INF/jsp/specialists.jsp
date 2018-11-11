@@ -153,23 +153,24 @@
                 </div>
             </c:forEach>
             </br>
-            <nav aria-label="...">
-                <ul class="pagination">
-                    <c:forEach var="page" begin="${1}" end="${totalPages-1}">
-                        <c:if test="${currentPage+1 == page}">
-                            <li class="page-item active">
+            <c:if test="${totalPages > 0}">
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <c:forEach var="page" begin="${1}" end="${totalPages-1}">
+                            <c:if test="${currentPage+1 == page}">
+                                <li class="page-item active">
                               <span class="page-link" style="background-color: #257CBF; border-color: transparent;">
-                                ${page}
+                                      ${page}
                               </span>
-                            </li>
-                        </c:if>
-                        <c:if test="${currentPage+1 != page}">
-                            <%--TODO MARTINA pone bien el link de la href--%>
-                            <li class="page-item"><a class="page-link" style="color: #257CBF;" href="/processForm/${page-1}">${page}</a></li>
-                        </c:if>
-                    </c:forEach>
-                </ul>
-            </nav>
+                                </li>
+                            </c:if>
+                            <c:if test="${currentPage+1 != page}">
+                                <li class="page-item"><a class="page-link" style="color: #257CBF;" href="/processForm/${page-1}?name=&specialty=${qSpecialty}&insurance=${qInsurance}&_insurancePlan=no&sex=${qSex}">${page}</a></li>
+                            </c:if>
+                        </c:forEach>
+                    </ul>
+                </nav>
+            </c:if>
         </div>
         <div class="col-md-3">
             <div class="sidebar-nav-fixed pull-right affix">

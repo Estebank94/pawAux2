@@ -11,7 +11,7 @@ import java.util.Set;
 
 public interface DoctorDao {
 
-    int getLastPage();
+    Long getLastPage(Search search);
 
     Boolean setDoctorAvatar(Doctor doctor, byte[] avatar);
 

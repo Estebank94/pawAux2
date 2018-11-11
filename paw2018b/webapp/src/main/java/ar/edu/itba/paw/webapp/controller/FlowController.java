@@ -115,22 +115,12 @@ public class FlowController {
 			LOGGER.trace("404 error");
 			return new ModelAndView("404");
 		}
-		//catch (NullPointerException e){
-		//	LOGGER.trace("404 error");
-		//	return new ModelAndView("404");
-		//}
+		catch (NullPointerException e){
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
+		}
 
 
-// if(compressedSearch.isPresent()) {
-//			doctorsList = compressedSearch.get().getDoctors();
-//		}
-//		else {
-//			doctorsList = doctorService.listDoctors();
-//			mav.addObject("notFound", "no");
-//			theSearch.setName("");
-//			theSearch.setInsurance("no");
-//			theSearch.setSpecialty("");
-//		}
 		boolean hasUserRole = false;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
@@ -158,20 +148,24 @@ public class FlowController {
 //		LOGGER.debug("GET sexList {}", compressedSearch.get().getSex().toString());
 //		LOGGER.debug("GET insuranceNameList {}", compressedSearch.get().getInsurance().toString());
 
-		List<String> sex = new ArrayList<>();
+		List<String> sexes = new ArrayList<>();
 
 		for(Doctor doctor : doctorsList){
-			if(sex.size() < 2 && !sex.contains(doctor.getSex())){
-				sex.add(doctor.getSex());
+			if(sexes.size() < 2 && !sexes.contains(doctor.getSex())){
+				sexes.add(doctor.getSex());
 			}
 		}
-		mav.addObject("totalPages", doctorService.getLastPage());
+		mav.addObject("totalPages", doctorService.getLastPage(search));
 		mav.addObject("currentPage", page);
 		mav.addObject("doctorList", doctorsList);
-		mav.addObject("sexes", sex);
+		mav.addObject("sexes", sexes);
 		mav.addObject("insurances", searchService.listInsurances());
 		mav.addObject("searchInsurance", search.getInsurance());
 		mav.addObject("specialtyList", searchService.listSpecialties());
+		mav.addObject("qName", search.getName().replace(" ","+"));
+		mav.addObject("qInsurance", search.getInsurance().replace(" ","+"));
+		mav.addObject("qSpecialty", search.getSpecialty().replace(" ","+"));
+		mav.addObject("qSex", search.getSex());
 
 		return mav;
 	}

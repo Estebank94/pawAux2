@@ -47,9 +47,9 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public int getLastPage(){
+    public Long getLastPage(Search search){
         LOGGER.debug("DoctorServiceImpl: getLastPage");
-        return doctorDao.getLastPage();
+        return doctorDao.getLastPage(search);
     }
 
     @Override
