@@ -258,9 +258,9 @@ public class RegistrationController {
             Resource resource;
 
             if(doctorService.findDoctorById(String.valueOf(doctorId)).get().getSex().equals("M")){
-                resource = applicationContext.getResource("/resource/defaultmen");
+                resource = applicationContext.getResource("/resources/images/defaultmen.jpg");
             }else{
-                resource = applicationContext.getResource("/resource/defaultwomen");
+                resource = applicationContext.getResource("/resources/images/defaultwomen.jpg");
             }
 
             long resourceLength = resource.contentLength();
