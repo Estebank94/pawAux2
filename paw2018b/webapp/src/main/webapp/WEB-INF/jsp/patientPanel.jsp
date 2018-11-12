@@ -110,7 +110,7 @@
                                                             <p style="margin-bottom: 0rem"><strong><spring:message code="registration.phone"/>:</strong> <c:out value="${listItems.doctor.phoneNumber}"/></p>
                                                             <p><strong><spring:message code="registration.address"/>:</strong> <c:out value="${listItems.doctor.address}"/></p>
                                                             <form:form modelAttribute="appointment" method="POST" action="${specialist_id}" id="appointment">
-                                                                <div onclick="cancelAppointment('${listItems.doctor.id}','${listItems.appointmentDay}', '${listItems.appointmentTime}')">Cancelar Turno</div>
+                                                                <div class = "btn btn-primary custom-btn red" onclick="cancelAppointment('${listItems.doctor.id}','${listItems.appointmentDay}', '${listItems.appointmentTime}')">Cancelar Turno</div>
                                                             </form:form>
                                                         </div>
                                                     </div>

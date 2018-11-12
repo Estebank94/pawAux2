@@ -514,6 +514,11 @@ a {
   animation: heart-unburst .8s steps(28) 1;
 }
 
+.red{
+  background-color:  crimson !important;
+  border: crimson;
+}
+
 @keyframes heart-burst {
   from {background-position:left;}
   to { background-position:right;}
