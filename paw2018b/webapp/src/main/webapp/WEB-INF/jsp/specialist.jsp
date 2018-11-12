@@ -184,7 +184,7 @@
 
                     <h3 id="information"><spring:message code="specialist.infoTitle" /></h3>
                     <br>
-                    <c:if test="${doctor.description.certificate != null}">
+                    <c:if test="${not empty doctor.description.certificate}">
                         <h4><spring:message code="specialist.certificate" /></h4>
                         <c:forEach items="${doctor.description.certificate}" var="certificate">
                             <c:out value="${certificate}"/>
@@ -192,7 +192,7 @@
                         <br>
                         <br>
                     </c:if>
-                    <c:if test="${doctor.description.education != null}">
+                    <c:if test="${not empty doctor.description.education}">
                         <h4><spring:message code="specialist.education" /></h4>
                         <c:forEach items="${doctor.description.education}" var="education">
                            <c:out value="${education}"/>
@@ -216,10 +216,10 @@
                         </c:forEach>
                     </div>
                     </br>
-                    <c:if test="${doctor.description.languages.length() > 0}">
+                    <c:if test="${doctor.description.languages.length() > 0 && languagesNo eq false}">
                         <h4><spring:message code="specialist.languages" /></h4>
                         <c:forEach items="${doctor.description.languages}" var="languages">
-                            <c:out value="${languages}"/>
+                                <c:out value="${languages}"/>
                         </c:forEach>
                         <br>
                         <br>

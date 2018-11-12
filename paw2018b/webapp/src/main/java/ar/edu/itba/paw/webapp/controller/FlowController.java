@@ -229,6 +229,11 @@ public class FlowController {
 //				favoriteService.addFavorite(doctor, patient);
 
 				mav.addObject("doctor", doctor);
+				if(doctor.getDescription().getLanguages().matches("no")){
+					mav.addObject("languangesNo", true);
+				}else{
+					mav.addObject("languagesNo", false);
+				}
 //				mav.addObject("workingHoursTest", doctor.getWorkingHours());
 //				TODO: AGREGAR FUNCION QUE BUSCA INSURANCE USANDO LOS INSURANCE PLANS
 				mav.addObject("insuranceNameList", doctor.getInsurancePlans());

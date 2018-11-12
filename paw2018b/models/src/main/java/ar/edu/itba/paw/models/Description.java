@@ -4,6 +4,7 @@ package ar.edu.itba.paw.models;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="information")
@@ -72,4 +73,5 @@ public class Description {
     public void setId(Integer id) {
         this.id = id;
     }
+
 }

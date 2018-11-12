@@ -159,7 +159,6 @@
                                                         <h5><spring:message code="general.doctorName" arguments="${name}; ${lastName}" htmlEscape="false" argumentSeparator=";"/></h5>
                                                         <p style="margin-bottom: 0rem;"><strong><spring:message code="registration.phone"/>:</strong> <c:out value="${listItems.doctor.phoneNumber}"/></p>
                                                         <p><strong><spring:message code="registration.address"/>:</strong> <c:out value="${listItems.doctor.address}"/></p>
-                                                    
                                                     </div>
                                                 </div>
                                             </div>
