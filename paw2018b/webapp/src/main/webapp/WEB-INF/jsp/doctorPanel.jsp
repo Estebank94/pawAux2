@@ -127,7 +127,19 @@
                         </div>
                         <%-- Appointments as Patient --%>
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            <br>
+                            <c:if test="${patientAppointments.size() == 0}">
+                                <div>
+                                    <div style="padding-top: 20px; padding-left: 20px; padding-right: 20px;">
+                                        <div class="media">
+                                            <img class="center-img" src="/resources/images/noAppointments.png">
+                                            <h3><spring:message code="patient.noAppointments" /></h3>
+                                            <div>
+                                                <p><spring:message code="patient.noAppointmentsSub" /></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:if>
                             <c:forEach items="${patientAppointments}" var="appointment">
                                 <div style="margin-left: 16px; margin-right: 16px;">
                                     <h3>
@@ -142,11 +154,12 @@
                                                 <div class="center-vertical">
                                                     <div>
                                                         <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
-                                                        <c:set var="name" value="${listItems.doctorFirstName}"/>
-                                                        <c:set var="lastName" value="${listItems.doctorLastName}"/>
+                                                        <c:set var="name" value="${listItems.doctor.firstName}"/>
+                                                        <c:set var="lastName" value="${listItems.doctor.lastName}"/>
                                                         <h5><spring:message code="general.doctorName" arguments="${name}; ${lastName}" htmlEscape="false" argumentSeparator=";"/></h5>
-                                                        <p style="margin-bottom: 0rem;"><strong><spring:message code="phone"/>:</strong> <c:out value="${listItems.doctorPhonenumber}"/></p>
-                                                        <p><strong><spring:message code="address"/>:</strong> <c:out value="${listItems.doctorAddress}"/></p>
+                                                        <p style="margin-bottom: 0rem;"><strong><spring:message code="registration.phone"/>:</strong> <c:out value="${listItems.doctor.phoneNumber}"/></p>
+                                                        <p><strong><spring:message code="registration.address"/>:</strong> <c:out value="${listItems.doctor.address}"/></p>
+                                                    
                                                     </div>
                                                 </div>
                                             </div>
