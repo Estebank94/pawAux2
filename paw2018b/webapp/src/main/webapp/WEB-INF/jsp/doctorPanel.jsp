@@ -212,7 +212,7 @@
                         <div class="tab-pane fade" id="fav-doc" role="tabpanel" aria-labelledby="profile-tab">
                             <br>
                             <c:forEach items="${favoritesDoctors}" var="doctor">
-                                <div class="card card-doctor d-flex flex-x row box" onclick='window.location="<c:url value='/specialist/${doctor.id}'/>"'>
+                                <div class="card card-doctor d-flex flex-row box" onclick='window.location="<c:url value='/specialist/${doctor.id}'/>"'>
                                     <img src="/profile-image/${doctor.id}" class="avatar">
                                     <div class="card-body">
                                         <h3 class="doctor-name">${doctor.lastName}, ${doctor.firstName}</h3>
@@ -231,8 +231,10 @@
                                                 </c:forEach>
                                             </div>
                                         </c:if>
+                                        <p class="doctor-text">${doctor.description.certificate}</p>
+                                        <br>
+                                        <p class="doctor-text"><i class="fas fa-map-marker-alt"></i> ${doctor.address}, CABA</p>
                                     </div>
-
                                 </div>
                             </c:forEach>
                         </div>
