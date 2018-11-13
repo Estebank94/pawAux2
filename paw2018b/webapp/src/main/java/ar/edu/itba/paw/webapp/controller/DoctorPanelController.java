@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 
+import ar.edu.itba.paw.interfaces.AppointmentService;
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.models.Appointment;
@@ -11,6 +12,7 @@ import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
 import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
 import ar.edu.itba.paw.models.exceptions.NotValidIDException;
+import ar.edu.itba.paw.webapp.forms.CancelAppointmentForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +21,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 public class DoctorPanelController {
@@ -39,6 +40,9 @@ public class DoctorPanelController {
 
     @Autowired
     private PatientService patientService;
+
+    @Autowired
+    AppointmentService appointmentService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DoctorPanelController.class);
 
@@ -109,6 +113,33 @@ public class DoctorPanelController {
             /*TODO CHECK IF THE ID IS A REAL DOCTOR*/
         }
 
+
+        return mav;
+
+    }
+
+    @RequestMapping(value = "/doctorPanel", method = {RequestMethod.POST})
+    public ModelAndView doctorPanel(@ModelAttribute("appointment") CancelAppointmentForm form) throws Exception{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Patient patient;
+        try {
+            patient = patientService.findPatientByEmail(authentication.getName());
+        } catch (NotValidEmailException e) {
+            LOGGER.trace("Error 404");
+            return new ModelAndView("404");
+        } catch (NotFoundPacientException e) {
+            LOGGER.trace("Error 404");
+            return new ModelAndView("404");
+        }
+
+
+        if(form.getDay() != null){
+            Optional<Doctor> doctor = doctorService.findDoctorById(String.valueOf(form.getDoctorid()));
+            appointmentService.cancelAppointment(form.getDay(), form.getTime(), patient, doctor.get());
+        }
+
+        ModelAndView mav = new ModelAndView("redirect:/doctorPanel");
 
         return mav;
 

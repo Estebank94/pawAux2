@@ -89,14 +89,7 @@ public class PatientPanelController {
             appointmentService.cancelAppointment(form.getDay(), form.getTime(), patient, doctor.get());
         }
 
-        ModelAndView mav = new ModelAndView("patientPanel");
-        mav.addObject("patient", patient);
-        Map<LocalDate, List<Appointment>> patientAppointment = patient.appointmentsMap();
-        mav.addObject("patientAppointments", patientAppointment);
-        List<Appointment> patientHistoricalAppointments = patient.getHistoricalAppointments();
-        mav.addObject("patientHistoricalAppointments",patientHistoricalAppointments);
-        List<Doctor> favoritesDoctors = patient.getFavoriteDoctors();
-        mav.addObject("favoritesDoctors", favoritesDoctors);
+        ModelAndView mav = new ModelAndView("redirect:/patientPanel");
 
         return mav;
 
