@@ -10,11 +10,9 @@ public class Search {
     private String insurance = "no";
     private String sex = "ALL";
 
-    private String insuranceWithInsurancePlan = "no";
-
     private List<String> insurancePlan = null;
 
-    private List<String> days = null;
+    private String days = "no";
 
     public String getName() {
             return name;
@@ -63,19 +61,11 @@ public class Search {
         this.insurancePlan = insurancePlan;
     }
 
-    public String getInsuranceWithInsurancePlan() {
-        return insuranceWithInsurancePlan;
-    }
-
-    public void setInsuranceWithInsurancePlan(String insuranceWithInsurancePlan) {
-        this.insuranceWithInsurancePlan = insuranceWithInsurancePlan;
-    }
-
-    public List<String> getDays() {
+    public String getDays() {
         return days;
     }
 
-    public void setDays(List<String> days) {
+    public void setDays(String days) {
         this.days = days;
     }
 }

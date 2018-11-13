@@ -121,6 +121,9 @@ public class FlowController {
 		catch (NullPointerException e){
 			LOGGER.trace("404 error");
 			return new ModelAndView("404");
+		} catch (Exception e){
+			LOGGER.trace("404 error");
+			return new ModelAndView("404");
 		}
 
 
@@ -172,6 +175,7 @@ public class FlowController {
 		mav.addObject("qInsurance", search.getInsurance().replace(" ","+"));
 		mav.addObject("qSpecialty", search.getSpecialty().replace(" ","+"));
 		mav.addObject("qSex", search.getSex());
+		mav.addObject("futureDays", searchService.getFutureDays());
 
 		return mav;
 	}
@@ -229,7 +233,7 @@ public class FlowController {
 //				favoriteService.addFavorite(doctor, patient);
 
 				mav.addObject("doctor", doctor);
-				if(doctor.getDescription().getLanguages().matches("no")){
+				if(doctor.getDescription() == null || doctor.getDescription().getLanguages() == null ||doctor.getDescription().getLanguages().matches("no")){
 					mav.addObject("languangesNo", true);
 				}else{
 					mav.addObject("languagesNo", false);

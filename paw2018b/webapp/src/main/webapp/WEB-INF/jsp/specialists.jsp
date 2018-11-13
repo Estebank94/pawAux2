@@ -203,6 +203,22 @@
                                             </div>
                                         </c:if>
                                     </div>
+                                    <%--
+                                    <div>
+                                        <h4 class="sidebar-title">
+                                            <spring:message code="specialist.futureDays"/>
+                                            <br>
+                                        </h4>
+                                        <div class="form-check">
+                                            <form:radiobutton path="days" value="no"/> <spring:message code="specialist.anyDay"/><br>
+                                            <c:forEach items="${futureDays}" var="day">
+                                                <form:radiobutton path="days" value="${day}"/>
+                                                <c:out value="${day}"/><br>
+                                            </c:forEach>
+                                        </div>
+
+                                    </div>
+                                    --%>
                                 </div>
                             </c:when>
                             <c:otherwise>
