@@ -10,6 +10,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import javax.persistence.metamodel.Metamodel;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -56,6 +59,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         Optional<String> insurance = search.getInsurance().matches("no")?Optional.ofNullable(null):Optional.ofNullable(search.getInsurance());
         Optional<String> sex = search.getSex().equals("ALL") || search.getSex().isEmpty() || search.getSex().equals("")?Optional.ofNullable(null): Optional.ofNullable(search.getSex());
         Optional<List<String>> insurancePlan;
+        Optional<String> days = search.getDays().equals("no")|| search.getDays().isEmpty() || search.getDays().equals("")?Optional.ofNullable(null):Optional.ofNullable(search.getDays());
 
         if (search.getInsurancePlan() != null)
         {
@@ -113,6 +117,10 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
                 query.where(cb.isMember(insurancePlanObj, root.get("insurancePlans")));
             }
         }
+
+        if (days.isPresent()) {
+         }
+
 //        TODO averiguar porque si descomento esto me tira could not extract resultset
 //        query.where(cb.isNotNull(root.get("specialties")));
 //        query.where(cb.isNotNull(root.get("insurancePlans")));
