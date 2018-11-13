@@ -148,23 +148,28 @@
                                     </h3>
                                     <br>
                                     <c:forEach items="${appointment.value}" var="listItems">
-                                        <div>
-                                            <div class="row" style="margin: 3px">
-                                                    <%--<img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_xh_2017.jpg" class="avatar medium">--%>
-                                                <div class="center-vertical">
-                                                    <div>
-                                                        <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
-                                                        <c:set var="name" value="${listItems.doctor.firstName}"/>
-                                                        <c:set var="lastName" value="${listItems.doctor.lastName}"/>
-                                                        <h5><spring:message code="general.doctorName" arguments="${name}; ${lastName}" htmlEscape="false" argumentSeparator=";"/></h5>
-                                                        <p style="margin-bottom: 0rem;"><strong><spring:message code="registration.phone"/>:</strong> <c:out value="${listItems.doctor.phoneNumber}"/></p>
-                                                        <p><strong><spring:message code="registration.address"/>:</strong> <c:out value="${listItems.doctor.address}"/></p>
+                                        <c:if test="${!listItems.appointmentCancelled}">
+                                            <div>
+                                                <div class="row" style="margin: 3px">
+                                                        <%--<img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_xh_2017.jpg" class="avatar medium">--%>
+                                                    <div class="center-vertical">
+                                                        <div>
+                                                            <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
+                                                            <c:set var="name" value="${listItems.doctor.firstName}"/>
+                                                            <c:set var="lastName" value="${listItems.doctor.lastName}"/>
+                                                            <h5><spring:message code="general.doctorName" arguments="${name}; ${lastName}" htmlEscape="false" argumentSeparator=";"/></h5>
+                                                            <p style="margin-bottom: 0rem;"><strong><spring:message code="registration.phone"/>:</strong> <c:out value="${listItems.doctor.phoneNumber}"/></p>
+                                                            <p><strong><spring:message code="registration.address"/>:</strong> <c:out value="${listItems.doctor.address}"/></p>
+                                                            <form:form modelAttribute="appointment" method="POST" action="${specialist_id}" id="appointment">
+                                                                <div class = "btn btn-primary custom-btn red" onclick="cancelAppointment('${listItems.doctor.id}','${listItems.appointmentDay}', '${listItems.appointmentTime}')">Cancelar Turno</div>
+                                                            </form:form>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <hr class="hr-header-sidebar">
                                             </div>
-                                            <hr class="hr-header-sidebar">
-                                        </div>
-                                        <br>
+                                            <br>
+                                        </c:if>
                                     </c:forEach>
                                 </div>
                             </c:forEach>
