@@ -100,6 +100,7 @@ public class FlowController {
 					return new ModelAndView("404");
 				}
 				mav.addObject("patient", patient);
+				mav.addObject("hasFavorites", patient.getFavoriteDoctors().size() > 0 );
 			}
 		}
 		return mav;

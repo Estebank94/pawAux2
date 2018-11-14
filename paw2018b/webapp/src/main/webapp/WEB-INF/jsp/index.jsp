@@ -154,7 +154,7 @@
     </div>
 </security:authorize>
 <security:authorize access="isAuthenticated()">
-    <c:if test="${patient.favorites.size() > 0}">
+    <c:if test="${hasFavorites}">
         <div class="container">
             <div class="margin-big">
                 <p class="jumbotron-subtitle"><spring:message code="explanation.loggedin.question"/></p>
@@ -196,7 +196,7 @@
             <br>
         </div>
     </c:if>
-    <c:if test="${patient.favorites.size() == 0}">
+    <c:if test="${!hasFavorites}">
         <div class="container">
             <div class="margin-big">
                 <p class="jumbotron-subtitle"><spring:message code="explanation.title" /></p>
