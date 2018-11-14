@@ -45,7 +45,7 @@
             <div class="card-body">
                 <div class="card-text">
                     <div class="row">
-                        <img class="avatar big" src=<c:out value="/profile-image/${doctor.id}"/>>
+                        <img class="avatar big" src=<c:url value="/profile-image/${doctor.id}"/>/>
                         <div class="doctor-info-container">
                             <div>
                                 <p class="doctor-specialty"><spring:message code="welcome"/></p>

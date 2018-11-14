@@ -50,7 +50,8 @@
                         </button>
                     </security:authorize>
                     <security:authorize access="isAuthenticated()">
-                        <form:form action="/logout" method="post">
+                        <c:url value="/logout" var="logout"/>
+                        <form:form action="${logout}" method="post">
                             <security:authentication property="principal.username" var="userName"/>
                             <div class="dropdown" >
                                 <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:#ffffff !important;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b>${userName}</b></button>
