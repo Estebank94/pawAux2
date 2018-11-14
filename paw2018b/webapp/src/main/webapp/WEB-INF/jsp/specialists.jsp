@@ -105,7 +105,7 @@
 <div class="main container">
     <div class="row">
         <div class="col-md-9">
-            <c:if test="${notFound eq 'no'}">
+            <c:if test="${notFound}">
             <div id="no-results" class="card card-doctor">
                 <div style="padding-top: 20px; padding-left: 20px; padding-right: 20px;">
                     <div class="media">

@@ -111,9 +111,11 @@ public class FlowController {
 
 		final ModelAndView mav = new ModelAndView("specialists");
 		List<Doctor> doctorsList;
+		boolean notFound = false;
 
 		try	{
 			doctorsList = doctorService.listDoctors(search, page);
+			mav.addObject("totalPages", doctorService.getLastPage(search));
 		} catch (NotValidPageException e) {
 			LOGGER.trace("404 error");
 			return new ModelAndView("404");
@@ -124,6 +126,13 @@ public class FlowController {
 		} catch (Exception e){
 			LOGGER.trace("404 error");
 			return new ModelAndView("404");
+		}
+
+		if(doctorsList.isEmpty()){
+			doctorsList = doctorService.listDoctors(page);
+			notFound = true;
+			mav.addObject("notFound", notFound);
+			mav.addObject("totalPages", doctorService.getLastPage(new Search()));
 		}
 
 
@@ -165,7 +174,6 @@ public class FlowController {
 		if(!search.getInsurance().equals("no")){
 			mav.addObject("searchInsurance", insuranceService.getInsuranceByName(search.getInsurance()));
 		}
-		mav.addObject("totalPages", doctorService.getLastPage(search));
 		mav.addObject("currentPage", page);
 		mav.addObject("doctorList", doctorsList);
 		mav.addObject("sexes", sexes);
