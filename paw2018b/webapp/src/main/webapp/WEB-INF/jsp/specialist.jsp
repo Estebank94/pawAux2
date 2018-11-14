@@ -108,10 +108,10 @@
                         <img class="avatar big" src=<c:out value="/profile-image/${doctor.id}"/>/>
                         <div class="doctor-info-container">
                             <div>
-                                <div class="row">
+                                <div class="row center-vertical">
                                     <c:set var="name" value="${doctor.firstName}"/>
                                     <c:set var="lastName" value="${doctor.lastName}"/>
-                                    <h3 class="doctor-name"><spring:message argumentSeparator=";" htmlEscape="false" arguments="${name}; ${lastName}" code="general.doctorName"/></h3>
+                                    <h3 class="doctor-name" style="margin-left: 14px;"><spring:message argumentSeparator=";" htmlEscape="false" arguments="${name}; ${lastName}" code="general.doctorName"/></h3>
                                     <security:authorize access="isAuthenticated()">
                                         <c:if test="${user.isFavorite(doctor) || isFavorite eq true}">
                                             <form:form modelAttribute="favorite" method="POST" action="${specialist_id}" id="favorite">
@@ -227,21 +227,21 @@
                 </div>
                 <hr>
                 <c:if test="${doctor.reviews.size() > 0}">
-                <div>
-                    <h4>Reseñas</h4>
-                    <br>
-                    <c:forEach items="${doctor.reviews}" var="review">
-                        <p style="margin-bottom: 4px"><strong><c:out value="${review.reviewerFirstName} ${review.reviewerLastName}"/></strong></p>
-                        <div class="container row">
-                            <c:forEach begin = "1" end = "${review.stars}">
-                                <i class="fas fa-star star-yellow star-small"></i>
-                            </c:forEach>
-                        </div>
-                        <p><c:out value="${review.description}"/></p>
-                        <hr style="margin-top:8px; margin-bottom: 8px;">
-                    </c:forEach>
-                    <br>
-                </div>
+                    <div>
+                        <h4>Reseñas</h4>
+                        <br>
+                        <c:forEach items="${doctor.reviews}" var="review">
+                            <p style="margin-bottom: 4px"><strong><c:out value="${review.reviewerFirstName} ${review.reviewerLastName}"/></strong></p>
+                            <div class="container row">
+                                <c:forEach begin = "1" end = "${review.stars}">
+                                    <i class="fas fa-star star-yellow star-small"></i>
+                                </c:forEach>
+                            </div>
+                            <p><c:out value="${review.description}"/></p>
+                            <hr style="margin-top:8px; margin-bottom: 8px;">
+                        </c:forEach>
+                        <br>
+                    </div>
                 </c:if>
                 <security:authorize access="isAuthenticated()">
                     <div>
