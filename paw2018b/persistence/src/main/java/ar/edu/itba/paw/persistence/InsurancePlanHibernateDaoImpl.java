@@ -60,16 +60,4 @@ public class InsurancePlanHibernateDaoImpl implements InsurancePlanDao {
         List<InsurancePlan> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
     }
-
-    private String parseInsurance(String insurance){
-
-        char [] insuranceNameArray = insurance.toCharArray();
-        StringBuilder string = new StringBuilder();
-        for(int i=0; i<insuranceNameArray.length; i++){
-            if(insuranceNameArray[i] != '.'){string.append(insuranceNameArray[i]);}
-            else{string.append(' ');}
-        }
-
-        return string.toString();
-    }
 }

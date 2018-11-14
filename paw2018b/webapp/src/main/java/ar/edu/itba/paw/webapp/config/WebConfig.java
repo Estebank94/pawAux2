@@ -44,7 +44,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-	@Value("/resources/schema.sql")
+	@Value("../resource/schema.sql")
 	private Resource schemaSQL;
 
 	@Autowired
@@ -80,7 +80,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public MessageSource messageSource (){
 		final ReloadableResourceBundleMessageSource source = new ReloadableResourceBundleMessageSource();
-		source.setBasename("/resources/i18n/messages");
+		source.setBasename("resources/i18n/messages");
 		source.setDefaultEncoding(StandardCharsets.UTF_8.displayName());
 		source.setCacheSeconds(5);
 		return source;
