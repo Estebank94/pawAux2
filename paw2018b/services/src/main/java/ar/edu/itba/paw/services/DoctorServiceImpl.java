@@ -197,7 +197,6 @@ public class DoctorServiceImpl implements DoctorService {
             throw new NotValidPhoneNumberException("phonenumber firstname can't be empty");
         }
 
-        /*TODO: validar regExp de phone*/
         if (phoneNumber.length() > 20){
             LOGGER.debug("The Phone Number of a doctor can't have more than 20 numbers. The Phone Number given is: {}", phoneNumber);
             throw new NotValidPhoneNumberException("phonenumber can't have more than 20 characters");

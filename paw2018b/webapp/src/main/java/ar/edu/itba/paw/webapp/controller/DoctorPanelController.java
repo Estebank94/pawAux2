@@ -109,10 +109,7 @@ public class DoctorPanelController {
             List<Doctor> favoritesDoctors = patient.getFavoriteDoctors();
             mav.addObject("favoritesDoctors", favoritesDoctors);
 
-        }else{
-            /*TODO CHECK IF THE ID IS A REAL DOCTOR*/
         }
-
 
         return mav;
 
