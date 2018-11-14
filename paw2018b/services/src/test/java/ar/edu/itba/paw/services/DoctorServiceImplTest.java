@@ -45,14 +45,14 @@ public class DoctorServiceImplTest {
     private Specialty specialty;
     private Insurance insurance;
 
-    private static final String DOC_NAME = "Roberto Nicolas Agustin";
-    private static final String DOC_SECOND_NAME = "Nicolas";
+//    private static final String DOC_NAME = "Roberto Nicolas Agustin";
+//    private static final String DOC_SECOND_NAME = "Nicolas";
     private static final Integer DOC_ID = 1;
     private static final String DOC_SPECIALTY = "NUTRICIÓN";
     private static final String DOC_INSURANCE = "Accord";
-    private static final String DOC_INSURANCE_PLAN_AS_STRING = "('Accord Salud')";
+//    private static final String DOC_INSURANCE_PLAN_AS_STRING = "('Accord Salud')";
     private static final String DOC_INSURANCE_PLAN = "Accord Salud";
-    private static final String DOC_SEX = "M";
+//    private static final String DOC_SEX = "M";
 
     private static final String NEW_DOC_NAME = "Marlon Jay";
     private static final String NEW_DOC_LASTNAME = "Brando";
@@ -62,8 +62,6 @@ public class DoctorServiceImplTest {
     private static final Integer NEW_DOC_LICENSE_INT = 2020;
     private static final byte NEW_DOC_AVATAR [] = new byte[] {1, 6, 3};
     private static final String NEW_DOC_ADDRESS = "Cabildo 650";
-
-    private static final int DOCTOR_QUANTITY_BEFORE = 3;
 
     private static final DayOfWeek DAY_OF_WEEK = DayOfWeek.FRIDAY;
     private static final LocalTime START = LocalTime.of(9, 10, 50);
