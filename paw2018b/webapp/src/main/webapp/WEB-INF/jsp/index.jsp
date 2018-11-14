@@ -8,7 +8,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Waldoc</title>
+    <title><spring:message code="brand.name"/></title>
     <meta name="description" content="Roughly 155 characters">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css"/>">
@@ -157,8 +157,8 @@
     <c:if test="${patient.favorites.size() > 0}">
         <div class="container">
             <div class="margin-big">
-                <p class="jumbotron-subtitle">¿Te sentis mal?</p>
-                <p class="jumbotron-text">Tranquilo, tus medicos favoritos estan para ayudarte.</p>
+                <p class="jumbotron-subtitle"><spring:message code="explanation.loggedin.question"/></p>
+                <p class="jumbotron-text"><spring:message code="explanation.loggedin.subtitle"/></p>
             </div>
             <c:forEach items="${patient.favorites}" var="favorite">
                 <c:if test="${!favorite.favoriteCancelled}">
@@ -186,7 +186,7 @@
 
                                 <p class="doctor-text">${favorite.doctor.description.certificate}</p>
                                 <br>
-                                <p class="doctor-text"><i class="fas fa-map-marker-alt"></i> ${favorite.doctor.address}, CABA</p>
+                                <p class="doctor-text"><i class="fas fa-map-marker-alt"></i> ${favorite.doctor.address}, <spring:message code="city"/></p>
                             </div>
                         </div>
                     </div>

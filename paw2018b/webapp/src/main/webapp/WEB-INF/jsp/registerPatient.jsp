@@ -79,7 +79,7 @@
                 <form:input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock" placeholder="${password}" path="password"/>
                 <form:errors path="password" cssClass="wrong" element="p"></form:errors>
                 <small id="passwordHelpBlock" class="form-text text-muted">
-                    <spring:message code="error.wrongPassword"/>
+                    <spring:message code="registration.password.message"/>
                 </small>
                 <c:if test="${noMatchingPassword eq true}">
                     <p class="wrong"><spring:message code="error.notmatching"/></p>

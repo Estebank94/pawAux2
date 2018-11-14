@@ -35,7 +35,7 @@
         <div>
             <label for="exampleFormControlFile1"><strong><spring:message code="registration.avatar"/></strong></label>
             <form:input type="file" class="form-control-file" id="exampleFormControlFile1" path="avatar" name="exampleFormControlFile1"/>
-            <form:errors path="avatar" cssClass="wrong"  element="p"></form:errors>
+            <form:errors path="avatar" cssClass="wrong"  element="p"/>
         </div>
         <br>
 
@@ -50,7 +50,7 @@
                 <small class="form-text text-muted">
                     <spring:message code="registration.maxSize"/>
                 </small>
-                <form:errors path="certificate" cssClass="wrong"  element="p"></form:errors>
+                <form:errors path="certificate" cssClass="wrong"  element="p"/>
                 <c:if test="${wrongDesciption eq true}">
                     <p class="wrong"><spring:message code="error.description"/></p>
                 </c:if>
@@ -66,7 +66,7 @@
                 <small class="form-text text-muted">
                     <spring:message code="registration.maxSize"/>
                 </small>
-                <form:errors path="education" cssClass="wrong"></form:errors>
+                <form:errors path="education" cssClass="wrong"/>
                 <c:if test="${wrongEducaction eq true}">
                     <b class="wrong"><spring:message code="error.education"/></b>
                 </c:if>
@@ -86,7 +86,7 @@
                         <option value="Frances" label="Frances" />
                         <option value="Chino" label="Chino"/>
                     </select>
-                    <form:errors path="languages" cssClass="wrong"></form:errors>
+                    <form:errors path="languages" cssClass="wrong"/>
                     <c:if test="${wrongLanguage eq true}">
                         <p class="wrong"><spring:message code="error.language"/></p>
                     </c:if>
@@ -114,7 +114,7 @@
                     </c:forEach>
                 </select>
                     <%--FALTA AGREGAR VALIDACION--%>
-                <form:errors path="specialty" cssClass="wrong"  element="p"></form:errors>
+                <form:errors path="specialty" cssClass="wrong"  element="p"/>
                 <c:if test="${wrongSpecialty eq true}">
                     <p class="wrong"><spring:message code="error.specialty"/></p>
                 </c:if>
@@ -138,7 +138,8 @@
                         <option value="${insurance.name}" label="${insurance.name}"/>
                     </c:forEach>
                 </select>
-                <form:errors path="insurance" cssClass="wrong"  element="p"></form:errors>
+                <form:errors path="insurance" cssClass="wrong"  element="p"/>
+                <%--TODO 1. no existe esta variable - wrongInsurance- , la cambio, la saco? --%>
                 <c:if test="${wrongInsurance eq true}">
                     <p class="wrong"><spring:message code="registration.wrongInsurance"/></p>
                 </c:if>
@@ -155,7 +156,7 @@
                             <div class="${insurance.name}" style="display: none">
                                 <c:forEach items="${insurance.plans}" var="plan">
                                     <input type="checkbox" id="insurancePlan" value="${plan.plan}" label="${plan.plan}">${plan.plan}
-                                    </br>
+                                    <br>
                                 </c:forEach>
                             </div>
                         </c:forEach>

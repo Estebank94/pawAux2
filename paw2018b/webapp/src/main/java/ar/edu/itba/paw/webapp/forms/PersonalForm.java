@@ -9,43 +9,42 @@ import javax.validation.constraints.Pattern;
 
 public class PersonalForm {
 
-
-    @Length(min=3, max=45, message = "Cantidad de caracteres incorrecto. Su nombre debe contener entre 3 y 45 caracteres")
-    @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su nombre")
-    @Pattern(regexp = "^[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]*$", message = "Su nombre no puede contener simbolos que no sean letras y especios")
+    @Length(min=3, max=45)
+    @NotEmpty
+    @Pattern(regexp = "^[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]*$")
     private String firstName;
 
-    @Length(min=2, max=45, message = "Cantidad de caracteres incorrecto. Su apellido debe contener entre 2 y 45 caracteres")
-    @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su apellido")
-    @Pattern(regexp = "^[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]*$", message = "Su nombre no puede contener simbolos que no sean letras y especios")
+    @Length(min=2, max=45)
+    @NotEmpty
+    @Pattern(regexp = "^[a-zA-ZñÑáéíóúÁÉÍÓÚ\\s]*$")
     private String lastName;
 
-    @Email(message = "El email ingresado es invalido. Por favor, ingrese un email valido")
-    @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su email")
+    @Email
+    @NotEmpty
     private String email;
 
-    @Length(min=6, max=55, message = "Cantidad de caracteres incorrecto. Su contraseña debe contener entre 6 y 55 caracteres y un número")
-    @NotEmpty(message = "Este campo es obligatorio.Por favor, ingrese una contraseña")
-    @Pattern(regexp = "[a-zA-Z0-9]+", message = "Su contraseña debe contener al menos un número. Por favor, reingrese una contraseña valida")
+    @Length(min=6, max=55)
+    @NotEmpty
+    @Pattern(regexp = "[a-zA-Z0-9]+")
     private String password;
 
-    @Length(min=6, max=10, message = "Cantidad de caracteres incorrecto. Su contraseña debe contener entre 6 y 10 caracteres")
-    @NotEmpty(message = "Este campo es obligatorio.Por favor, ingrese una contraseña")
-    @Pattern(regexp = "[a-zA-Z0-9]+", message = "Su contraseña debe contener al menos un número. Por favor, reingrese una contraseña valida")
+    @Length(min=6, max=10)
+    @NotEmpty
+    @Pattern(regexp = "[a-zA-Z0-9]+")
     private String passwordConfirmation;
 
-    @Pattern(regexp = "^((\\(|)(011)(\\)|)(|\\s)(\\d{8}|\\d{4}\\s\\d{4}))$", message = "Su numero de telefono es incorrecto. Recuerde que el formato es : (Codigo de Area) Numero de Telefono ")
-    @NotEmpty(message = "Este campo es obligatorio. Por favor, ingrese su número de teléfono")
+    @Pattern(regexp = "^((\\(|)(011)(\\)|)(|\\s)(\\d{8}|\\d{4}\\s\\d{4}))$")
+    @NotEmpty
     private String phoneNumber;
 
-    @NotEmpty(message = "Este campo es obligatorio.Por favor, ingrese una direccion")
+    @NotEmpty
     private String address;
 
-    @NotEmpty(message = "Este campo es obligatorio. Por favor, elija una opcion")
+    @NotEmpty
     private String sex;
 
-    @Length(max=10, message = "Su numero de matricula no puede contener mas de 10 caracteres")
-    @Pattern(regexp = "[0-9]{1,10}", message = "Este campo es obligatorio. Su numero de matricula solo puede contener numeros")
+    @Length(max=10)
+    @Pattern(regexp = "[0-9]{1,10}")
     private String licence;
 
     public String getLicence() {
