@@ -4,14 +4,14 @@ package ar.edu.itba.paw.webapp.forms;
  * Created by estebankramer on 02/11/2018.
  */
 public class ReviewForm {
-    Integer stars;
+    String stars;
     String description;
 
-    public Integer getStars() {
+    public String getStars() {
         return stars;
     }
 
-    public void setStars(Integer stars) {
+    public void setStars(String stars) {
         this.stars = stars;
     }
 

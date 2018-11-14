@@ -312,8 +312,14 @@ public class FlowController {
 		}
 
 		if(reviewForm.getStars() != null && reviewForm.getDescription() != null){
-			Review review = new Review(reviewForm.getStars(), reviewForm.getDescription(), doctor, patient.getFirstName(), patient.getLastName());
-			reviewService.createReview(review);
+			Review review = null;
+
+			try {
+				review = reviewService.createReview(reviewForm.getStars(), reviewForm.getDescription(),doctor, patient.getFirstName(), patient.getLastName());
+			} catch (NotValidReviewException e) {
+				LOGGER.trace("404");
+				return new ModelAndView("404");
+			}
 		}
 
 		if(favoriteForm.getAction() != null){
@@ -328,6 +334,9 @@ public class FlowController {
 				try {
 					favoriteService.removeFavorite(doctor, patient);
 				} catch (NotRemoveFavoriteException e) {
+					LOGGER.trace("404 Error");
+					return new ModelAndView("404");
+				} catch (Exception e){
 					LOGGER.trace("404 Error");
 					return new ModelAndView("404");
 				}

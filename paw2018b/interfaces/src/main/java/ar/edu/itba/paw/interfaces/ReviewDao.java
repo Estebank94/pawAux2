@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ReviewDao {
 
-    Review createReview(Review review);
+    Review createReview(Integer stars, String description, Doctor doctor, String reviewerFirstName, String reviewerLastName);
 
     List<Review> listReviews(Doctor doctor);
 }

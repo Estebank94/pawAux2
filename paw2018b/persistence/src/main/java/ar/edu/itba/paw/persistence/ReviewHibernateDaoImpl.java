@@ -19,7 +19,8 @@ public class ReviewHibernateDaoImpl implements ReviewDao {
     private EntityManager em;
 
     @Override
-    public Review createReview(Review review) {
+    public Review createReview(Integer stars, String description, Doctor doctor, String reviewerFirstName, String reviewerLastName) {
+        Review review = new Review(stars, description , doctor, reviewerFirstName, reviewerLastName);
         em.persist(review);
         return review;
     }
