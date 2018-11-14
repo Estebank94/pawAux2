@@ -183,6 +183,7 @@ public class FlowController {
 		mav.addObject("qInsurance", search.getInsurance().replace(" ","+"));
 		mav.addObject("qSpecialty", search.getSpecialty().replace(" ","+"));
 		mav.addObject("qSex", search.getSex());
+		mav.addObject("qDay", search.getDays());
 		mav.addObject("futureDays", searchService.getFutureDays());
 
 		return mav;

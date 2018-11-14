@@ -166,7 +166,7 @@
                                 </li>
                             </c:if>
                             <c:if test="${currentPage+1 != page}">
-                                <li class="page-item"><a class="page-link" style="color: #257CBF;" href="<c:url value="/processForm/${page-1}?name=&specialty=${qSpecialty}&insurance=${qInsurance}&_insurancePlan=no&sex=${qSex}"/>">${page}</a></li>
+                                <li class="page-item"><a class="page-link" style="color: #257CBF;" href="<c:url value="/processForm/${page-1}?name=&specialty=${qSpecialty}&insurance=${qInsurance}&_insurancePlan=no&sex=${qSex}&days=${qDay}"/>">${page}</a></li>
                             </c:if>
                         </c:forEach>
                     </ul>
@@ -180,7 +180,7 @@
                     <%--<c:when test="${insuranceNameList.size() == 1 && sexList.size() != 1}">--%>
                         <hr class="hr-header-sidebar">
                         <c:choose>
-                            <c:when test="${search.insurance != 'no' || sexes.size() != 1}">
+                            <c:when test="${search.insurance != 'no' || sexes.size() != 1 || futureDays.size() > 0}">
                                 <div>
                                     <c:if test="${search.insurance != 'no'}">
                                         <h4 class="sidebar-title"><spring:message code="specialist.insurancesPlan.title"/></h4>
@@ -204,21 +204,22 @@
                                             </div>
                                         </c:if>
                                     </div>
-                                    <div>
-                                        <br>
-                                        <h4 class="sidebar-title">
-                                            <spring:message code="specialist.futureDays"/>
+                                    <c:if test="${futureDays.size() > 0}">
+                                        <div>
                                             <br>
-                                        </h4>
-                                        <div class="form-check">
-                                            <form:radiobutton path="days" value="no"/> <spring:message code="specialist.anyDay"/><br>
-                                            <c:forEach items="${futureDays}" var="day">
-                                                <form:radiobutton path="days" value="${day}"/>
-                                                <c:out value="${day}"/><br>
-                                            </c:forEach>
+                                            <h4 class="sidebar-title">
+                                                <spring:message code="specialist.futureDays"/>
+                                                <br>
+                                            </h4>
+                                            <div class="form-check">
+                                                <form:radiobutton path="days" value="no"/> <spring:message code="specialist.anyDay"/><br>
+                                                <c:forEach items="${futureDays}" var="day">
+                                                    <form:radiobutton path="days" value="${day}"/>
+                                                    <c:out value="${day}"/><br>
+                                                </c:forEach>
+                                            </div>
                                         </div>
-
-                                    </div>
+                                    </c:if>
                                 </div>
                             </c:when>
                             <c:otherwise>
