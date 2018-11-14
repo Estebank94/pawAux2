@@ -3,6 +3,9 @@ package ar.edu.itba.paw.models;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 
@@ -152,6 +155,16 @@ public class Appointment implements Comparable<Appointment>{
     }
     public void cancelAppointment(){
         setAppointmentCancelled(true);
+    }
+
+    public boolean canCancel(){
+        LocalDate appDate = LocalDate.parse(getAppointmentDay());
+        LocalDateTime appDayTime = appDate.atTime(LocalTime.parse(getAppointmentTime()));
+        if (appDayTime.isAfter(LocalDateTime.now().plusDays(2))){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
