@@ -11,6 +11,10 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Root;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -38,12 +42,18 @@ public class SearchDaoImpl implements SearchDao {
 
 //    @Override
 //    public List<Insurance> listInsurancesWithDoctors(){
-//        StringBuilder query = new StringBuilder();
+//
+//        CriteriaBuilder cb = em.getCriteriaBuilder();
+//        CriteriaQuery<Insurance> query = cb.createQuery(Insurance.class);
+//        Root<Insurance> root = query.from(Insurance.class);
+//
+//        Join<Insurance, Doctor> insuranceWithDoctors = root.join(Insurance.g)
+
 //        query.append("SELECT DISTINCT insuranceName, insurance.id ");
 //        query.append("FROM medicalCare ");
 //        query.append("JOIN insurancePlan ON medicalCare.insurancePlanId = insurancePlan.id " );
 //        query.append("JOIN insurance ON insurance.id = insurancePlan.insuranceId");
-//
+
 //        return list;
 //    }
 
@@ -80,34 +90,5 @@ public class SearchDaoImpl implements SearchDao {
         final List<InsurancePlan> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
     }
-
-//    private final class CompressedExtractor implements ResultSetExtractor<Map<String, List<String>>> {
-//        @Override
-//        public Map<String, List<String>> extractData(ResultSet rs) throws SQLException {
-//            Map<String, List<String>> map = new HashMap<>();
-//
-//
-//            while(rs.next()){
-//                boolean containsInsurance = false;
-//                for(String insurance : map.keySet()){
-//                    if(insurance.equals(rs.getString("insuranceName"))){
-//                        map.get(insurance).add(rs.getString("insurancePlanName"));
-//                        containsInsurance = true;
-//                    }
-//                }
-//                if(!containsInsurance){
-//                    List<String> l = new ArrayList<>();
-//                    l.add(rs.getString("insurancePlanName"));
-//                    map.put(rs.getString("insuranceName"),l);
-//                }
-//
-//            }
-//            System.out.println(map.keySet().size());
-//            for(String insurance : map.keySet()){
-//                System.out.println(insurance);
-//            }
-//            return map;
-//        }
-//    }
 
 }

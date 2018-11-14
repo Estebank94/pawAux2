@@ -354,7 +354,7 @@ public class DoctorServiceImpl implements DoctorService {
         }
         for (WorkingHours wh: workingHours){
             if (wh == null){
-                LOGGER.debug("The Working Hour list contains a null working hour. Day: {}", wh.getDayOfWeek());
+                LOGGER.debug("The Working Hour list contains a null working hour.");
                 throw new NotValidWorkingHourException("The Working Hours list contains a null working hour");
             }
             if (wh.getFinishTime() == null){
