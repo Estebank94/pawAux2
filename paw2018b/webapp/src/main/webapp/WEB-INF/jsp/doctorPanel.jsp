@@ -156,6 +156,7 @@
                             </c:if>
                             <c:forEach items="${patientAppointments}" var="appointment">
                                 <div style="margin-left: 16px; margin-right: 16px;">
+                                    <br>
                                     <h3>
                                             <%--<c:out value="${appointment.key}"></c:out>--%>
                                         <c:out value="${appointment.key.dayOfMonth}"/>-<c:out value="${appointment.key.monthValue}"/>-<c:out value="${appointment.key.year}"/>
