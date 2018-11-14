@@ -174,7 +174,7 @@
                                 </security:authorize>
                                 <security:authorize access="isAuthenticated()">
                                     <div class="col-sm-2">
-                                        <button type="submit" class="btn btn-primary" path="submit" style="position: absolute; bottom: 0;">Reservar Turno</button>
+                                        <button type="submit" class="btn btn-primary custom-btn" path="submit" style="position: absolute; bottom: 0;">Reservar Turno</button>
                                     </div>
                                 </security:authorize>
                             </div>
@@ -263,7 +263,7 @@
                                 <label for="description">Describí tu experiencia</label>
                                 <form:textarea class="form-control" id="description" path="description" rows="3"/>
                             </div>
-                            <button type="submit" class="btn btn-primary mb-2">Enviar Reseña</button>
+                            <button type="submit" class="btn btn-primary custom-btn mb-2">Enviar Reseña</button>
                         </form:form>
                     </div>
                 </security:authorize>
