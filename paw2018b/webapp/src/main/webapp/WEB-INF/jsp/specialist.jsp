@@ -174,7 +174,11 @@
                                 </security:authorize>
                                 <security:authorize access="isAuthenticated()">
                                     <div class="col-sm-2">
+<<<<<<< HEAD
                                         <button type="submit" class="btn btn-primary" path="submit" style="position: absolute; bottom: 0;"><spring:message code="appointment.choose"/></button>
+=======
+                                        <button type="submit" class="btn btn-primary custom-btn" path="submit" style="position: absolute; bottom: 0;">Reservar Turno</button>
+>>>>>>> 0b343055aab0259a28e7c161bf8e4906bf0fd28e
                                     </div>
                                 </security:authorize>
                             </div>
@@ -264,6 +268,7 @@
                                 <form:textarea class="form-control" id="description" path="description" rows="3"/>
                             </div>
                             <button type="submit" class="btn btn-primary mb-2"><spring:message code="panel.review.send"/></button>
+
                         </form:form>
                     </div>
                 </security:authorize>
