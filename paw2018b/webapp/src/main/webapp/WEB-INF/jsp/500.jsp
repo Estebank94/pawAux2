@@ -33,7 +33,7 @@
 <div>
     <div class="inner-div" style="max-width: 1024px;">
         <img class="center-img" src="https://i.imgur.com/rYW2N3E.jpg">
-        <button class="btn btn-primary custom-btn center-horiz box" type="button" onclick="window.location='<c:out value="/">'">
+        <button class="btn btn-primary custom-btn center-horiz box" type="button" onclick="window.location='<c:url value="/"/>'">
             Volver al Inicio
         </button>
     </div>

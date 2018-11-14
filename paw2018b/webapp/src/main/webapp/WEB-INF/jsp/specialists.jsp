@@ -165,7 +165,7 @@
                                 </li>
                             </c:if>
                             <c:if test="${currentPage+1 != page}">
-                                <li class="page-item"><a class="page-link" style="color: #257CBF;" href="/processForm/${page-1}?name=&specialty=${qSpecialty}&insurance=${qInsurance}&_insurancePlan=no&sex=${qSex}">${page}</a></li>
+                                <li class="page-item"><a class="page-link" style="color: #257CBF;" href="<c:url value="/processForm/${page-1}?name=&specialty=${qSpecialty}&insurance=${qInsurance}&_insurancePlan=no&sex=${qSex}"/>">${page}</a></li>
                             </c:if>
                         </c:forEach>
                     </ul>
