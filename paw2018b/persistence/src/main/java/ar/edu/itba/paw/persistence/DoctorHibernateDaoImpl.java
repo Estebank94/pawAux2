@@ -279,5 +279,33 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         return true;
     }
 
+    public Optional<Description> findDescriptionByDoctor(Doctor doctor){
+        final TypedQuery<Description> query = em.createQuery("from Description as d WHERE d.doctor = :doctor", Description.class);
+        query.setParameter("doctor", doctor);
+        return Optional.ofNullable(query.getSingleResult());
+    }
+
+    public boolean mergeDoctorDescription(Description original, Description toMerge){
+        if (original == null){
+            return false;
+        }
+        if (toMerge == null){
+            return false;
+        }
+        Doctor doctor = original.getDoctor();
+
+        if (original.getLanguages() == null && toMerge.getLanguages() != null){
+            original.setLanguages(toMerge.getLanguages());
+        }
+        if (original.getEducation() == null && toMerge.getEducation() != null){
+            original.setEducation(toMerge.getEducation());
+        }
+        if (original.getCertificate() == null && toMerge.getCertificate() != null){
+            original.setCertificate(toMerge.getCertificate());
+        }
+        doctor.setDescription(original);
+        em.merge(doctor);
+        return true;
+    }
 
 }

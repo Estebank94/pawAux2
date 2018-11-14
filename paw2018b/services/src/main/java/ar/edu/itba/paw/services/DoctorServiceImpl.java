@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.sql.SQLException;
 import java.util.List;
@@ -504,7 +505,23 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     @Transactional
     public Optional<Doctor> setDescription(Doctor doctor, Description description){
-        doctorDao.setDoctorDescription(doctor, description);
+        boolean created = false;
+        Optional<Description> des = Optional.empty();
+        try {
+            des = doctorDao.findDescriptionByDoctor(doctor);
+            created = true;
+        } catch (NoResultException e){
+
+        } catch (Exception e){
+
+        }
+
+        if (des.isPresent()){
+            doctorDao.mergeDoctorDescription(des.get(), description);
+        } else {
+                doctorDao.setDoctorDescription(doctor, description);
+        }
+
         return Optional.ofNullable(doctor);
     }
 

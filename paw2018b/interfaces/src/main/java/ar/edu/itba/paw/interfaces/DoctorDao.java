@@ -33,4 +33,8 @@ public interface DoctorDao {
     Boolean setDoctorInsurances(Doctor doctor, List<InsurancePlan> insurancePlans);
 
     Boolean setDoctorDescription(Doctor doctor, Description description);
+
+    Optional<Description> findDescriptionByDoctor(Doctor doctor);
+
+    boolean mergeDoctorDescription(Description original, Description toMerge);
 }

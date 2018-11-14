@@ -135,11 +135,8 @@ public class DoctorPanelController {
             Optional<Doctor> doctor = doctorService.findDoctorById(String.valueOf(form.getDoctorid()));
             appointmentService.cancelAppointment(form.getDay(), form.getTime(), patient, doctor.get());
         }
-
         ModelAndView mav = new ModelAndView("redirect:/doctorPanel");
-
         return mav;
-
     }
 
 
