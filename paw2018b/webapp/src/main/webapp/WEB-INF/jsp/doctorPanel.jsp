@@ -133,7 +133,7 @@
                                 <div>
                                     <div style="padding-top: 20px; padding-left: 20px; padding-right: 20px;">
                                         <div class="media">
-                                            <img class="center-img" src="/resources/images/noAppointments.png">
+                                            <img class="center-img" src="https://i.imgur.com/qWxQY0d.png">
                                             <h3><spring:message code="patient.noAppointments" /></h3>
                                             <div>
                                                 <p><spring:message code="patient.noAppointmentsSub" /></p>

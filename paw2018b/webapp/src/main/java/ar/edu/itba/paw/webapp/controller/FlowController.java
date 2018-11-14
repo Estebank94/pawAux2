@@ -100,6 +100,7 @@ public class FlowController {
 					return new ModelAndView("404");
 				}
 				mav.addObject("patient", patient);
+				mav.addObject("hasFavorites", patient.getFavoriteDoctors().size() > 0 );
 			}
 		}
 		return mav;
@@ -194,10 +195,17 @@ public class FlowController {
 				Doctor doctor;
 				try {
 					doctor = doctorService.findDoctorById(doctorId).get();
+					if (doctor == null){
+						LOGGER.trace("404 error");
+						return new ModelAndView("404");
+					}
 				} catch (NotFoundDoctorException e) {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				} catch (NotValidIDException e) {
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				} catch (Exception e){
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				}

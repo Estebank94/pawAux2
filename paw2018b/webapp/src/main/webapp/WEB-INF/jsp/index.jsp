@@ -154,7 +154,7 @@
     </div>
 </security:authorize>
 <security:authorize access="isAuthenticated()">
-    <c:if test="${patient.favorites.size() > 0}">
+    <c:if test="${hasFavorites}">
         <div class="container">
             <div class="margin-big">
                 <p class="jumbotron-subtitle"><spring:message code="explanation.loggedin.question"/></p>
@@ -196,7 +196,7 @@
             <br>
         </div>
     </c:if>
-    <c:if test="${patient.favorites.size() == 0}">
+    <c:if test="${!hasFavorites}">
         <div class="container">
             <div class="margin-big">
                 <p class="jumbotron-subtitle"><spring:message code="explanation.title" /></p>
@@ -236,12 +236,6 @@
     </c:if>
 
 </security:authorize>
-
-<!--<div class="footer-grey">
-  <div class="container">
-    <p class="footer-text">© Copyright 2018. Waldoc</p>
-  </div>
-</div>-->
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
