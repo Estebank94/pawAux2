@@ -204,7 +204,6 @@
                                             </div>
                                         </c:if>
                                     </div>
-                                    <%--
                                     <div>
                                         <h4 class="sidebar-title">
                                             <spring:message code="specialist.futureDays"/>
@@ -219,7 +218,6 @@
                                         </div>
 
                                     </div>
-                                    --%>
                                 </div>
                             </c:when>
                             <c:otherwise>
