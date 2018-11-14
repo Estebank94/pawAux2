@@ -109,12 +109,14 @@
                                                             <h5><spring:message code="general.doctorName" arguments="${name}; ${lastName}" htmlEscape="false" argumentSeparator=";"/></h5>
                                                             <p style="margin-bottom: 0rem"><strong><spring:message code="registration.phone"/>:</strong> <c:out value="${listItems.doctor.phoneNumber}"/></p>
                                                             <p><strong><spring:message code="registration.address"/>:</strong> <c:out value="${listItems.doctor.address}"/></p>
-                                                            <form:form modelAttribute="appointment" method="POST" action="${specialist_id}" id="appointment">
-                                                                <c:set var="message"><spring:message code="patient.continue"/></c:set>
-                                                                <div class = "btn btn-primary custom-btn red" onclick="cancelAppointment('${listItems.doctor.id}','${listItems.appointmentDay}', '${listItems.appointmentTime}','${message}')">
-                                                                    <spring:message code="patient.cancelAppointment"/>
-                                                                </div>
-                                                            </form:form>
+                                                            <c:if test="${listItems.canCancel()}">
+                                                                <form:form modelAttribute="appointment" method="POST" action="${specialist_id}" id="appointment">
+                                                                    <c:set var="message"><spring:message code="patient.continue"/></c:set>
+                                                                    <div class = "btn btn-primary custom-btn red" onclick="cancelAppointment('${listItems.doctor.id}','${listItems.appointmentDay}', '${listItems.appointmentTime}','${message}')">
+                                                                        <spring:message code="patient.cancelAppointment"/>
+                                                                    </div>
+                                                                </form:form>
+                                                            </c:if>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -158,7 +160,7 @@
                             <c:forEach items="${patient.favorites}" var="favorite">
                                 <c:if test="${favorite.favoriteCancelled eq false}">
                                     <div class="card card-doctor d-flex flex-row box"  onclick='window.location="<c:url value='/specialist/${favorite.doctor.id}'/>"'>
-                                        <img src="/profile-image/${favorite.doctor.id}" class="avatar">
+                                        <img src="<c:url value="/profile-image/${favorite.doctor.id}"/>" class="avatar">
                                         <div class="card-body">
                                             <div class="card-text">
                                                 <h3 class="doctor-name">${favorite.doctor.lastName}, ${favorite.doctor.firstName}</h3>
