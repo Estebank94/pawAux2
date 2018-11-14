@@ -66,6 +66,9 @@ public class TestConfig {
     private InsurancePlanDao insurancePlanDao;
 
     @Mock
+    private InsuranceDao insuranceDao;
+
+    @Mock
     private DescriptionDao descriptionDao;
 
     @Mock
@@ -125,6 +128,11 @@ public class TestConfig {
     @Bean
     public InsurancePlanDao getInsurancePlanDao() {
         return insurancePlanDao;
+    }
+
+    @Bean
+    public InsuranceDao getInsuranceDao() {
+        return insuranceDao;
     }
 
     @Bean

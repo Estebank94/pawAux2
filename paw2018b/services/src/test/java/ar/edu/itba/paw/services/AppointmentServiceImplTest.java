@@ -50,39 +50,11 @@ public class AppointmentServiceImplTest {
     private Patient patient;
     private Appointment appointment;
 
-//    @Rule
-//    public MockitoRule rule = MockitoJUnit.rule();
-//
-//    @InjectMocks
-//    private AppointmentDao appointmentDao;
-//
-//    @InjectMocks
-//    private DoctorDao doctorDao;
-
     @Autowired
     private AppointmentServiceImpl appointmentServiceImpl;
 
     @Autowired
     private AppointmentDao appointmentDao;
-
-//    @Autowired
-//    private DataSource ds;
-
-//    private JdbcTemplate jdbcTemplate;
-
-//    @Before
-//    public void setUp() {
-//
-//        jdbcTemplate = new JdbcTemplate(ds);
-//        MockitoAnnotations.initMocks(this);
-//
-//    }
-
-//    @After
-//    public void tearDown(){
-//        JdbcTestUtils.deleteFromTables(jdbcTemplate, "appointment", "workingHour", "medicalCare", "doctorSpecialty", "doctor", "insurancePlan", "insurance",
-//                "Specialty", "review", "information", "patient");
-//    }
 
     @Test
     public void testCreateAppointment() throws Exception {

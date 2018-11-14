@@ -30,7 +30,9 @@
                         <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:white !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
                             <button class="dropdown-item" type="submit"><spring:message code="logout.message"/></button>
-                        <%--<button class="dropdown-item" type="button">Registrate como especialista</button>--%>
+                            <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="/specialist/${doctor.id}"/>'">
+                                <spring:message code="dropdown.viewInfo"/>
+                            </button>
                         </div>
                     </div>
                 </form:form>
@@ -45,7 +47,7 @@
             <div class="card-body">
                 <div class="card-text">
                     <div class="row">
-                        <img class="avatar big" src=<c:url value="/profile-image/${doctor.id}"/>/>
+                        <img class="avatar big" src="<c:url value="/profile-image/${doctor.id}"/>"/>
                         <div class="doctor-info-container">
                             <div>
                                 <p class="doctor-specialty"><spring:message code="welcome"/></p>
@@ -160,12 +162,14 @@
                                                             <h5><spring:message code="general.doctorName" arguments="${name}; ${lastName}" htmlEscape="false" argumentSeparator=";"/></h5>
                                                             <p style="margin-bottom: 0rem;"><strong><spring:message code="registration.phone"/>:</strong> <c:out value="${listItems.doctor.phoneNumber}"/></p>
                                                             <p><strong><spring:message code="registration.address"/>:</strong> <c:out value="${listItems.doctor.address}"/></p>
-                                                            <form:form modelAttribute="appointment" method="POST" action="${specialist_id}" id="appointment">
-                                                                <c:set var="message"><spring:message code="patient.continue"/></c:set>
-                                                                <div class = "btn btn-primary custom-btn red" onclick="cancelAppointment('${listItems.doctor.id}','${listItems.appointmentDay}', '${listItems.appointmentTime}','${message}')">
-                                                                    <spring:message code="patient.cancelAppointment"/>
-                                                                </div>
-                                                            </form:form>
+                                                            <c:if test="${listItems.canCancel()}">
+                                                                <form:form modelAttribute="appointment" method="POST" action="${specialist_id}" id="appointment">
+                                                                    <c:set var="message"><spring:message code="patient.continue"/></c:set>
+                                                                    <div class = "btn btn-primary custom-btn red" onclick="cancelAppointment('${listItems.doctor.id}','${listItems.appointmentDay}', '${listItems.appointmentTime}','${message}')">
+                                                                        <spring:message code="patient.cancelAppointment"/>
+                                                                    </div>
+                                                                </form:form>
+                                                            </c:if>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -233,7 +237,7 @@
                             <br>
                             <c:forEach items="${favoritesDoctors}" var="doctor">
                                 <div class="card card-doctor d-flex flex-row box" onclick='window.location="<c:url value='/specialist/${doctor.id}'/>"'>
-                                    <img src="/profile-image/${doctor.id}" class="avatar">
+                                    <img src="<c:url value="/profile-image/${doctor.id}"/>" class="avatar">
                                     <div class="card-body">
                                         <h3 class="doctor-name">${doctor.lastName}, ${doctor.firstName}</h3>
                                         <div class="row-container">

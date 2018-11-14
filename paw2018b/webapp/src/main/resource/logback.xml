@@ -4,7 +4,7 @@
     <appender name="root-appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <maxHistory>5</maxHistory>
-            <Filenamepattern>logs/warnings.%d{yyyy-MM-dd}.log</Filenamepattern>
+            <Filenamepattern>logs/paw2018b-06-warnings.%d{yyyy-MM-dd}.log</Filenamepattern>
         </rollingPolicy>
         <encoder>
             <pattern>${defaultPattern:-}</pattern>
@@ -13,7 +13,7 @@
     <appender name="paw-appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <maxHistory>7</maxHistory>
-            <Filenamepattern>logs/paw.%d{yyyy-MM-dd}.log</Filenamepattern>
+            <Filenamepattern>logs/paw2018b-06-warnings-webapp.%d{yyyy-MM-dd}.log</Filenamepattern>
         </rollingPolicy>
         <encoder>
             <pattern>${defaultPattern:-}</pattern>
