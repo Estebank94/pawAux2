@@ -81,16 +81,18 @@
                             <c:if test="${patientAppointments.size() == 0}">
                                 <div>
                                     <div style="padding-top: 20px; padding-left: 20px; padding-right: 20px;">
-                                        <div class="media">
+                                        <div>
                                             <img class="center-img" src="https://i.imgur.com/qWxQY0d.png">
-                                            <h3><spring:message code="patient.noAppointments" /></h3>
-                                            <p><spring:message code="patient.noAppointmentsSub" /></p>
+                                            <br>
+                                            <h3 style="text-align: center;"><spring:message code="patient.noAppointments" /></h3>
+                                            <p style="text-align: center;"><spring:message code="patient.noAppointmentsSub" /></p>
                                         </div>
                                     </div>
                                 </div>
                             </c:if>
                             <c:forEach items="${patientAppointments}" var="appointment">
                                 <div style="margin-left: 16px; margin-right: 16px;">
+                                    <br>
                                     <h3>
                                             <%--<c:out value="${appointment.key}"></c:out>--%>
                                         <c:out value="${appointment.key.dayOfMonth}"/>-<c:out value="${appointment.key.monthValue}"/>-<c:out value="${appointment.key.year}"/>
@@ -100,7 +102,6 @@
                                         <c:if test="${!listItems.appointmentCancelled}">
                                             <div>
                                                 <div class="row" style="margin: 3px">
-                                                        <%--<img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_h_2017.jpg" class="avatar medium">--%>
                                                     <div class="center-vertical">
                                                         <div>
                                                             <p style="margin-bottom: 0px"><c:out value="${listItems.appointmentTime}"/></p>
@@ -132,12 +133,23 @@
                     <%-- Historical Appointments--%>
                     <div class="tab-pane fade" id="historical-appointments" role="tabpanel" aria-labelledby="history-pac-app">
                         <br>
+                        <c:if test="${patientHistoricalAppointments.size() == 0}">
+                            <div>
+                                <div style="padding-top: 20px; padding-left: 20px; padding-right: 20px;">
+                                    <div>
+                                        <img class="center-img" src="https://i.imgur.com/qWxQY0d.png">
+                                        <br>
+                                        <h3 style="text-align: center;"><spring:message code="patient.noHistoricalAppointments" /></h3>
+                                        <p style="text-align: center;"><spring:message code="patient.noHistoricalAppointmentsSub" /></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:if>
                         <c:forEach items="${patientHistoricalAppointments}" var="appointment">
                             <c:if test="${appointment.appointmentCancelled eq false}">
                                 <div style="margin-left: 16px; margin-right: 16px;">
                                     <div>
                                         <div class="row" style="margin: 3px">
-                                                <%--<img src="http://cdn1.thr.com/sites/default/files/2017/08/gettyimages-630421358_-_xh_2017.jpg" class="avatar medium">--%>
                                             <div class="center-vertical">
                                                 <div>
                                                     <p style="margin-bottom: 0px"><c:out value="${appointment.appointmentDay}"/> <c:out value="${appointment.appointmentTime}"/></p>
@@ -157,6 +169,18 @@
                         <%-- Favorite Doctors--%>
                         <div class="tab-pane fade" id="fav-doc" role="tabpanel" aria-labelledby="favorite-doctors-tab">
                             <br>
+                            <c:if test="${patient.favoriteDoctors.size() == 0}">
+                                <div>
+                                    <div style="padding-top: 20px; padding-left: 20px; padding-right: 20px;">
+                                        <div>
+                                            <img class="center-img" src="https://i.imgur.com/qWxQY0d.png">
+                                            <br>
+                                            <h3 style="text-align: center;"><spring:message code="patient.noFavorites" /></h3>
+                                            <p style="text-align: center;"><spring:message code="patient.noFavoritesSub" /></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:if>
                             <c:forEach items="${patient.favorites}" var="favorite">
                                 <c:if test="${favorite.favoriteCancelled eq false}">
                                     <div class="card card-doctor d-flex flex-row box"  onclick='window.location="<c:url value='/specialist/${favorite.doctor.id}'/>"'>
