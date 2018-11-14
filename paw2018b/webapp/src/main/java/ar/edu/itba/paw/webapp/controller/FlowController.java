@@ -201,13 +201,21 @@ public class FlowController {
 				Doctor doctor;
 				try {
 					doctor = doctorService.findDoctorById(doctorId).get();
+					if (doctor == null){
+						LOGGER.trace("404 error");
+						return new ModelAndView("404");
+					}
 				} catch (NotFoundDoctorException e) {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				} catch (NotValidIDException e) {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
+				} catch (Exception e){
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
 				}
+
 //				if (doctor.getDescription() != null){
 //					if(doctor.getDescription().getLanguages() == null){
 //						doctor.getDescription().getLanguages().contains("no");
