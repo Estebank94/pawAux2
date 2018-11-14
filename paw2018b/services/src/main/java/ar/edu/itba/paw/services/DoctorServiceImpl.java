@@ -126,6 +126,12 @@ public class DoctorServiceImpl implements DoctorService {
 
         LOGGER.debug("Find doctor by ID");
         Optional<Doctor> thisdoctor =  doctorDao.findDoctorById(idAsInt);
+
+        if (!thisdoctor.isPresent()){
+            LOGGER.debug("The Doctor doesn't exist with ID number: {}", idAsInt);
+            throw new NotFoundDoctorException("Doctor doesn't exist");
+        }
+
         thisdoctor.get().getWorkingHours().size();
         thisdoctor.get().getAppointments().size();
         thisdoctor.get().getReviews().size();
@@ -144,10 +150,7 @@ public class DoctorServiceImpl implements DoctorService {
 
         Doctor doc = thisdoctor.get();
         em.merge(doc);
-        if (!thisdoctor.isPresent()){
-            LOGGER.debug("The Doctor doesn't exist with ID number: {}", idAsInt);
-            throw new NotFoundDoctorException("Doctor doesn't exist");
-        }
+
         LOGGER.debug("Doctor with ID: {} found", idAsInt);
         LOGGER.debug("Doctor is: {}", thisdoctor);
         return thisdoctor;

@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -247,16 +249,35 @@ public class RegistrationController {
 
     @ResponseBody
     @RequestMapping(value = "/profile-image/{doctorId}", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
-    public byte[] avatar(@PathVariable(value = "doctorId") final Integer doctorId ) throws Exception {
+    public ResponseEntity<byte[]> avatar(@PathVariable(value = "doctorId") final Integer doctorId ) throws IOException {
 
-        byte[] bytes = doctorService.findDoctorById(String.valueOf(doctorId)).get().getProfilePicture();
+        LOGGER.debug("RegistrationController: Profile-image Avatar");
+        
+        byte[] bytes = null;
+
+        try {
+            bytes = doctorService.findDoctorById(String.valueOf(doctorId)).get().getProfilePicture();
+        } catch (NotFoundDoctorException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (NotValidIDException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
         if(bytes != null){
-            return bytes;
+            return new ResponseEntity<>(bytes, HttpStatus.OK);
         }else{
 
             Resource resource;
+            String sex = null;
+            try {
+                sex = doctorService.findDoctorById(String.valueOf(doctorId)).get().getSex();
+            } catch (NotFoundDoctorException e) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } catch (NotValidIDException e) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
 
-            if(doctorService.findDoctorById(String.valueOf(doctorId)).get().getSex().equals("M")){
+            if(sex.equals("M")){
                 resource = applicationContext.getResource("/resources/images/defaultmen.jpg");
             }else{
                 resource = applicationContext.getResource("/resources/images/defaultwomen.jpg");
@@ -266,7 +287,7 @@ public class RegistrationController {
             byte[] defaultImage = new byte[(int) resourceLength];
             resource.getInputStream().read(defaultImage);
 
-            return defaultImage;
+            return new ResponseEntity<>(defaultImage, HttpStatus.OK);
         }
     }
 
