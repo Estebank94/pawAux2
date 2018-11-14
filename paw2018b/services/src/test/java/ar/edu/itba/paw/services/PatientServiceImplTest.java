@@ -24,9 +24,9 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = TestConfig.class)
 public class PatientServiceImplTest {
 
-    private static final String PATIENT_EMAIL = "Roberto@rosa.com";
-    private static final Integer PATIENT_ID = 5;
-    private static final Integer PATIENT_DOC_ID = 1;
+//    private static final String PATIENT_EMAIL = "Roberto@rosa.com";
+//    private static final Integer PATIENT_ID = 5;
+//    private static final Integer PATIENT_DOC_ID = 1;
 
     private static final String NEW_PATIENT_NAME = "Mike";
     private static final String NEW_PATIENT_LASTNAME = "Muchpain";
@@ -36,31 +36,11 @@ public class PatientServiceImplTest {
 
     private Patient createPatient;
 
-    private static final Integer PATIENTS_QUANTITY_BEFORE = 2;
-
     @Autowired
     private PatientServiceImpl patientServiceImpl;
 
     @Autowired
     private PatientDao patientDao;
-
-//    @Autowired
-//    private DataSource ds;
-//
-//    private JdbcTemplate jdbcTemplate;
-
-//    @Before
-//    public void setUp() {
-//
-//        jdbcTemplate = new JdbcTemplate(ds);
-//
-//    }
-//
-//    @After
-//    public void tearDown(){
-//        JdbcTestUtils.deleteFromTables(jdbcTemplate, "workingHour", "medicalCare", "doctorSpecialty", "doctor", "insurancePlan", "insurance",
-//                "Specialty", "review", "information", "appointment", "patient");
-//    }
 
     @Test
     public void testCreatePatient() throws Exception {
@@ -81,42 +61,8 @@ public class PatientServiceImplTest {
         assertEquals(NEW_PATIENT_PHONE, newPatient.getPhoneNumber());
         assertEquals(NEW_PATIENT_EMAIL, newPatient.getEmail());
         assertEquals(NEW_PATIENT_PASSWORD, newPatient.getPassword());
-//        assertEquals(PATIENTS_QUANTITY_BEFORE + 1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "patient"));
 
     }
 
-//    @Test
-//    public void testFindByEmail() throws Exception{
-//
-//        Patient patientByEmail = patientServiceImpl.findPatientByEmail(PATIENT_EMAIL);
-//
-//        assertNotNull(patientByEmail);
-//        assertEquals(PATIENT_ID, patientByEmail.getPatientId());
-//        assertEquals(PATIENT_EMAIL, patientByEmail.getEmail());
-//
-//    }
-//
-//    @Test
-//    public void testFindById() throws Exception{
-//
-//        Patient patientById = patientServiceImpl.findPatientById(PATIENT_ID);
-//
-//        assertNotNull(patientById);
-//        assertEquals(PATIENT_ID, patientById.getPatientId());
-//
-//    }
-//
-//    @Test
-//    public void testSetPatientInfo() throws Exception {
-//
-//        Boolean setInfo = patientServiceImpl.setDoctorId(PATIENT_ID, PATIENT_DOC_ID);
-//
-//        Patient setPatient = patientServiceImpl.findPatientById(PATIENT_ID);
-//
-//        assertTrue(setInfo);
-//        assertEquals(PATIENT_DOC_ID, setPatient.getDoctorId());
-//        assertEquals(PATIENT_ID, setPatient.getPatientId());
-//
-//    }
 
 }
