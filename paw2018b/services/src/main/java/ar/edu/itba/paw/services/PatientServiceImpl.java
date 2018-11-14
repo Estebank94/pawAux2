@@ -4,7 +4,6 @@ import ar.edu.itba.paw.interfaces.DoctorDao;
 import ar.edu.itba.paw.interfaces.PatientDao;
 import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.InputValidation;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.*;
 import org.hibernate.exception.ConstraintViolationException;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -57,11 +55,6 @@ public class PatientServiceImpl implements PatientService {
             throw new NotValidFirstNameException("Username firstname maxlength is 50");
         }
 
-        if (!InputValidation.validUTF8(firstName.getBytes())){
-            LOGGER.debug("The first name is not a valid UTF8");
-            throw new NotValidFirstNameException();
-        }
-
         if (lastName == null) {
             LOGGER.debug("Last Name of a Patient is null");
             throw new NotValidLastNameException("last name can't be null");
@@ -74,11 +67,6 @@ public class PatientServiceImpl implements PatientService {
         if (lastName.length() > 45){
             LOGGER.debug("Last Name longer than 45 characters. Last Name: {}", lastName);
             throw new NotValidLastNameException("Username Lastname maxlength is 45");
-        }
-
-        if (!InputValidation.validUTF8(lastName.getBytes())){
-            LOGGER.debug("The last name is not a valid UTF-8");
-            throw new NotValidLastNameException();
         }
 
         if (phoneNumber == null) {
@@ -95,11 +83,6 @@ public class PatientServiceImpl implements PatientService {
             throw new NotValidPhoneNumberException("phonenumber can't have more than 20 characters");
         }
 
-        if (!InputValidation.validUTF8(phoneNumber.getBytes())){
-            LOGGER.debug("The phonenumber is not a valid UTF8");
-            throw new NotValidPhoneNumberException();
-        }
-
         if (email == null) {
             LOGGER.debug("Email is null");
             throw new NotValidEmailException("email can't be null");
@@ -107,11 +90,6 @@ public class PatientServiceImpl implements PatientService {
         if (email.length() > 90){
             LOGGER.debug("Email has more than 90 characters. Email given: {}", email);
             throw new NotValidEmailException("Email can't have more than 90 characters");
-        }
-
-        if (!InputValidation.validUTF8(email.getBytes())){
-            LOGGER.debug("The email is not a valid UTF8");
-            throw new NotValidEmailException();
         }
 
         if (password == null){
@@ -126,10 +104,6 @@ public class PatientServiceImpl implements PatientService {
         if (password.length() > 55){
             LOGGER.debug("Password has more than 72 characters. Password given: {}", password);
             throw new NotValidPasswordException("password can't have more than 72 characters");
-        }
-        if (!InputValidation.validUTF8(password.getBytes())){
-            LOGGER.debug("The password is not a valid UTF8");
-            throw new NotValidPhoneNumberException();
         }
 
         if (patientDao.findPatientByEmail(email) != null){
