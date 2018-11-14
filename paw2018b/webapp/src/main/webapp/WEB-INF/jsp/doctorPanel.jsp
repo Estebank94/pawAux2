@@ -47,7 +47,7 @@
             <div class="card-body">
                 <div class="card-text">
                     <div class="row">
-                        <img class="avatar big" src=<c:url value="/profile-image/${doctor.id}"/>/>
+                        <img class="avatar big" src="<c:url value="/profile-image/${doctor.id}"/>"/>
                         <div class="doctor-info-container">
                             <div>
                                 <p class="doctor-specialty"><spring:message code="welcome"/></p>
@@ -235,7 +235,7 @@
                             <br>
                             <c:forEach items="${favoritesDoctors}" var="doctor">
                                 <div class="card card-doctor d-flex flex-row box" onclick='window.location="<c:url value='/specialist/${doctor.id}'/>"'>
-                                    <img src="/profile-image/${doctor.id}" class="avatar">
+                                    <img src="<c:url value="/profile-image/${doctor.id}"/>" class="avatar">
                                     <div class="card-body">
                                         <h3 class="doctor-name">${doctor.lastName}, ${doctor.firstName}</h3>
                                         <div class="row-container">

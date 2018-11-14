@@ -105,7 +105,7 @@
             <div class="card-body">
                 <div class="card-text">
                     <div class="row">
-                        <img class="avatar big" src=<c:out value="/profile-image/${doctor.id}"/>/>
+                        <img class="avatar big" src="<c:url value="/profile-image/${doctor.id}"/>"/>
                         <div class="doctor-info-container">
                             <div>
                                 <div class="row center-vertical">
@@ -114,7 +114,7 @@
                                     <h3 class="doctor-name" style="margin-left: 14px;"><spring:message argumentSeparator=";" htmlEscape="false" arguments="${name}; ${lastName}" code="general.doctorName"/></h3>
                                     <security:authorize access="isAuthenticated()">
                                         <c:if test="${user.isFavorite(doctor) || isFavorite eq true}">
-                                            <form:form modelAttribute="favorite" method="POST" action="${specialist_id}" id="favorite">
+                                            <form:form FmodelAttribute="favorite" method="POST" action="${specialist_id}" id="favorite">
                                                 <div class="heart-added" onclick="removeFavorite()"></div>
                                             </form:form>
                                         </c:if>

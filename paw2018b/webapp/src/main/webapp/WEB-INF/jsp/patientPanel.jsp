@@ -158,7 +158,7 @@
                             <c:forEach items="${patient.favorites}" var="favorite">
                                 <c:if test="${favorite.favoriteCancelled eq false}">
                                     <div class="card card-doctor d-flex flex-row box"  onclick='window.location="<c:url value='/specialist/${favorite.doctor.id}'/>"'>
-                                        <img src="/profile-image/${favorite.doctor.id}" class="avatar">
+                                        <img src="<c:url value="/profile-image/${favorite.doctor.id}"/>" class="avatar">
                                         <div class="card-body">
                                             <div class="card-text">
                                                 <h3 class="doctor-name">${favorite.doctor.lastName}, ${favorite.doctor.firstName}</h3>
