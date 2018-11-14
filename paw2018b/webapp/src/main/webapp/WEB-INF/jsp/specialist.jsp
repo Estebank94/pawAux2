@@ -108,10 +108,10 @@
                         <img class="avatar big" src=<c:out value="/profile-image/${doctor.id}"/>/>
                         <div class="doctor-info-container">
                             <div>
-                                <div class="row">
+                                <div class="row center-vertical">
                                     <c:set var="name" value="${doctor.firstName}"/>
                                     <c:set var="lastName" value="${doctor.lastName}"/>
-                                    <h3 class="doctor-name"><spring:message argumentSeparator=";" htmlEscape="false" arguments="${name}; ${lastName}" code="general.doctorName"/></h3>
+                                    <h3 class="doctor-name" style="margin-left: 14px;"><spring:message argumentSeparator=";" htmlEscape="false" arguments="${name}; ${lastName}" code="general.doctorName"/></h3>
                                     <security:authorize access="isAuthenticated()">
                                         <c:if test="${user.isFavorite(doctor) || isFavorite eq true}">
                                             <form:form modelAttribute="favorite" method="POST" action="${specialist_id}" id="favorite">
