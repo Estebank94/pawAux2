@@ -26,19 +26,19 @@ public class ProfessionalForm {
 
     private MultipartFile avatar;
 
-    @Length(max=250, message = "Cantidad de caracteres incorrecto. Su nombre debe contener entre 3 y 45 caracteres")
+    @Length(max=250)
     private String certificate;
 
-    @Length(max=250, message = "Cantidad de caracteres incorrecto. Su nombre debe contener entre 3 y 45 caracteres")
+    @Length(max=250)
     private String education;
 
     private String languages;
 
-    @NotNull(message = "Por favor, registre las obras sociales con las que trabaja")
+    @NotNull
     private List<String> insurance;
-    @NotNull(message = "Por favor, indique los planes de la obra social seleccionada, o seleccione una")
+    @NotNull
     private List<String> insurancePlan;
-    @NotNull(message = "Por favor, indique su especialidad")
+    @NotNull
     private Set<String> specialty;
 
 

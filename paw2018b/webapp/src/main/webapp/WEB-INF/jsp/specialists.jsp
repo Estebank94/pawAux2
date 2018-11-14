@@ -15,7 +15,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Waldoc</title>
+    <title><spring:message code="brand.name"/></title>
     <meta name="description" content="Roughly 155 characters">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
@@ -147,7 +147,7 @@
 
                             <p class="doctor-text">${doctorListItem.description.certificate}</p>
                             <br>
-                            <p class="doctor-text"><i class="fas fa-map-marker-alt"></i> ${doctorListItem.address}, CABA</p>
+                            <p class="doctor-text"><i class="fas fa-map-marker-alt"></i> ${doctorListItem.address}, <spring:message code="city"/></p>
                         </div>
                     </div>
                 </div>
@@ -182,7 +182,7 @@
                             <c:when test="${search.insurance != 'no' || sexes.size() != 1}">
                                 <div>
                                     <c:if test="${search.insurance != 'no'}">
-                                        <h4 class="sidebar-title">Plan Prepaga</h4>
+                                        <h4 class="sidebar-title"><spring:message code="specialist.insurancesPlan.title"/></h4>
                                             <div class="form-check">
                                                 <b> ${searchInsurance.name} <br> </b>
                                                     <form:checkboxes path="insurancePlan" items="${searchInsurance.plans}" itemValue="plan" itemLabel="plan" delimiter="<br>" />

@@ -253,7 +253,7 @@
                                         </c:if>
                                         <p class="doctor-text">${doctor.description.certificate}</p>
                                         <br>
-                                        <p class="doctor-text"><i class="fas fa-map-marker-alt"></i> ${doctor.address}, CABA</p>
+                                        <p class="doctor-text"><i class="fas fa-map-marker-alt"></i> ${doctor.address}, <spring:message code="city"/></p>
                                     </div>
                                 </div>
                             </c:forEach>

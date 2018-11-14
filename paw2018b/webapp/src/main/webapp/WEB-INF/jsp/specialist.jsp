@@ -54,7 +54,7 @@
                         <div class="dropdown">
                             <button class="btn btn-light dropdown-toggle" style="margin-right: 15px; background-color:transparent; border-color:white; color:#ffffff !important;" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><b><c:out value="${userName}"/></b></button>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-                                <button class="dropdown-item" type="submit">Cerrar Sesion</button>
+                                <button class="dropdown-item" type="submit"><spring:message code="logout.message"/></button>
                                 <security:authorize access="hasRole('ROLE_DOCTOR')">
                                     <button class="btn btn-light btn-primary custom-btn dropdown-item" style="margin-right: 8px; background-color:transparent; border-color:#257CBF; !important;" type="button" onclick="window.location='<c:url value="/doctorPanel"/>'">
                                         <spring:message code="dropdown.viewProfile"/>
@@ -149,7 +149,7 @@
                                     <div class="col-sm-5">
                                         <label for="day"><spring:message code="specialist.appointmentDay" /></label>
                                         <select class="custom-select" id="day" path="day" cssStyle="cursor: pointer;">
-                                            <option value="no" selected>Elegí el Día</option>
+                                            <option value="no" selected><spring:message code="appointment.choose.day"/></option>
                                             <c:forEach items="${appointmentsAvailable}" var="date">
                                                 <option value="${date.key}" label="${date.key}"><c:out value="${date.key}"/></option>
                                             </c:forEach>
@@ -158,7 +158,7 @@
                                 <div class="col-sm-5">
                                     <label for="time"><spring:message code="specialist.appointmentTime"/></label>
                                     <select class="custom-select" disabled="false" id="time" path="time" cssStyle="cursor: pointer;">
-                                        <option value="no" label="Elegi el Horario" selected>Elegí el Horario</option>
+                                        <option value="no" label="Elegi el Horario" selected><spring:message code="appointment.choose.time"/></option>
                                     <c:forEach items="${appointmentsAvailable}" var="date">
                                         <c:forEach items="${date.value}" var="listItem">
                                             <option value="${listItem.appointmentDay}_${listItem.appointmentTime}" day="${listItem.appointmentDay}" time="${listItem.appointmentTime}"><c:out value="${listItem.appointmentTime}"/></option>
@@ -169,12 +169,12 @@
                                 </div>
                                 <security:authorize access="!isAuthenticated()">
                                 <div class="col-sm-2">
-                                    <button type="button" class="btn btn-primary custom-btn" style="position: absolute; bottom: 0;" onclick="window.location='<c:url value="/showLogIn"/>'">Reservar Turno</button>
+                                    <button type="button" class="btn btn-primary custom-btn" style="position: absolute; bottom: 0;" onclick="window.location='<c:url value="/showLogIn"/>'"><spring:message code="appointment.choose"/></button>
                                 </div>
                                 </security:authorize>
                                 <security:authorize access="isAuthenticated()">
                                     <div class="col-sm-2">
-                                        <button type="submit" class="btn btn-primary custom-btn" path="submit" style="position: absolute; bottom: 0;">Reservar Turno</button>
+                                        <button type="submit" class="btn btn-primary" path="submit" style="position: absolute; bottom: 0;"><spring:message code="appointment.choose"/></button>
                                     </div>
                                 </security:authorize>
                             </div>
@@ -227,43 +227,44 @@
                 </div>
                 <hr>
                 <c:if test="${doctor.reviews.size() > 0}">
-                    <div>
-                        <h4>Reseñas</h4>
-                        <br>
-                        <c:forEach items="${doctor.reviews}" var="review">
-                            <p style="margin-bottom: 4px"><strong><c:out value="${review.reviewerFirstName} ${review.reviewerLastName}"/></strong></p>
-                            <div class="container row">
-                                <c:forEach begin = "1" end = "${review.stars}">
-                                    <i class="fas fa-star star-yellow star-small"></i>
-                                </c:forEach>
-                            </div>
-                            <p><c:out value="${review.description}"/></p>
-                            <hr style="margin-top:8px; margin-bottom: 8px;">
-                        </c:forEach>
-                        <br>
-                    </div>
+                <div>
+                    <h4><spring:message code="panel.review"/></h4>
+                    <br>
+                    <c:forEach items="${doctor.reviews}" var="review">
+                        <p style="margin-bottom: 4px"><strong><c:out value="${review.reviewerFirstName} ${review.reviewerLastName}"/></strong></p>
+                        <div class="container row">
+                            <c:forEach begin = "1" end = "${review.stars}">
+                                <i class="fas fa-star star-yellow star-small"></i>
+                            </c:forEach>
+                        </div>
+                        <p><c:out value="${review.description}"/></p>
+                        <hr style="margin-top:8px; margin-bottom: 8px;">
+                    </c:forEach>
+                    <br>
+                </div>
                 </c:if>
                 <security:authorize access="isAuthenticated()">
                     <div>
-                        <h4>Dejá tu Reseña</h4>
+                        <h4><spring:message code="panel.leave.review"/></h4>
                         <br>
                         <c:url var="specialist_id"  value="/specialist/${doctor.id}" />
                         <form:form modelAttribute="review" method="POST" action="${specialist_id}" id="review">
                             <div class="form-group">
-                                <label for="stars">Estrellas</label>
+                                <label for="stars"><spring:message code="panel.review.stars"/></label>
                                 <form:select class="form-control" id="stars" path="stars">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
+                                    <option><spring:message code="one"/></option>
+                                    <option><spring:message code="two"/></option>
+                                    <option><spring:message code="three"/></option>
+                                    <option><spring:message code="four"/></option>
+                                    <option><spring:message code="five"/></option>
                                 </form:select>
                             </div>
                             <div class="form-group">
-                                <label for="description">Describí tu experiencia</label>
+                                <label for="description"><spring:message code="panel.review.experience"/></label>
                                 <form:textarea class="form-control" id="description" path="description" rows="3"/>
                             </div>
-                            <button type="submit" class="btn btn-primary custom-btn mb-2">Enviar Reseña</button>
+                            <button type="submit" class="btn btn-primary mb-2"><spring:message code="panel.review.send"/></button>
+
                         </form:form>
                     </div>
                 </security:authorize>
