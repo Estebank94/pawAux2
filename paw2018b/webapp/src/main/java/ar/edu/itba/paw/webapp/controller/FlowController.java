@@ -156,12 +156,6 @@ public class FlowController {
 				mav.addObject("doctorID", patient.getDoctor().getId());
 			}
 		}
-//
-//		LOGGER.debug("GET DoctorList {}", doctorsList.toString());
-//		LOGGER.debug("GET ListInsurance {}", searchService.listInsurancesWithDoctors().get().toString());
-//		LOGGER.debug("GET specialtyList {}",  searchService.listSpecialtiesWithDoctors().get().toString());
-//		LOGGER.debug("GET sexList {}", compressedSearch.get().getSex().toString());
-//		LOGGER.debug("GET insuranceNameList {}", compressedSearch.get().getInsurance().toString());
 
 		List<String> sexes = new ArrayList<>();
 
@@ -207,13 +201,7 @@ public class FlowController {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				}
-//				if (doctor.getDescription() != null){
-//					if(doctor.getDescription().getLanguages() == null){
-//						doctor.getDescription().getLanguages().contains("no");
-////					TODO buscar el no en el string y sacarlo. PARSERRRRR
-////					doctor.getDescription().getLanguages().remove("no");
-//					}
-//				}
+
 
 				boolean hasUserRole = false;
 				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -238,8 +226,7 @@ public class FlowController {
 
 					}
 				}
-//				Patient patient = patientService.findPatientByEmail(authentication.getName());
-//				favoriteService.addFavorite(doctor, patient);
+
 
 				mav.addObject("doctor", doctor);
 				if(doctor.getDescription() == null || doctor.getDescription().getLanguages() == null ||doctor.getDescription().getLanguages().matches("no")){
@@ -247,13 +234,11 @@ public class FlowController {
 				}else{
 					mav.addObject("languagesNo", false);
 				}
-//				mav.addObject("workingHoursTest", doctor.getWorkingHours());
-//				TODO: AGREGAR FUNCION QUE BUSCA INSURANCE USANDO LOS INSURANCE PLANS
+
 				mav.addObject("insuranceNameList", doctor.getInsurancePlans());
 				List<WorkingHours> wh = doctor.getWorkingHours();
 				Map<LocalDate, List<Appointment>> appointments = doctor.getAvailableAppointments();
 				mav.addObject("appointmentsAvailable", doctor.getAvailableAppointments());
-//				TODO insurances And specialties with doctors
 				mav.addObject("insuranceList", searchService.listInsurances());
 				mav.addObject("specialtyList", searchService.listSpecialties());
 				mav.addObject("appointmentTaken",false);
@@ -280,8 +265,6 @@ public class FlowController {
 
 		Doctor doctor = doctorService.findDoctorById(String.valueOf(doctorId)).get();
 		boolean appointment = false;
-
-		/*TODO: check validation for try catch*/
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

@@ -45,6 +45,8 @@ public class PatientPanelController {
     @RequestMapping("/patientPanel")
     public ModelAndView patientPanel(){
 
+        LOGGER.debug("Calling: patientPanel GET");
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Patient patient;
@@ -70,6 +72,9 @@ public class PatientPanelController {
 
     @RequestMapping(value = "/patientPanel", method = {RequestMethod.POST})
     public ModelAndView patientPanel(@ModelAttribute("appointment")CancelAppointmentForm form) throws Exception{
+
+        LOGGER.debug("Calling: patientPanel POST");
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Patient patient;

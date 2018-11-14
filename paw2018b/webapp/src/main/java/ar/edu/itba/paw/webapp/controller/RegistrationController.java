@@ -70,7 +70,6 @@ public class RegistrationController {
         if(errors.hasErrors() || !personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation()
         )){
             if(!personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())){
-                /*TODO: this doesn't show the error message*/
                 showDoctorRegistration(personalForm).addObject("noMatchingPassword", true)
                         .addObject("repeatedEmail",false)
                         .addObject("wrongLastName",false)
@@ -405,7 +404,6 @@ public class RegistrationController {
 
         final ModelAndView mav = new ModelAndView("index");
         mav.addObject("search", new Search());
-//        TODO LIST ONLY INSURANCES AND SPECIALTIES WITH DOCTORS
         mav.addObject("insuranceList", searchService.listInsurances());
         mav.addObject("specialtyList", searchService.listSpecialties());
 
@@ -456,9 +454,7 @@ public class RegistrationController {
             if (!patientForm.matchingPasswords(patientForm.getPassword(), patientForm.getPasswordConfirmation())) {
 
                 showPatientRegistration(patientForm, "wrongPassword");
-            }/*else if(patientService.findPatientByEmail(personalForm.getEmail()) != null){
-                showDoctorRegistration(personalForm).addObject("userExists", true);
-            }*/
+            }
             return showPatientRegistration(patientForm, "").addObject("noMatchingPassword", true);
         } else {
             try {

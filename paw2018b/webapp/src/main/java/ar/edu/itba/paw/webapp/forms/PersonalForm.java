@@ -33,7 +33,7 @@ public class PersonalForm {
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String passwordConfirmation;
 
-    @Pattern(regexp = "^((\\(|)(011)(\\)|)(|\\s)(\\d{8}|\\d{4}\\s\\d{4}))$")
+    @Pattern(regexp = "^((\\(|)(011)*(\\)|)(|\\s)(\\d{8}|\\d{4}\\s\\d{4}))$")
     @NotEmpty
     private String phoneNumber;
 

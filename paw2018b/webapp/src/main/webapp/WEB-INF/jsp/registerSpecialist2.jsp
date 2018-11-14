@@ -139,7 +139,6 @@
                     </c:forEach>
                 </select>
                 <form:errors path="insurance" cssClass="wrong"  element="p"/>
-                <%--TODO 1. no existe esta variable - wrongInsurance- , la cambio, la saco? --%>
                 <c:if test="${wrongInsurance eq true}">
                     <p class="wrong"><spring:message code="registration.wrongInsurance"/></p>
                 </c:if>
@@ -150,7 +149,6 @@
             <br>
             <div>
                 <div>
-                    <%--TODO FIX INSURANCE--%>
                     <div id="insuranceContainer">
                         <c:forEach items="${insurances}" var="insurance">
                             <div class="${insurance.name}" style="display: none">
