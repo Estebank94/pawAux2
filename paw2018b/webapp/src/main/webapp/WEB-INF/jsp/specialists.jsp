@@ -205,6 +205,7 @@
                                         </c:if>
                                     </div>
                                     <div>
+                                        <br>
                                         <h4 class="sidebar-title">
                                             <spring:message code="specialist.futureDays"/>
                                             <br>
