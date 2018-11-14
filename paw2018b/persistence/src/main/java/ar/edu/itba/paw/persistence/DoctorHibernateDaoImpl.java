@@ -126,10 +126,6 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
          }
 
-//        TODO averiguar porque si descomento esto me tira could not extract resultset
-//        query.where(cb.isNotNull(root.get("specialties")));
-//        query.where(cb.isNotNull(root.get("insurancePlans")));
-
         TypedQuery<Doctor> typedQuery = em.createQuery(query);
         typedQuery.setFirstResult(PAGESIZE*(page));
         typedQuery.setMaxResults(PAGESIZE);
@@ -150,6 +146,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         Optional<String> specialty = search.getSpecialty().equals("noSpecialty")?Optional.ofNullable(null):Optional.ofNullable(search.getSpecialty());
         Optional<String> insurance = search.getInsurance().matches("no")?Optional.ofNullable(null):Optional.ofNullable(search.getInsurance());
         Optional<String> sex = search.getSex().equals("ALL") || search.getSex().isEmpty() || search.getSex().equals("")?Optional.ofNullable(null): Optional.ofNullable(search.getSex());
+        Optional<String> days = search.getDays().equals("no")|| search.getDays().isEmpty() || search.getDays().equals("")?Optional.ofNullable(null):Optional.ofNullable(search.getDays());
         Optional<List<String>> insurancePlan;
 
         if (search.getInsurancePlan() != null)
@@ -188,15 +185,11 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         {
             Insurance insuranceObj = insuranceDao.findInsuranceByName(insurance.get());
             List<InsurancePlan> insurancePlans = insurancePlanDao.findAllInsurancePlansByInsurance(insuranceObj);
-            boolean first = true;
+            List<Predicate> predicates = new ArrayList<>();
             for(InsurancePlan plan : insurancePlans){
-                if(first){
-                    query.where(cb.isMember(plan, root.get("insurancePlans")));
-                } else {
-                    query.where(cb.or(cb.isMember(plan, root.get("insurancePlans"))));
-                }
-                first = false;
+                predicates.add(cb.isMember(plan, root.get("insurancePlans")));
             }
+            query.where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
         }
 
         if (sex.isPresent()){
@@ -206,8 +199,18 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
             for(String plan : insurancePlan.get()){
                 InsurancePlan insurancePlanObj = insurancePlanDao.findInsurancePlanByPlanName(plan);
                 query.where(cb.isMember(insurancePlanObj, root.get("insurancePlans")));
-                query.where(cb.isMember(insurancePlanObj, root.get("insurancePlans")));
             }
+        }
+
+        if (days.isPresent()) {
+            Integer day = Integer.valueOf(LocalDate.parse(search.getDays()).getDayOfWeek().getValue());
+            List<WorkingHours> workingHours = workingHoursDao.findWorkingHoursByDayWeek(day);
+            List<Predicate> predicates = new ArrayList<>();
+            for(WorkingHours w : workingHours){
+                predicates.add(cb.isMember(w, root.get("workingHours")));
+            }
+            query.where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
+
         }
 
         TypedQuery<Long> typedQuery = em.createQuery(query);
