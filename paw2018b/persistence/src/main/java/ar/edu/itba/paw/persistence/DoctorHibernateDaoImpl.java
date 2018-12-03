@@ -308,4 +308,8 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         return true;
     }
 
+    public void mergeDoctor(Doctor doctor){
+        em.merge(doctor);
+    }
+
 }

@@ -149,7 +149,8 @@ public class DoctorServiceImpl implements DoctorService {
         }
 
         Doctor doc = thisdoctor.get();
-        em.merge(doc);
+        doctorDao.mergeDoctor(doc);
+        //em.merge(doc);
 
         LOGGER.debug("Doctor with ID: {} found", idAsInt);
         LOGGER.debug("Doctor is: {}", thisdoctor);

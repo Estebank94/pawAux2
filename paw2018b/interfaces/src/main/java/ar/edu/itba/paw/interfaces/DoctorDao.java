@@ -37,4 +37,6 @@ public interface DoctorDao {
     Optional<Description> findDescriptionByDoctor(Doctor doctor);
 
     boolean mergeDoctorDescription(Description original, Description toMerge);
+
+    void mergeDoctor(Doctor doctor);
 }
