@@ -20,9 +20,6 @@ import java.util.Set;
 @Service("DoctorServiceImpl")
 public class DoctorServiceImpl implements DoctorService {
 
-    @PersistenceContext
-    private EntityManager em;
-
     @Autowired
     private DoctorDao doctorDao;
     

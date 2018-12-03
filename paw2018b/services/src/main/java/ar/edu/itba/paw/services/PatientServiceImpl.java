@@ -30,9 +30,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @PersistenceContext
-    private EntityManager em;
+    
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PatientServiceImpl.class);
 
