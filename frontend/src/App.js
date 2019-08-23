@@ -1,14 +1,35 @@
 import React, { Component } from 'react';
+import { Route, Redirect } from 'react-router-dom'
 import './App.css';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="container">
-        <h3>Waldoc</h3>
-      </div>
-    );
-  }
+import Navigation from './components/navigation'
+import Home from './pages/home'
+
+const Header = () => (
+  <header>
+    <div>
+      <a href="/">
+        <span className="logo-provi">Waldoc</span>
+      </a>
+    </div>
+  </header>
+)
+
+const App = props => {
+  let everyoneRoutes = [
+    { path: "/", component: Home },
+  ];
+  let doctorRoutes = [
+    ...everyoneRoutes
+  ];
+  return(
+    <div>
+      <Navigation />
+      <main>
+        <Route exact path="/" component={Home} />
+      </main>
+    </div>
+  )
 }
 
 export default App;
