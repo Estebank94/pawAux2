@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 class JumbotronSearch extends React.Component {
   render() {
@@ -18,7 +19,9 @@ class JumbotronSearch extends React.Component {
                               <option value="no" label="Prepaga" selected="Prepaga"/>
                           </select>
                           <div className="input-group-append">
-                              <input type="submit" className="btn btn-primary custom-btn" value="Buscar" path="submit"/>
+                              <Link className="btn btn-primary custom-btn" to="/specialists" style={{ textDecoration: 'none', color: '#FFF' }}>
+                                Buscar
+                              </Link>
                           </div>
                       </div>
                   </form>
@@ -28,6 +31,5 @@ class JumbotronSearch extends React.Component {
     );
   }
 }
-
 
 export default JumbotronSearch;

@@ -2,18 +2,10 @@ import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-dom'
 import './App.css';
 
-import Navigation from './components/navigation'
+import Header from './components/navigation/header'
+import Footer from './components/navigation/footer'
 import Home from './pages/home'
-
-const Header = () => (
-  <header>
-    <div>
-      <a href="/">
-        <span className="logo-provi">Waldoc</span>
-      </a>
-    </div>
-  </header>
-)
+import Specialists from './pages/specialists'
 
 const App = props => {
   let everyoneRoutes = [
@@ -24,10 +16,12 @@ const App = props => {
   ];
   return(
     <div>
-      <Navigation />
+      <Header />
       <main>
         <Route exact path="/" component={Home} />
+        <Route exact path="/specialists" component={Specialists} />
       </main>
+      <Footer />
     </div>
   )
 }
