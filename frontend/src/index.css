@@ -152,6 +152,11 @@ p
 
 .jumbotron {
   background-color: #FFFFFF !important;
+  height: 100vh;
+  display:flex;
+  align-content:center;
+  justify-items:center;
+  align-items:center;
 }
 
 .jumbotron-title
