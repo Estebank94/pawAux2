@@ -1,25 +1,28 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-const Navigation = props => {
-  return(
-    <nav class="navbar navbar-dark" style={{ backgroundColor: '#FFFFFF', paddingBottom: 0 }}>
-      <div class="container">
-          <a class="navbar-brand" href="/">
-              <h1 class="navbar-brand-home"><strong>Waldoc</strong></h1>
-          </a>
-          <a href="/login">
-              <div class="row">
-                  <div class="center-vertical">
-                    <button class="btn btn-light" style={{ backgroundColor: 'transparent', borderColor: 'transparent', color: '#257CBF' }} type="button">
-                      Iniciar Sesion
-                    </button>
-                  </div>
-              </div>
-          </a>
-      </div>
-    </nav>
-  );
+class Navigation extends React.Component {
+  render() {
+    const { pathname } = this.props.location;
+    return(
+      <nav className="navbar navbar-dark" style={{ backgroundColor: pathname === '/' ? '#FFFFFF' : '#257CBF', paddingBottom: 0 }}>
+        <div className="container">
+            <a className="navbar-brand" href="/">
+                <h1 className={pathname === '/' ? 'navbar-brand-home' : ''}><strong>Waldoc</strong></h1>
+            </a>
+            <a href="/login">
+                <div className="row">
+                    <div className="center-vertical">
+                      <button className="btn btn-light" style={{ backgroundColor: 'transparent', borderColor: 'transparent', color: '#257CBF' }} type="button">
+                        Iniciar Sesion
+                      </button>
+                    </div>
+                </div>
+            </a>
+        </div>
+      </nav>
+    );
+  }
 }
 
-export default Navigation
+export default Navigation;

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-dom'
+import { withRouter } from "react-router";
 import './App.css';
 
 import Header from './components/navigation/header'
@@ -14,9 +15,10 @@ const App = props => {
   let doctorRoutes = [
     ...everyoneRoutes
   ];
+  const HeaderWithRouter = withRouter(Header);
   return(
     <div>
-      <Header />
+      <HeaderWithRouter />
       <main>
         <Route exact path="/" component={Home} />
         <Route exact path="/specialists" component={Specialists} />
