@@ -1,19 +1,13 @@
 package ar.edu.itba.paw.webapp.forms;
 
-import ar.edu.itba.paw.interfaces.TimeService;
 import ar.edu.itba.paw.models.InsurancePlan;
 import ar.edu.itba.paw.models.Specialty;
 import ar.edu.itba.paw.models.WorkingHours;
-import com.sun.corba.se.spi.orbutil.threadpool.Work;
-import com.sun.xml.internal.fastinfoset.util.CharArray;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
