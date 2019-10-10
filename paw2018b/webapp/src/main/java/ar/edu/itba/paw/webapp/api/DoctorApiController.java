@@ -4,37 +4,47 @@ import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.NotValidIDException;
+import ar.edu.itba.paw.webapp.dto.DoctorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.awt.*;
 import java.util.Optional;
 
 @Path("doctor")
-@Controller
-public class DoctorApiController{
+@Component
+public class DoctorApiController extends BaseApiController{
     @Autowired
     private DoctorService doctorService;
 
+    @Context
+    private UriInfo uriInfo;
+
     @GET
     @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Doctor getDoctorById(@PathParam("id") final int id) throws NotFoundDoctorException, NotValidIDException {
-        System.out.println("Hola");
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getDoctorById(@PathParam("id") final int id){
 
-        Optional<Doctor> doctorOptional = doctorService.findDoctorById(id + "");
-        if (doctorOptional.isPresent()){
-            System.out.println(doctorOptional.get().getFirstName() + " ," + doctorOptional.get().getLastName());
-            return doctorOptional.get();
+        System.out.println("Hola");
+        Optional<Doctor> doctorOptional = Optional.empty();
+        try {
+            doctorOptional = doctorService.findDoctorById(id + "");
+        } catch (NotFoundDoctorException e) {
+            e.printStackTrace();
+        } catch (NotValidIDException e) {
+            e.printStackTrace();
         }
-        System.out.println("No encontro a Doctor");
-        return null;
+        if (doctorOptional.isPresent()){
+            return Response.ok(new DoctorDTO(doctorOptional.get()))
+                    .build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
 }
