@@ -33,8 +33,6 @@ public class DoctorApiController extends BaseApiController{
     @Path("/{id}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getDoctorById(@PathParam("id") final int id){
-        System.out.println("Hola");
-
         Optional<Doctor> doctorOptional = Optional.empty();
         try {
             doctorOptional = doctorService.findDoctorById(id + "");
@@ -44,13 +42,14 @@ public class DoctorApiController extends BaseApiController{
             e.printStackTrace();
         }
         if (doctorOptional.isPresent()){
-            DoctorDTO doctorDTO = new DoctorDTO(doctorOptional.get(), buildBaseURI(uriInfo));
-            System.out.println(doctorDTO.toString());
-            System.out.println(Response.ok(new DoctorDTO(doctorOptional.get(), buildBaseURI(uriInfo))).build().toString());
+            // TODO: LIMPIAR ESTA PARTE
+            // DoctorDTO doctorDTO = new DoctorDTO(doctorOptional.get(), buildBaseURI(uriInfo));
+            // System.out.println(doctorDTO.toString());
+            // System.out.println(Response.ok(new DoctorDTO(doctorOptional.get(), buildBaseURI(uriInfo))).build().toString());
             return Response.ok(new DoctorDTO(doctorOptional.get(), buildBaseURI(uriInfo)))
                     .build();
         }
-        System.out.println("No encontro a Doctor");
+        // System.out.println("No encontro a Doctor");
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 

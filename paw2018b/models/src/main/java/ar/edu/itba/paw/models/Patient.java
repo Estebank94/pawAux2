@@ -37,7 +37,6 @@ public class Patient {
     @LazyCollection(LazyCollectionOption.FALSE)
     List<Favorite> favorites;
 
-
     public Patient( String firstName, String lastName, String phoneNumber, String email, String password) {
         this.id = null;
         this.firstName = firstName;
