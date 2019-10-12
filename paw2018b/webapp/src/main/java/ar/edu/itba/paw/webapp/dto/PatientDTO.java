@@ -1,12 +1,11 @@
 package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.models.Appointment;
-import ar.edu.itba.paw.models.Favorite;
 import ar.edu.itba.paw.models.Patient;
 
 import java.net.URI;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 public class PatientDTO {
     private Integer id;
@@ -15,9 +14,9 @@ public class PatientDTO {
     private String phoneNumber;
     private String email;
     private String password;
-    private Set<Appointment> appointments;
-    List<Favorite> favorites;
-    private URI uri;
+    private List<PatientAppointmentDTO> appointments;
+    // List<Favorite> favorites;
+    // private URI uri;
 
     public PatientDTO(){
     }
@@ -29,20 +28,13 @@ public class PatientDTO {
         phoneNumber = patient.getPhoneNumber();
         email = patient.getEmail();
         password = patient.getEmail();
-        appointments = patient.getAppointments();
-        favorites = patient.getFavorites();
-    }
 
-    public PatientDTO(Patient patient, URI baseURI){
-        id = patient.getId();
-        firstName = patient.getFirstName();
-        lastName = patient.getLastName();
-        phoneNumber = patient.getPhoneNumber();
-        email = patient.getEmail();
-        password = patient.getEmail();
-        appointments = patient.getAppointments();
-        favorites = patient.getFavorites();
-        this.uri = baseURI.resolve(String.valueOf(this.id));
+        this.appointments = new LinkedList<>();
+        for (Appointment appointment: patient.getAppointments()){
+            this.appointments.add(new PatientAppointmentDTO(appointment));
+        }
+        // appointments = patient.getAppointments();
+        // favorites = patient.getFavorites();
     }
 
     public Integer getId() {
@@ -93,6 +85,7 @@ public class PatientDTO {
         this.password = password;
     }
 
+    /*
     public Set<Appointment> getAppointments() {
         return appointments;
     }
@@ -100,13 +93,24 @@ public class PatientDTO {
     public void setAppointments(Set<Appointment> appointments) {
         this.appointments = appointments;
     }
+    */
 
-    public List<Favorite> getFavorites() {
-        return favorites;
-    }
+    // public List<Favorite> getFavorites() {
+    //     return favorites;
+    // }
 
+    /*
     public void setFavorites(List<Favorite> favorites) {
         this.favorites = favorites;
+    }
+    */
+
+    public List<PatientAppointmentDTO> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<PatientAppointmentDTO> appointments) {
+        this.appointments = appointments;
     }
 
     @Override
@@ -118,8 +122,8 @@ public class PatientDTO {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", appointments=" + appointments +
-                ", favorites=" + favorites +
+                // ", appointments=" + appointments +
+                //", favorites=" + favorites +
                 '}';
     }
 }

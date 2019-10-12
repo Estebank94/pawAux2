@@ -51,9 +51,7 @@ public class PatientApiController extends BaseApiController{
             return Response.status(Response.Status.NOT_FOUND)
                     .build();
         }
-        PatientDTO patientDtoTOPrint = new PatientDTO(patient);
-        System.out.println(patientDtoTOPrint.toString());
-        return Response.ok(new PatientDTO(patient, buildBaseURI(uriInfo))).build();
+        return Response.ok(new PatientDTO(patient)).build();
     }
 
 
