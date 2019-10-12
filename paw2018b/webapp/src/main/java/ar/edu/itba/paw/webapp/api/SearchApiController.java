@@ -3,7 +3,6 @@ package ar.edu.itba.paw.webapp.api;
 import ar.edu.itba.paw.interfaces.SearchService;
 import ar.edu.itba.paw.models.Insurance;
 import ar.edu.itba.paw.models.Specialty;
-import ar.edu.itba.paw.webapp.dto.FutureDayDTO;
 import ar.edu.itba.paw.webapp.dto.FutureDayListDTO;
 import ar.edu.itba.paw.webapp.dto.InsuranceListDTO;
 import ar.edu.itba.paw.webapp.dto.SpecialtyListDTO;
@@ -21,7 +20,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import java.util.List;
 
-@Path("search")
+@Path("/")
 @Controller
 public class SearchApiController extends BaseApiController {
 
@@ -34,7 +33,7 @@ public class SearchApiController extends BaseApiController {
     private UriInfo uriInfo;
 
     @GET
-    @Path("/specialties")
+    @Path("specialties")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getSpecialties(){
         List<Specialty> specialtyList = searchService.listSpecialties();
@@ -43,7 +42,7 @@ public class SearchApiController extends BaseApiController {
     }
 
     @GET
-    @Path("/insurances")
+    @Path("insurances")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getInsurances(){
         List<Insurance> insuranceList = searchService.listInsurances();
@@ -52,7 +51,7 @@ public class SearchApiController extends BaseApiController {
     }
 
     @GET
-    @Path("/futureDays")
+    @Path("futureDays")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getFutureDays () {
         List<String> futureDays = searchService.getFutureDays();
