@@ -3,6 +3,8 @@ package ar.edu.itba.paw.webapp.api;
 import ar.edu.itba.paw.interfaces.SearchService;
 import ar.edu.itba.paw.models.Insurance;
 import ar.edu.itba.paw.models.Specialty;
+import ar.edu.itba.paw.webapp.dto.FutureDayDTO;
+import ar.edu.itba.paw.webapp.dto.FutureDayListDTO;
 import ar.edu.itba.paw.webapp.dto.InsuranceListDTO;
 import ar.edu.itba.paw.webapp.dto.SpecialtyListDTO;
 import org.slf4j.Logger;
@@ -47,6 +49,14 @@ public class SearchApiController extends BaseApiController {
         List<Insurance> insuranceList = searchService.listInsurances();
         LOGGER.info("Insurance List");
         return Response.ok(new InsuranceListDTO(insuranceList)).build();
-        // return Response.ok(new InsuranceListDTO(insuranceList, buildBaseURI(uriInfo))).build();
+    }
+
+    @GET
+    @Path("/futureDays")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getFutureDays () {
+        List<String> futureDays = searchService.getFutureDays();
+        LOGGER.info("futureDays");
+        return Response.ok(new FutureDayListDTO(futureDays)).build();
     }
 }
