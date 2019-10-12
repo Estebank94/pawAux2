@@ -46,7 +46,7 @@ public class DoctorApiController extends BaseApiController{
             // DoctorDTO doctorDTO = new DoctorDTO(doctorOptional.get(), buildBaseURI(uriInfo));
             // System.out.println(doctorDTO.toString());
             // System.out.println(Response.ok(new DoctorDTO(doctorOptional.get(), buildBaseURI(uriInfo))).build().toString());
-            return Response.ok(new DoctorDTO(doctorOptional.get(), buildBaseURI(uriInfo)))
+            return Response.ok(new DoctorDTO(doctorOptional.get()))
                     .build();
         }
         // System.out.println("No encontro a Doctor");
