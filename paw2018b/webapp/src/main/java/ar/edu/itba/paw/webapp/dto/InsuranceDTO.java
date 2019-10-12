@@ -9,23 +9,15 @@ import java.util.List;
 public class InsuranceDTO {
     private Integer id;
     private String name;
-    private List<InsurancePlan> plans;
-    private URI uri;
+    private InsurancePlanListDTO plans;
 
     public InsuranceDTO () {
-    }
-
-    public InsuranceDTO(Insurance insurance, URI baseURI){
-        this.id = insurance.getId();
-        this.name = insurance.getName();
-        this.plans = insurance.getPlans();
-        this.uri = baseURI.resolve(String.valueOf(this.id));
     }
 
     public InsuranceDTO (Insurance insurance){
         this.id = insurance.getId();
         this.name = insurance.getName();
-        this.plans = insurance.getPlans();
+        this.plans = new InsurancePlanListDTO(insurance.getPlans());
     }
 
     public Integer getId() {
@@ -44,11 +36,11 @@ public class InsuranceDTO {
         this.name = name;
     }
 
-    public List<InsurancePlan> getPlans() {
+    public InsurancePlanListDTO getPlans() {
         return plans;
     }
 
-    public void setPlans(List<InsurancePlan> plans) {
+    public void setPlans(InsurancePlanListDTO plans) {
         this.plans = plans;
     }
 

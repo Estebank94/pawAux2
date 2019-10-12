@@ -39,6 +39,6 @@ public class InsuranceApiController extends BaseApiController {
             LOGGER.warn("Insurance with name {} not found", insuranceName);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(new InsuranceDTO(insurance, buildBaseURI(uriInfo))).build();
+        return Response.ok(new InsuranceDTO(insurance)).build();
     }
 }

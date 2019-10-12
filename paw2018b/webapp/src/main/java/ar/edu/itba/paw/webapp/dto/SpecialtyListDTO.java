@@ -2,7 +2,6 @@ package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.models.Specialty;
 
-import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,12 +11,13 @@ public class SpecialtyListDTO {
     public SpecialtyListDTO () {
     }
 
-    public SpecialtyListDTO(List<Specialty> allSpecialties, URI baseURI){
+    public SpecialtyListDTO(List<Specialty> allSpecialties){
         this.specialties = new LinkedList<>();
         for (Specialty specialty : allSpecialties){
-            this.specialties.add(new SpecialtyDTO(specialty, baseURI));
+            this.specialties.add(new SpecialtyDTO(specialty));
         }
     }
+
 
     public List<SpecialtyDTO> getSpecialties() {
         return specialties;
