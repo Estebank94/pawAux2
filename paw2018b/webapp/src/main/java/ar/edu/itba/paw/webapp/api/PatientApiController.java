@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
 import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
+import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
 import ar.edu.itba.paw.models.exceptions.NotValidPatientIdException;
 import ar.edu.itba.paw.webapp.dto.PatientDTO;
 import org.slf4j.Logger;
@@ -54,5 +55,25 @@ public class PatientApiController extends BaseApiController{
         return Response.ok(new PatientDTO(patient)).build();
     }
 
+    @GET
+    @Path("/email/{email}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getPatientByEmail(@PathParam("email")final String email) throws NotValidPatientIdException, NotFoundPacientException, NotCreatePatientException {
+        Patient patient = new Patient();
+        try {
+            patient = patientService.findPatientByEmail(email);
+        } catch (NotFoundPacientException e){
+            e.printStackTrace();
+        } catch (NotValidEmailException e) {
+            e.printStackTrace();
+        }
+        System.out.println(patient.toString());
+        if (patient == null){
+            LOGGER.warn("Patient with email {} not found", email);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .build();
+        }
+        return Response.ok(new PatientDTO(patient)).build();
+    }
 
 }
