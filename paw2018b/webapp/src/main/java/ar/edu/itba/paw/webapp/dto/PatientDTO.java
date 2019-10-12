@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.models.Appointment;
+import ar.edu.itba.paw.models.Favorite;
 import ar.edu.itba.paw.models.Patient;
 
-import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,8 +15,7 @@ public class PatientDTO {
     private String email;
     private String password;
     private List<PatientAppointmentDTO> appointments;
-    // List<Favorite> favorites;
-    // private URI uri;
+    private List<FavoriteDoctorDTO> favorites;
 
     public PatientDTO(){
     }
@@ -33,8 +32,11 @@ public class PatientDTO {
         for (Appointment appointment: patient.getAppointments()){
             this.appointments.add(new PatientAppointmentDTO(appointment));
         }
-        // appointments = patient.getAppointments();
-        // favorites = patient.getFavorites();
+
+        this.favorites = new LinkedList<>();
+        for (Favorite favorite : patient.getFavorites()){
+            this.favorites.add(new FavoriteDoctorDTO(favorite));
+        }
     }
 
     public Integer getId() {
@@ -85,32 +87,20 @@ public class PatientDTO {
         this.password = password;
     }
 
-    /*
-    public Set<Appointment> getAppointments() {
-        return appointments;
-    }
-
-    public void setAppointments(Set<Appointment> appointments) {
-        this.appointments = appointments;
-    }
-    */
-
-    // public List<Favorite> getFavorites() {
-    //     return favorites;
-    // }
-
-    /*
-    public void setFavorites(List<Favorite> favorites) {
-        this.favorites = favorites;
-    }
-    */
-
     public List<PatientAppointmentDTO> getAppointments() {
         return appointments;
     }
 
     public void setAppointments(List<PatientAppointmentDTO> appointments) {
         this.appointments = appointments;
+    }
+
+    public List<FavoriteDoctorDTO> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<FavoriteDoctorDTO> favorites) {
+        this.favorites = favorites;
     }
 
     @Override
@@ -122,8 +112,6 @@ public class PatientDTO {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                // ", appointments=" + appointments +
-                //", favorites=" + favorites +
                 '}';
     }
 }
