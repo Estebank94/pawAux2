@@ -7,6 +7,7 @@ import { API_URL } from "../constants/constants";
 
 //TODO Remove cross origin headers
 export default (endpoint, method, body = {}) => {
+    console.log('FETCHING FROM: ' + API_URL + endpoint);
     switch (endpoint) {
         default:
             if (method === 'GET') {
