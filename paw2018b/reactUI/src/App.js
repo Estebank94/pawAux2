@@ -7,6 +7,7 @@ import Header from './components/navigation/header'
 import Footer from './components/navigation/footer'
 import Home from './pages/home'
 import Specialists from './pages/specialists'
+import Specialist from './pages/specialist'
 
 const App = props => {
   let everyoneRoutes = [
@@ -20,8 +21,9 @@ const App = props => {
     <div>
       <HeaderWithRouter />
       <main>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/specialists" component={Specialists} />
+          <Route exact path="/" component={Home} />
+          <Route exact path="/specialists" component={Specialists} />
+          <Route exact path="/specialist/:id" component={Specialist} />
       </main>
       <Footer />
     </div>

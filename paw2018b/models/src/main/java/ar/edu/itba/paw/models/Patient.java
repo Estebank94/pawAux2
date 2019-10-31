@@ -183,7 +183,7 @@ public class Patient {
         this.favorites = favorites;
     }
 
-    @NotNull
+//    @NotNull
     private LocalDateTime getAppointmentDateTime (Appointment ap){
         LocalDate appointementDay = LocalDate.parse(ap.getAppointmentDay());
         return appointementDay.atTime(LocalTime.parse(ap.getAppointmentTime()));
