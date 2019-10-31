@@ -1,8 +1,9 @@
-package ar.edu.itba.paw.webapp.api;
+package ar.edu.itba.paw.webapp.api.v1;
 
 import ar.edu.itba.paw.interfaces.SearchService;
 import ar.edu.itba.paw.models.Insurance;
 import ar.edu.itba.paw.models.Specialty;
+import ar.edu.itba.paw.webapp.api.BaseApiController;
 import ar.edu.itba.paw.webapp.dto.FutureDayListDTO;
 import ar.edu.itba.paw.webapp.dto.InsuranceListDTO;
 import ar.edu.itba.paw.webapp.dto.SpecialtyListDTO;
@@ -20,7 +21,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import java.util.List;
 
-@Path("/")
+@Path("v1/")
 @Controller
 public class SearchApiController extends BaseApiController {
 

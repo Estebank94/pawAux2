@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.api;
+package ar.edu.itba.paw.webapp.api.v1;
 
 import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.models.Patient;
@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
 import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
 import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
 import ar.edu.itba.paw.models.exceptions.NotValidPatientIdException;
+import ar.edu.itba.paw.webapp.api.BaseApiController;
 import ar.edu.itba.paw.webapp.dto.PatientDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ import javax.ws.rs.core.UriInfo;
 
 @Path("patient")
 @Controller
-public class PatientApiController extends BaseApiController{
+public class PatientApiController extends BaseApiController {
     private static final Logger LOGGER = LoggerFactory.getLogger(PatientApiController.class);
 
     @Autowired

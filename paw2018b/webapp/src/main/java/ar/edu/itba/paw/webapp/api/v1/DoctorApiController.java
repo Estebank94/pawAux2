@@ -1,9 +1,10 @@
-package ar.edu.itba.paw.webapp.api;
+package ar.edu.itba.paw.webapp.api.v1;
 
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.NotValidIDException;
+import ar.edu.itba.paw.webapp.api.BaseApiController;
 import ar.edu.itba.paw.webapp.dto.DoctorDTO;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ import java.util.Optional;
 
 @Path("doctor")
 @Controller
-public class DoctorApiController extends BaseApiController{
+public class DoctorApiController extends BaseApiController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DoctorApiController.class);
 
