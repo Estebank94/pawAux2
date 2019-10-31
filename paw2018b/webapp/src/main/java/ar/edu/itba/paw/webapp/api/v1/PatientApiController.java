@@ -22,7 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-@Path("patient")
+@Path("v1/patient")
 @Controller
 public class PatientApiController extends BaseApiController {
     private static final Logger LOGGER = LoggerFactory.getLogger(PatientApiController.class);

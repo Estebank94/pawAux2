@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.NotValidIDException;
 import ar.edu.itba.paw.webapp.api.BaseApiController;
 import ar.edu.itba.paw.webapp.dto.DoctorDTO;
+import ar.edu.itba.paw.webapp.dto.DoctorListDTO;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.List;
 import java.util.Optional;
 
-@Path("doctor")
+@Path("v1/doctor")
 @Controller
 public class DoctorApiController extends BaseApiController {
 
@@ -54,4 +56,10 @@ public class DoctorApiController extends BaseApiController {
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
+    @GET
+    @Path("/list")
+    public Response listDoctors(@QueryParam("page") int page) {
+        List<Doctor> doctorList = doctorService.listDoctors(page);
+        return Response.ok(new DoctorListDTO(doctorList)).build();
+    }
 }

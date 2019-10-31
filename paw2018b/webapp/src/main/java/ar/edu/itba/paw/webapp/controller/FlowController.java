@@ -130,7 +130,7 @@ public class FlowController {
 		}
 
 		if(doctorsList.isEmpty()){
-			doctorsList = doctorService.listDoctors(page);
+			doctorsList = doctorService.listDoctors(Integer.parseInt(page));
 			notFound = true;
 			mav.addObject("notFound", notFound);
 			mav.addObject("totalPages", doctorService.getLastPage(new Search()));

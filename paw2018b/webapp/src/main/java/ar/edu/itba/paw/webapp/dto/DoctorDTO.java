@@ -11,12 +11,12 @@ public class DoctorDTO {
     private byte[] profilePicture;
     private SpecialtyListDTO specialties;
     private InsurancePlanListDTO insurancesPlans;
-    private WorkingHoursListDTO workingHours;
-    private ReviewListDTO reviews;
-    private DescriptionDTO description;
+    // private WorkingHoursListDTO workingHours;
+    // private ReviewListDTO reviews;
+    // private DescriptionDTO description;
     private Integer averageRating;
-    private Integer licence;
-    private String district;
+    // private Integer licence;
+    // private String district;
 
 
     // private URI uri;
@@ -44,11 +44,11 @@ public class DoctorDTO {
         this.profilePicture = doctor.getProfilePicture();
         this.specialties = new SpecialtyListDTO(doctor.getSpecialties());
         this.insurancesPlans = new InsurancePlanListDTO(doctor.getInsurancePlans());
-        this.workingHours = new WorkingHoursListDTO(doctor.getWorkingHours());
-        this.reviews = new ReviewListDTO(doctor.getReviews());
+        // this.workingHours = new WorkingHoursListDTO(doctor.getWorkingHours());
+        // this.reviews = new ReviewListDTO(doctor.getReviews());
         this.averageRating = doctor.calculateAverageRating();
-        this.licence = doctor.getLicence();
-        this.district = doctor.getDistrict();
+        // this.licence = doctor.getLicence();
+        // this.district = doctor.getDistrict();
     }
 
     public Integer getId() {
@@ -123,6 +123,7 @@ public class DoctorDTO {
         this.insurancesPlans = insurancesPlans;
     }
 
+    /*
     public WorkingHoursListDTO getWorkingHours() {
         return workingHours;
     }
@@ -146,7 +147,7 @@ public class DoctorDTO {
     public void setDescription(DescriptionDTO description) {
         this.description = description;
     }
-
+    */
     public Integer getAverageRating() {
         return averageRating;
     }
@@ -155,6 +156,7 @@ public class DoctorDTO {
         this.averageRating = averageRating;
     }
 
+    /*
     public Integer getLicence() {
         return licence;
     }
@@ -170,7 +172,7 @@ public class DoctorDTO {
     public void setDistrict(String district) {
         this.district = district;
     }
-
+    */
     @Override
     public String toString() {
         return "DoctorDTO{" +

@@ -489,7 +489,11 @@ public class Doctor {
         for(Review review : getReviews()){
             sum+=review.getStars();
         }
-        sum/=getReviews().size();
+        if (getReviews().size() > 0) {
+            sum/=getReviews().size();
+        } else {
+            sum = 0;
+        }
         return Math.round(sum);
     }
 
