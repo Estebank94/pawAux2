@@ -6,22 +6,22 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class InsurancePlanListDTO {
-    private List<InsurancePlanDTO> insurancePlanDTOList;
+    private List<InsurancePlanDTO> insurancePlans;
 
     public InsurancePlanListDTO (){}
 
     public InsurancePlanListDTO(List<InsurancePlan> insurancePlans){
-        this.insurancePlanDTOList = new LinkedList<>();
+        this.insurancePlans = new LinkedList<>();
         for (InsurancePlan insurancePlan: insurancePlans){
-            this.insurancePlanDTOList.add(new InsurancePlanDTO(insurancePlan));
+            this.insurancePlans.add(new InsurancePlanDTO(insurancePlan));
         }
     }
 
-    public List<InsurancePlanDTO> getInsurancePlanDTOList() {
-        return insurancePlanDTOList;
+    public List<InsurancePlanDTO> getInsurancePlans() {
+        return insurancePlans;
     }
 
-    public void setInsurancePlanDTOList(List<InsurancePlanDTO> insurancePlanDTOList) {
-        this.insurancePlanDTOList = insurancePlanDTOList;
+    public void setInsurancePlans(List<InsurancePlanDTO> insurancePlans) {
+        this.insurancePlans = insurancePlans;
     }
 }

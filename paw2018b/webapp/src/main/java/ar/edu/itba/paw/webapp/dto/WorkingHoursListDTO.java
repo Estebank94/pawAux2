@@ -6,22 +6,22 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WorkingHoursListDTO {
-    private List<WorkingHoursDTO> workingHoursDTOList;
+    private List<WorkingHoursDTO> workingHours;
 
     public WorkingHoursListDTO(){}
 
     public WorkingHoursListDTO(List<WorkingHours> workingHours){
-        this.workingHoursDTOList = new LinkedList<>();
+        this.workingHours = new LinkedList<>();
         for (WorkingHours wh: workingHours){
-            this.workingHoursDTOList.add(new WorkingHoursDTO(wh));
+            this.workingHours.add(new WorkingHoursDTO(wh));
         }
     }
 
-    public List<WorkingHoursDTO> getWorkingHoursDTOList() {
-        return workingHoursDTOList;
+    public List<WorkingHoursDTO> getWorkingHours() {
+        return workingHours;
     }
 
-    public void setWorkingHoursDTOList(List<WorkingHoursDTO> workingHoursDTOList) {
-        this.workingHoursDTOList = workingHoursDTOList;
+    public void setWorkingHours(List<WorkingHoursDTO> workingHours) {
+        this.workingHours = workingHours;
     }
 }

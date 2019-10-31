@@ -13,10 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -57,9 +54,8 @@ public class PatientApiController extends BaseApiController {
     }
 
     @GET
-    @Path("/email/{email}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getPatientByEmail(@PathParam("email")final String email) throws NotValidPatientIdException, NotFoundPacientException, NotCreatePatientException {
+    public Response getPatientByEmail(@QueryParam("email")final String email) throws NotValidPatientIdException, NotFoundPacientException, NotCreatePatientException {
         Patient patient = new Patient();
         try {
             patient = patientService.findPatientByEmail(email);
