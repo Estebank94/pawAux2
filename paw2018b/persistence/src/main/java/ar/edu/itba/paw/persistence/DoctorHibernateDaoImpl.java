@@ -39,6 +39,12 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     @Autowired
     private WorkingHoursDao workingHoursDao;
 
+    @Override
+    public List<Doctor> listDoctors() {
+        final TypedQuery<Doctor> query = em.createQuery("FROM Doctor", Doctor.class);
+        final List<Doctor> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
 
     @Override
     public List<Doctor> listDoctors(int page) {

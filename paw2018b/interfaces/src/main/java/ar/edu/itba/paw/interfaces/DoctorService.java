@@ -18,6 +18,8 @@ public interface DoctorService {
 
    List<Doctor> listDoctors(int page);
 
+   List<Doctor> listDoctors();
+
    List<Doctor> listDoctors(Search search, String pageAsString) throws NotValidSearchException, NotValidPageException;
 
    Optional<Doctor> findDoctorById(String id) throws NotFoundDoctorException, NotValidIDException;

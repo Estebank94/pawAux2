@@ -39,6 +39,12 @@ public class DoctorServiceImpl implements DoctorService {
     private static final Logger LOGGER = LoggerFactory.getLogger(DoctorServiceImpl.class);
 
     @Override
+    public List<Doctor> listDoctors() {
+        LOGGER.debug("DoctorServiceImpl: listDoctors");
+        return doctorDao.listDoctors();
+    }
+
+    @Override
     public List<Doctor> listDoctors(int page) {
         LOGGER.debug("DoctorServiceImpl: listDoctors");
         return doctorDao.listDoctors(page);

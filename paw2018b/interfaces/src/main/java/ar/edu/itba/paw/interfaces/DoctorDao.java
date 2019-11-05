@@ -17,6 +17,8 @@ public interface DoctorDao {
 
     List<Doctor> listDoctors(int page);
 
+    List<Doctor> listDoctors();
+
     List<Doctor> listDoctors(Search search, int page);
 
     Optional<Doctor> findDoctorById(Integer id);
