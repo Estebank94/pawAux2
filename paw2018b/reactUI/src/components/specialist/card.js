@@ -18,7 +18,7 @@ class SpecialistCard extends React.Component {
     }
 
     render() {
-      const { profilePicture, firstName, lastName, phoneNumber, specialties, averageRating } = this.props.data;
+      const { profilePicture, firstName, lastName, phoneNumber, specialties, averageRating, address } = this.props.data;
     return(
       <div className="card card-doctor d-flex flex-row box">
           <img class="avatar big" src={`data:image/jpeg;base64,${profilePicture}`} className="avatar" />
