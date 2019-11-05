@@ -62,4 +62,11 @@ public class DoctorApiController extends BaseApiController {
         List<Doctor> doctorList = doctorService.listDoctors(page);
         return Response.ok(new DoctorListDTO(doctorList)).build();
     }
+
+    @GET
+    @Path("/all")
+    public Response allDoctors() {
+        List<Doctor> doctorList = doctorService.listDoctors(1);
+        return Response.ok(new DoctorListDTO(doctorList)).build();
+    }
 }
