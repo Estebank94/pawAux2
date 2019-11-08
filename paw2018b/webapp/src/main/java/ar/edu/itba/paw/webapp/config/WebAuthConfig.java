@@ -1,11 +1,14 @@
 package ar.edu.itba.paw.webapp.config;
 
+import ar.edu.itba.paw.webapp.auth.StatelessAuthenticationFilter;
+import ar.edu.itba.paw.webapp.auth.StatelessAuthenticationSuccessHandler;
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -31,6 +34,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private StatelessAuthenticationSuccessHandler statelessAuthenticationSuccessHandler;
+
+    @Autowired
+    private StatelessAuthenticationFilter statelessAuthenticationFilter;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -67,23 +76,28 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.userDetailsService(userDetailsService)
-                .sessionManagement().and()
-                .authorizeRequests()
+                .sessionManagement()
+            .and().authorizeRequests()
                 .antMatchers("/doctorPanel/**").hasRole("DOCTOR")
                 .antMatchers("/doctorProfile/").hasRole("DOCTOR")
                 .antMatchers("/patientPanel/**").hasRole("PATIENT")
-                .and().formLogin()
+                //.antMatchers(HttpMethod.DELETE).authenticated()
+                //.antMatchers(HttpMethod.POST).authenticated()
+                //.antMatchers(HttpMethod.PUT).authenticated()
+                //.antMatchers(HttpMethod.PATCH).authenticated()
+            .and().formLogin()
                 .usernameParameter("j_username")
                 .passwordParameter("j_password")
                 .loginPage("/showLogIn").successHandler(successHandler()).defaultSuccessUrl("/")
                 .permitAll()
-                .and().rememberMe().rememberMeParameter("j_rememberme").userDetailsService(userDetailsService)
+
+            .and().rememberMe().rememberMeParameter("j_rememberme").userDetailsService(userDetailsService)
                 .key(rememberMeKey).tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(30))
-                .and().logout()
+            .and().logout()
                 .logoutSuccessUrl("/")
                 .permitAll().and().exceptionHandling()
                 .accessDeniedPage("/403")
-                .and().csrf().disable();
+            .and().csrf().disable();
     }
 
     @Bean
