@@ -1,16 +1,14 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.AppointmentService;
-import ar.edu.itba.paw.interfaces.DoctorService;
-import ar.edu.itba.paw.interfaces.PatientService;
+import ar.edu.itba.paw.interfaces.services.AppointmentService;
+import ar.edu.itba.paw.interfaces.services.DoctorService;
+import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
 import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
-import ar.edu.itba.paw.webapp.forms.AppointmentForm;
 import ar.edu.itba.paw.webapp.forms.CancelAppointmentForm;
-import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
