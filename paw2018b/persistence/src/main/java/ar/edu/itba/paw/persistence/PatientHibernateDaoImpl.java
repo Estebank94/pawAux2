@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.persistance.PatientDao;
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
+import ar.edu.itba.paw.models.VerificationToken;
 import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.RepeatedEmailException;
@@ -18,6 +19,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class PatientHibernateDaoImpl implements PatientDao {
@@ -68,5 +70,32 @@ public class PatientHibernateDaoImpl implements PatientDao {
         final TypedQuery<Appointment> query = em.createQuery("FROM appointment", Appointment.class);
         final List<Appointment> list = query.getResultList();
         return list.isEmpty() ? null : list;
+    }
+
+    @Override
+    public VerificationToken createToken(Patient patient) {
+        final String token = UUID.randomUUID().toString();
+        final VerificationToken vt = new VerificationToken(token, patient);
+        // em.persist(vt);
+        return vt;
+    }
+
+    @Override
+    public Optional<VerificationToken> findToken(String token) {
+        /*
+        final TypedQuery<VerificationToken> query = em.createQuery("from VerificationToken as vt where vt.token =:token", VerificationToken.class);
+        query.setParameter("token", token);
+        return query.getResultList().stream().findFirst();
+        */
+        return Optional.empty();
+    }
+
+    @Override
+    public void deleteToken(final VerificationToken token) {
+        /*
+        final VerificationToken vt = em.merge(token);
+        em.remove(vt);
+
+         */
     }
 }
