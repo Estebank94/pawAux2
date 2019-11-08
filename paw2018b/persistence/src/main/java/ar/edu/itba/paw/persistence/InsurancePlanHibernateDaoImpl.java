@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.InsurancePlanDao;
+import ar.edu.itba.paw.interfaces.persistance.InsurancePlanDao;
 import ar.edu.itba.paw.models.Insurance;
 import ar.edu.itba.paw.models.InsurancePlan;
 import org.springframework.stereotype.Repository;

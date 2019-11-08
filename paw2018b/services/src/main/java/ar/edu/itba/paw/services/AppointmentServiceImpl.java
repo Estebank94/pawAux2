@@ -1,10 +1,11 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.*;
+import ar.edu.itba.paw.interfaces.persistance.AppointmentDao;
+import ar.edu.itba.paw.interfaces.persistance.DoctorDao;
+import ar.edu.itba.paw.interfaces.services.AppointmentService;
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
-import ar.edu.itba.paw.models.WorkingHours;
 import ar.edu.itba.paw.models.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service

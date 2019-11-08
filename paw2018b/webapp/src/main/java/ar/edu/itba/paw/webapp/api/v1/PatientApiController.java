@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.api.v1;
 
-import ar.edu.itba.paw.interfaces.PatientService;
+import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
 import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;

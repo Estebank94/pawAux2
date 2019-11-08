@@ -1,11 +1,10 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.SpecialtyDao;
+import ar.edu.itba.paw.interfaces.persistance.SpecialtyDao;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Specialty;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;

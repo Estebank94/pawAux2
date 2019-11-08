@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.api.v1;
 
-import ar.edu.itba.paw.interfaces.DoctorService;
+import ar.edu.itba.paw.interfaces.services.DoctorService;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.NotValidIDException;

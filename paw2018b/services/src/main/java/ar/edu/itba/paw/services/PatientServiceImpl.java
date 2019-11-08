@@ -1,8 +1,8 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.DoctorDao;
-import ar.edu.itba.paw.interfaces.PatientDao;
-import ar.edu.itba.paw.interfaces.PatientService;
+import ar.edu.itba.paw.interfaces.persistance.DoctorDao;
+import ar.edu.itba.paw.interfaces.persistance.PatientDao;
+import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.*;
@@ -14,9 +14,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 @Service
 @Transactional

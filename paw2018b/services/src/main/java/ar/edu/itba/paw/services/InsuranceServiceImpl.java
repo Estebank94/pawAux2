@@ -1,8 +1,8 @@
 package ar.edu.itba.paw.services;
 
 
-import ar.edu.itba.paw.interfaces.InsuranceDao;
-import ar.edu.itba.paw.interfaces.InsuranceService;
+import ar.edu.itba.paw.interfaces.persistance.InsuranceDao;
+import ar.edu.itba.paw.interfaces.services.InsuranceService;
 import ar.edu.itba.paw.models.Insurance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

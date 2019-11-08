@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.api.v1;
 
-import ar.edu.itba.paw.interfaces.SearchService;
+import ar.edu.itba.paw.interfaces.services.SearchService;
 import ar.edu.itba.paw.models.Insurance;
 import ar.edu.itba.paw.models.Specialty;
 import ar.edu.itba.paw.webapp.api.BaseApiController;

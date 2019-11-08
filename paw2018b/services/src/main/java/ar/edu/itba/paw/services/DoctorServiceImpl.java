@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.*;
+import ar.edu.itba.paw.interfaces.persistance.*;
+import ar.edu.itba.paw.interfaces.services.DoctorService;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
 import org.slf4j.Logger;
@@ -9,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;

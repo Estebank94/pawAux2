@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.api.v1;
 
-import ar.edu.itba.paw.interfaces.InsuranceService;
+import ar.edu.itba.paw.interfaces.services.InsuranceService;
 import ar.edu.itba.paw.models.Insurance;
 import ar.edu.itba.paw.webapp.api.BaseApiController;
 import ar.edu.itba.paw.webapp.dto.InsuranceDTO;

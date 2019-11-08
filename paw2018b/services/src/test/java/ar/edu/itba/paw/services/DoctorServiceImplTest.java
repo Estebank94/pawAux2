@@ -1,26 +1,14 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.DoctorDao;
+import ar.edu.itba.paw.interfaces.persistance.DoctorDao;
 import ar.edu.itba.paw.models.*;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.sql.DataSource;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;

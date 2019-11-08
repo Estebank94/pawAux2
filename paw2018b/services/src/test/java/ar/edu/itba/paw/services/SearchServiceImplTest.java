@@ -1,27 +1,18 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.SearchDao;
+import ar.edu.itba.paw.interfaces.persistance.SearchDao;
 import ar.edu.itba.paw.models.Insurance;
 import ar.edu.itba.paw.models.InsurancePlan;
-import ar.edu.itba.paw.models.ListItem;
 import ar.edu.itba.paw.models.Specialty;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 
-import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
