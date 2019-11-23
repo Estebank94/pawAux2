@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.persistance.PatientDao;
 import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
+import ar.edu.itba.paw.models.VerificationToken;
 import ar.edu.itba.paw.models.exceptions.*;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -192,31 +193,38 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Patient findPatientByEmail(String email) throws NotValidEmailException, NotFoundPacientException {
+    public Patient findPatientByEmail(String email){
         LOGGER.debug("PatientServiceImpl: findPatientByEmail(String email)");
         if (email == null){
             LOGGER.debug("Email is null");
-            throw new NotValidEmailException("patient email can't be null");
+            return null;
+            // throw new NotValidEmailException("patient email can't be null");
         }
         if (email.length() == 0){
             LOGGER.debug("Email length is 0");
-            throw new NotValidEmailException("Patient email can't be negative or zero");
+            return null;
+            // throw new NotValidEmailException("Patient email can't be negative or zero");
         }
         if (email.length() > 90){
             LOGGER.debug("Email has more than 90 characters. Email: {}", email);
-            throw new NotValidEmailException("PatientMail can't have more than 90 characters");
+            return null;
+            // throw new NotValidEmailException("PatientMail can't have more than 90 characters");
         }
         LOGGER.debug("Calling patientDao.findPatientByEmail(email)");
         Patient foundPatient = patientDao.findPatientByEmail(email);
         if (foundPatient == null){
             LOGGER.debug("No patient found");
-            throw new NotFoundPacientException("Patient was not found");
+            return null;
+            // throw new NotFoundPacientException("Patient was not found");
         }
         foundPatient.getFavorites();
 //        LOGGER.debug("Patient found. Patient: {}", foundPatient.get());
 //        LOGGER.debug("Patient name: {}", foundPatient.get().getFirstName());
         return foundPatient;
-        
     }
 
+    @Override
+    public VerificationToken createToken(Patient patient) {
+        return null;
+    }
 }

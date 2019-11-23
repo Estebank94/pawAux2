@@ -32,6 +32,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
 
         Patient user = null;
+        user = us.findPatientByEmail(email);
+        /*
         try {
             user = us.findPatientByEmail(email);
         } catch (NotValidEmailException e) {
@@ -39,6 +41,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         } catch (NotFoundPacientException e) {
             e.printStackTrace();
         }
+         */
 
         if (user == null) {
             throw new UsernameNotFoundException("No user found with email " + email);

@@ -56,6 +56,9 @@ public class PatientApiController extends BaseApiController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getPatientByEmail(@QueryParam("email")final String email) throws NotValidPatientIdException, NotFoundPacientException, NotCreatePatientException {
         Patient patient = new Patient();
+        patient = patientService.findPatientByEmail(email);
+
+        /*
         try {
             patient = patientService.findPatientByEmail(email);
         } catch (NotFoundPacientException e){
@@ -63,6 +66,8 @@ public class PatientApiController extends BaseApiController {
         } catch (NotValidEmailException e) {
             e.printStackTrace();
         }
+         */
+
         System.out.println(patient.toString());
         if (patient == null){
             LOGGER.warn("Patient with email {} not found", email);

@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -111,4 +112,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    @Bean
+    public String authTokenKey () {
+        return Base64.getEncoder().encodeToString("576e5a7134743777217a25432a462d4a".getBytes());
+    }
 }
