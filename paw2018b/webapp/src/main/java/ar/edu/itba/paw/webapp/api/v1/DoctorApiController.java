@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.api.v1;
 
 import ar.edu.itba.paw.interfaces.services.DoctorService;
 import ar.edu.itba.paw.models.Doctor;
+import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.NotValidIDException;
 import ar.edu.itba.paw.webapp.api.BaseApiController;
@@ -61,14 +62,16 @@ public class DoctorApiController extends BaseApiController {
     @Path("/list")
     public Response listDoctors(@QueryParam("page") int page) {
         List<Doctor> doctorList = doctorService.listDoctors(page);
-        return Response.ok(new DoctorListDTO(doctorList)).build();
+        Long totalPageCount = doctorService.getLastPage();
+        return Response.ok(new DoctorListDTO(doctorList, totalPageCount)).build();
     }
 
     @GET
     @Path("/all")
     public Response allDoctors() {
         List<Doctor> doctorList = doctorService.listDoctors();
-        return Response.ok(new DoctorListDTO(doctorList)).build();
+        Long totalPageCount = doctorService.getLastPage();
+        return Response.ok(new DoctorListDTO(doctorList, totalPageCount)).build();
     }
 
     @GET
@@ -78,6 +81,11 @@ public class DoctorApiController extends BaseApiController {
         for (Map.Entry entry: uriInfo.getQueryParameters().entrySet()){
             result += entry.getKey() + "=" + entry.getValue() + ", ";
         }
+        /*
+        Search search = new Search();
+        List<Doctor> doctorList = doctorService.listDoctors(search , pageNumber)
+        Long totalPageCount = doctorService.getLastPage(search);
+        */
         return Response.ok(result).build();
     }
 }

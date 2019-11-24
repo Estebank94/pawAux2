@@ -13,6 +13,8 @@ public interface DoctorDao {
 
     Long getLastPage(Search search);
 
+    Long getLastPage();
+
     Boolean setDoctorAvatar(Doctor doctor, byte[] avatar);
 
     List<Doctor> listDoctors(int page);

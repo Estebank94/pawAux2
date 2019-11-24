@@ -14,6 +14,8 @@ public interface DoctorService {
 
    Long getLastPage(Search search);
 
+   Long getLastPage();
+
    Optional<Doctor> setDoctorAvatar(Doctor doctor, byte[] avatar);
 
    List<Doctor> listDoctors(int page);

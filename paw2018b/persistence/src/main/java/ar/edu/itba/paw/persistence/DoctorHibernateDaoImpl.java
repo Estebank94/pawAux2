@@ -139,6 +139,14 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     }
 
     @Override
+    public Long getLastPage() {
+        final TypedQuery<Doctor> query = em.createQuery("FROM Doctor", Doctor.class);
+        final List<Doctor> list = query.getResultList();
+        int pageCount = (int) (Math.ceil(list.size() / PAGESIZE));
+        return Long.valueOf(pageCount);
+    }
+
+    @Override
     public Long getLastPage(Search search) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
