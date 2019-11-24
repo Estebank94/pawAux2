@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Path("v1/doctor")
@@ -68,5 +69,15 @@ public class DoctorApiController extends BaseApiController {
     public Response allDoctors() {
         List<Doctor> doctorList = doctorService.listDoctors();
         return Response.ok(new DoctorListDTO(doctorList)).build();
+    }
+
+    @GET
+    @Path("/search")
+    public Response searchDoctors (@Context UriInfo uriInfo) {
+        String result = "";
+        for (Map.Entry entry: uriInfo.getQueryParameters().entrySet()){
+            result += entry.getKey() + "=" + entry.getValue() + ", ";
+        }
+        return Response.ok(result).build();
     }
 }

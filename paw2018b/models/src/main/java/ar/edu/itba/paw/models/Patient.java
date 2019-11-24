@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.models;
 
-import com.sun.istack.internal.NotNull;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -183,7 +183,7 @@ public class Patient {
         this.favorites = favorites;
     }
 
-    @NotNull
+    @NonNull
     private LocalDateTime getAppointmentDateTime (Appointment ap){
         LocalDate appointementDay = LocalDate.parse(ap.getAppointmentDay());
         return appointementDay.atTime(LocalTime.parse(ap.getAppointmentTime()));
