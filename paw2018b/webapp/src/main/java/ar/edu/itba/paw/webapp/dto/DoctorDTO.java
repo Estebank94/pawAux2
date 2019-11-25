@@ -12,7 +12,7 @@ public class DoctorDTO {
     private SpecialtyListDTO specialties;
     private InsurancePlanListDTO insurancesPlans;
     // private WorkingHoursListDTO workingHours;
-    // private ReviewListDTO reviews;
+    private ReviewListDTO reviews;
     // private DescriptionDTO description;
     private Integer averageRating;
     // private Integer licence;

@@ -55,8 +55,8 @@ public class Doctor {
     @LazyCollection(LazyCollectionOption.FALSE)
     Set<Appointment> appointments;
 
-    @OneToMany(mappedBy = "doctor")
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
+    // @LazyCollection(LazyCollectionOption.FALSE)
     List<Review> reviews;
 
     @OneToOne(mappedBy="doctor")
