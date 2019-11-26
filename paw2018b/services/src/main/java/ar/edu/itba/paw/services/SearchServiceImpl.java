@@ -1,20 +1,16 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.SearchDao;
-import ar.edu.itba.paw.interfaces.SearchService;
+import ar.edu.itba.paw.interfaces.persistance.SearchDao;
+import ar.edu.itba.paw.interfaces.services.SearchService;
 import ar.edu.itba.paw.models.Insurance;
 import ar.edu.itba.paw.models.InsurancePlan;
-import ar.edu.itba.paw.models.ListItem;
 import ar.edu.itba.paw.models.Specialty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * Created by estebankramer on 02/09/2018.

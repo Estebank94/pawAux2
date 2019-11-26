@@ -1,12 +1,11 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.DescriptionDao;
+import ar.edu.itba.paw.interfaces.persistance.DescriptionDao;
 import ar.edu.itba.paw.models.Description;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Set;
 
 /**
  * Created by estebankramer on 10/10/2018.

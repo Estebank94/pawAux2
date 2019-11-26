@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.FavoriteDao;
-import ar.edu.itba.paw.interfaces.FavoriteService;
+import ar.edu.itba.paw.interfaces.persistance.FavoriteDao;
+import ar.edu.itba.paw.interfaces.services.FavoriteService;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Favorite;
 import ar.edu.itba.paw.models.exceptions.NotCreatedFavoriteException;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Optional;
 
 /**

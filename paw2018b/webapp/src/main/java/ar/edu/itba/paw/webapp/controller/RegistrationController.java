@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.DoctorService;
-import ar.edu.itba.paw.interfaces.EmailService;
-import ar.edu.itba.paw.interfaces.PatientService;
-import ar.edu.itba.paw.interfaces.SearchService;
+import ar.edu.itba.paw.interfaces.services.DoctorService;
+import ar.edu.itba.paw.interfaces.services.EmailService;
+import ar.edu.itba.paw.interfaces.services.PatientService;
+import ar.edu.itba.paw.interfaces.services.SearchService;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.forms.PatientForm;
@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -34,7 +32,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.sound.midi.SysexMessage;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -189,14 +186,8 @@ public class RegistrationController {
                 .addObject("wrongCertificate",false);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Patient patient = null;
-        try {
-            patient = patientService.findPatientByEmail(authentication.getName());
-        } catch (NotValidEmailException e) {
-            e.printStackTrace();
-        } catch (NotFoundPacientException e) {
-            e.printStackTrace();
-        }
+        Patient patient = patientService.findPatientByEmail(authentication.getName());
+
         Doctor doctor = null;
         try {
             doctor = doctorService.findDoctorById(String.valueOf(patient.getDoctor().getId())).get();
@@ -299,13 +290,9 @@ public class RegistrationController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Patient patient = null;
-        try {
-            patient = patientService.findPatientByEmail(authentication.getName());
-        } catch (NotValidEmailException e) {
-            e.printStackTrace();
-        } catch (NotFoundPacientException e) {
-            e.printStackTrace();
-        }
+
+        patient = patientService.findPatientByEmail(authentication.getName());
+
         Doctor doctor = null;
         try {
             doctor = doctorService.findDoctorById(String.valueOf(patient.getDoctor().getId())).get();

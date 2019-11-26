@@ -3,32 +3,17 @@
 package ar.edu.itba.paw.services;
 
 
-import ar.edu.itba.paw.interfaces.AppointmentDao;
-import ar.edu.itba.paw.interfaces.DoctorDao;
+import ar.edu.itba.paw.interfaces.persistance.AppointmentDao;
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 
-import javax.persistence.EntityManager;
-import javax.sql.DataSource;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;

@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.ReviewDao;
+import ar.edu.itba.paw.interfaces.persistance.ReviewDao;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Review;
 import org.springframework.stereotype.Repository;

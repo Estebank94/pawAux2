@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.TimeService;
+import ar.edu.itba.paw.interfaces.services.TimeService;
 import ar.edu.itba.paw.models.WorkingHours;
 
 import java.time.LocalTime;

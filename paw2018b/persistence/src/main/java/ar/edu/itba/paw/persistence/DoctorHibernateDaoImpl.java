@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.*;
+import ar.edu.itba.paw.interfaces.persistance.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.NotCreateDoctorException;
 import ar.edu.itba.paw.models.exceptions.RepeatedLicenceException;
@@ -10,10 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import javax.persistence.metamodel.Metamodel;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -39,6 +36,12 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     @Autowired
     private WorkingHoursDao workingHoursDao;
 
+    @Override
+    public List<Doctor> listDoctors() {
+        final TypedQuery<Doctor> query = em.createQuery("FROM Doctor", Doctor.class);
+        final List<Doctor> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
 
     @Override
     public List<Doctor> listDoctors(int page) {

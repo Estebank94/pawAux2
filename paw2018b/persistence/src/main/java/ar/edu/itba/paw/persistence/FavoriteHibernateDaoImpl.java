@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.FavoriteDao;
+import ar.edu.itba.paw.interfaces.persistance.FavoriteDao;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Favorite;
 import ar.edu.itba.paw.models.Patient;

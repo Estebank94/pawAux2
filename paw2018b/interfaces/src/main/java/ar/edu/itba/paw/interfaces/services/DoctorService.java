@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.interfaces;
+package ar.edu.itba.paw.interfaces.services;
 
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
@@ -17,6 +17,8 @@ public interface DoctorService {
    Optional<Doctor> setDoctorAvatar(Doctor doctor, byte[] avatar);
 
    List<Doctor> listDoctors(int page);
+
+   List<Doctor> listDoctors();
 
    List<Doctor> listDoctors(Search search, String pageAsString) throws NotValidSearchException, NotValidPageException;
 

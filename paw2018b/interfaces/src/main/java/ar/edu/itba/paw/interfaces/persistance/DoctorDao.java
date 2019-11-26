@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.interfaces;
+package ar.edu.itba.paw.interfaces.persistance;
 
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.NotCreateDoctorException;
@@ -16,6 +16,8 @@ public interface DoctorDao {
     Boolean setDoctorAvatar(Doctor doctor, byte[] avatar);
 
     List<Doctor> listDoctors(int page);
+
+    List<Doctor> listDoctors();
 
     List<Doctor> listDoctors(Search search, int page);
 
