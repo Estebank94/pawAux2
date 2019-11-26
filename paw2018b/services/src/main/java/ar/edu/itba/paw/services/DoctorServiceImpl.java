@@ -139,7 +139,7 @@ public class DoctorServiceImpl implements DoctorService {
         }
 
         thisdoctor.get().getWorkingHours().size();
-        thisdoctor.get().getAppointments().size();
+        // thisdoctor.get().getAppointments().size();
         thisdoctor.get().getReviews().size();
 
         if(thisdoctor.get().getDescription() != null){
