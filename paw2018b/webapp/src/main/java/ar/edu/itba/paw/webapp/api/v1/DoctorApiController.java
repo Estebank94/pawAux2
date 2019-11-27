@@ -83,9 +83,35 @@ public class DoctorApiController extends BaseApiController {
         }
 
         Search search = new Search();
+        System.out.println("LLego");
         List<String> specialties = uriInfo.getQueryParameters().get("specialty");
         if (specialties != null){
             search.setSpecialty(specialties.get(0));
+        }
+
+        List<String> name = uriInfo.getQueryParameters().get("name");
+        if (name != null){
+            search.setName(name.get(0));
+        }
+
+        List<String> insurance = uriInfo.getQueryParameters().get("insurance");
+        if (insurance != null){
+            search.setInsurance(insurance.get(0));
+        }
+
+        List<String> insurancePlan = uriInfo.getQueryParameters().get("insurancePlan");
+        if (insurancePlan.size() > 0){
+            search.setInsurancePlan(insurancePlan);
+        }
+
+        List<String> sex = uriInfo.getQueryParameters().get("sex");
+        if (sex != null){
+            search.setSex(sex.get(0));
+        }
+
+        List<String> days = uriInfo.getQueryParameters().get("days");
+        if (days != null){
+            search.setDays(days.get(0));
         }
 
         List<Doctor> doctors = doctorService.listDoctors(search);
