@@ -14,13 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @Path("v1/doctor")
 @Controller
@@ -76,51 +74,65 @@ public class DoctorApiController extends BaseApiController {
 
     @GET
     @Path("/search")
-    public Response searchDoctors (@Context UriInfo uriInfo) {
-        String result = "";
-        for (Map.Entry entry: uriInfo.getQueryParameters().entrySet()){
-            result += entry.getKey() + "=" + entry.getValue() + ", ";
-        }
+    public Response searchDoctors (@QueryParam("specialty") String specialty,
+                                   @QueryParam("name") String name,
+                                   @QueryParam("insurance")String insurance,
+                                   @QueryParam("sex") String sex,
+                                   @QueryParam("insurancePlan")List<String> insurancePlan,
+                                   @QueryParam("days") String days) {
 
         Search search = new Search();
-        System.out.println("LLego");
-        List<String> specialties = uriInfo.getQueryParameters().get("specialty");
-        if (specialties != null){
+        // Consultar por cada uno de los parametros si son null
+        search.setSpecialty(specialty);
+        List<Doctor> doctors = doctorService.listDoctors(search);
+        return Response.ok(new DoctorListDTO(doctors, Long.parseLong("0"))).build();
+    }
+
+
+    private Search generateSearchFromUri(UriInfo uriInfo) {
+        MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
+        Set<Map.Entry<String, List<String>>> entrySet = queryParameters.entrySet();
+        Search search = new Search();
+
+
+        if (entrySet.contains("specialty")){
+            List<String> specialties = queryParameters.get("specialty");
             search.setSpecialty(specialties.get(0));
         }
-
-        List<String> name = uriInfo.getQueryParameters().get("name");
-        if (name != null){
+        /*
+        if (entrySet.contains("name")){
+            List<String> name = queryParameters.get("name");
             search.setName(name.get(0));
-        }
+        };
 
-        List<String> insurance = uriInfo.getQueryParameters().get("insurance");
-        if (insurance != null){
+         */
+        /*
+        if (entrySet.contains("insurance")){
+            List<String> insurance = queryParameters.get("insurance");
             search.setInsurance(insurance.get(0));
         }
 
-        List<String> insurancePlan = uriInfo.getQueryParameters().get("insurancePlan");
-        if (insurancePlan.size() > 0){
+         */
+        /*
+        if (entrySet.contains("insurancePlan")){
+            List<String> insurancePlan = uriInfo.getQueryParameters().get("insurancePlan");
             search.setInsurancePlan(insurancePlan);
         }
-
-        List<String> sex = uriInfo.getQueryParameters().get("sex");
-        if (sex != null){
+         */
+        /*
+        if (entrySet.contains("sex")){
+            List<String> sex = queryParameters.get("sex");
             search.setSex(sex.get(0));
         }
 
-        List<String> days = uriInfo.getQueryParameters().get("days");
-        if (days != null){
+         */
+        /*
+        if (entrySet.contains("days")) {
+            List<String> days = queryParameters.get("days");
             search.setDays(days.get(0));
         }
 
-        List<Doctor> doctors = doctorService.listDoctors(search);
-
-        /*
-        Search search = new Search();
-        List<Doctor> doctorList = doctorService.listDoctors(search , pageNumber)
-        Long totalPageCount = doctorService.getLastPage(search);
-        */
-        return Response.ok(new DoctorListDTO(doctors, Long.parseLong("0"))).build();
+         */
+        return search;
     }
 }

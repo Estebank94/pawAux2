@@ -68,4 +68,17 @@ public class Search {
     public void setDays(String days) {
         this.days = days;
     }
+
+    @Override
+    public String toString() {
+        return "Search{" +
+                "name='" + name + '\'' +
+                ", specialty='" + specialty + '\'' +
+                ", location='" + location + '\'' +
+                ", insurance='" + insurance + '\'' +
+                ", sex='" + sex + '\'' +
+                ", insurancePlan=" + insurancePlan +
+                ", days='" + days + '\'' +
+                '}';
+    }
 }
