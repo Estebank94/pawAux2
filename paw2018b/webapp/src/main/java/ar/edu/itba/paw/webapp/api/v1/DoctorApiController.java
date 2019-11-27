@@ -10,7 +10,7 @@ import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.NotValidIDException;
-import ar.edu.itba.paw.webapp.api.BaseApiController;
+import ar.edu.itba.paw.webapp.api.v1.BaseApiController;
 import ar.edu.itba.paw.webapp.dto.DoctorDTO;
 import ar.edu.itba.paw.webapp.dto.DoctorListDTO;
 import ar.edu.itba.paw.webapp.dto.PatientDTO;
@@ -102,9 +102,11 @@ public class DoctorApiController extends BaseApiController {
     @Produces(value = { MediaType.APPLICATION_JSON})
     public Response createDoctor(
             @Valid final PersonalForm personalForm) {
+
         if (personalForm == null){
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
+
         if (!personalForm.matchingPasswords(personalForm.getPassword(), personalForm.getPasswordConfirmation())) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(errorMessageToJSON("Non Mathching passwords"))
@@ -138,6 +140,7 @@ public class DoctorApiController extends BaseApiController {
             e.printStackTrace();
         }
         final VerificationToken token = patientService.createToken(patient);
+
 
         /*Send welcome email to new user*/
         emailService.sendMessageWithAttachment(patient.getFirstName(), patient.getEmail(), "Bienvenido a Waldoc");
