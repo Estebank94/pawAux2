@@ -82,15 +82,19 @@ public class DoctorApiController extends BaseApiController {
             result += entry.getKey() + "=" + entry.getValue() + ", ";
         }
 
-        /* Search search = new Search();
+        Search search = new Search();
         List<String> specialties = uriInfo.getQueryParameters().get("specialty");
-        search.setSpecialty(specialties.get(0));
+        if (specialties != null){
+            search.setSpecialty(specialties.get(0));
+        }
+
+        List<Doctor> doctors = doctorService.listDoctors(search);
 
         /*
         Search search = new Search();
         List<Doctor> doctorList = doctorService.listDoctors(search , pageNumber)
         Long totalPageCount = doctorService.getLastPage(search);
         */
-        return Response.ok(result).build();
+        return Response.ok(new DoctorListDTO(doctors, Long.parseLong("0"))).build();
     }
 }

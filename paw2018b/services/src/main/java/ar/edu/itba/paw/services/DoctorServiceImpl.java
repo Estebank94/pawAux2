@@ -50,6 +50,12 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    public List<Doctor> listDoctors(Search search) {
+        LOGGER.debug("DoctorServiceImpl: listDoctors");
+        return doctorDao.listDoctors2(search);
+    }
+
+    @Override
     public Long getLastPage() {
         LOGGER.debug("DoctorServiceImpl: getLastPage without search");
         return doctorDao.getLastPage();
@@ -98,6 +104,7 @@ public class DoctorServiceImpl implements DoctorService {
 //        list.get(0).getInsurancePlans().size();
         return list;
     }
+
 
     @Override
     @Transactional

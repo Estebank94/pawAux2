@@ -20,6 +20,8 @@ public interface DoctorService {
 
    List<Doctor> listDoctors(int page);
 
+   List<Doctor> listDoctors(Search search);
+
    List<Doctor> listDoctors();
 
    List<Doctor> listDoctors(Search search, String pageAsString) throws NotValidSearchException, NotValidPageException;
@@ -42,5 +44,6 @@ public interface DoctorService {
    Optional<Doctor> setWorkingHours(Doctor doctor, List<WorkingHours> workingHours);
 
    Optional<Doctor> setDescription(Doctor doctor, Description description);
+
 
 }

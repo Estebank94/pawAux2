@@ -139,7 +139,8 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
     }
 
-    public List<Doctor> listDoctors2(Search search, int page) {
+    @Override
+    public List<Doctor> listDoctors2(Search search) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Doctor> query = cb.createQuery(Doctor.class);
@@ -177,8 +178,6 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
         if (name.isPresent())
         {
-            query.where(cb.or(cb.like(cb.lower(root.get("firstName")), "%"+name.get().toLowerCase()+"%"),
-                    (cb.like(cb.lower(root.get("lastName")), "%"+name.get().toLowerCase()+"%"))));
             expression = cb.or(cb.like(cb.lower(root.get("firstName")), "%"+name.get().toLowerCase()+"%"),
                     (cb.like(cb.lower(root.get("lastName")), "%"+name.get().toLowerCase()+"%")));
         }
@@ -186,7 +185,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         if (specialty.isPresent())
         {
             Specialty specialtyObj = specialtyDao.findSpecialtyByName(specialty.get());
-            query.where(cb.isMember(specialtyObj, root.get("specialties")));
+            // query.where(cb.isMember(specialtyObj, root.get("specialties")));
             Expression specialtyExpresion = cb.isMember(specialtyObj, root.get("specialties"));
             if (expression == null){
                 expression = specialtyExpresion;
@@ -203,7 +202,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
             for(InsurancePlan plan : insurancePlans){
                 predicates.add(cb.isMember(plan, root.get("insurancePlans")));
             }
-            query.where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
+            // query.where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
             Expression insuranceExpression = cb.or(predicates.toArray(new Predicate[predicates.size()]));
             if (expression == null){
                 expression = insuranceExpression;
@@ -213,7 +212,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         }
 
         if (sex.isPresent()){
-            query.where(cb.equal(root.get("sex"), sex.get()));
+            // query.where(cb.equal(root.get("sex"), sex.get()));
             Expression sexExpression = cb.equal(root.get("sex"), sex.get());
             if (expression == null){
                 expression = sexExpression;
@@ -224,7 +223,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         if(insurancePlan.isPresent()){
             for(String plan : insurancePlan.get()){
                 InsurancePlan insurancePlanObj = insurancePlanDao.findInsurancePlanByPlanName(plan);
-                query.where(cb.isMember(insurancePlanObj, root.get("insurancePlans")));
+                // query.where(cb.isMember(insurancePlanObj, root.get("insurancePlans")));
                 Expression insuranceExpression = cb.isMember(insurancePlanObj, root.get("insurancePlans"));
                 if (expression == null){
                     expression = insuranceExpression;
@@ -241,7 +240,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
             for(WorkingHours w : workingHours){
                 predicates.add(cb.isMember(w, root.get("workingHours")));
             }
-            query.where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
+            // query.where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
             Expression daysExpression = cb.or(predicates.toArray(new Predicate[predicates.size()]));
             if (expression == null){
                 expression = daysExpression;
@@ -250,13 +249,12 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
             }
         }
 
+        if (expression != null){
+            query.where(expression);
+        }
         TypedQuery<Doctor> typedQuery = em.createQuery(query);
-        typedQuery.setFirstResult(PAGESIZE*(page));
-        typedQuery.setMaxResults(PAGESIZE);
         List<Doctor> list = typedQuery.getResultList();
-
         return list.isEmpty() ? Collections.emptyList() : list;
-
     }
 
     @Override
