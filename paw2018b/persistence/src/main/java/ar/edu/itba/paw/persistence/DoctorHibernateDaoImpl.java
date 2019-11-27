@@ -204,15 +204,33 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
                 predicates.add(cb.isMember(plan, root.get("insurancePlans")));
             }
             query.where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
+            Expression insuranceExpression = cb.or(predicates.toArray(new Predicate[predicates.size()]));
+            if (expression == null){
+                expression = insuranceExpression;
+            } else {
+                expression = cb.and(expression, insuranceExpression);
+            }
         }
 
         if (sex.isPresent()){
             query.where(cb.equal(root.get("sex"), sex.get()));
+            Expression sexExpression = cb.equal(root.get("sex"), sex.get());
+            if (expression == null){
+                expression = sexExpression;
+            } else {
+                expression = cb.and(expression, sexExpression);
+            }
         }
         if(insurancePlan.isPresent()){
             for(String plan : insurancePlan.get()){
                 InsurancePlan insurancePlanObj = insurancePlanDao.findInsurancePlanByPlanName(plan);
                 query.where(cb.isMember(insurancePlanObj, root.get("insurancePlans")));
+                Expression insuranceExpression = cb.isMember(insurancePlanObj, root.get("insurancePlans"));
+                if (expression == null){
+                    expression = insuranceExpression;
+                } else {
+                    expression = cb.and(expression, insuranceExpression);
+                }
             }
         }
 
@@ -224,7 +242,12 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
                 predicates.add(cb.isMember(w, root.get("workingHours")));
             }
             query.where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
-
+            Expression daysExpression = cb.or(predicates.toArray(new Predicate[predicates.size()]));
+            if (expression == null){
+                expression = daysExpression;
+            } else {
+                expression = cb.and(expression, daysExpression);
+            }
         }
 
         TypedQuery<Doctor> typedQuery = em.createQuery(query);
