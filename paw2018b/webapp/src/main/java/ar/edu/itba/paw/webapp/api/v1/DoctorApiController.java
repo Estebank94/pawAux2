@@ -81,6 +81,11 @@ public class DoctorApiController extends BaseApiController {
         for (Map.Entry entry: uriInfo.getQueryParameters().entrySet()){
             result += entry.getKey() + "=" + entry.getValue() + ", ";
         }
+
+        /* Search search = new Search();
+        List<String> specialties = uriInfo.getQueryParameters().get("specialty");
+        search.setSpecialty(specialties.get(0));
+
         /*
         Search search = new Search();
         List<Doctor> doctorList = doctorService.listDoctors(search , pageNumber)
