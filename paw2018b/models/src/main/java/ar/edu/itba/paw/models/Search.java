@@ -9,10 +9,11 @@ public class Search {
     private String location = "";
     private String insurance = "no";
     private String sex = "ALL";
-
     private List<String> insurancePlan = null;
-
     private String days = "no";
+
+    public Search () {
+    }
 
     public String getName() {
             return name;
@@ -43,7 +44,6 @@ public class Search {
     }
 
     public void setInsurance(String insurance) { this.insurance = insurance; }
-
 
     public String getSex() {
         return sex;
