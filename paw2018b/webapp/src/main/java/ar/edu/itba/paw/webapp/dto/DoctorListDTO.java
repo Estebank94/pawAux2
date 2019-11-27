@@ -10,15 +10,18 @@ public class DoctorListDTO {
 
     private int count;
 
+    private Long totalPageCount;
+
     public DoctorListDTO() {
     }
 
-    public DoctorListDTO (List<Doctor> doctorList){
+    public DoctorListDTO (List<Doctor> doctorList, Long pageCount){
         this.doctors = new LinkedList<>();
         for (Doctor doctor : doctorList) {
             this.doctors.add(new DoctorDTO(doctor));
         }
         this.count = this.doctors.size();
+        this.totalPageCount = pageCount;
     }
 
     public List<DoctorDTO> getDoctors() {
@@ -35,5 +38,13 @@ public class DoctorListDTO {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public Long getTotalPageCount() {
+        return totalPageCount;
+    }
+
+    public void setTotalPageCount(Long totalPageCount) {
+        this.totalPageCount = totalPageCount;
     }
 }

@@ -16,4 +16,12 @@ public class ReviewListDTO {
             this.reviews.add(new ReviewDTO(review));
         }
     }
+
+    public List<ReviewDTO> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<ReviewDTO> reviews) {
+        this.reviews = reviews;
+    }
 }

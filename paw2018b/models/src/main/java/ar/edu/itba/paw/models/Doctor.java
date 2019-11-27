@@ -52,7 +52,7 @@ public class Doctor {
 
 
     @OneToMany(mappedBy = "doctor")
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @LazyCollection(LazyCollectionOption.TRUE)
     Set<Appointment> appointments;
 
     @OneToMany(mappedBy = "doctor")
@@ -217,7 +217,6 @@ public class Doctor {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(getId());
     }
 
@@ -297,7 +296,6 @@ public class Doctor {
         }
         return null;
     }
-
 
     public List<WorkingHours> getWorkingHours() {
         return workingHours;
@@ -442,7 +440,6 @@ public class Doctor {
     public void setFavorites(List<Favorite> favorites) {
         this.favorites = favorites;
     }
-
 
     private LocalDateTime getAppointmentDateTime (Appointment ap){
         LocalDate appointementDay = LocalDate.parse(ap.getAppointmentDay());

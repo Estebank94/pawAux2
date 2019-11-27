@@ -7,6 +7,10 @@ import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.VerificationToken;
 import ar.edu.itba.paw.models.exceptions.*;
+import ar.edu.itba.paw.models.Search;
+import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
+import ar.edu.itba.paw.models.exceptions.NotValidIDException;
+import ar.edu.itba.paw.webapp.api.BaseApiController;
 import ar.edu.itba.paw.webapp.dto.DoctorDTO;
 import ar.edu.itba.paw.webapp.dto.DoctorListDTO;
 import ar.edu.itba.paw.webapp.dto.PatientDTO;
@@ -27,6 +31,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -79,14 +84,16 @@ public class DoctorApiController extends BaseApiController {
     @Path("/list")
     public Response listDoctors(@QueryParam("page") int page) {
         List<Doctor> doctorList = doctorService.listDoctors(page);
-        return Response.ok(new DoctorListDTO(doctorList)).build();
+        Long totalPageCount = doctorService.getLastPage();
+        return Response.ok(new DoctorListDTO(doctorList, totalPageCount)).build();
     }
 
     @GET
     @Path("/all")
     public Response allDoctors() {
         List<Doctor> doctorList = doctorService.listDoctors();
-        return Response.ok(new DoctorListDTO(doctorList)).build();
+        Long totalPageCount = doctorService.getLastPage();
+        return Response.ok(new DoctorListDTO(doctorList, totalPageCount)).build();
     }
 
     @POST
@@ -141,5 +148,20 @@ public class DoctorApiController extends BaseApiController {
         // final org.thymelead.context.Context ctx = new org.thymelead.context.Context
         return Response.created(location).entity(new PatientDTO(patient)).build();
 
+    }
+
+    @GET
+    @Path("/search")
+    public Response searchDoctors (@Context UriInfo uriInfo) {
+        String result = "";
+        for (Map.Entry entry: uriInfo.getQueryParameters().entrySet()){
+            result += entry.getKey() + "=" + entry.getValue() + ", ";
+        }
+        /*
+        Search search = new Search();
+        List<Doctor> doctorList = doctorService.listDoctors(search , pageNumber)
+        Long totalPageCount = doctorService.getLastPage(search);
+        */
+        return Response.ok(result).build();
     }
 }

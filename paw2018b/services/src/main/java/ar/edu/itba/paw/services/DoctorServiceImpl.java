@@ -50,6 +50,12 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    public Long getLastPage() {
+        LOGGER.debug("DoctorServiceImpl: getLastPage without search");
+        return doctorDao.getLastPage();
+    }
+
+    @Override
     public Long getLastPage(Search search){
         LOGGER.debug("DoctorServiceImpl: getLastPage");
         return doctorDao.getLastPage(search);
@@ -93,8 +99,6 @@ public class DoctorServiceImpl implements DoctorService {
         return list;
     }
 
-
-
     @Override
     @Transactional
     public Optional<Doctor> findDoctorById(String idAsString) throws NotFoundDoctorException, NotValidIDException {
@@ -135,7 +139,7 @@ public class DoctorServiceImpl implements DoctorService {
         }
 
         thisdoctor.get().getWorkingHours().size();
-        thisdoctor.get().getAppointments().size();
+        // thisdoctor.get().getAppointments().size();
         thisdoctor.get().getReviews().size();
 
         if(thisdoctor.get().getDescription() != null){
@@ -158,7 +162,6 @@ public class DoctorServiceImpl implements DoctorService {
         LOGGER.debug("Doctor is: {}", thisdoctor);
         return thisdoctor;
     }
-
 
     @Override
     @Transactional
