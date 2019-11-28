@@ -1,6 +1,7 @@
 import React from 'react';
 import i18n from "../../i18n";
 import BounceLoader from 'react-spinners/BounceLoader';
+import queryString from 'query-string';
 
 import fetchApi from '../../utils/api'
 
@@ -12,26 +13,54 @@ class Specialists extends React.Component {
         error: false,
         specialists: null,
         insurances: null,
-        specialties: null
+        specialties: null,
+        currentPage: 0,
+        pages: null
     };
 
     componentDidMount() {
-        console.log('params', this.props.location);
-        fetchApi('/doctor/list?page=' + 1, 'GET') //TODO poner bien el page del query param
-            .then(specialists => {
-                    console.log(specialists);
-                    this.setState({ specialists: specialists, loading: false });
-                })
-            .catch(() => this.setState({ error: true, loading: false }));
+      const parsed = queryString.parse(this.props.location.search)
+      this.getSpecialists(parsed.page || this.state.currentPage);
     }
 
+    getSpecialists(page) {
+      this.setState({ loading: true, currentPage: page })
+      fetchApi('/doctor/list?page=' + page, 'GET')
+        .then(specialists => {
+          console.log(specialists);
+          this.setState({ specialists: specialists, pages: specialists.totalPageCount, loading: false });
+        })
+        .catch(() => this.setState({ error: true, loading: false }));
+    }
+
+  renderPagePicker = () => {
+    const { pages, currentPage } = this.state;
+    let p = [];
+
+    for (let i = 0; i < pages; i++) {
+      p.push(<li className={ 'page-item' + currentPage === i ? ' active' : '' }>
+        {
+          currentPage === i ?
+            <span class="page-link">
+              {i + 1}
+              <span class="sr-only">(current)</span>
+            </span>
+            :
+            <a className="page-link" onClick={() => this.getSpecialists(i)}>{i + 1}</a>
+        }
+
+      </li>);
+    }
+
+    return p;
+  }
+
   render() {
-      const { error, loading, specialists } = this.state;
-      const PAGE_SIZE = 10;
+      const { error, loading, specialists, currentPage } = this.state;
 
       if(loading) {
           return (
-              <div className="align-items-center justify-content-center">
+              <div className="centered">
                   <BounceLoader
                       sizeUnit={"px"}
                       size={75}
@@ -63,17 +92,11 @@ class Specialists extends React.Component {
                     </div>
                 </div>
             </div>
-            <div className="m-t-20 m-b-20">
+            <div style={{ marginTop: 20 }}>
                 <ul className="pagination justify-content-star">
-                    <li className="page-item disabled">
-                        <a className="page-link" href="#" tabindex="-1">Previous</a>
-                    </li>
-                    <li className="page-item"><a className="page-link" href="#">1</a></li>
-                    <li className="page-item"><a className="page-link" href="#">2</a></li>
-                    <li className="page-item"><a className="page-link" href="#">3</a></li>
-                    <li className="page-item">
-                        <a className="page-link" href="#">Next</a>
-                    </li>
+                    {
+                      this.renderPagePicker()
+                    }
                 </ul>
             </div>
         </div>
