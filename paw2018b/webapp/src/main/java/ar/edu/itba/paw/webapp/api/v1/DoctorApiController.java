@@ -82,8 +82,25 @@ public class DoctorApiController extends BaseApiController {
                                    @QueryParam("days") String days) {
 
         Search search = new Search();
+        if (specialty != null) {
+            search.setSpecialty(specialty);
+        }
+        if (name != null) {
+            search.setName(name);
+        }
+        if (insurance != null){
+            search.setInsurance(insurance);
+        }
+        if (sex != null){
+            search.setSex(sex);
+        }
+        if (insurancePlan != null && insurancePlan.size() > 0){
+            search.setInsurancePlan(insurancePlan);
+        }
+        if (days != null){
+            search.setDays(days);
+        }
         // Consultar por cada uno de los parametros si son null
-        search.setSpecialty(specialty);
         List<Doctor> doctors = doctorService.listDoctors(search);
         return Response.ok(new DoctorListDTO(doctors, Long.parseLong("0"))).build();
     }
