@@ -2,6 +2,11 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 
 class Navigation extends React.Component {
+  handleClick() {
+    const { id } = this.props.data;
+    this.props.history.push(`/login`);
+  }
+
   render() {
     const { pathname } = this.props.location;
     return(
@@ -13,7 +18,11 @@ class Navigation extends React.Component {
             <a href="/login">
                 <div className="row">
                     <div className="center-vertical">
-                      <button className="btn btn-light" style={{ backgroundColor: 'transparent', borderColor: 'transparent', color: '#257CBF' }} type="button">
+                      <button
+                        onClick={() => this.handleClick()}
+                        className="btn btn-light" style={{ backgroundColor: 'transparent', borderColor: 'transparent', color: '#257CBF' }}
+                        type="button"
+                      >
                         Iniciar Sesion
                       </button>
                     </div>

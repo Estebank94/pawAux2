@@ -8,6 +8,7 @@ import Footer from './components/navigation/footer'
 import Home from './pages/home'
 import Specialists from './pages/specialists'
 import Specialist from './pages/specialist'
+import Login from './pages/login'
 
 const App = props => {
   let everyoneRoutes = [
@@ -24,6 +25,7 @@ const App = props => {
           <Route exact path="/" component={Home} />
           <Route exact path="/specialists" component={Specialists} />
           <Route exact path="/specialist/:id" component={Specialist} />
+          <Route exact path="/login" component={Login} />
       </main>
       <Footer />
     </div>
