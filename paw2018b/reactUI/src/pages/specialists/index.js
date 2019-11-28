@@ -1,5 +1,4 @@
 import React from 'react';
-import i18n from "../../i18n";
 import BounceLoader from 'react-spinners/BounceLoader';
 import queryString from 'query-string';
 
@@ -56,7 +55,7 @@ class Specialists extends React.Component {
   }
 
   render() {
-      const { error, loading, specialists, currentPage } = this.state;
+      const { error, loading, specialists } = this.state;
 
       if(loading) {
           return (
@@ -88,7 +87,7 @@ class Specialists extends React.Component {
                 </div>
                 <div className="col-md-3">
                     <div className="sidebar-nav-fixed pull-right affix">
-                        <h3 className="sidebar-title">{i18n.t('prueba')}</h3>
+                        <h3 className="sidebar-title">Filtros</h3>
                     </div>
                 </div>
             </div>
