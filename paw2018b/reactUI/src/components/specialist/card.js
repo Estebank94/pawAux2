@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom'
 
 class SpecialistCard extends React.Component {
 
@@ -17,10 +17,16 @@ class SpecialistCard extends React.Component {
         return stars;
     }
 
+    handleClick() {
+      const { id } = this.props.data;
+      this.props.history.push(`/specialist/${id}`);
+    }
+
     render() {
       const { profilePicture, firstName, lastName, phoneNumber, specialties, averageRating, address } = this.props.data;
+      console.log(this.props.data);
     return(
-      <div className="card card-doctor d-flex flex-row box">
+      <div className="card card-doctor d-flex flex-row box" onClick={() => this.handleClick()}>
           <img class="avatar big" src={`data:image/jpeg;base64,${profilePicture}`} className="avatar" />
           <div className="card-body">
               <div className="card-text">
@@ -44,4 +50,4 @@ class SpecialistCard extends React.Component {
   }
 }
 
-export default SpecialistCard;
+export default withRouter(SpecialistCard);
