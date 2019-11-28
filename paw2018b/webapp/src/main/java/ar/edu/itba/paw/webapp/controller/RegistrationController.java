@@ -120,39 +120,15 @@ public class RegistrationController {
 
                 return mav;
 
-            } catch (NotValidLastNameException e) {
-                return showDoctorRegistration(personalForm).addObject("wrongLastName",true);
-            } catch (RepeatedEmailException e) {
-                return showDoctorRegistration(personalForm).addObject("repeatedEmail",true);
-            } catch (NotValidFirstNameException e) {
-                return showDoctorRegistration(personalForm).addObject("wrongFirstName",true);
-            } catch (NotCreatePatientException e) {
+            } catch (NotValidLastNameException | RepeatedEmailException | NotValidFirstNameException | NotValidPhoneNumberException |
+                    NotValidPasswordException | NotValidEmailException | RepeatedLicenceException | NotValidAddressException |
+                    NotValidSexException | NotValidLicenceException e) {
+                return showDoctorRegistration(personalForm).addObject(e.getAttributeName(),true);
+            } catch (NotCreatePatientException | NotCreateDoctorException | NotValidPatientIdException | NotValidDoctorIdException e) {
                 return new ModelAndView("500");
-            } catch (NotValidPhoneNumberException e) {
-                return showDoctorRegistration(personalForm).addObject("wrongPhoneNumber",true);
-            } catch (NotValidPasswordException e) {
-                return showDoctorRegistration(personalForm).addObject("wrongPassword",true);
-            } catch (NotValidEmailException e) {
-                return showDoctorRegistration(personalForm).addObject("wrongEmail",true);
-            } catch (NotCreateDoctorException e) {
-                return new ModelAndView("500");
-            } catch (RepeatedLicenceException e) {
-                return showDoctorRegistration(personalForm).addObject("repeatedLicence",true);
-            } catch (NotValidAddressException e) {
-                return showDoctorRegistration(personalForm).addObject("wrongAddress",true);
-            } catch (NotValidSexException e) {
-                return showDoctorRegistration(personalForm).addObject("wrongSex",true);
-            } catch (NotValidLicenceException e) {
-                return showDoctorRegistration(personalForm).addObject("wrongLicence",true);
             } catch (NotFoundDoctorException e) {
                 LOGGER.trace("404");
                 return new ModelAndView("404");
-            } catch (NotValidPatientIdException e) {
-                LOGGER.trace("500");
-                return new ModelAndView("500");
-            } catch (NotValidDoctorIdException e) {
-                LOGGER.trace("500");
-                return new ModelAndView("500");
             }
         }
 

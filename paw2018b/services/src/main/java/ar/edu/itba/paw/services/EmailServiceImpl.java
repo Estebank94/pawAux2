@@ -136,17 +136,11 @@ public class EmailServiceImpl implements EmailService {
 
         MimeMessage email = jms.createMimeMessage();
 
-        try{email.setSubject(subject);}
+        try{email.setSubject(subject);
+            email.setSubject("Contact message");
+            email.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            email.setContent(message, "text/html; charset=utf-8");}
         catch (MessagingException e){}
-        try
-        {email.setSubject("Contact message");}
-        catch (MessagingException e){}
-        try
-        {email.setRecipient(Message.RecipientType.TO, new InternetAddress(to));}
-        catch (MessagingException e){}
-        try
-        {email.setContent(message, "text/html; charset=utf-8");}
-        catch(MessagingException e){}
 
         jms.send(email);
     }

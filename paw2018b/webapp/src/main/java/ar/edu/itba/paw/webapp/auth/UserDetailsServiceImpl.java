@@ -27,9 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Patient user = null;
         try {
             user = us.findPatientByEmail(email);
-        } catch (NotValidEmailException e) {
-            e.printStackTrace();
-        } catch (NotFoundPacientException e) {
+        } catch (NotValidEmailException | NotFoundPacientException e) {
             e.printStackTrace();
         }
 

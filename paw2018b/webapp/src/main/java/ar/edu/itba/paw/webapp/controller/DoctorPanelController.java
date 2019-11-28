@@ -50,10 +50,7 @@ public class DoctorPanelController {
         Patient patient;
         try {
             patient = patientService.findPatientByEmail(authentication.getName());
-        } catch (NotValidEmailException e) {
-            LOGGER.trace("Error 404");
-            return new ModelAndView("404");
-        } catch (NotFoundPacientException e) {
+        } catch (NotValidEmailException | NotFoundPacientException e) {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
         }
@@ -63,10 +60,7 @@ public class DoctorPanelController {
         Doctor doctor = null;
         try {
             doctor = doctorService.findDoctorById(String.valueOf(doctorId)).get();
-        } catch (NotFoundDoctorException e) {
-            LOGGER.trace("Error 404");
-            return new ModelAndView("404");
-        } catch (NotValidIDException e) {
+        } catch (NotFoundDoctorException | NotValidIDException e) {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
         }
@@ -116,14 +110,10 @@ public class DoctorPanelController {
         Patient patient;
         try {
             patient = patientService.findPatientByEmail(authentication.getName());
-        } catch (NotValidEmailException e) {
-            LOGGER.trace("Error 404");
-            return new ModelAndView("404");
-        } catch (NotFoundPacientException e) {
+        } catch (NotValidEmailException | NotFoundPacientException e) {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
         }
-
 
         if(form.getDay() != null){
             Optional<Doctor> doctor = doctorService.findDoctorById(String.valueOf(form.getDoctorid()));
