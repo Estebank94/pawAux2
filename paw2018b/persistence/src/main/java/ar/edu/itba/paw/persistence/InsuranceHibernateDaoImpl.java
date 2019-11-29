@@ -31,7 +31,6 @@ public class InsuranceHibernateDaoImpl implements InsuranceDao {
                 "WHERE name = :name ", Insurance.class);
         query.setParameter("name", name);
         Insurance insurance = query.getSingleResult();
-        System.out.println(insurance);
         return insurance;
     }
 }

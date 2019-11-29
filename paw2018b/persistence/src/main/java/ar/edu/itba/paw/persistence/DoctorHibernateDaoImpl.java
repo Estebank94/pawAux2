@@ -197,7 +197,8 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         if (insurance.isPresent())
         {
             Insurance insuranceObj = insuranceDao.findInsuranceByName(insurance.get());
-            List<InsurancePlan> insurancePlans = insurancePlanDao.findAllInsurancePlansByInsurance(insuranceObj);
+            List<InsurancePlan> insurancePlans = insuranceObj.getPlans();
+            // List<InsurancePlan> insurancePlans = insurancePlanDao.findAllInsurancePlansByInsurance(insuranceObj);
             List<Predicate> predicates = new ArrayList<>();
             for(InsurancePlan plan : insurancePlans){
                 predicates.add(cb.isMember(plan, root.get("insurancePlans")));
