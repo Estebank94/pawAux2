@@ -38,10 +38,8 @@ public class FavoriteServiceImpl implements FavoriteService {
 
         try{
             fav = favoriteDao.findFavorite(doctor, patient);
-        } catch (NoResultException e){
-
         } catch (Exception e){
-
+            LOGGER.debug("No favorite doctor");
         }
 
         if (fav.isPresent()){

@@ -37,11 +37,7 @@ public class PatientApiController extends BaseApiController {
         Patient patient = new Patient();
         try {
             patient = patientService.findPatientById(id);
-        } catch (NotValidPatientIdException e){
-            e.printStackTrace();
-        } catch (NotFoundPacientException e){
-            e.printStackTrace();
-        } catch (NotCreatePatientException e){
+        } catch (NotValidPatientIdException | NotFoundPacientException | NotCreatePatientException e){
             e.printStackTrace();
         }
         System.out.println(patient.toString());
@@ -59,9 +55,7 @@ public class PatientApiController extends BaseApiController {
         Patient patient = new Patient();
         try {
             patient = patientService.findPatientByEmail(email);
-        } catch (NotFoundPacientException e){
-            e.printStackTrace();
-        } catch (NotValidEmailException e) {
+        } catch (NotFoundPacientException | NotValidEmailException e) {
             e.printStackTrace();
         }
         System.out.println(patient.toString());
