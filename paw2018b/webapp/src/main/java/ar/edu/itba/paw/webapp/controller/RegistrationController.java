@@ -120,39 +120,17 @@ public class RegistrationController {
 
                 return mav;
 
-            } catch (NotValidLastNameException e) {
-                return showDoctorRegistration(personalForm).addObject("wrongLastName",true);
-            } catch (RepeatedEmailException e) {
-                return showDoctorRegistration(personalForm).addObject("repeatedEmail",true);
-            } catch (NotValidFirstNameException e) {
-                return showDoctorRegistration(personalForm).addObject("wrongFirstName",true);
-            } catch (NotCreatePatientException e) {
+            } catch (NotValidLastNameException | RepeatedEmailException | NotValidFirstNameException | NotValidPhoneNumberException |
+                    NotValidPasswordException | NotValidEmailException | RepeatedLicenceException | NotValidAddressException |
+                    NotValidSexException | NotValidLicenceException e) {
+                LOGGER.debug(e.debugMessage());
+                return showDoctorRegistration(personalForm).addObject(e.getAttributeName(),true);
+            } catch (NotCreatePatientException | NotCreateDoctorException | NotValidPatientIdException | NotValidDoctorIdException e) {
+                LOGGER.trace("500");
                 return new ModelAndView("500");
-            } catch (NotValidPhoneNumberException e) {
-                return showDoctorRegistration(personalForm).addObject("wrongPhoneNumber",true);
-            } catch (NotValidPasswordException e) {
-                return showDoctorRegistration(personalForm).addObject("wrongPassword",true);
-            } catch (NotValidEmailException e) {
-                return showDoctorRegistration(personalForm).addObject("wrongEmail",true);
-            } catch (NotCreateDoctorException e) {
-                return new ModelAndView("500");
-            } catch (RepeatedLicenceException e) {
-                return showDoctorRegistration(personalForm).addObject("repeatedLicence",true);
-            } catch (NotValidAddressException e) {
-                return showDoctorRegistration(personalForm).addObject("wrongAddress",true);
-            } catch (NotValidSexException e) {
-                return showDoctorRegistration(personalForm).addObject("wrongSex",true);
-            } catch (NotValidLicenceException e) {
-                return showDoctorRegistration(personalForm).addObject("wrongLicence",true);
             } catch (NotFoundDoctorException e) {
                 LOGGER.trace("404");
                 return new ModelAndView("404");
-            } catch (NotValidPatientIdException e) {
-                LOGGER.trace("500");
-                return new ModelAndView("500");
-            } catch (NotValidDoctorIdException e) {
-                LOGGER.trace("500");
-                return new ModelAndView("500");
             }
         }
 
@@ -189,18 +167,14 @@ public class RegistrationController {
         Patient patient = null;
         try {
             patient = patientService.findPatientByEmail(authentication.getName());
-        } catch (NotValidEmailException e) {
-            e.printStackTrace();
-        } catch (NotFoundPacientException e) {
+        } catch (NotValidEmailException | NotFoundPacientException e) {
             e.printStackTrace();
         }
+
         Doctor doctor = null;
         try {
             doctor = doctorService.findDoctorById(String.valueOf(patient.getDoctor().getId())).get();
-        } catch (NotFoundDoctorException e) {
-            LOGGER.trace("Error 404");
-            return new ModelAndView("404");
-        } catch (NotValidIDException e) {
+        } catch (NotFoundDoctorException | NotValidIDException e) {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
         }
@@ -254,9 +228,7 @@ public class RegistrationController {
 
         try {
             bytes = doctorService.findDoctorById(String.valueOf(doctorId)).get().getProfilePicture();
-        } catch (NotFoundDoctorException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (NotValidIDException e) {
+        } catch (NotFoundDoctorException | NotValidIDException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -268,9 +240,7 @@ public class RegistrationController {
             String sex = null;
             try {
                 sex = doctorService.findDoctorById(String.valueOf(doctorId)).get().getSex();
-            } catch (NotFoundDoctorException e) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            } catch (NotValidIDException e) {
+            } catch (NotFoundDoctorException | NotValidIDException e) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
@@ -298,18 +268,14 @@ public class RegistrationController {
         Patient patient = null;
         try {
             patient = patientService.findPatientByEmail(authentication.getName());
-        } catch (NotValidEmailException e) {
-            e.printStackTrace();
-        } catch (NotFoundPacientException e) {
+        } catch (NotValidEmailException | NotFoundPacientException e) {
             e.printStackTrace();
         }
+
         Doctor doctor = null;
         try {
             doctor = doctorService.findDoctorById(String.valueOf(patient.getDoctor().getId())).get();
-        } catch (NotFoundDoctorException e) {
-            LOGGER.trace("Error 404");
-            return new ModelAndView("404");
-        } catch (NotValidIDException e) {
+        } catch (NotFoundDoctorException | NotValidIDException e) {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
         }
@@ -385,36 +351,13 @@ public class RegistrationController {
             LOGGER.debug("SET full Doctor's information to DB");
             try {
                 Doctor doctorProfessional = doctorService.setDoctorInfo(patient.getDoctor().getId(), professionalForm.getSpecialties(), insurance,workingHours ,description).get();
-            } catch (NotValidDoctorIdException e) {
+            } catch (NotValidDoctorIdException | NotFoundDoctorException e) {
                 LOGGER.trace("Error 404");
                 return new ModelAndView("404");
-            } catch (NotFoundDoctorException e) {
-                LOGGER.trace("Error 404");
-                return new ModelAndView("404");
-            } catch (NotValidInsurancePlanException e) {
-                LOGGER.debug("Wrong InsurancePlan Input");
-                return showDoctorProfile(professionalForm).addObject("wrongInsurancePlan",true);
-            } catch (NotValidCertificateException e) {
-                LOGGER.debug("Wrong Certificate Input");
-                return showDoctorProfile(professionalForm).addObject("wrongCertificate",true);
-            } catch (NotValidWorkingHourException e) {
-                LOGGER.debug("Wrong WorkingHour Input");
-                return showDoctorProfile(professionalForm).addObject("wrongWorkingHour",true);
-            } catch (NotValidLanguagesException e) {
-                LOGGER.debug("Wrong Language Input");
-                return showDoctorProfile(professionalForm).addObject("wrongLanguage",true);
-            } catch (NotValidSpecialtyException e) {
-                LOGGER.debug("Wrong specialty Input");
-                return showDoctorProfile(professionalForm).addObject("wrongSpecialty",true);
-            } catch (NotValidDescriptionException e) {
-                LOGGER.debug("Wrong Description Input");
-                return showDoctorProfile(professionalForm).addObject("wrongDesciption",true);
-            } catch (NotValidEducationException e) {
-                LOGGER.debug("Wrong education Input");
-                return showDoctorProfile(professionalForm).addObject("wrongEducation",true);
-            } catch (NotValidInsuranceException e) {
-                LOGGER.debug("Wrong Certificate Input");
-                return showDoctorProfile(professionalForm).addObject("wrongCertificat",true);
+            } catch (NotValidInsurancePlanException | NotValidCertificateException | NotValidWorkingHourException | NotValidLanguagesException |
+                    NotValidSpecialtyException | NotValidDescriptionException | NotValidEducationException | NotValidInsuranceException e) {
+                LOGGER.debug(e.debugMessage());
+                return showDoctorProfile(professionalForm).addObject(e.getAttributeName(),true);
             }
         }
         LOGGER.debug("AutoLogIn of patient with ID: {}", patient.getPatientId());

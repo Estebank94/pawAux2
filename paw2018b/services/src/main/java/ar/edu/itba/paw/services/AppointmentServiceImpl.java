@@ -36,10 +36,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         Optional<Appointment> app = Optional.empty();
         try{
             app = appointmentDao.findAppointment(appointmentDay, appointmentTime, patient, doctor);
-        }catch (NoResultException e){
-
         }catch (Exception e){
-
+            LOGGER.debug("No appointment");
         }
         if (app.isPresent()){
             appointmentDao.undoCancelAppointment(app.get());
@@ -66,8 +64,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         Optional<Appointment> app = Optional.empty();
         try {
             app = appointmentDao.findAppointment(appointmentDay, appointmentTime, patient, doctor);
-        } catch (NoResultException e){
-            ans = false;
         } catch (Exception e){
             ans = false;
         }

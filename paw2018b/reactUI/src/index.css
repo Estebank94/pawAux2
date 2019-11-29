@@ -495,3 +495,10 @@ h2
 a {
   color: #257CBF;
 }
+
+.centered {
+  height: 100vh; /* Magic here */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

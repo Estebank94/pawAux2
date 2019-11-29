@@ -36,9 +36,7 @@ public class PatientHibernateDaoImpl implements PatientDao {
         try{
             patient = new Patient(firstName,lastName,phoneNumber, email, password);
             em.persist(patient);
-        }catch (DataIntegrityViolationException exc2){
-            throw new RepeatedEmailException();
-        }catch (ConstraintViolationException exc3){
+        }catch (DataIntegrityViolationException | ConstraintViolationException e){
             throw new RepeatedEmailException();
         }
         return patient;

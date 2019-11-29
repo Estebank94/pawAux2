@@ -116,11 +116,7 @@ public class PatientServiceImpl implements PatientService {
         Patient patient;
         try{
             patient= patientDao.createPatient(firstName, lastName, phoneNumber, email, finalpassword);
-        }catch (RepeatedEmailException exc1){
-            throw new RepeatedEmailException();
-        } catch (DataIntegrityViolationException exc2){
-            throw new RepeatedEmailException();
-        }catch (ConstraintViolationException exc3){
+        }catch (RepeatedEmailException | DataIntegrityViolationException | ConstraintViolationException exc1){
             throw new RepeatedEmailException();
         }
 

@@ -27,7 +27,7 @@ class Specialist extends React.Component {
 
         if(loading) {
             return (
-                <div className="align-items-center justify-content-center">
+                <div className="centered">
                     <BounceLoader
                         sizeUnit={"px"}
                         size={75}
