@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -32,6 +32,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.templatemode.TemplateMode;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -43,6 +46,8 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 public class WebConfig extends WebMvcConfigurerAdapter {
+
+    private ApplicationContext applicationContext;
 
 	@Value("../resource/schema.sql")
 	private Resource schemaSQL;
@@ -67,20 +72,31 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
+	public String frontUrl() {
+		//Test
+		return "http://localhost:8081/api/v1/patient/";
+
+		//Deploy
+//		return "http://pawserver.it.itba.edu.ar/paw-2018b-08/#/";
+	}
+
+	@Bean
 	public DataSource dataSource() {
 		final SimpleDriverDataSource ds = new SimpleDriverDataSource();
 		ds.setDriverClass(org.postgresql.Driver.class);
+
 		// Production
-		ds.setUrl("jdbc:postgresql://localhost:9091/");
-		ds.setUsername("paw-2018b-06");
-		ds.setPassword("67wFYxljg");
+//		ds.setUrl("jdbc:postgresql://localhost:9091/");
+//		ds.setUsername("paw-2018b-06");
+//		ds.setPassword("67wFYxljg");
 
 //		ds.setUrl("jdbc:postgresql://10.16.1.110:5432/paw-2018b-06");
-		/* Development
+
+		/* Development */
 		ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
 		ds.setUsername("postgres");
-		ds.setPassword("admin123");
-		 */
+		ds.setPassword("987456Ms");
+
 		return ds;
 	}
 
@@ -152,6 +168,31 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 			final EntityManagerFactory emf) {
 		return new JpaTransactionManager(emf);
 	}
+
+    //https://github.com/thymeleaf
+
+    @Bean
+    public SpringResourceTemplateResolver templateResolver(){
+        final SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+        templateResolver.setApplicationContext(this.applicationContext);
+        templateResolver.setPrefix("/WEB-INF/templates/");
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setCacheable(true);
+        return templateResolver;
+    }
+
+    @Bean
+    public SpringTemplateEngine templateEngine(){
+        final SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver());
+        templateEngine.setEnableSpringELCompiler(true);
+        return templateEngine;
+    }
+
+
+
+
 
 }
 
