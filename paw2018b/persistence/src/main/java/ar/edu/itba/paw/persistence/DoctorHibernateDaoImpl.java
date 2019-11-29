@@ -194,6 +194,16 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
             }
         }
 
+        if (sex.isPresent()){
+            // query.where(cb.equal(root.get("sex"), sex.get()));
+            Expression sexExpression = cb.equal(root.get("sex"), sex.get());
+            if (expression == null){
+                expression = sexExpression;
+            } else {
+                expression = cb.and(expression, sexExpression);
+            }
+        }
+
         if (insurance.isPresent())
         {
             Insurance insuranceObj = insuranceDao.findInsuranceByName(insurance.get());
@@ -212,16 +222,19 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
             }
         }
 
-        if (sex.isPresent()){
-            // query.where(cb.equal(root.get("sex"), sex.get()));
-            Expression sexExpression = cb.equal(root.get("sex"), sex.get());
-            if (expression == null){
-                expression = sexExpression;
-            } else {
-                expression = cb.and(expression, sexExpression);
-            }
-        }
         if(insurancePlan.isPresent()){
+            List<InsurancePlan> insurancePlans = insurancePlanDao.getInsurancePlansByList(insurancePlan.get());
+            List<Predicate> insurancePlansPredicates = new ArrayList<>();
+            for (InsurancePlan plan : insurancePlans){
+                insurancePlansPredicates.add(cb.isMember(plan, root.get("insurancePlans")));
+            }
+            Expression insurancePlansExpression = cb.or(insurancePlansPredicates.toArray(new Predicate[insurancePlansPredicates.size()]));
+            if (expression == null) {
+                expression = insurancePlansExpression;
+            } else {
+                expression = cb.and(expression, insurancePlansExpression);
+            }
+            /* AND SEARCHING
             for(String plan : insurancePlan.get()){
                 InsurancePlan insurancePlanObj = insurancePlanDao.findInsurancePlanByPlanName(plan);
                 // query.where(cb.isMember(insurancePlanObj, root.get("insurancePlans")));
@@ -232,6 +245,8 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
                     expression = cb.and(expression, insuranceExpression);
                 }
             }
+
+             */
         }
 
         if (days.isPresent()) {
