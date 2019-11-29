@@ -33,9 +33,15 @@ public class Patient {
     @JoinColumn(name = "doctorid")
     private Doctor doctor;
 
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled;
+
     @OneToMany(mappedBy="patient", cascade = {CascadeType.PERSIST})
     @LazyCollection(LazyCollectionOption.FALSE)
     List<Favorite> favorites;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = true, mappedBy = "patient")
+    private Verification verification;
 
     public Patient( String firstName, String lastName, String phoneNumber, String email, String password) {
         this.id = null;
@@ -66,6 +72,14 @@ public class Patient {
 
     @Autowired
     public Patient(){
+    }
+
+    public Verification getVerification() {
+        return verification;
+    }
+
+    public void setVerification(Verification verification) {
+        this.verification = verification;
     }
 
     public Integer getPatientId() {
@@ -247,5 +261,13 @@ public class Patient {
             }
         }
         return ans;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

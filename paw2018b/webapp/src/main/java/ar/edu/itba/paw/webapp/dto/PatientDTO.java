@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Favorite;
 import ar.edu.itba.paw.models.Patient;
 
+import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,8 +17,35 @@ public class PatientDTO {
     private String password;
     private List<PatientAppointmentDTO> appointments;
     private List<FavoriteDoctorDTO> favorites;
+    private URI uri;
 
     public PatientDTO(){
+    }
+
+
+    public PatientDTO(Patient patient, URI baseUri) {
+        id = patient.getId();
+        firstName = patient.getFirstName();
+        lastName = patient.getLastName();
+        phoneNumber = patient.getPhoneNumber();
+        email = patient.getEmail();
+        password = patient.getPassword();
+
+        this.appointments = new LinkedList<>();
+        if(!appointments.isEmpty()){
+            for (Appointment appointment: patient.getAppointments()){
+                this.appointments.add(new PatientAppointmentDTO(appointment));
+            }
+        }
+
+
+        this.favorites = new LinkedList<>();
+        if(!favorites.isEmpty()) {
+            for (Favorite favorite : patient.getFavorites()) {
+                this.favorites.add(new FavoriteDoctorDTO(favorite));
+            }
+        }
+        this.uri = baseUri.resolve(String.valueOf(this.id));
     }
 
     public PatientDTO(Patient patient){
@@ -26,16 +54,21 @@ public class PatientDTO {
         lastName = patient.getLastName();
         phoneNumber = patient.getPhoneNumber();
         email = patient.getEmail();
-        password = patient.getEmail();
+        password = patient.getPassword();
 
         this.appointments = new LinkedList<>();
-        for (Appointment appointment: patient.getAppointments()){
-            this.appointments.add(new PatientAppointmentDTO(appointment));
+        if(!appointments.isEmpty()){
+            for (Appointment appointment: patient.getAppointments()){
+                this.appointments.add(new PatientAppointmentDTO(appointment));
+            }
         }
 
+
         this.favorites = new LinkedList<>();
-        for (Favorite favorite : patient.getFavorites()){
-            this.favorites.add(new FavoriteDoctorDTO(favorite));
+        if(!favorites.isEmpty()) {
+            for (Favorite favorite : patient.getFavorites()) {
+                this.favorites.add(new FavoriteDoctorDTO(favorite));
+            }
         }
     }
 

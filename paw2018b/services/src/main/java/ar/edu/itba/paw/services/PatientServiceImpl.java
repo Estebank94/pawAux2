@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.persistance.PatientDao;
 import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
+import ar.edu.itba.paw.models.Verification;
 import ar.edu.itba.paw.models.exceptions.*;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -14,6 +15,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -218,5 +221,32 @@ public class PatientServiceImpl implements PatientService {
         return foundPatient;
         
     }
+
+
+    @Override
+    public Verification createToken(final Patient patient) {
+        return patientDao.createToken(patient);
+    }
+
+    @Override
+    public Optional<Verification> findToken(final String token) {
+        Optional<Verification> vt = patientDao.findToken(token);
+        if (vt.isPresent()) {
+            patientDao.deleteToken(vt.get());
+        }
+        return vt;
+    }
+
+    @Override
+    public void enableUser(final Patient patient) {
+        patientDao.enableUser(patient);
+    }
+
+    @Override
+    public void deleteUser(final Patient patient) {
+        patientDao.deleteUser(patient);
+    }
+
+
 
 }
