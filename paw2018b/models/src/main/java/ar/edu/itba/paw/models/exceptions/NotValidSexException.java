@@ -12,6 +12,11 @@ public class NotValidSexException extends Exception implements ExceptionWithAttr
         return attributeName;
     }
 
+    @Override
+    public String debugMessage() {
+        return null;
+    }
+
     public NotValidSexException(String message) {
         super(message);
     }

@@ -12,6 +12,11 @@ public class NotValidLicenceException extends Exception implements ExceptionWith
         return attributeName;
     }
 
+    @Override
+    public String debugMessage() {
+        return null;
+    }
+
     public NotValidLicenceException(String message) {
         super(message);
     }
