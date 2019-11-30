@@ -4,7 +4,10 @@ import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
 import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
-import org.springframework.security.core.userdetails.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,11 +18,15 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.HashSet;
 
+
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private PatientService us;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
+
 
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
@@ -45,7 +52,27 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority("ROLE_DOCTOR"));
         }
 
-        return new User(email, user.getPassword(), authorities);
+        return new org.springframework.security.core.userdetails.User(email, user.getPassword(), user.isEnabled(), true, true, true, authorities);
+    }
+
+
+    public Patient getLoggedUser() throws NotFoundPacientException, NotValidEmailException {
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+            return null;
+        }
+
+        Patient user = null;
+        try {
+            user = us.findPatientByEmail(auth.getName());
+        } catch (NotValidEmailException e) {
+            e.printStackTrace();
+        } catch (NotFoundPacientException e) {
+            e.printStackTrace();
+        }
+
+        LOGGER.debug("Currently logged user is {}", (user.getId()));
+        return user;
     }
 
 }
