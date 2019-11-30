@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.Verification;
 import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.api.BaseApiController;
 import ar.edu.itba.paw.webapp.dto.PatientDTO;
+import ar.edu.itba.paw.webapp.forms.PatientForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,7 +104,7 @@ public class PatientApiController extends BaseApiController {
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response createUser(@Valid final PersonalForm userForm) throws NotCreatePatientException, NotValidPhoneNumberException, NotValidLastNameException, RepeatedEmailException, NotValidPasswordException, NotValidFirstNameException, NotValidEmailException {
+    public Response createUser(@Valid final PatientForm userForm) throws NotCreatePatientException, NotValidPhoneNumberException, NotValidLastNameException, RepeatedEmailException, NotValidPasswordException, NotValidFirstNameException, NotValidEmailException {
 
         if (userForm == null)
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -152,5 +153,6 @@ public class PatientApiController extends BaseApiController {
 
         return Response.created(uri).entity(new PatientDTO(patient, buildBaseURI(uriInfo))).build();
     }
+
 
 }

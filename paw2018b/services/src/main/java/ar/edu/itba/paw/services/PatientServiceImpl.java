@@ -216,6 +216,7 @@ public class PatientServiceImpl implements PatientService {
             throw new NotFoundPacientException("Patient was not found");
         }
         foundPatient.getFavorites();
+//        foundPatient.isPresent().getFavorites();
 //        LOGGER.debug("Patient found. Patient: {}", foundPatient.get());
 //        LOGGER.debug("Patient name: {}", foundPatient.get().getFirstName());
         return foundPatient;
