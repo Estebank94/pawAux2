@@ -9,6 +9,8 @@ import Home from './pages/home'
 import Specialists from './pages/specialists'
 import Specialist from './pages/specialist'
 import Login from './pages/login'
+import Register from './pages/register'
+
 
 const App = props => {
   let everyoneRoutes = [
@@ -26,6 +28,7 @@ const App = props => {
           <Route exact path="/specialists" component={Specialists} />
           <Route exact path="/specialist/:id" component={Specialist} />
           <Route exact path="/login" component={Login} />
+          <Route exact path="/register" component={Register} />
       </main>
       <Footer />
     </div>

@@ -512,3 +512,37 @@ a {
 .w-shadow {
   box-shadow: 0 1px 2px 0 rgba(102,107,135,.14);
 }
+
+.btn-register {
+  margin-right: 16px;
+  background-color:transparent;
+  border-color:#257CBF;
+  color: #257CBF !important;
+}
+
+.w-p-20 {
+  padding: 30px;
+}
+
+.rc-steps-item-finish .rc-steps-item-icon {
+  background-color: #46ce23 !important;
+  border-color: #46ce23 !important;
+}
+
+.rc-steps-item-finish .rc-steps-item-icon .rc-steps-icon {
+  color: #FFF !important;
+}
+
+.rc-steps-item-icon .rc-steps-icon.rcicon {
+  font-size: 15px !important;
+  top: -1.5px !important;
+}
+
+.rc-steps-item-process .rc-steps-item-icon {
+  background: #257cbf !important;
+  border-color: #257cbf !important;
+}
+
+ .rc-steps-item-finish .rc-steps-item-tail:after {
+   background-color: #257cbf !important;
+ }
