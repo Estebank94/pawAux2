@@ -1,16 +1,24 @@
-# waldoc
+# Waldoc
 
-##Credenciales de usuario
+## Credenciales de usuario
 
-###Paciente:
+### Paciente:
 
+```
 email: walpat@gmail.com
-
 contraseña: clave123
+```
 
-###Doctor:
+### Doctor:
 
+```
 email: rrosa@gmail.com
-
 contraseña: clave123
+```
 
+## Equipo
+
+[@Mscomazzon](https://github.com/mscomazzon) :sushi:
+[@Estebank94](https://github.com/estebank94) :space_invader:
+[@Obalfour](https://github.com/obalfour) :zap:
+[@JuanPabloLoCoco](https://github.com/JuanPabloLoCoco) :floppy_disk:

@@ -72,13 +72,7 @@ public class FlowController {
 					patient = patientService.findPatientByEmail(authentication.getName());
 					doctor = doctorService.findDoctorById(String.valueOf(patient.getDoctor().getId())).get();
 					LOGGER.debug("The User Logged in is a DOCTOR with ID: {}", doctor.getId());
-				}catch (NotFoundDoctorException ex1){
-					LOGGER.trace("404 error");
-					return new ModelAndView("404");
-				} catch (NotFoundPacientException e) {
-					LOGGER.trace("404 error");
-					return new ModelAndView("404");
-				} catch (NotValidEmailException e) {
+				}catch (NotFoundDoctorException | NotFoundPacientException | NotValidEmailException e){
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				}
@@ -90,10 +84,7 @@ public class FlowController {
 				Patient patient;
 				try {
 					patient = patientService.findPatientByEmail(authentication.getName());
-				} catch (NotFoundPacientException e) {
-					LOGGER.trace("404 error");
-					return new ModelAndView("404");
-				} catch (NotValidEmailException e) {
+				} catch (NotFoundPacientException | NotValidEmailException e) {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				}
@@ -115,14 +106,7 @@ public class FlowController {
 		try	{
 			doctorsList = doctorService.listDoctors(search, page);
 			mav.addObject("totalPages", doctorService.getLastPage(search));
-		} catch (NotValidPageException e) {
-			LOGGER.trace("404 error");
-			return new ModelAndView("404");
-		}
-		catch (NullPointerException e){
-			LOGGER.trace("404 error");
-			return new ModelAndView("404");
-		} catch (Exception e){
+		} catch (Exception e) {
 			LOGGER.trace("404 error");
 			return new ModelAndView("404");
 		}
@@ -145,10 +129,7 @@ public class FlowController {
 				Patient patient = null;
 				try {
 					patient = patientService.findPatientByEmail(authentication.getName());
-				} catch (NotValidEmailException e) {
-					LOGGER.trace("404 error");
-					return new ModelAndView("404");
-				} catch (NotFoundPacientException e) {
+				} catch (NotValidEmailException | NotFoundPacientException e) {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				}
@@ -197,13 +178,7 @@ public class FlowController {
 						LOGGER.trace("404 error");
 						return new ModelAndView("404");
 					}
-				} catch (NotFoundDoctorException e) {
-					LOGGER.trace("404 error");
-					return new ModelAndView("404");
-				} catch (NotValidIDException e) {
-					LOGGER.trace("404 error");
-					return new ModelAndView("404");
-				} catch (Exception e){
+				} catch (Exception e) {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				}
@@ -248,13 +223,7 @@ public class FlowController {
 				mav.addObject("insuranceList", searchService.listInsurances());
 				mav.addObject("specialtyList", searchService.listSpecialties());
 				mav.addObject("appointmentTaken",false);
-			} catch (NotFoundException e) {
-				LOGGER.trace("404 error");
-				return new ModelAndView("404");
-			} catch (NotFoundPacientException e) {
-				LOGGER.trace("404 error");
-				return new ModelAndView("404");
-			} catch (NotValidEmailException e) {
+			} catch (NotFoundException | NotFoundPacientException | NotValidEmailException e) {
 				LOGGER.trace("404 error");
 				return new ModelAndView("404");
 			}
@@ -277,10 +246,7 @@ public class FlowController {
 		Patient patient = null;
 		try {
 			patient = patientService.findPatientByEmail(authentication.getName());
-		} catch (NotValidEmailException e) {
-			LOGGER.trace("404 error");
-			return new ModelAndView("404");
-		} catch (NotFoundPacientException e) {
+		} catch (NotValidEmailException | NotFoundPacientException e) {
 			LOGGER.trace("404 error");
 			return new ModelAndView("404");
 		}
@@ -292,19 +258,8 @@ public class FlowController {
 		} catch (RepeatedAppointmentException e) {
 			LOGGER.debug("The appointment has just been taken");
 			return doctorDescription(String.valueOf(doctorId),search,appointmentForm, reviewForm).addObject("appointmentTaken", true);
-		} catch (NotCreatedAppointmentException e) {
-			LOGGER.trace("404 error");
-			return new ModelAndView("404");
-		} catch (NotValidDoctorIdException e) {
-			LOGGER.trace("404 error");
-			return new ModelAndView("404");
-		} catch (NotValidAppointmentDayException e) {
-			LOGGER.trace("404 error");
-			return new ModelAndView("404");
-		} catch (NotValidAppointmentTimeException e) {
-			LOGGER.trace("404 error");
-			return new ModelAndView("404");
-		} catch (NotValidPatientIdException e) {
+		} catch (NotCreatedAppointmentException | NotValidDoctorIdException | NotValidAppointmentDayException | NotValidAppointmentTimeException
+				| NotValidPatientIdException e) {
 			LOGGER.trace("404 error");
 			return new ModelAndView("404");
 		}
@@ -331,9 +286,6 @@ public class FlowController {
 			} else {
 				try {
 					favoriteService.removeFavorite(doctor, patient);
-				} catch (NotRemoveFavoriteException e) {
-					LOGGER.trace("404 Error");
-					return new ModelAndView("404");
 				} catch (Exception e){
 					LOGGER.trace("404 Error");
 					return new ModelAndView("404");

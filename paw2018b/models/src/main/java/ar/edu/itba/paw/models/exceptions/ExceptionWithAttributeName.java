@@ -4,4 +4,6 @@ public interface ExceptionWithAttributeName {
 
     public String getAttributeName();
 
+    public String debugMessage();
+
 }

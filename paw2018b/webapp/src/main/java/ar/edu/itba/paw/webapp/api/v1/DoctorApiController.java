@@ -41,9 +41,7 @@ public class DoctorApiController extends BaseApiController {
         Optional<Doctor> doctorOptional = Optional.empty();
         try {
             doctorOptional = doctorService.findDoctorById(id + "");
-        } catch (NotFoundDoctorException e) {
-            e.printStackTrace();
-        } catch (NotValidIDException e) {
+        } catch (NotFoundDoctorException | NotValidIDException e) {
             e.printStackTrace();
         }
         if (doctorOptional.isPresent()){

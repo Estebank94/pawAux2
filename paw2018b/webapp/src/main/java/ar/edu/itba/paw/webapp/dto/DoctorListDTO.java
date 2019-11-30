@@ -8,8 +8,6 @@ import java.util.List;
 public class DoctorListDTO {
     private List<DoctorDTO> doctors;
 
-    private int count;
-
     private Long totalPageCount;
 
     public DoctorListDTO() {
@@ -20,7 +18,6 @@ public class DoctorListDTO {
         for (Doctor doctor : doctorList) {
             this.doctors.add(new DoctorDTO(doctor));
         }
-        this.count = this.doctors.size();
         this.totalPageCount = pageCount;
     }
 
@@ -30,14 +27,6 @@ public class DoctorListDTO {
 
     public void setDoctors(List<DoctorDTO> doctors) {
         this.doctors = doctors;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
     }
 
     public Long getTotalPageCount() {
