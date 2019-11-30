@@ -43,17 +43,17 @@ public class PersonalForm {
     @NotEmpty
     private String sex;
 
-//    @Length(max=10)
-//    @Pattern(regexp = "[0-9]{1,10}")
-//    private String licence;
+    @Length(max=10)
+    @Pattern(regexp = "[0-9]{1,10}")
+    private String licence;
 
-//    public String getLicence() {
-//        return licence;
-//    }
-//
-//    public void setLicence(String licence) {
-//        this.licence = licence;
-//    }
+    public String getLicence() {
+        return licence;
+    }
+
+    public void setLicence(String licence) {
+        this.licence = licence;
+    }
 
     public String getFirstName() {
         return firstName;
