@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,8 +42,20 @@ public class WorkingHourHibernateDaoImpl implements WorkingHoursDao {
     @Override
     public List<WorkingHours> findWorkingHoursByDayWeek(Integer dayOfWeek){
         final TypedQuery<WorkingHours> query = em.createQuery("FROM WorkingHours WHERE dayweek = :dayweek", WorkingHours.class);
-        query.setParameter("dayweek", dayOfWeek);
+        query.setParameter("dayweek", "%" + dayOfWeek + "%");
         List<WorkingHours> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
+    @Override
+    public List<WorkingHours> findWorkingHoursByDayWeek(List<String> daysOfWeek) {
+        final TypedQuery<WorkingHours> query = em.createQuery("FROM WorkingHours WHERE dayweek IN (:dayweek)", WorkingHours.class);
+        List<Integer> daysOfWeksToSearch = new ArrayList<>();
+        for (String day: daysOfWeek){
+            daysOfWeksToSearch.add(Integer.valueOf(day));
+        }
+        query.setParameter("dayweek", daysOfWeksToSearch);
+        List<WorkingHours> list = query.getResultList();
+        return list.isEmpty()? Collections.emptyList() : list;
     }
 }

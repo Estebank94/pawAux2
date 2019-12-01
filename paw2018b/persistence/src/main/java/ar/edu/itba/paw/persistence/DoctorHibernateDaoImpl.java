@@ -64,7 +64,23 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         Optional<String> insurance = search.getInsurance().matches("no")?Optional.ofNullable(null):Optional.ofNullable(search.getInsurance());
         Optional<String> sex = search.getSex().equals("ALL") || search.getSex().isEmpty() || search.getSex().equals("")?Optional.ofNullable(null): Optional.ofNullable(search.getSex());
         Optional<List<String>> insurancePlan;
-        Optional<String> days = search.getDays().equals("no")|| search.getDays().isEmpty() || search.getDays().equals("")?Optional.ofNullable(null):Optional.ofNullable(search.getDays());
+        Optional<List<String>> days; // = search.getDays().equals("no")|| search.getDays().isEmpty() || search.getDays().equals("")?Optional.ofNullable(null):Optional.ofNullable(search.getDays());
+
+        if (search.getDays() != null){
+            boolean hasAllDays = false;
+            for (String daysIterator: search.getDays()) {
+                if (daysIterator.equals("ALL")){
+                    hasAllDays = true;
+                }
+            }
+            if (hasAllDays || search.getDays().size() == 0){
+                days = Optional.ofNullable(null);
+            } else {
+                days = Optional.ofNullable(search.getDays());
+            }
+        } else {
+            days = Optional.ofNullable(null);
+        }
 
         if (search.getInsurancePlan() != null)
         {
@@ -120,7 +136,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         }
 
         if (days.isPresent()) {
-            Integer day = Integer.valueOf(LocalDate.parse(search.getDays()).getDayOfWeek().getValue());
+            Integer day = Integer.valueOf(LocalDate.parse(search.getDays().get(0)).getDayOfWeek().getValue());
             List<WorkingHours> workingHours = workingHoursDao.findWorkingHoursByDayWeek(day);
             List<Predicate> predicates = new ArrayList<>();
             for(WorkingHours w : workingHours){
@@ -154,7 +170,23 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         Optional<String> insurance = search.getInsurance().matches("no")?Optional.ofNullable(null):Optional.ofNullable(search.getInsurance());
         Optional<String> sex = search.getSex().equals("ALL") || search.getSex().isEmpty() || search.getSex().equals("")?Optional.ofNullable(null): Optional.ofNullable(search.getSex());
         Optional<List<String>> insurancePlan;
-        Optional<String> days = search.getDays().equals("no")|| search.getDays().isEmpty() || search.getDays().equals("")?Optional.ofNullable(null):Optional.ofNullable(search.getDays());
+        Optional<List<String>> days; // = search.getDays().equals("no")|| search.getDays().isEmpty() || search.getDays().equals("")?Optional.ofNullable(null):Optional.ofNullable(search.getDays());
+
+        if (search.getDays() != null){
+            boolean hasAllDays = false;
+            for (String daysIterator: search.getDays()) {
+                if (daysIterator.equals("ALL")){
+                    hasAllDays = true;
+                }
+            }
+            if (hasAllDays || search.getDays().size() == 0){
+                days = Optional.ofNullable(null);
+            } else {
+                days = Optional.ofNullable(search.getDays());
+            }
+        } else {
+            days = Optional.empty();
+        }
 
         if (search.getInsurancePlan() != null)
         {
@@ -164,8 +196,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
                     hasAll = true;
                 }
             }
-            if (hasAll || search.getInsurancePlan().size() == 0)
-            {
+            if (hasAll || search.getInsurancePlan().size() == 0) {
                 insurancePlan = Optional.ofNullable(null);
             } else {
                 insurancePlan = Optional.ofNullable(search.getInsurancePlan());
@@ -250,12 +281,18 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         }
 
         if (days.isPresent()) {
+            List <WorkingHours> workingHours = workingHoursDao.findWorkingHoursByDayWeek(days.get());
+
+            /*
             Integer day = Integer.valueOf(LocalDate.parse(search.getDays()).getDayOfWeek().getValue());
             List<WorkingHours> workingHours = workingHoursDao.findWorkingHoursByDayWeek(day);
+            */
+
             List<Predicate> predicates = new ArrayList<>();
             for(WorkingHours w : workingHours){
                 predicates.add(cb.isMember(w, root.get("workingHours")));
             }
+
             // query.where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
             Expression daysExpression = cb.or(predicates.toArray(new Predicate[predicates.size()]));
             if (expression == null){
@@ -292,7 +329,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         Optional<String> specialty = search.getSpecialty().equals("noSpecialty")?Optional.ofNullable(null):Optional.ofNullable(search.getSpecialty());
         Optional<String> insurance = search.getInsurance().matches("no")?Optional.ofNullable(null):Optional.ofNullable(search.getInsurance());
         Optional<String> sex = search.getSex().equals("ALL") || search.getSex().isEmpty() || search.getSex().equals("")?Optional.ofNullable(null): Optional.ofNullable(search.getSex());
-        Optional<String> days = search.getDays().equals("no")|| search.getDays().isEmpty() || search.getDays().equals("")?Optional.ofNullable(null):Optional.ofNullable(search.getDays());
+        Optional<String> days = null;//search.getDays().equals("no")|| search.getDays().isEmpty() || search.getDays().equals("")?Optional.ofNullable(null):Optional.ofNullable(search.getDays());
         Optional<List<String>> insurancePlan;
 
         if (search.getInsurancePlan() != null)
@@ -349,7 +386,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         }
 
         if (days.isPresent()) {
-            Integer day = Integer.valueOf(LocalDate.parse(search.getDays()).getDayOfWeek().getValue());
+            Integer day = Integer.valueOf(LocalDate.parse(search.getDays().get(0)).getDayOfWeek().getValue());
             List<WorkingHours> workingHours = workingHoursDao.findWorkingHoursByDayWeek(day);
             List<Predicate> predicates = new ArrayList<>();
             for(WorkingHours w : workingHours){

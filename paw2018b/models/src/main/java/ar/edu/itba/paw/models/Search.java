@@ -10,7 +10,7 @@ public class Search {
     private String insurance = "no";
     private String sex = "ALL";
     private List<String> insurancePlan = null;
-    private String days = "no";
+    private List<String> days = null;
 
     public Search () {
     }
@@ -61,11 +61,11 @@ public class Search {
         this.insurancePlan = insurancePlan;
     }
 
-    public String getDays() {
+    public List<String> getDays() {
         return days;
     }
 
-    public void setDays(String days) {
+    public void setDays(List<String> days) {
         this.days = days;
     }
 

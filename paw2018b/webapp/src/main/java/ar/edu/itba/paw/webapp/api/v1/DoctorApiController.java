@@ -5,7 +5,6 @@ import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.NotValidIDException;
-import ar.edu.itba.paw.webapp.api.BaseApiController;
 import ar.edu.itba.paw.webapp.dto.DoctorDTO;
 import ar.edu.itba.paw.webapp.dto.DoctorListDTO;
 import org.slf4j.LoggerFactory;
@@ -16,9 +15,7 @@ import org.springframework.stereotype.Controller;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 @Path("v1/doctor")
 @Controller
@@ -77,7 +74,7 @@ public class DoctorApiController extends BaseApiController {
                                    @QueryParam("insurance")String insurance,
                                    @QueryParam("sex") String sex,
                                    @QueryParam("insurancePlan")List<String> insurancePlan,
-                                   @QueryParam("days") String days) {
+                                   @QueryParam("days") List<String> days) {
 
         Search search = new Search();
         if (specialty != null) {
@@ -95,59 +92,13 @@ public class DoctorApiController extends BaseApiController {
         if (insurancePlan != null && insurancePlan.size() > 0){
             search.setInsurancePlan(insurancePlan);
         }
-        if (days != null){
+        if (days != null && days.size() > 0){
             search.setDays(days);
         }
         // Consultar por cada uno de los parametros si son null
         List<Doctor> doctors = doctorService.listDoctors(search);
+
         return Response.ok(new DoctorListDTO(doctors, Long.parseLong("0"))).build();
     }
 
-
-    private Search generateSearchFromUri(UriInfo uriInfo) {
-        MultivaluedMap<String, String> queryParameters = uriInfo.getQueryParameters();
-        Set<Map.Entry<String, List<String>>> entrySet = queryParameters.entrySet();
-        Search search = new Search();
-
-
-        if (entrySet.contains("specialty")){
-            List<String> specialties = queryParameters.get("specialty");
-            search.setSpecialty(specialties.get(0));
-        }
-        /*
-        if (entrySet.contains("name")){
-            List<String> name = queryParameters.get("name");
-            search.setName(name.get(0));
-        };
-
-         */
-        /*
-        if (entrySet.contains("insurance")){
-            List<String> insurance = queryParameters.get("insurance");
-            search.setInsurance(insurance.get(0));
-        }
-
-         */
-        /*
-        if (entrySet.contains("insurancePlan")){
-            List<String> insurancePlan = uriInfo.getQueryParameters().get("insurancePlan");
-            search.setInsurancePlan(insurancePlan);
-        }
-         */
-        /*
-        if (entrySet.contains("sex")){
-            List<String> sex = queryParameters.get("sex");
-            search.setSex(sex.get(0));
-        }
-
-         */
-        /*
-        if (entrySet.contains("days")) {
-            List<String> days = queryParameters.get("days");
-            search.setDays(days.get(0));
-        }
-
-         */
-        return search;
-    }
 }
