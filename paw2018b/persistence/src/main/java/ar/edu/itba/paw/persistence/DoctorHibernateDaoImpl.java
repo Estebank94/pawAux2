@@ -196,7 +196,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
         if (sex.isPresent()){
             // query.where(cb.equal(root.get("sex"), sex.get()));
-            Expression sexExpression = cb.equal(root.get("sex"), sex.get());
+            Expression sexExpression = cb.like(root.get("sex"), "%" + sex.get().toUpperCase() + "%");
             if (expression == null){
                 expression = sexExpression;
             } else {
