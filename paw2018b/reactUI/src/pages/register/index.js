@@ -1,12 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { isValidEmail } from '../../utils/validations'
+import { isValidEmail } from '../../utils/validations';
 import 'rc-steps/assets/index.css';
 import 'rc-steps/assets/iconfont.css';
 import Steps, { Step } from 'rc-steps';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee } from '@fortawesome/free-solid-svg-icons';
-import Form from 'react-bootstrap/Form'
+import { faCoffee, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import Form from 'react-bootstrap/Form';
+import Tab from 'react-bootstrap/Tab';
+import Nav from 'react-bootstrap/Nav';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Badge from 'react-bootstrap/Badge';
+import Select from 'react-select';
+import fetchApi from '../../utils/api'
 
 class Register extends React.Component {
   state = {
@@ -23,8 +30,10 @@ class Register extends React.Component {
     studies: '',
     languages: new Map(),
     specialties: [],
-    insurances: [],
-    workingHours: [],
+    insurances: new Map(),
+    insurancePlans: new Map(),
+    workingHours: new Map(),
+    allSpecialties: [],
     errors: {
       email: false,
       password: false,
@@ -46,6 +55,15 @@ class Register extends React.Component {
     submitted: false,
   };
 
+  componentWillMount() {
+    fetchApi('/specialties', 'GET')
+      .then(response => {
+        let allSpecialties = [];
+        response.specialties.map(specialty => allSpecialties.push({value: specialty.id, label: specialty.speciality}))
+        this.setState({allSpecialties}, console.log(allSpecialties));
+      })
+  }
+
   handleChange(e) {
     e.preventDefault();
     const { name, value } = e.target;
@@ -53,10 +71,10 @@ class Register extends React.Component {
 
     switch (name) {
       case 'name':
-        errors.name = value.length < 3
+        errors.name = value.length <= 0
         break;
       case 'lastName':
-        errors.lastName = value.length < 3
+        errors.lastName = value.length <= 0
         break;
       case 'email':
         errors.email = !isValidEmail(value)
@@ -68,13 +86,19 @@ class Register extends React.Component {
         errors.confirmPassword = value.length < 8
         break;
       case 'address':
-        errors.address = value.length < 3
+        errors.address = value.length <= 0
+        break;
+      case 'license':
+        errors.license = value.length <= 0
+        break;
+      case 'studies':
+        errors.studies = value.length <= 0
         break;
       default:
         break;
     }
 
-    this.setState({errors, [name]: value}, ()=> {
+    this.setState({errors, [name]: value }, ()=> {
       console.log(errors)
     })
   }
@@ -83,11 +107,13 @@ class Register extends React.Component {
     const item = e.target.name;
     const isChecked = e.target.checked;
     console.log(item, isChecked);
-    this.setState(prevState => ({ languages: prevState.languages.set(item, isChecked) }));
+    this.setState(prevState => ({ languages: prevState.languages.set(item, isChecked), submitted: false }));
   }
 
   handleSubmit() {
-    const { email, password, confirmPassword, name, lastName, address, phoneNumber, gender, current } = this.state;
+    const { email, password, confirmPassword, name, lastName, address, phoneNumber, gender, current,
+      license, photo, studies, languages, specialties, insurances, insurancePlans, workingHours
+    } = this.state;
     this.setState({ submitted: true });
     if(current === 0) {
       if(email && password && confirmPassword && this.passwordsMatch()) {
@@ -97,10 +123,14 @@ class Register extends React.Component {
       if(name && lastName && address && phoneNumber && gender) {
         this.setState({ current: current + 1, submitted: false })
       }
+    } else if(current === 2) {
+      if(license && studies && languages && languages.size > 0 && specialties.length > 0
+      && insurancePlans && insurancePlans.size > 0 && workingHours && workingHours.size > 0) {
+        this.setState({ current: current + 1, submitted: false })
+      } //TODO add photo
     }
 
   }
-
 
   passwordsMatch() {
     const { password, confirmPassword, errors } = this.state;
@@ -123,6 +153,19 @@ class Register extends React.Component {
       )
     }
   }
+
+  handleSelect(s) {
+    const specialties = this.state.specialties;
+    if(specialties.indexOf(s.label) === -1){
+      this.setState({ specialties: [...specialties, s.label], submitted: false });
+    }
+  }
+
+  removeSpecialty(s){
+    let specialties = this.state.specialties.filter(e => e !== s)
+    this.setState({ specialties })
+  }
+
 
   renderBasicForm(){
     const { email, password, confirmPassword, errors, submitted } = this.state;
@@ -273,28 +316,26 @@ class Register extends React.Component {
   }
 
   renderProfessionalForm() {
-    const { license, errors, languages, studies, submitted, current } = this.state;
+    const { license, errors, languages, insurances, insurancePlans, studies, specialties, submitted, current, allSpecialties, workingHours } = this.state;
     const LANGUAGES = ['Español', 'Ingles', 'Aleman'];
+    const INSURANCES = [
+      {
+        name: 'OSDE',
+        plans: ['210', '310', '410']
+      },
+      {
+        name: 'Swiss Medical',
+        plans: ['210', '310', '410']
+      }
+    ]
+    const DAYS = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'];
     return(
-      <div>
-        <div className="form-group">
-          <label className={errors.license || this.isEmpty(license) ? 'text-danger' : ''}>Licencia Profesional</label>
-          <input name="license" value={license} type="text" className={'form-control ' + (errors.license || this.isEmpty(license) ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder="Ingresa tu licencia" onChange={(e) =>this.handleChange(e)}/>
-          {
-            errors.address &&
-            <div className="text-danger">
-              Ingresa una licencia valida
-            </div>
-          }
-          {
-            this.renderEmptyError(license)
-          }
-        </div>
+      <div className="mb-3">
         <div className="form-group">
           <label className={errors.studies || this.isEmpty(studies) ? 'text-danger' : ''}>Estudios</label>
-          <textarea name="license" value={studies} type="text" rows="3" className={'form-control ' + (errors.studies || this.isEmpty(studies) ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder="Ingresa tus estudios" onChange={(e) =>this.handleChange(e)}/>
+          <textarea name="studies" value={studies} type="text" rows="3" className={'form-control ' + (errors.studies || this.isEmpty(studies) ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder="Ingresa tus estudios" onChange={(e) =>this.handleChange(e)}/>
           {
-            errors.address &&
+            errors.studies &&
             <div className="text-danger">
               Ingresa informacion sobre tus estudios
             </div>
@@ -303,10 +344,10 @@ class Register extends React.Component {
             this.renderEmptyError(studies)
           }
         </div>
-        <div className="mb-3">
+        <div className="mb-1">
           <Form>
-            <Form.Group controlId="formPlaintextPassword">
-              <Form.Label style={{ marginRight: 32 }}>
+            <Form.Group>
+              <Form.Label className={this.isValidMap(languages) ? '' : 'text-danger'} style={{ marginRight: 32 }}>
                 Idiomas
               </Form.Label>
               {
@@ -326,11 +367,184 @@ class Register extends React.Component {
                   )
                 })
               }
+              {
+                !this.isValidMap(languages) &&
+                <label className="text-danger">Selecciona uno o mas lenguajes</label>
+              }
             </Form.Group>
           </Form>
         </div>
+        <div className="form-group">
+          <label className={this.isEmpty(license) ? 'text-danger' : ''}>Licencia Profesional</label>
+          <input name="license" value={license} type="text" className={'form-control ' + (this.isEmpty(license) ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder="Ingresa tu licencia" onChange={(e) =>this.handleChange(e)}/>
+          {
+            this.renderEmptyError(license)
+          }
+        </div>
+        <div>
+          <label className={specialties.length === 0 && submitted ? 'text-danger' : ''}>Especialidades</label>
+          <Select
+            onChange={(e) => this.handleSelect(e)}
+            options={allSpecialties}
+            placeholder="Busca tus especialidades"
+            className={specialties.length === 0 && submitted ? 'text-danger is-invalid' : ''}
+            isLoading={allSpecialties.length === 0}
+          />
+          {
+            specialties.length === 0 && submitted &&
+            <label className="text-danger">Selecciona una o mas especialidades</label>
+          }
+        </div>
+        <div className="col-sm-12 p-0 mt-3 mb-3">
+          {
+            specialties.length > 0 &&
+            <small className="mr-2">Estas son las especialidades que agregaste:</small>
+          }
+          {
+            specialties.map((s, index) => {
+              return(
+                 <Badge key={index} className="badge-waldoc" onClick={() => this.removeSpecialty(s)}>
+                   {s} <FontAwesomeIcon className="ml-1" icon={faTimesCircle}/>
+                 </Badge>
+              )
+            })
+          }
+        </div>
+        <div className="mb-3">
+          <Tab.Container id="left-tabs-example" defaultActiveKey={INSURANCES[0].name}>
+            <Form.Label className={!this.isValidMap(insurancePlans) ? 'text-danger' : '' } style={{ marginRight: 32 }}>
+              Selecciona los planes de las prepagas con las que trabajas
+            </Form.Label>
+            <Row>
+              <Col sm={3}>
+                <Nav variant="pills" className="flex-column">
+                  {
+                    INSURANCES.map((ins) => {
+                      return (
+                        <Nav.Item key={ins.name}>
+                          <Nav.Link eventKey={ins.name}>{ins.name}</Nav.Link>
+                        </Nav.Item>
+                      )
+                    })
+                  }
+                </Nav>
+              </Col>
+              <Col sm={9}>
+                <Tab.Content>
+                  {
+                    INSURANCES.map((ins) => {
+                      return (
+                        <Tab.Pane eventKey={ins.name} key={ins.name}>
+                          {
+                            ins.plans.map((plan) => {
+                              return (
+                                <Form.Check
+                                  checked={insurancePlans.get(plan)}
+                                  onChange={(e) => this.handleCheckboxChange(e)}
+                                  name={plan}
+                                  label={plan}
+                                  key={plan + ins.name}
+                                  type="switch"
+                                  id={plan + ins.name}
+                                />
+                              )
+                            })
+                          }
+                        </Tab.Pane>
+                      )
+                    })
+                  }
+                </Tab.Content>
+              </Col>
+            </Row>
+            {
+              !this.isValidMap(insurancePlans) &&
+              <Form.Label className={'text-danger'} style={{ marginRight: 32 }}>
+                Selecciona al menos un plan
+              </Form.Label>
+            }
+          </Tab.Container>
+        </div>
+        <label className={(!this.isValidMap(workingHours) ? 'text-danger ' : '') + 'mt-1'}>Ingresa tus horarios de trabajo</label>
+        {
+          DAYS.map(day => {
+            let start = this.getMapValue(workingHours, day, true);
+            let end = this.getMapValue(workingHours, day, false);
+            return(
+              <div key={day}>
+                <div className="form-row">
+                  <div className="form-group col-md-2 pt-2">
+                    <label className={!this.isValidDay(day) ? 'text-danger' : ''}>{day}</label>
+                  </div>
+                  <div className="form-group col-md-5">
+                    <input name="start" value={start} type="number" min="0" max="24" className={'form-control ' + (this.isValidDay(day) ? '' : 'is-invalid')} placeholder="Inicio (Ej: 9Hs)" onChange={(e) => this.handleAddWorkingHours(e, day, true)}/>
+                  </div>
+                  <div className="form-group col-md-5">
+                    <input name="end" value={end} type="number" min="0" max="24" className={'form-control ' + (this.isValidDay(day) ? '' : 'is-invalid')} placeholder="Fin (Ej: 18Hs)" onChange={(e) => this.handleAddWorkingHours(e, day, false)}/>
+                  </div>
+                </div>
+              </div>
+            )
+          })
+        }
+        {
+          !this.isValidMap(workingHours) &&
+          <label className={'text-danger '}>Completá al menos un dia</label>
+        }
       </div>
     )
+  }
+
+  getMapValue(map, day, start) {
+    if(map.get(day) && start && map.get(day).start) {
+      return map.get(day).start;
+    }
+    if(map.get(day) && !start && map.get(day).end) {
+      return map.get(day).end;
+    }
+    return '';
+  }
+
+  handleAddWorkingHours(e,day, start) {
+    const time = e.target.value;
+    const workingHours = this.state.workingHours
+    if(!workingHours.get(day)){
+      if(start) {
+        workingHours.set(day, { name: day, start: time })
+      } else {
+        workingHours.set(day, { name: day, end: time })
+      }
+    } else {
+      let w = workingHours.get(day)
+      if(start) {
+        workingHours.set(day, { ...w, start: time})
+      } else {
+        workingHours.set(day, { ...w, end: time})
+      }
+    }
+    this.setState({ workingHours, submitted: false });
+    console.log(this.state.workingHours);
+  }
+
+  isValidMap(map) {
+    if(this.state.submitted && map && map.size === 0) {
+      return false
+    }
+    return true;
+  }
+
+  isValidDay(day) {
+    const workingHours = this.state.workingHours
+    if(!this.state.submitted || !workingHours.get(day)){
+      return true;
+    }
+    let w = workingHours.get(day);
+    if(!w.start || !w.end){
+      return false
+    }
+    const start = parseInt(w.start)
+    const end = parseInt(w.end);
+    return start <= 24 && start >= 0 && end <= 24 && start >= 0 && start < end;
   }
 
 
@@ -341,6 +555,22 @@ class Register extends React.Component {
       return(
         <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn pull-right">Continuar</div>
         )
+    }
+    if(current === 1) {
+      return(
+        <div className="row container">
+          <div onClick={() => this.setState({ current: this.state.current - 1 })} className="btn btn-secondary mr-2">Atras</div>
+          <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn pull-right">Continuar</div>
+        </div>
+      )
+    }
+    if(current === 2) {
+      return(
+      <div className="row container">
+        <div onClick={() => this.setState({ current: this.state.current - 1 })} className="btn btn-secondary mr-2">Atras</div>
+        <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn pull-right">Registrarme</div>
+      </div>
+      )
     }
   }
 
@@ -375,9 +605,8 @@ class Register extends React.Component {
             }
 
             <form>
-
               {
-                current === 3 &&
+                current === 0 &&
                 this.renderBasicForm() //TODO Pasar a componentes para evitar re-render
               }
               {
@@ -385,6 +614,7 @@ class Register extends React.Component {
                 this.renderPersonalForm()
               }
               {
+                current === 2 &&
                 this.renderProfessionalForm()
               }
 

@@ -546,3 +546,27 @@ a {
  .rc-steps-item-finish .rc-steps-item-tail:after {
    background-color: #257cbf !important;
  }
+
+.custom-control-input:checked~.custom-control-label::before {
+  color: #fff;
+  border-color: #257cbf !important;
+  background-color: #257cbf !important;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+  color: #fff;
+  background-color: #257cbf !important;
+}
+
+.nav-item a {
+  color: #257cbf;
+  text-decoration: none;
+
+}
+
+.badge-waldoc {
+  color: #FFF;
+  background-color: #257cbf;
+  margin-right: 4px;
+  cursor: pointer;
+}
