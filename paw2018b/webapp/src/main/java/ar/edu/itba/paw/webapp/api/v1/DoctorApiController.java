@@ -8,7 +8,9 @@ import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Verification;
 import ar.edu.itba.paw.models.exceptions.*;
-import ar.edu.itba.paw.webapp.api.BaseApiController;
+
+
+//import ar.edu.itba.paw.webapp.api.BaseApiController;
 import ar.edu.itba.paw.webapp.dto.BaseFormDTO;
 import ar.edu.itba.paw.webapp.dto.DoctorDTO;
 import ar.edu.itba.paw.webapp.dto.DoctorListDTO;
@@ -42,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+
 @Path("v1/doctor")
 @Controller
 public class DoctorApiController extends BaseApiController {
@@ -54,6 +57,7 @@ public class DoctorApiController extends BaseApiController {
     @Autowired
     private PatientService patientService;
 
+
     @Autowired
     private EmailService emailService;
 
@@ -61,6 +65,7 @@ public class DoctorApiController extends BaseApiController {
     private UriInfo uriInfo;
 
     @Autowired
+
     private MessageSource messageSource;
 
     @Autowired
@@ -73,6 +78,7 @@ public class DoctorApiController extends BaseApiController {
 
     @Autowired
     private String frontUrl;
+
 
     @GET
     @Path("/{id}")
@@ -113,6 +119,7 @@ public class DoctorApiController extends BaseApiController {
         Long totalPageCount = doctorService.getLastPage();
         return Response.ok(new DoctorListDTO(doctorList, totalPageCount)).build();
     }
+    
 
     @GET
     @Path("/search")

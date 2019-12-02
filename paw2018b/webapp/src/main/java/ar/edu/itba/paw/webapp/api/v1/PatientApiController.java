@@ -3,9 +3,10 @@ package ar.edu.itba.paw.webapp.api.v1;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.Patient;
+
 import ar.edu.itba.paw.models.Verification;
 import ar.edu.itba.paw.models.exceptions.*;
-import ar.edu.itba.paw.webapp.api.BaseApiController;
+//import ar.edu.itba.paw.webapp.api.BaseApiController;
 import ar.edu.itba.paw.webapp.dto.PatientDTO;
 import ar.edu.itba.paw.webapp.forms.PatientForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
@@ -84,6 +85,9 @@ public class PatientApiController extends BaseApiController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getPatientByEmail(@QueryParam("email")final String email) throws NotValidPatientIdException, NotFoundPacientException, NotCreatePatientException {
         Patient patient = new Patient();
+        patient = patientService.findPatientByEmail(email);
+
+        /*
         try {
             patient = patientService.findPatientByEmail(email);
         } catch (NotFoundPacientException e){
@@ -91,6 +95,8 @@ public class PatientApiController extends BaseApiController {
         } catch (NotValidEmailException e) {
             e.printStackTrace();
         }
+         */
+
         System.out.println(patient.toString());
         if (patient == null){
             LOGGER.warn("Patient with email {} not found", email);

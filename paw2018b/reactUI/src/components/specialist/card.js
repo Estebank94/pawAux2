@@ -36,7 +36,7 @@ class SpecialistCard extends React.Component {
                   }
                   <p className="doctor-text">"Muy buena atención, muy puntual"</p>
                   <p className="doctor-text"><i className="far fa-clock"></i>8 - 20pm</p>
-                  <p className="doctor-text"><i className="fas fa-map-marker-alt"></i> Libertador 1000, CABA</p>
+                  <p className="doctor-text"><i className="fas fa-map-marker-alt"></i>{address}, CABA</p>
               </div>
           </div>
       </div>

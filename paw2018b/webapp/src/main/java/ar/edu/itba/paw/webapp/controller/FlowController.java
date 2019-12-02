@@ -75,19 +75,22 @@ public class FlowController {
 				}catch (NotFoundDoctorException ex1){
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
-				} catch (NotFoundPacientException e) {
+				} /* catch (NotFoundPacientException e) {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				} catch (NotValidEmailException e) {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				}
+				*/
 				mav.addObject("doctorID", doctor.getId());
 			}
 			hasUserRole = authentication.getAuthorities().stream()
 					.anyMatch(r -> r.getAuthority().equals("ROLE_PATIENT"));
 			if(hasUserRole){
 				Patient patient;
+				patient = patientService.findPatientByEmail(authentication.getName());
+				/*
 				try {
 					patient = patientService.findPatientByEmail(authentication.getName());
 				} catch (NotFoundPacientException e) {
@@ -97,6 +100,8 @@ public class FlowController {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				}
+
+				 */
 				mav.addObject("patient", patient);
 				mav.addObject("hasFavorites", patient.getFavoriteDoctors().size() > 0 );
 			}
@@ -143,6 +148,8 @@ public class FlowController {
 					.anyMatch(r -> r.getAuthority().equals("ROLE_DOCTOR"));
 			if(hasUserRole){
 				Patient patient = null;
+				patient = patientService.findPatientByEmail(authentication.getName());
+				/*
 				try {
 					patient = patientService.findPatientByEmail(authentication.getName());
 				} catch (NotValidEmailException e) {
@@ -152,6 +159,8 @@ public class FlowController {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				}
+
+				 */
 				mav.addObject("doctorID", patient.getDoctor().getId());
 			}
 		}
@@ -251,13 +260,14 @@ public class FlowController {
 			} catch (NotFoundException e) {
 				LOGGER.trace("404 error");
 				return new ModelAndView("404");
-			} catch (NotFoundPacientException e) {
+			} /* catch (NotFoundPacientException e) {
 				LOGGER.trace("404 error");
 				return new ModelAndView("404");
 			} catch (NotValidEmailException e) {
 				LOGGER.trace("404 error");
 				return new ModelAndView("404");
 			}
+			*/
 		return mav;
     }
 
@@ -275,6 +285,8 @@ public class FlowController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		Patient patient = null;
+		patient = patientService.findPatientByEmail(authentication.getName());
+		/*
 		try {
 			patient = patientService.findPatientByEmail(authentication.getName());
 		} catch (NotValidEmailException e) {
@@ -284,6 +296,8 @@ public class FlowController {
 			LOGGER.trace("404 error");
 			return new ModelAndView("404");
 		}
+
+		 */
 		try {
 			if(appointmentForm.getDay() != null && appointmentForm.getTime() != null) {
 				appointment = true;

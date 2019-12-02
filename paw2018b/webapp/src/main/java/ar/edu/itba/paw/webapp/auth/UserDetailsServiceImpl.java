@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
 import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -27,11 +28,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
-
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
 
         Patient user = null;
+        user = us.findPatientByEmail(email);
+        /*
         try {
             user = us.findPatientByEmail(email);
         } catch (NotValidEmailException e) {
@@ -39,6 +41,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         } catch (NotFoundPacientException e) {
             e.printStackTrace();
         }
+         */
 
         if (user == null) {
             throw new UsernameNotFoundException("No user found with email " + email);
@@ -56,23 +59,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
 
+
     public Patient getLoggedUser() throws NotFoundPacientException, NotValidEmailException {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+        if (auth == null) { // TODO: Ver que onda con esto
             return null;
         }
 
-        Patient user = null;
-        try {
-            user = us.findPatientByEmail(auth.getName());
-        } catch (NotValidEmailException e) {
-            e.printStackTrace();
-        } catch (NotFoundPacientException e) {
-            e.printStackTrace();
-        }
-
-        LOGGER.debug("Currently logged user is {}", (user.getId()));
+        final Patient user = us.findPatientByEmail(auth.getName());
+        LOGGER.debug("Currently logged user is {}", user.getId());
         return user;
     }
-
 }

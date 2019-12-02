@@ -48,6 +48,8 @@ public class PatientPanelController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Patient patient;
+        patient = patientService.findPatientByEmail(authentication.getName());
+        /*
         try {
             patient = patientService.findPatientByEmail(authentication.getName());
         } catch (NotValidEmailException e) {
@@ -57,6 +59,7 @@ public class PatientPanelController {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
         }
+        */
 
         ModelAndView mav = new ModelAndView("patientPanel");
         mav.addObject("patient", patient);
@@ -76,6 +79,8 @@ public class PatientPanelController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Patient patient;
+        patient = patientService.findPatientByEmail(authentication.getName());
+        /*
         try {
             patient = patientService.findPatientByEmail(authentication.getName());
         } catch (NotValidEmailException e) {
@@ -85,6 +90,7 @@ public class PatientPanelController {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
         }
+         */
 
 
         if(form.getDay() != null){

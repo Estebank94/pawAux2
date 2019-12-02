@@ -142,7 +142,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     public Long getLastPage() {
         final TypedQuery<Doctor> query = em.createQuery("FROM Doctor", Doctor.class);
         final List<Doctor> list = query.getResultList();
-        int pageCount = (int) (Math.ceil(list.size() / PAGESIZE));
+        int pageCount = (int) (Math.ceil(list.size() * 1.0 / PAGESIZE));
         return Long.valueOf(pageCount);
     }
 
