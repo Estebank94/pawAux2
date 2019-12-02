@@ -11,11 +11,11 @@ import ar.edu.itba.paw.models.exceptions.*;
 
 
 //import ar.edu.itba.paw.webapp.api.BaseApiController;
-import ar.edu.itba.paw.webapp.dto.BaseFormDTO;
+
 import ar.edu.itba.paw.webapp.dto.DoctorDTO;
 import ar.edu.itba.paw.webapp.dto.DoctorListDTO;
 import ar.edu.itba.paw.webapp.dto.PatientDTO;
-import ar.edu.itba.paw.webapp.forms.BaseForm;
+
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 import com.fasterxml.jackson.databind.deser.Deserializers;
 import org.slf4j.LoggerFactory;
