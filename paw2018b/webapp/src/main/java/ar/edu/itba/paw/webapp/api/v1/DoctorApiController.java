@@ -119,7 +119,7 @@ public class DoctorApiController extends BaseApiController {
         Long totalPageCount = doctorService.getLastPage();
         return Response.ok(new DoctorListDTO(doctorList, totalPageCount)).build();
     }
-    
+
 
     @GET
     @Path("/search")
