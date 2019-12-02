@@ -20,4 +20,6 @@ public interface InsurancePlanDao {
 
       List<InsurancePlan> findAllInsurancePlansByInsurance(Insurance insurance);
 
+      List<InsurancePlan> getInsurancePlansByList (List<String> insurancePlanNames);
+
 }

@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.api;
+package ar.edu.itba.paw.webapp.api.v1;
 
 import javax.json.Json;
 import javax.ws.rs.core.UriBuilder;

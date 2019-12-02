@@ -6,7 +6,6 @@ import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
 import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
 import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
 import ar.edu.itba.paw.models.exceptions.NotValidPatientIdException;
-import ar.edu.itba.paw.webapp.api.BaseApiController;
 import ar.edu.itba.paw.webapp.dto.PatientDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
