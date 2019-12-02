@@ -102,17 +102,17 @@ public class DoctorApiController extends BaseApiController {
         }
         if (days != null && days.size() > 0){
             for (String dayIterator: days){
-                if (dayIterator.length() > 1 || dayIterator.length() == 0) {
+                if (dayIterator.length() != 1) {
                     return Response.status(Response.Status.BAD_REQUEST)
                             .entity(errorMessageToJSON("DayWeek is not an Digit between 1-7")).build();
                 }
 
-                if (Character.isDigit(dayIterator.charAt(0)) == false){
+                if (!Character.isDigit(dayIterator.charAt(0))){
                     return Response.status(Response.Status.BAD_REQUEST)
                             .entity(errorMessageToJSON("DayWeek is not an Digit between 1-7")).build();
                 }
 
-                if (Integer.valueOf(dayIterator.charAt(0)).intValue() > 7 || Integer.valueOf(dayIterator.charAt(0)).intValue() < 1){
+                if ((int) dayIterator.charAt(0) > 7 || (int) dayIterator.charAt(0) < 1){
                     return Response.status(Response.Status.BAD_REQUEST)
                             .entity(errorMessageToJSON("DayWeek is not an Digit between 1-7")).build();
                 }
