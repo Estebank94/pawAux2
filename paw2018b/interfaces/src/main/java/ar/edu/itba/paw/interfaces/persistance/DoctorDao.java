@@ -23,8 +23,6 @@ public interface DoctorDao {
 
     List<Doctor> listDoctors(Search search, int page);
 
-    List<Doctor> listDoctors2(Search search);
-
     Optional<Doctor> findDoctorById(Integer id);
 
     Doctor createDoctor(String firstName, String lastName, String phoneNumber, String sex, Integer licence,

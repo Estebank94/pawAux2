@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.NotValidIDException;
+import ar.edu.itba.paw.models.exceptions.NotValidPageException;
 import ar.edu.itba.paw.webapp.dto.DoctorDTO;
 import ar.edu.itba.paw.webapp.dto.DoctorListDTO;
 import org.slf4j.LoggerFactory;
@@ -53,10 +54,82 @@ public class DoctorApiController extends BaseApiController {
 
     @GET
     @Path("/list")
-    public Response listDoctors(@QueryParam("page") int page) {
-        List<Doctor> doctorList = doctorService.listDoctors(page);
-        Long totalPageCount = doctorService.getLastPage();
-        return Response.ok(new DoctorListDTO(doctorList, totalPageCount)).build();
+    public Response listDoctors(@QueryParam("page") @DefaultValue("0") int page,
+                                @QueryParam("specialty") String specialty,
+                                @QueryParam("name") String name,
+                                @QueryParam("insurance")String insurance,
+                                @QueryParam("sex") String sex,
+                                @QueryParam("insurancePlan")List<String> insurancePlan,
+                                @QueryParam("days") List<String> days) {
+
+        Search search = new Search();
+        if (specialty != null) {
+            if (specialty.length() == 0){
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity(errorMessageToJSON("Specialty bad format")).build();
+            }
+            search.setSpecialty(specialty);
+        }
+        if (name != null) {
+            if (name.length() == 0){
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity(errorMessageToJSON("name bad format")).build();
+            }
+            search.setName(name);
+        }
+        if (insurance != null){
+            if (insurance.length() == 0){
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity(errorMessageToJSON("Insurance bad format")).build();
+            }
+            search.setInsurance(insurance);
+        }
+        if (sex != null){
+            if (sex.length() == 0){
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity(errorMessageToJSON("sex bad format")).build();
+            }
+            search.setSex(sex);
+        }
+        if (insurancePlan != null && insurancePlan.size() > 0){
+            for (String ip : insurancePlan){
+                if (ip.length() == 0){
+                    return Response.status(Response.Status.BAD_REQUEST)
+                            .entity(errorMessageToJSON("insurancePlan bad format")).build();
+                }
+            }
+            search.setInsurancePlan(insurancePlan);
+        }
+        if (days != null && days.size() > 0){
+            for (String dayIterator: days){
+                if (dayIterator.length() > 1 || dayIterator.length() == 0) {
+                    return Response.status(Response.Status.BAD_REQUEST)
+                            .entity(errorMessageToJSON("DayWeek is not an Digit between 1-7")).build();
+                }
+
+                if (Character.isDigit(dayIterator.charAt(0)) == false){
+                    return Response.status(Response.Status.BAD_REQUEST)
+                            .entity(errorMessageToJSON("DayWeek is not an Digit between 1-7")).build();
+                }
+
+                if (Integer.valueOf(dayIterator.charAt(0)).intValue() > 7 || Integer.valueOf(dayIterator.charAt(0)).intValue() < 1){
+                    return Response.status(Response.Status.BAD_REQUEST)
+                            .entity(errorMessageToJSON("DayWeek is not an Digit between 1-7")).build();
+                }
+            }
+            search.setDays(days);
+        }
+
+        List<Doctor> doctors;
+        try {
+            doctors = doctorService.listDoctors(search, String.valueOf(page));
+        } catch (NotValidPageException e){
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("DayWeek is not an Digit between 1-7")).build();
+        }
+
+        Long totalPageCount = doctorService.getLastPage(search);
+        return Response.ok(new DoctorListDTO(doctors, totalPageCount)).build();
     }
 
     @GET
@@ -66,39 +139,4 @@ public class DoctorApiController extends BaseApiController {
         Long totalPageCount = doctorService.getLastPage();
         return Response.ok(new DoctorListDTO(doctorList, totalPageCount)).build();
     }
-
-    @GET
-    @Path("/search")
-    public Response searchDoctors (@QueryParam("specialty") String specialty,
-                                   @QueryParam("name") String name,
-                                   @QueryParam("insurance")String insurance,
-                                   @QueryParam("sex") String sex,
-                                   @QueryParam("insurancePlan")List<String> insurancePlan,
-                                   @QueryParam("days") List<String> days) {
-
-        Search search = new Search();
-        if (specialty != null) {
-            search.setSpecialty(specialty);
-        }
-        if (name != null) {
-            search.setName(name);
-        }
-        if (insurance != null){
-            search.setInsurance(insurance);
-        }
-        if (sex != null){
-            search.setSex(sex);
-        }
-        if (insurancePlan != null && insurancePlan.size() > 0){
-            search.setInsurancePlan(insurancePlan);
-        }
-        if (days != null && days.size() > 0){
-            search.setDays(days);
-        }
-        // Consultar por cada uno de los parametros si son null
-        List<Doctor> doctors = doctorService.listDoctors(search);
-
-        return Response.ok(new DoctorListDTO(doctors, Long.parseLong("0"))).build();
-    }
-
 }
