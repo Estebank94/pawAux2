@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +37,7 @@ public class InsurancePlanHibernateDaoImpl implements InsurancePlanDao {
     }
 
     public List<InsurancePlan> getInsurancePlans(Insurance insurance) {
-        final TypedQuery<InsurancePlan> query = em.createQuery("from InsurancePlan WHERE insuranceID = :insuranceID", InsurancePlan.class);
+        final TypedQuery<InsurancePlan> query = em.createQuery("FROM InsurancePlan WHERE insuranceID = :insuranceID", InsurancePlan.class);
         query.setParameter("insuranceID", insurance.getId());
         final List<InsurancePlan> list = query.getResultList();
         return (list.isEmpty() ?  null : list);
@@ -48,7 +52,7 @@ public class InsurancePlanHibernateDaoImpl implements InsurancePlanDao {
 
     @Override
     public InsurancePlan findInsurancePlanByPlanName(String name) {
-        final TypedQuery<InsurancePlan> query = em.createQuery("from InsurancePlan WHERE plan = :plan", InsurancePlan.class);
+        final TypedQuery<InsurancePlan> query = em.createQuery("FROM InsurancePlan WHERE plan = :plan", InsurancePlan.class);
         query.setParameter("plan", name);
         return query.getSingleResult();
     }
@@ -59,5 +63,13 @@ public class InsurancePlanHibernateDaoImpl implements InsurancePlanDao {
         query.setParameter("insurance", insurance);
         List<InsurancePlan> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
+    @Override
+    public List<InsurancePlan> getInsurancePlansByList(List<String> insurancePlanNames) {
+        final TypedQuery<InsurancePlan> query = em.createQuery("FROM InsurancePlan WHERE plan IN (:planNames)", InsurancePlan.class);
+        query.setParameter("planNames", insurancePlanNames);
+        List<InsurancePlan> list = query.getResultList();
+        return list.isEmpty() ? Collections.EMPTY_LIST : list;
     }
 }

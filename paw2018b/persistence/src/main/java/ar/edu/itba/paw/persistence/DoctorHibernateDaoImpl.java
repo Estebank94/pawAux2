@@ -52,32 +52,50 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         return list.isEmpty() ? Collections.emptyList() : list;
     }
 
+    @Override
     public List<Doctor> listDoctors(Search search, int page) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Doctor> query = cb.createQuery(Doctor.class);
+
         Root<Doctor> root = query.from(Doctor.class);
+
+        Expression expression = null;
 
         Optional<String> name = search.getName().equals("")? Optional.ofNullable(null):Optional.ofNullable(search.getName());
         Optional<String> specialty = search.getSpecialty().equals("noSpecialty")?Optional.ofNullable(null):Optional.ofNullable(search.getSpecialty());
         Optional<String> insurance = search.getInsurance().matches("no")?Optional.ofNullable(null):Optional.ofNullable(search.getInsurance());
         Optional<String> sex = search.getSex().equals("ALL") || search.getSex().isEmpty() || search.getSex().equals("")?Optional.ofNullable(null): Optional.ofNullable(search.getSex());
         Optional<List<String>> insurancePlan;
-        Optional<String> days = search.getDays().equals("no")|| search.getDays().isEmpty() || search.getDays().equals("")?Optional.ofNullable(null):Optional.ofNullable(search.getDays());
+        Optional<List<String>> days;
 
-        if (search.getInsurancePlan() != null)
-        {
+        if (search.getDays() != null){
+            boolean hasAllDays = false;
+            for (String daysIterator: search.getDays()) {
+                if (daysIterator.equals("ALL")){
+                    hasAllDays = true;
+                }
+            }
+            if (hasAllDays || search.getDays().size() == 0){
+                days = Optional.ofNullable(null);
+            } else {
+                days = Optional.ofNullable(search.getDays());
+            }
+        } else {
+            days = Optional.empty();
+        }
+
+        if (search.getInsurancePlan() != null) {
             boolean hasAll = false;
             for (String insurancePlanIterator : search.getInsurancePlan()){
                 if (insurancePlanIterator.equals("ALL")) {
                     hasAll = true;
                 }
             }
-            if (hasAll || search.getInsurancePlan().size() == 0)
-            {
+            if (hasAll || search.getInsurancePlan().size() == 0) {
                 insurancePlan = Optional.ofNullable(null);
             } else {
-                insurancePlan =Optional.ofNullable(search.getInsurancePlan());
+                insurancePlan = Optional.ofNullable(search.getInsurancePlan());
             }
         } else {
             insurancePlan = Optional.ofNullable(null);
@@ -85,57 +103,95 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
         query.select(root);
 
-        if (name.isPresent())
-        {
-            query.where(cb.or(cb.like(cb.lower(root.get("firstName")), "%"+name.get().toLowerCase()+"%"),
-                    (cb.like(cb.lower(root.get("lastName")), "%"+name.get().toLowerCase()+"%"))));
+        if (name.isPresent()) {
+            expression = cb.or(cb.like(cb.lower(root.get("firstName")), "%"+name.get().toLowerCase()+"%"),
+                    (cb.like(cb.lower(root.get("lastName")), "%"+name.get().toLowerCase()+"%")));
         }
 
-        if (specialty.isPresent())
-        {
+        if (specialty.isPresent()) {
             Specialty specialtyObj = specialtyDao.findSpecialtyByName(specialty.get());
-            query.where(cb.isMember(specialtyObj, root.get("specialties")));
+            Expression specialtyExpresion = cb.isMember(specialtyObj, root.get("specialties"));
+            if (expression == null){
+                expression = specialtyExpresion;
+            } else {
+                expression = cb.and(expression, specialtyExpresion);
+            }
         }
 
-        if (insurance.isPresent())
-        {
+        if (sex.isPresent()) {
+            Expression sexExpression = cb.like(root.get("sex"), "%" + sex.get().toUpperCase() + "%");
+            if (expression == null){
+                expression = sexExpression;
+            } else {
+                expression = cb.and(expression, sexExpression);
+            }
+        }
+
+        if (insurance.isPresent()) {
             Insurance insuranceObj = insuranceDao.findInsuranceByName(insurance.get());
-            List<InsurancePlan> insurancePlans = insurancePlanDao.findAllInsurancePlansByInsurance(insuranceObj);
+            List<InsurancePlan> insurancePlans = insuranceObj.getPlans();
             List<Predicate> predicates = new ArrayList<>();
             for(InsurancePlan plan : insurancePlans){
                 predicates.add(cb.isMember(plan, root.get("insurancePlans")));
             }
-            query.where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
-        }
-
-        if (sex.isPresent()){
-            query.where(cb.equal(root.get("sex"), sex.get()));
-        }
-        if(insurancePlan.isPresent()){
-            for(String plan : insurancePlan.get()){
-                InsurancePlan insurancePlanObj = insurancePlanDao.findInsurancePlanByPlanName(plan);
-                query.where(cb.isMember(insurancePlanObj, root.get("insurancePlans")));
+            Expression insuranceExpression = cb.or(predicates.toArray(new Predicate[predicates.size()]));
+            if (expression == null){
+                expression = insuranceExpression;
+            } else {
+                expression = cb.and(expression, insuranceExpression);
             }
         }
 
+        if(insurancePlan.isPresent()){
+            List<InsurancePlan> insurancePlans = insurancePlanDao.getInsurancePlansByList(insurancePlan.get());
+            List<Predicate> insurancePlansPredicates = new ArrayList<>();
+            for (InsurancePlan plan : insurancePlans){
+                insurancePlansPredicates.add(cb.isMember(plan, root.get("insurancePlans")));
+            }
+            Expression insurancePlansExpression = cb.or(insurancePlansPredicates.toArray(new Predicate[insurancePlansPredicates.size()]));
+            if (expression == null) {
+                expression = insurancePlansExpression;
+            } else {
+                expression = cb.and(expression, insurancePlansExpression);
+            }
+            /* AND SEARCHING
+            for(String plan : insurancePlan.get()){
+                InsurancePlan insurancePlanObj = insurancePlanDao.findInsurancePlanByPlanName(plan);
+                // query.where(cb.isMember(insurancePlanObj, root.get("insurancePlans")));
+                Expression insuranceExpression = cb.isMember(insurancePlanObj, root.get("insurancePlans"));
+                if (expression == null){
+                    expression = insuranceExpression;
+                } else {
+                    expression = cb.and(expression, insuranceExpression);
+                }
+            }
+
+             */
+        }
+
         if (days.isPresent()) {
-            Integer day = Integer.valueOf(LocalDate.parse(search.getDays()).getDayOfWeek().getValue());
-            List<WorkingHours> workingHours = workingHoursDao.findWorkingHoursByDayWeek(day);
+            List <WorkingHours> workingHours = workingHoursDao.findWorkingHoursByDayWeek(days.get());
             List<Predicate> predicates = new ArrayList<>();
             for(WorkingHours w : workingHours){
                 predicates.add(cb.isMember(w, root.get("workingHours")));
             }
-            query.where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
+            Expression daysExpression = cb.or(predicates.toArray(new Predicate[predicates.size()]));
+            if (expression == null){
+                expression = daysExpression;
+            } else {
+                expression = cb.and(expression, daysExpression);
+            }
+        }
 
-         }
+        if (expression != null){
+            query.where(expression);
+        }
 
         TypedQuery<Doctor> typedQuery = em.createQuery(query);
-        typedQuery.setFirstResult(PAGESIZE*(page));
+        typedQuery.setFirstResult(PAGESIZE * (page));
         typedQuery.setMaxResults(PAGESIZE);
         List<Doctor> list = typedQuery.getResultList();
-
         return list.isEmpty() ? Collections.emptyList() : list;
-
     }
 
     @Override
@@ -143,92 +199,148 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         final TypedQuery<Doctor> query = em.createQuery("FROM Doctor", Doctor.class);
         final List<Doctor> list = query.getResultList();
         int pageCount = (int) (Math.ceil(list.size() * 1.0 / PAGESIZE));
-        return Long.valueOf(pageCount);
+        return (long) pageCount;
     }
 
     @Override
     public Long getLastPage(Search search) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Long> query = cb.createQuery(Long.class);
+        CriteriaQuery<Doctor> query = cb.createQuery(Doctor.class);
         Root<Doctor> root = query.from(Doctor.class);
 
+        Expression expression = null;
         Optional<String> name = search.getName().equals("")? Optional.ofNullable(null):Optional.ofNullable(search.getName());
         Optional<String> specialty = search.getSpecialty().equals("noSpecialty")?Optional.ofNullable(null):Optional.ofNullable(search.getSpecialty());
         Optional<String> insurance = search.getInsurance().matches("no")?Optional.ofNullable(null):Optional.ofNullable(search.getInsurance());
         Optional<String> sex = search.getSex().equals("ALL") || search.getSex().isEmpty() || search.getSex().equals("")?Optional.ofNullable(null): Optional.ofNullable(search.getSex());
-        Optional<String> days = search.getDays().equals("no")|| search.getDays().isEmpty() || search.getDays().equals("")?Optional.ofNullable(null):Optional.ofNullable(search.getDays());
         Optional<List<String>> insurancePlan;
+        Optional<List<String>> days;
+        if (search.getDays() != null){
+            boolean hasAllDays = false;
+            for (String daysIterator: search.getDays()) {
+                if (daysIterator.equals("ALL")){
+                    hasAllDays = true;
+                }
+            }
+            if (hasAllDays || search.getDays().size() == 0){
+                days = Optional.ofNullable(null);
+            } else {
+                days = Optional.ofNullable(search.getDays());
+            }
+        } else {
+            days = Optional.empty();
+        }
 
-        if (search.getInsurancePlan() != null)
-        {
+        if (search.getInsurancePlan() != null) {
             boolean hasAll = false;
             for (String insurancePlanIterator : search.getInsurancePlan()){
                 if (insurancePlanIterator.equals("ALL")) {
                     hasAll = true;
                 }
             }
-            if (hasAll || search.getInsurancePlan().size() == 0)
-            {
+            if (hasAll || search.getInsurancePlan().size() == 0) {
                 insurancePlan = Optional.ofNullable(null);
             } else {
-                insurancePlan =Optional.ofNullable(search.getInsurancePlan());
+                insurancePlan = Optional.ofNullable(search.getInsurancePlan());
             }
         } else {
             insurancePlan = Optional.ofNullable(null);
         }
 
-        query.select(cb.count(root));
+        query.select(root);
 
-        if (name.isPresent())
-        {
-            query.where(cb.or(cb.like(cb.lower(root.get("firstName")), "%"+name.get().toLowerCase()+"%"),
-                    (cb.like(cb.lower(root.get("lastName")), "%"+name.get().toLowerCase()+"%"))));
+        if (name.isPresent()) {
+            expression = cb.or(cb.like(cb.lower(root.get("firstName")), "%"+name.get().toLowerCase()+"%"),
+                    (cb.like(cb.lower(root.get("lastName")), "%"+name.get().toLowerCase()+"%")));
         }
 
-        if (specialty.isPresent())
-        {
+        if (specialty.isPresent()) {
             Specialty specialtyObj = specialtyDao.findSpecialtyByName(specialty.get());
-            query.where(cb.isMember(specialtyObj, root.get("specialties")));
+            Expression specialtyExpresion = cb.isMember(specialtyObj, root.get("specialties"));
+            if (expression == null){
+                expression = specialtyExpresion;
+            } else {
+                expression = cb.and(expression, specialtyExpresion);
+            }
         }
 
-        if (insurance.isPresent())
-        {
+        if (sex.isPresent()) {
+            Expression sexExpression = cb.like(root.get("sex"), "%" + sex.get().toUpperCase() + "%");
+            if (expression == null){
+                expression = sexExpression;
+            } else {
+                expression = cb.and(expression, sexExpression);
+            }
+        }
+
+        if (insurance.isPresent()) {
             Insurance insuranceObj = insuranceDao.findInsuranceByName(insurance.get());
-            List<InsurancePlan> insurancePlans = insurancePlanDao.findAllInsurancePlansByInsurance(insuranceObj);
+            List<InsurancePlan> insurancePlans = insuranceObj.getPlans();
             List<Predicate> predicates = new ArrayList<>();
             for(InsurancePlan plan : insurancePlans){
                 predicates.add(cb.isMember(plan, root.get("insurancePlans")));
             }
-            query.where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
-        }
-
-        if (sex.isPresent()){
-            query.where(cb.equal(root.get("sex"), sex.get()));
-        }
-        if(insurancePlan.isPresent()){
-            for(String plan : insurancePlan.get()){
-                InsurancePlan insurancePlanObj = insurancePlanDao.findInsurancePlanByPlanName(plan);
-                query.where(cb.isMember(insurancePlanObj, root.get("insurancePlans")));
+            Expression insuranceExpression = cb.or(predicates.toArray(new Predicate[predicates.size()]));
+            if (expression == null){
+                expression = insuranceExpression;
+            } else {
+                expression = cb.and(expression, insuranceExpression);
             }
         }
 
+        if(insurancePlan.isPresent()){
+            List<InsurancePlan> insurancePlans = insurancePlanDao.getInsurancePlansByList(insurancePlan.get());
+            List<Predicate> insurancePlansPredicates = new ArrayList<>();
+            for (InsurancePlan plan : insurancePlans){
+                insurancePlansPredicates.add(cb.isMember(plan, root.get("insurancePlans")));
+            }
+            Expression insurancePlansExpression = cb.or(insurancePlansPredicates.toArray(new Predicate[insurancePlansPredicates.size()]));
+            if (expression == null) {
+                expression = insurancePlansExpression;
+            } else {
+                expression = cb.and(expression, insurancePlansExpression);
+            }
+            /* AND SEARCHING
+            for(String plan : insurancePlan.get()){
+                InsurancePlan insurancePlanObj = insurancePlanDao.findInsurancePlanByPlanName(plan);
+                // query.where(cb.isMember(insurancePlanObj, root.get("insurancePlans")));
+                Expression insuranceExpression = cb.isMember(insurancePlanObj, root.get("insurancePlans"));
+                if (expression == null){
+                    expression = insuranceExpression;
+                } else {
+                    expression = cb.and(expression, insuranceExpression);
+                }
+            }
+
+             */
+        }
+
         if (days.isPresent()) {
-            Integer day = Integer.valueOf(LocalDate.parse(search.getDays()).getDayOfWeek().getValue());
-            List<WorkingHours> workingHours = workingHoursDao.findWorkingHoursByDayWeek(day);
+            List <WorkingHours> workingHours = workingHoursDao.findWorkingHoursByDayWeek(days.get());
             List<Predicate> predicates = new ArrayList<>();
             for(WorkingHours w : workingHours){
                 predicates.add(cb.isMember(w, root.get("workingHours")));
             }
-            query.where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
-
+            Expression daysExpression = cb.or(predicates.toArray(new Predicate[predicates.size()]));
+            if (expression == null){
+                expression = daysExpression;
+            } else {
+                expression = cb.and(expression, daysExpression);
+            }
         }
 
-        TypedQuery<Long> typedQuery = em.createQuery(query);
-        return typedQuery.getSingleResult() / PAGESIZE;
+        if (expression != null){
+            query.where(expression);
+        }
+
+        TypedQuery<Doctor> typedQuery = em.createQuery(query);
+
+        final List<Doctor> list = typedQuery.getResultList();
+        int pageCount = (int) (Math.ceil(list.size() * 1.0 / PAGESIZE));
+        return (long) pageCount;
 
     }
-
 
     @Override
     public Optional<Doctor> findDoctorById(Integer id) {

@@ -63,7 +63,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     @Transactional
-    public List<Doctor> listDoctors(Search search, String pageAsString) throws NotValidSearchException, NotValidPageException {
+    public List<Doctor> listDoctors(Search search, String pageAsString) throws NotValidPageException {
         LOGGER.debug("DoctorServiceImpl: listDoctors");
 
         if (pageAsString == null){
@@ -98,6 +98,7 @@ public class DoctorServiceImpl implements DoctorService {
 //        list.get(0).getInsurancePlans().size();
         return list;
     }
+
 
     @Override
     @Transactional

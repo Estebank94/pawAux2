@@ -13,4 +13,5 @@ public interface WorkingHoursDao {
 
     List<WorkingHours> findWorkingHoursByDayWeek(Integer dayOfWeek);
 
+    List<WorkingHours> findWorkingHoursByDayWeek(List<String> daysOfWeek);
 }

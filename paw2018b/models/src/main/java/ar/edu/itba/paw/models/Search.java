@@ -9,10 +9,11 @@ public class Search {
     private String location = "";
     private String insurance = "no";
     private String sex = "ALL";
-
     private List<String> insurancePlan = null;
+    private List<String> days = null;
 
-    private String days = "no";
+    public Search () {
+    }
 
     public String getName() {
             return name;
@@ -44,7 +45,6 @@ public class Search {
 
     public void setInsurance(String insurance) { this.insurance = insurance; }
 
-
     public String getSex() {
         return sex;
     }
@@ -61,11 +61,24 @@ public class Search {
         this.insurancePlan = insurancePlan;
     }
 
-    public String getDays() {
+    public List<String> getDays() {
         return days;
     }
 
-    public void setDays(String days) {
+    public void setDays(List<String> days) {
         this.days = days;
+    }
+
+    @Override
+    public String toString() {
+        return "Search{" +
+                "name='" + name + '\'' +
+                ", specialty='" + specialty + '\'' +
+                ", location='" + location + '\'' +
+                ", insurance='" + insurance + '\'' +
+                ", sex='" + sex + '\'' +
+                ", insurancePlan=" + insurancePlan +
+                ", days='" + days + '\'' +
+                '}';
     }
 }
