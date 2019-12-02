@@ -39,7 +39,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 @EnableWebMvc
-@ComponentScan({ "ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.services", "ar.edu.itba.paw.persistence" })
+@ComponentScan({ "ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.services", "ar.edu.itba.paw.persistence", "ar.edu.itba.paw.webapp.auth" })
 @Configuration
 @EnableTransactionManagement
 public class WebConfig extends WebMvcConfigurerAdapter {
@@ -88,7 +88,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		// Palito - Development
 		ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
 		ds.setUsername("postgres");
-		ds.setPassword("admin123");
+		ds.setPassword("987456Ms");
 		
 		return ds;
 	}
