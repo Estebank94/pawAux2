@@ -48,12 +48,16 @@ public class DoctorPanelController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Patient patient;
+        patient = patientService.findPatientByEmail(authentication.getName());
+
+        /*
         try {
             patient = patientService.findPatientByEmail(authentication.getName());
         } catch (NotValidEmailException | NotFoundPacientException e) {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
         }
+         */
 
         Integer doctorId = patient.getDoctor().getId();
 
@@ -108,12 +112,15 @@ public class DoctorPanelController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Patient patient;
+        patient = patientService.findPatientByEmail(authentication.getName());
+        /*
         try {
             patient = patientService.findPatientByEmail(authentication.getName());
         } catch (NotValidEmailException | NotFoundPacientException e) {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
         }
+         */
 
         if(form.getDay() != null){
             Optional<Doctor> doctor = doctorService.findDoctorById(String.valueOf(form.getDoctorid()));

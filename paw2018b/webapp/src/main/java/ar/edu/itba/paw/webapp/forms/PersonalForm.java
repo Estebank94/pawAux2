@@ -33,7 +33,7 @@ public class PersonalForm {
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String passwordConfirmation;
 
-    @Pattern(regexp = "^((\\(|)(011)*(\\)|)(|\\s)(\\d{8}|\\d{4}\\s\\d{4}))$")
+//    @Pattern(regexp = "^((\\(|)(011)*(\\)|)(|\\s)(\\d{8}|\\d{4}\\s\\d{4}))$")
     @NotEmpty
     private String phoneNumber;
 
@@ -121,6 +121,21 @@ public class PersonalForm {
 
     public boolean matchingPasswords(String password, String passwordConfirmation){
         return password.equals(passwordConfirmation);
+    }
+
+    @Override
+    public String toString() {
+        return "PersonalForm{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", passwordConfirmation='" + passwordConfirmation + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", sex='" + sex + '\'' +
+//                ", licence='" + licence + '\'' +
+                '}';
     }
 }
 

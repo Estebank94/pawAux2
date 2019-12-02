@@ -72,22 +72,33 @@ public class FlowController {
 					patient = patientService.findPatientByEmail(authentication.getName());
 					doctor = doctorService.findDoctorById(String.valueOf(patient.getDoctor().getId())).get();
 					LOGGER.debug("The User Logged in is a DOCTOR with ID: {}", doctor.getId());
-				}catch (NotFoundDoctorException | NotFoundPacientException | NotValidEmailException e){
+				}catch (NotFoundDoctorException ex1){
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				} /* catch (NotFoundPacientException e) {
+					LOGGER.trace("404 error");
+					return new ModelAndView("404");
+				} catch (NotValidEmailException e) {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				}
+				*/
 				mav.addObject("doctorID", doctor.getId());
 			}
 			hasUserRole = authentication.getAuthorities().stream()
 					.anyMatch(r -> r.getAuthority().equals("ROLE_PATIENT"));
 			if(hasUserRole){
 				Patient patient;
+				patient = patientService.findPatientByEmail(authentication.getName());
+				/*
 				try {
 					patient = patientService.findPatientByEmail(authentication.getName());
 				} catch (NotFoundPacientException | NotValidEmailException e) {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				}
+
+				 */
 				mav.addObject("patient", patient);
 				mav.addObject("hasFavorites", patient.getFavoriteDoctors().size() > 0 );
 			}
@@ -127,12 +138,16 @@ public class FlowController {
 					.anyMatch(r -> r.getAuthority().equals("ROLE_DOCTOR"));
 			if(hasUserRole){
 				Patient patient = null;
+				patient = patientService.findPatientByEmail(authentication.getName());
+				/*
 				try {
 					patient = patientService.findPatientByEmail(authentication.getName());
 				} catch (NotValidEmailException | NotFoundPacientException e) {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				}
+
+				 */
 				mav.addObject("doctorID", patient.getDoctor().getId());
 			}
 		}
@@ -223,10 +238,18 @@ public class FlowController {
 				mav.addObject("insuranceList", searchService.listInsurances());
 				mav.addObject("specialtyList", searchService.listSpecialties());
 				mav.addObject("appointmentTaken",false);
-			} catch (NotFoundException | NotFoundPacientException | NotValidEmailException e) {
+			} catch (NotFoundException e) {
+				LOGGER.trace("404 error");
+				return new ModelAndView("404");
+			} /* catch (NotFoundPacientException e) {
+				LOGGER.trace("404 error");
+				return new ModelAndView("404");
+			} catch (NotValidEmailException e) {
+
 				LOGGER.trace("404 error");
 				return new ModelAndView("404");
 			}
+			*/
 		return mav;
     }
 
@@ -244,12 +267,16 @@ public class FlowController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		Patient patient = null;
+		patient = patientService.findPatientByEmail(authentication.getName());
+		/*
 		try {
 			patient = patientService.findPatientByEmail(authentication.getName());
 		} catch (NotValidEmailException | NotFoundPacientException e) {
 			LOGGER.trace("404 error");
 			return new ModelAndView("404");
 		}
+
+		 */
 		try {
 			if(appointmentForm.getDay() != null && appointmentForm.getTime() != null) {
 				appointment = true;

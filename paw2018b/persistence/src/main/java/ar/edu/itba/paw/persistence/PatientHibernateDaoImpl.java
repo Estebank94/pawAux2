@@ -4,9 +4,11 @@ import ar.edu.itba.paw.interfaces.persistance.PatientDao;
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
+import ar.edu.itba.paw.models.Verification;
 import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.RepeatedEmailException;
+import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,6 +20,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class PatientHibernateDaoImpl implements PatientDao {
@@ -40,6 +43,22 @@ public class PatientHibernateDaoImpl implements PatientDao {
             throw new RepeatedEmailException();
         }
         return patient;
+    }
+
+    @Override
+    public Verification createToken(final Patient patient) {
+
+        final String token = UUID.randomUUID().toString();
+        final Verification v = new Verification(token, patient);
+        em.persist(v);
+        return v;
+    }
+
+    @Override
+    public Optional<Verification> findToken(final String token) {
+        final TypedQuery<Verification> query = em.createQuery("FROM Verification as vt where vt.token = :token", Verification.class);
+        query.setParameter("token", token);
+        return query.getResultList().stream().findFirst();
     }
 
     @Override
@@ -66,5 +85,24 @@ public class PatientHibernateDaoImpl implements PatientDao {
         final TypedQuery<Appointment> query = em.createQuery("FROM appointment", Appointment.class);
         final List<Appointment> list = query.getResultList();
         return list.isEmpty() ? null : list;
+    }
+
+    @Override
+    public void deleteToken(final Verification token) {
+        final Verification vt = em.merge(token);
+        em.remove(vt);
+    }
+
+    @Override
+    public Patient enableUser(final Patient patient) {
+        final Patient u = em.merge(patient);
+        u.setEnabled(true);
+        return u;
+    }
+
+    @Override
+    public void deleteUser(final Patient patient) {
+        final Patient u = em.merge(patient);
+        em.remove(u);
     }
 }

@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.persistance.PatientDao;
 import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
+import ar.edu.itba.paw.models.Verification;
 import ar.edu.itba.paw.models.exceptions.*;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -14,6 +15,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -188,31 +191,60 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Patient findPatientByEmail(String email) throws NotValidEmailException, NotFoundPacientException {
+    public Patient findPatientByEmail(String email){
         LOGGER.debug("PatientServiceImpl: findPatientByEmail(String email)");
         if (email == null){
             LOGGER.debug("Email is null");
-            throw new NotValidEmailException("patient email can't be null");
+            return null;
+            // throw new NotValidEmailException("patient email can't be null");
         }
         if (email.length() == 0){
             LOGGER.debug("Email length is 0");
-            throw new NotValidEmailException("Patient email can't be negative or zero");
+            return null;
+            // throw new NotValidEmailException("Patient email can't be negative or zero");
         }
         if (email.length() > 90){
             LOGGER.debug("Email has more than 90 characters. Email: {}", email);
-            throw new NotValidEmailException("PatientMail can't have more than 90 characters");
+            return null;
+            // throw new NotValidEmailException("PatientMail can't have more than 90 characters");
         }
         LOGGER.debug("Calling patientDao.findPatientByEmail(email)");
         Patient foundPatient = patientDao.findPatientByEmail(email);
         if (foundPatient == null){
             LOGGER.debug("No patient found");
-            throw new NotFoundPacientException("Patient was not found");
+            return null;
+            // throw new NotFoundPacientException("Patient was not found");
         }
         foundPatient.getFavorites();
+//        foundPatient.isPresent().getFavorites();
 //        LOGGER.debug("Patient found. Patient: {}", foundPatient.get());
 //        LOGGER.debug("Patient name: {}", foundPatient.get().getFirstName());
         return foundPatient;
-        
     }
+
+    @Override
+    public Verification createToken(final Patient patient) {
+        return patientDao.createToken(patient);
+    }
+
+    @Override
+    public Optional<Verification> findToken(final String token) {
+        Optional<Verification> vt = patientDao.findToken(token);
+        if (vt.isPresent()) {
+            patientDao.deleteToken(vt.get());
+        }
+        return vt;
+    }
+
+    @Override
+    public void enableUser(final Patient patient) {
+        patientDao.enableUser(patient);
+    }
+
+    @Override
+    public void deleteUser(final Patient patient) {
+        patientDao.deleteUser(patient);
+    }
+
 
 }

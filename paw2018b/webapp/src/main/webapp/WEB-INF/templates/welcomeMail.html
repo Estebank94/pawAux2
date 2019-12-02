@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title  th:text="#{mail.title}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body style="margin:0;	padding:0;" >
+<table style="border-spacing:0; padding:0; border:0; width:100%;"/>
+<tr>
+    <td style="padding: 10px 0 30px 0;"/>
+    <table style="border: 1px solid #257CBF; border-collapse: collapse; width: 600px;	margin-left:auto; margin-right:auto; border-spacing: 0;	padding: 0;"/>
+</tr>
+<td style="padding: 30px 0 30px 0; color: #153643; font-size: 28px; font-weight: bold; font-family: 'Rubik', sans-serif;" align=\"center" bgcolor="#257CBF" >
+    <img style="display: block;" src="https://i.imgur.com/DRVyjj1.png" alt="Waldoc" width="150" height="50"/>
+</td>
+</tr>
+<tr>
+    <td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;"/>
+    <table style="border-spacing: 0; padding: 0; border: 0; width: 100%;">
+        </tr>
+        <td style="color: #153643; font-family: 'Rubik', sans-serif; font-size: 24px;">
+            <p th:text="#{mail.welcome} + ' ' + ${patientName} + ' a Waldoc!'" style="font-weight: bold;"></p>
+        </td>
+        <tr>
+            <td style="padding: 20px 0 10px 0; color: #153643; font-family: 'Rubik', sans-serif; font-size: 15px; line-height: 20px;">
+                <p th:text="#{mail.intro}"></p>
+                <br>
+                <p th:text="#{mail.body}"></p>
+                <a th:href="${confirmationUrl}" th:text="#{confirmUrl}"></a>
+                <!--Comenzá tu experiencia ahora:-->
+                <!--<a href="http://pawserver.it.itba.edu.ar/paw-2018b-06/">-->
+                    <!--"Haz click aquí"-->
+                <!--</a>-->
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 5px 0 15px 0; color: #257CBF; font-family: 'Rubik', sans-serif; font-size: 15px; line-height: 20px;">
+            </td>
+        </tr>
+        <tr>
+            <td style="font-style: italic; font-family: 'Rubik', sans-serif; color: #999; font-size: 15px;">
+            </td>
+        </tr>
+    </table>
+    </td>
+</tr>
+<tr>
+    <td bgcolor="#257CBF" style="padding: 30px 30px 30px 30px;">
+        <table style="border-spacing: 0; padding: 0; border: 0; width: 100%;">
+            <tr>
+                <td style="color: #ffffff; font-family: 'Rubik', sans-serif; font-size: 14px;" width="75%">
+                    &reg; Waldoc, 2019
+                    <br/>
+                </td>
+            </tr>
+        </table>
+    </td>
+</body>
+</html>
