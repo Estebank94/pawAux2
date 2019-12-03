@@ -8,6 +8,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
                 <configuration>
                     <source>8</source>
                     <target>8</target>
@@ -38,7 +39,7 @@
 		<dependency>
 			<groupId>ar.edu.itba.paw</groupId>
 			<artifactId>models</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
         <dependency>
             <groupId>org.springframework</groupId>

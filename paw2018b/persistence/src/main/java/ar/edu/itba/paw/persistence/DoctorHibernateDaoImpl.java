@@ -104,8 +104,8 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         query.select(root);
 
         if (name.isPresent()) {
-            expression = cb.or(cb.like(cb.lower(root.get("firstName")), "%"+name.get().toLowerCase()+"%"),
-                    (cb.like(cb.lower(root.get("lastName")), "%"+name.get().toLowerCase()+"%")));
+            expression = cb.or(cb.like(cb.lower(root.get("firstName")), "%"+escapeSpecialCharacters(name.get()).toLowerCase()+"%"),
+                    (cb.like(cb.lower(root.get("lastName")), "%"+escapeSpecialCharacters(name.get()).toLowerCase()+"%")));
         }
 
         if (specialty.isPresent()) {
@@ -251,8 +251,8 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         query.select(root);
 
         if (name.isPresent()) {
-            expression = cb.or(cb.like(cb.lower(root.get("firstName")), "%"+name.get().toLowerCase()+"%"),
-                    (cb.like(cb.lower(root.get("lastName")), "%"+name.get().toLowerCase()+"%")));
+            expression = cb.or(cb.like(cb.lower(root.get("firstName")), "%"+escapeSpecialCharacters(name.get()).toLowerCase()+"%"),
+                    (cb.like(cb.lower(root.get("lastName")), "%"+escapeSpecialCharacters(name.get()).toLowerCase()+"%")));
         }
 
         if (specialty.isPresent()) {
@@ -433,6 +433,23 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
     public void mergeDoctor(Doctor doctor){
         em.merge(doctor);
+    }
+
+    private String escapeSpecialCharacters(String input) {
+        StringBuilder resultStr = new StringBuilder();
+        for (char ch : input.toCharArray()) {
+            if (!isUnsafe(ch)) {
+                resultStr.append(ch);
+            } else{
+                resultStr.append('\\');
+            }
+        }
+        return resultStr.toString();
+    }
+
+    private static boolean isUnsafe(char ch) {
+        return (ch == '%' || ch == '_' || ch == '\\' || ch == '"' || ch == '\'' || ch == '\b' || ch == '\n'
+                || ch == '\r' || ch == '\t' || ch == '\0');
     }
 
 }
