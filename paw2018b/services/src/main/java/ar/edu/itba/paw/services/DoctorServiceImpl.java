@@ -92,10 +92,6 @@ public class DoctorServiceImpl implements DoctorService {
             throw new NotValidPageException("Page can't be greater than the biggest number");
         }
         List<Doctor> list = doctorDao.listDoctors(search, pageAsInt);
-//        if(!list.isEmpty()){
-//            list.get(0).getReviews();
-//        }
-//        list.get(0).getInsurancePlans().size();
         return list;
     }
 

@@ -110,6 +110,7 @@ public class DoctorApiController extends BaseApiController {
 
     @GET
     @Path("/list")
+    @Produces(value = {MediaType.APPLICATION_JSON})
     public Response listDoctors(@QueryParam("page") @DefaultValue("0") int page,
                                 @QueryParam("specialty") String specialty,
                                 @QueryParam("name") String name,
@@ -194,22 +195,6 @@ public class DoctorApiController extends BaseApiController {
         List<Doctor> doctorList = doctorService.listDoctors();
         Long totalPageCount = doctorService.getLastPage();
         return Response.ok(new DoctorListDTO(doctorList, totalPageCount)).build();
-    }
-
-
-    @GET
-    @Path("/search")
-    public Response searchDoctors (@Context UriInfo uriInfo) {
-        String result = "";
-        for (Map.Entry entry: uriInfo.getQueryParameters().entrySet()){
-            result += entry.getKey() + "=" + entry.getValue() + ", ";
-        }
-        /*
-        Search search = new Search();
-        List<Doctor> doctorList = doctorService.listDoctors(search , pageNumber)
-        Long totalPageCount = doctorService.getLastPage(search);
-        */
-        return Response.ok(result).build();
     }
 
     @POST
