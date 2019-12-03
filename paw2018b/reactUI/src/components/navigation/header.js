@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { DropdownButton, Dropdown } from 'react-bootstrap';
+import SearchBar from '../home/searchBar';
 
 class Navigation extends React.Component {
   handleClick() {
@@ -17,13 +18,13 @@ class Navigation extends React.Component {
             </a>
           <div className="row">
             <DropdownButton id="dropdown-basic-button btn-register" variant="light" title="Registrarse">
-              <Dropdown.Item href="/register">Registrarse como paciente</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Registrarse como especialista</Dropdown.Item>
+              <Dropdown.Item href="/register/patient">Registrarse como paciente</Dropdown.Item>
+              <Dropdown.Item href="/register/specialist">Registrarse como especialista</Dropdown.Item>
             </DropdownButton>
             <div className="center-vertical">
               <button
                 onClick={() => this.handleClick()}
-                className="btn btn-light" style={{ backgroundColor: 'transparent', borderColor: 'transparent', color: pathname === '/' ? '#257CBF' : '#FFF' }}
+                className="btn btn-light ml-2" style={{ backgroundColor: 'transparent', borderColor: 'transparent', color: pathname === '/' ? '#257CBF' : '#FFF' }}
                 type="button"
               >
                 Iniciar Sesion
@@ -31,6 +32,16 @@ class Navigation extends React.Component {
             </div>
           </div>
         </div>
+        {
+          pathname === '/specialists' &&
+          <div className="container">
+            <div className="col-sm-12 pl-0 pr-0 pb-2">
+              <SearchBar dark/>
+            </div>
+          </div>
+
+
+        }
       </nav>
     );
   }
