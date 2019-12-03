@@ -40,7 +40,7 @@ public class SpecialtyHibernateDaoImpl implements SpecialtyDao {
     public Specialty findSpecialtyByName(String specialty) {
         final TypedQuery<Specialty> query = em.createQuery("FROM Specialty " +
                 "WHERE speciality = :specialty ", Specialty.class);
-        query.setParameter("specialty", "%" + specialty + "%");
+        query.setParameter("specialty", specialty);
         return query.getSingleResult();
     }
 
