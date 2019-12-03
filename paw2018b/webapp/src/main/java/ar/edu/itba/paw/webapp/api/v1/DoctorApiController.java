@@ -3,15 +3,12 @@ package ar.edu.itba.paw.webapp.api.v1;
 import ar.edu.itba.paw.interfaces.services.DoctorService;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.PatientService;
-import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.Patient;
-import ar.edu.itba.paw.models.Search;
+import ar.edu.itba.paw.models.*;
 
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.NotValidIDException;
 import ar.edu.itba.paw.models.exceptions.NotValidPageException;
 
-import ar.edu.itba.paw.models.Verification;
 import ar.edu.itba.paw.models.exceptions.*;
 
 
@@ -21,6 +18,7 @@ import ar.edu.itba.paw.webapp.dto.DoctorListDTO;
 import ar.edu.itba.paw.webapp.dto.PatientDTO;
 
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
+import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
 import com.fasterxml.jackson.databind.deser.Deserializers;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -216,16 +214,11 @@ public class DoctorApiController extends BaseApiController {
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response createUser(@Valid final PersonalForm userForm) throws NotCreatePatientException,
-            NotValidPhoneNumberException, NotValidLastNameException, RepeatedEmailException,
-            NotValidPasswordException, NotValidFirstNameException, NotValidEmailException,
-            NotValidSexException, NotValidLicenceException, NotValidAddressException,
-            NotCreateDoctorException, RepeatedLicenceException, NotValidPatientIdException,
-            NotValidDoctorIdException, NotFoundDoctorException {
+    public Response createUser(@Valid final PersonalForm userForm) {
 
         if (userForm == null)
             return Response.status(Response.Status.BAD_REQUEST).build();
-//
+
         if (!userForm.getPassword().equals(userForm.getPasswordConfirmation()))
             return Response
                     .status(Response.Status.BAD_REQUEST)
@@ -233,17 +226,39 @@ public class DoctorApiController extends BaseApiController {
                     .build();
 
         String image = userForm.getSex().equals("M") ? "https://i.imgur.com/au1zFvG.jpg" : "https://i.imgur.com/G66Hh4D.jpg";
-        final Doctor doctor = doctorService.createDoctor(userForm.getFirstName(), userForm.getLastName(), userForm.getPhoneNumber(),
-                userForm.getSex(), userForm.getLicence(), null, userForm.getAddress());
 
-        final Patient patient = patientService.createPatient(userForm.getFirstName(), userForm.getLastName(),
-                userForm.getPhoneNumber(), userForm.getEmail(), userForm.getPassword());
+        Doctor doctor = null;
+        Patient patient = null;
 
-        patientService.setDoctorId(patient, doctor);
+        try{
+            doctor = doctorService.createDoctor(userForm.getFirstName(), userForm.getLastName(), userForm.getPhoneNumber(),
+                    userForm.getSex(), userForm.getLicence(), null, userForm.getAddress());
+            patient = patientService.createPatient(userForm.getFirstName(), userForm.getLastName(),
+                    userForm.getPhoneNumber(), userForm.getEmail(), userForm.getPassword());
+            patientService.setDoctorId(patient, doctor);
+        }
+        catch (RepeatedEmailException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Duplicated email")).build();
+        }catch (NotValidFirstNameException | NotValidLastNameException | NotValidPhoneNumberException |
+              RepeatedLicenceException | NotValidLicenceException | NotValidAddressException |
+                NotValidSexException | NotValidPasswordException | NotValidEmailException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("There is an error on the form information")).build();
+        }catch (NotFoundDoctorException | NotCreateDoctorException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Doctor not found")).build();
+        }catch(NotCreatePatientException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Patient not created")).build();
+        }catch(NotValidPatientIdException | NotValidDoctorIdException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Id from doctor or patient not valid. Error associating")).build();
+        }
 
         final Verification verification = patientService.createToken(patient);
 
-        // Prepare the evaluation context
+        /* Prepare the evaluation context */
         final org.thymeleaf.context.Context ctx = new org.thymeleaf.context.Context(LocaleContextHolder.getLocale());
         final String confirmationUrl = frontUrl + "confirm?token=" + verification.getToken();
         ctx.setVariable("patientName", patient.getFirstName());
@@ -251,8 +266,17 @@ public class DoctorApiController extends BaseApiController {
         final String htmlContent = this.htmlTemplateEngine.process(VERIFICATION_TOKEN_TEMPLATE_NAME, ctx);
         final String subject = applicationContext.getMessage("mail.subject", null, LocaleContextHolder.getLocale());
 
-        // send welcome email
+        /* send welcome email */
         emailService.sendEmail(patient.getEmail(), subject, htmlContent);
+
+
+//        Description description = new Description(professionalForm.getCertificate(), professionalForm.getLanguages(),
+//                professionalForm.getEducation());
+//
+//        List<WorkingHours> workingHours = professionalForm.workingHoursList();
+//
+//        doctor.setDescription(description);
+//        doctor.setWorkingHours(workingHours);
 
         final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(patient.getId())).build();
 
@@ -262,7 +286,7 @@ public class DoctorApiController extends BaseApiController {
 
 
     //TODO: Dudoso que tengamos codigo repetido.  No se si no le estoy pifiando en algo que tiene que ser
-    // dotoctor y esta puesto como patient
+    // doctor y esta puesto como patient
     @GET
     @Path("/confirm")
     @Produces(value = { MediaType.APPLICATION_JSON, })
@@ -272,7 +296,7 @@ public class DoctorApiController extends BaseApiController {
         final Patient patient = verification.getPatient();
         patientService.enableUser(patient);
 
-        /* Auto Login */
+        /* Auto-Login */
         Authentication authentication = new UsernamePasswordAuthenticationToken(patient.getEmail(), patient.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

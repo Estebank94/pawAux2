@@ -113,7 +113,7 @@ public class PatientApiController extends BaseApiController {
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response createUser(@Valid final PatientForm userForm) throws NotCreatePatientException, NotValidPhoneNumberException, NotValidLastNameException, RepeatedEmailException, NotValidPasswordException, NotValidFirstNameException, NotValidEmailException {
+    public Response createUser(@Valid final PatientForm userForm) {
 
         if (userForm == null)
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -124,8 +124,23 @@ public class PatientApiController extends BaseApiController {
                     .entity(errorMessageToJSON(messageSource.getMessage("non_matching_passwords", null, LocaleContextHolder.getLocale())))
                     .build();
 
-        final Patient patient = patientService.createPatient(userForm.getFirstName(), userForm.getLastName(),
-                userForm.getPhoneNumber(), userForm.getEmail(), userForm.getPassword());
+        Patient patient = null;
+
+        try {
+            patient = patientService.createPatient(userForm.getFirstName(), userForm.getLastName(),
+                    userForm.getPhoneNumber(), userForm.getEmail(), userForm.getPassword());
+        } catch (RepeatedEmailException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Duplicated email")).build();
+        } catch (NotValidFirstNameException | NotValidLastNameException | NotValidPhoneNumberException |
+                NotValidEmailException | NotValidPasswordException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("There is an error on the form information")).build();
+        } catch(NotCreatePatientException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Patient not created")).build();
+        }
+
 
         final Verification verification = patientService.createToken(patient);
 
@@ -168,9 +183,7 @@ public class PatientApiController extends BaseApiController {
     @Produces(value = { MediaType.APPLICATION_JSON, })
     public Response loggedUser() throws NotFoundPacientException, NotValidEmailException {
         final Patient patient = userDetailsService.getLoggedUser();
-        LOGGER.debug("Patient HOLA: " + patient.getEmail());
         return Response.ok(new PatientDTO(patient)).build();
     }
-
 
 }

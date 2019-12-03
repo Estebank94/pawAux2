@@ -78,7 +78,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.userDetailsService(userDetailsService)
                 .authorizeRequests()
-                    .antMatchers("/api/v1/patient/me").permitAll()
+                    .antMatchers("/api/**/patient/me").permitAll()
                     .antMatchers(HttpMethod.POST, "/api/**/patient/login").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/**/patient/register").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/**/doctor/register").anonymous()
