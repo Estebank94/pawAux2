@@ -16,8 +16,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Base64;
 import java.util.concurrent.TimeUnit;
@@ -42,10 +47,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private StatelessAuthenticationFilter statelessAuthenticationFilter;
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    };
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Bean
     public DaoAuthenticationProvider authProvider(){
@@ -57,49 +60,48 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-        auth.authenticationProvider(authProvider());
-
-        //auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
-
-        //add our users for in memory authentication
-//        auth.inMemoryAuthentication().withUser("martina").password("martina").roles("DOCTOR");
-//        auth.inMemoryAuthentication().withUser("esteban").password("esteban").roles("DOCTOR");
-//        auth.inMemoryAuthentication().withUser("oliver").password("oliver").roles("PACIENTE");
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+//        auth.authenticationProvider(authProvider());
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/css/**", "/javascript/**", "/images/**", "/favicon.ico", "/403");
+        web.ignoring().antMatchers("/css/**",
+                "/javascript/**",
+                "/images/**",
+                "/favicon.ico",
+                "/403");
     }
 
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.userDetailsService(userDetailsService)
-                .sessionManagement()
-            .and().authorizeRequests()
-                .antMatchers("/doctorPanel/**").hasRole("DOCTOR")
-                .antMatchers("/doctorProfile/").hasRole("DOCTOR")
-                .antMatchers("/patientPanel/**").hasRole("PATIENT")
-                //.antMatchers(HttpMethod.DELETE).authenticated()
-                //.antMatchers(HttpMethod.POST).authenticated()
-                //.antMatchers(HttpMethod.PUT).authenticated()
-                //.antMatchers(HttpMethod.PATCH).authenticated()
-            .and().formLogin()
-                .usernameParameter("j_username")
-                .passwordParameter("j_password")
-                .loginPage("/showLogIn").successHandler(successHandler()).defaultSuccessUrl("/")
-                .permitAll()
-
-            .and().rememberMe().rememberMeParameter("j_rememberme").userDetailsService(userDetailsService)
-                .key(rememberMeKey).tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(30))
-            .and().logout()
-                .logoutSuccessUrl("/")
-                .permitAll().and().exceptionHandling()
-                .accessDeniedPage("/403")
-            .and().csrf().disable();
+                .authorizeRequests()
+                    .antMatchers("/api/v1/patient/me").permitAll()
+                    .antMatchers(HttpMethod.POST, "/api/**/patient/login").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/**/patient/register").anonymous()
+                    .antMatchers(HttpMethod.POST, "/api/**/doctor/register").anonymous()
+                     //para ver si estoy loggeado
+//                    .antMatchers("/api/users/me/**").authenticated()
+                    .antMatchers(HttpMethod.POST).authenticated()
+                    .antMatchers(HttpMethod.DELETE).authenticated()
+                    .antMatchers(HttpMethod.PUT).authenticated()
+                    .antMatchers("/**").permitAll()
+                .and().sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().formLogin()
+                    .usernameParameter("Jusername")
+                    .passwordParameter("Jpassword")
+                    .loginProcessingUrl("/api/**/patient/login")
+                    .successHandler(statelessAuthenticationSuccessHandler)
+                    .failureHandler(new SimpleUrlAuthenticationFailureHandler())
+                .and().exceptionHandling()
+                    .authenticationEntryPoint(new Http403ForbiddenEntryPoint())
+                .and().csrf().disable()
+                    .addFilterBefore(statelessAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
+
 
     @Bean
     public AuthenticationSuccessHandler successHandler() {
@@ -112,8 +114,14 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+
     @Bean
-    public String authTokenKey () {
+    public String authTokenKey() {
         return Base64.getEncoder().encodeToString("576e5a7134743777217a25432a462d4a".getBytes());
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

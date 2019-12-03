@@ -37,11 +37,12 @@ public class Patient {
     private boolean enabled;
 
     @OneToMany(mappedBy="patient", cascade = {CascadeType.PERSIST})
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @LazyCollection(LazyCollectionOption.TRUE)
     List<Favorite> favorites;
 
     @OneToOne(fetch = FetchType.LAZY, optional = true, mappedBy = "patient")
     private Verification verification;
+
 
     public Patient( String firstName, String lastName, String phoneNumber, String email, String password) {
         this.id = null;
@@ -50,6 +51,27 @@ public class Patient {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
+    }
+
+    public Patient(Integer id, String firstName, String lastName, String phoneNumber, String email, String password, Doctor doctor, boolean enabled) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.password = password;
+        this.enabled = enabled;
+        this.doctor = doctor;
+    }
+
+    public Patient(Integer id, String firstName, String lastName, String phoneNumber, String email, String password, boolean enabled) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.password = password;
+        this.enabled = enabled;
     }
 
     public Patient(Integer id, String firstName, String lastName, String phoneNumber, String email, String password) {
@@ -61,14 +83,7 @@ public class Patient {
         this.password = password;
     }
 
-    public Patient(Integer id, String firstName, String lastName, String phoneNumber, String email, String password, Integer doctorId) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.password = password;
-    }
+
 
     @Autowired
     public Patient(){

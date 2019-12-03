@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 public class TokenAuthtenticationService {
+
     private static final String AUTH_HEADER = "X-AUTH-TOKEN";
 
     @Autowired

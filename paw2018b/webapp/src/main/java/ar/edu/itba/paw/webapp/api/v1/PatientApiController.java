@@ -13,6 +13,7 @@ import ar.edu.itba.paw.models.exceptions.NotValidPatientIdException;
 import ar.edu.itba.paw.models.Verification;
 import ar.edu.itba.paw.models.exceptions.*;
 
+import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
 import ar.edu.itba.paw.webapp.dto.PatientDTO;
 import ar.edu.itba.paw.webapp.forms.PatientForm;
 import org.slf4j.Logger;
@@ -60,6 +61,9 @@ public class PatientApiController extends BaseApiController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
 
     private static final String VERIFICATION_TOKEN_TEMPLATE_NAME = "welcomeMail.html";
 
@@ -157,6 +161,15 @@ public class PatientApiController extends BaseApiController {
         final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(patient.getId())).build();
 
         return Response.created(uri).entity(new PatientDTO(patient, buildBaseURI(uriInfo))).build();
+    }
+
+    @GET
+    @Path("/me")
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response loggedUser() throws NotFoundPacientException, NotValidEmailException {
+        final Patient patient = userDetailsService.getLoggedUser();
+        LOGGER.debug("Patient HOLA: " + patient.getEmail());
+        return Response.ok(new PatientDTO(patient)).build();
     }
 
 

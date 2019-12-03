@@ -42,7 +42,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 @EnableWebMvc
-@ComponentScan({ "ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.services", "ar.edu.itba.paw.persistence", "ar.edu.itba.paw.webapp.auth" })
+@ComponentScan({ "ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.services", "ar.edu.itba.paw.persistence",
+        "ar.edu.itba.paw.webapp.auth", "ar.edu.itba.paw.webapp.api" })
 @Configuration
 @EnableTransactionManagement
 public class WebConfig extends WebMvcConfigurerAdapter {
@@ -52,8 +53,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	@Value("../resource/schema.sql")
 	private Resource schemaSQL;
 
-	@Autowired
-	private UserDetailsService userDetailsService;
+//	@Autowired
+//	private UserDetailsService userDetailsService;
 
 	@Bean
 	public ViewResolver viewResolver() {
@@ -122,13 +123,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Bean
-	public DaoAuthenticationProvider authProvider(){
-		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-		authProvider.setUserDetailsService(userDetailsService);
-		authProvider.setPasswordEncoder(passwordEncoder());
-		return authProvider;
-	}
+//	@Bean
+//	public DaoAuthenticationProvider authProvider(){
+//		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+//		authProvider.setUserDetailsService(userDetailsService);
+//		authProvider.setPasswordEncoder(passwordEncoder());
+//		return authProvider;
+//	}
 
 	@Bean
 	public MultipartResolver multipartResolver() {

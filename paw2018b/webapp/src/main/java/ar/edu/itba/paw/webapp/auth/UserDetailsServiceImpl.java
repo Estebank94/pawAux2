@@ -26,6 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private PatientService us;
 
+
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
     @Override
@@ -33,13 +34,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         Patient user = null;
         user = us.findPatientByEmail(email);
-        /*
-        try {
-            user = us.findPatientByEmail(email);
-        } catch (NotValidEmailException | NotFoundPacientException e) {
-            e.printStackTrace();
-        }
-         */
 
         if (user == null) {
             throw new UsernameNotFoundException("No user found with email " + email);
@@ -49,23 +43,27 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         authorities.add(new SimpleGrantedAuthority("ROLE_PATIENT"));
 
 
-        if(user.getDoctor() != null && user.getDoctor().getId() != 0) {
+        if (user.getDoctor() != null && user.getDoctor().getId() != 0) {
             authorities.add(new SimpleGrantedAuthority("ROLE_DOCTOR"));
         }
 
-        return new org.springframework.security.core.userdetails.User(email, user.getPassword(), user.isEnabled(), true, true, true, authorities);
+        return new org.springframework.security.core.userdetails.User(email, user.getPassword(), user.isEnabled(),
+                true, true, true, authorities);
     }
 
 
-
     public Patient getLoggedUser() throws NotFoundPacientException, NotValidEmailException {
+        String hola = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        LOGGER.debug("HOLA!! : " + hola);
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null) { // TODO: Ver que onda con esto
             return null;
         }
-
         final Patient user = us.findPatientByEmail(auth.getName());
-        LOGGER.debug("Currently logged user is {}", user.getId());
+        if(user == null){
+            LOGGER.debug("Auth name " + auth.getName());
+        }
+        LOGGER.debug("Currently logged user is {}", auth.getDetails());
         return user;
     }
 }
