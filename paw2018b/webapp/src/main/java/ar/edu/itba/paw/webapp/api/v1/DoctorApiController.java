@@ -12,11 +12,13 @@ import ar.edu.itba.paw.models.exceptions.NotValidPageException;
 import ar.edu.itba.paw.models.exceptions.*;
 
 
-
+import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
 import ar.edu.itba.paw.webapp.dto.DoctorDTO;
 import ar.edu.itba.paw.webapp.dto.DoctorListDTO;
+import ar.edu.itba.paw.webapp.dto.DoctorPatientDTO;
 import ar.edu.itba.paw.webapp.dto.PatientDTO;
 
+import ar.edu.itba.paw.webapp.forms.BasicProfessionalForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
 import com.fasterxml.jackson.databind.deser.Deserializers;
@@ -31,6 +33,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.TemplateEngine;
 
 import javax.print.Doc;
@@ -42,11 +45,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
 import java.net.URI;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 @Path("v1/doctor")
@@ -61,9 +63,11 @@ public class DoctorApiController extends BaseApiController {
     @Autowired
     private PatientService patientService;
 
-
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
 
     @Context
     private UriInfo uriInfo;
@@ -231,10 +235,10 @@ public class DoctorApiController extends BaseApiController {
         Patient patient = null;
 
         try{
-            doctor = doctorService.createDoctor(userForm.getFirstName(), userForm.getLastName(), userForm.getPhoneNumber(),
-                    userForm.getSex(), userForm.getLicence(), null, userForm.getAddress());
             patient = patientService.createPatient(userForm.getFirstName(), userForm.getLastName(),
                     userForm.getPhoneNumber(), userForm.getEmail(), userForm.getPassword());
+            doctor = doctorService.createDoctor(userForm.getFirstName(), userForm.getLastName(), userForm.getPhoneNumber(),
+                    userForm.getSex(), userForm.getLicence(), null, userForm.getAddress());
             patientService.setDoctorId(patient, doctor);
         }
         catch (RepeatedEmailException e){
@@ -256,6 +260,7 @@ public class DoctorApiController extends BaseApiController {
                     .entity(errorMessageToJSON("Id from doctor or patient not valid. Error associating")).build();
         }
 
+
         final Verification verification = patientService.createToken(patient);
 
         /* Prepare the evaluation context */
@@ -269,40 +274,90 @@ public class DoctorApiController extends BaseApiController {
         /* send welcome email */
         emailService.sendEmail(patient.getEmail(), subject, htmlContent);
 
+        final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(doctor.getId())).build();
 
-//        Description description = new Description(professionalForm.getCertificate(), professionalForm.getLanguages(),
-//                professionalForm.getEducation());
-//
-//        List<WorkingHours> workingHours = professionalForm.workingHoursList();
-//
-//        doctor.setDescription(description);
-//        doctor.setWorkingHours(workingHours);
-
-        final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(patient.getId())).build();
-
-        //Todo: aca estamos creando un patientDTO, pero estamos en doc ... esto esta bien, que onda?
         return Response.created(uri).entity(new PatientDTO(patient, buildBaseURI(uriInfo))).build();
+//        return Response.created(uri).entity(new DoctorPatientDTO(patient, buildBaseURI(uriInfo))).build();
     }
 
 
-    //TODO: Dudoso que tengamos codigo repetido.  No se si no le estoy pifiando en algo que tiene que ser
-    // doctor y esta puesto como patient
-    @GET
-    @Path("/confirm")
-    @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response confirmUser(@QueryParam("token") @DefaultValue("") String token) throws VerificationNotFoundException {
+    @POST
+    @Path("/registerProfessional")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response createProfessionalUser(@Valid final BasicProfessionalForm professionalForm){
 
-        final Verification verification = patientService.findToken(token).orElseThrow(VerificationNotFoundException::new);
-        final Patient patient = verification.getPatient();
-        patientService.enableUser(patient);
+        LOGGER.debug("entre");
+        Patient patient = null;
+        try{
+            patient = userDetailsService.getLoggedUser();
+        } catch (NotFoundPacientException | NotValidEmailException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Doctor/Patient not found")).build();
+        }
 
-        /* Auto-Login */
-        Authentication authentication = new UsernamePasswordAuthenticationToken(patient.getEmail(), patient.getPassword());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Doctor doctor = patient.getDoctor();
+        if(doctor == null){
+            //hacer algo
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Doctor is NULL")).build();
+        }
 
-        final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(patient.getId())).build();
+        /* Avatar */
+//        MultipartFile file = professionalForm.getAvatar();
 
-        return Response.created(uri).entity(new PatientDTO(patient, buildBaseURI(uriInfo))).build();
+//        if( file != null && file.getSize() != 0 ){
+//
+//            String mimetype = file.getContentType();
+//            String type = mimetype.split("/")[0];
+//
+//            if (!type.equals("image")) {
+//                LOGGER.warn("File is not an image");
+//            }else {
+//                try {
+//                    doctorService.setDoctorAvatar(doctor, file.getBytes());
+//                } catch (IOException e) {
+//                    LOGGER.warn("Could not upload image");
+//                }
+//            }
+//        }
+
+        Description description;
+        if(professionalForm.getCertificate() != null && professionalForm.getLanguages()
+                != null && professionalForm.getEducation() != null){
+
+            description = new Description(professionalForm.getCertificate(),
+                    professionalForm.getLanguages(), professionalForm.getEducation());
+
+            doctorService.setDescription(doctor,description);
+        }
+
+        if(professionalForm.getSpecialty() != null){
+            LOGGER.debug("ENTRE A SPECIALTY");
+            Set<Specialty> specialties = new HashSet<>();
+            for(String sp : professionalForm.getSpecialty()){
+                specialties.add(new Specialty(sp));
+            }
+            doctorService.setDoctorSpecialty(doctor,specialties);
+        }
+//
+//        if(professionalForm.getInsurancePlan() != null && professionalForm.getInsurance() != null){
+//            LOGGER.debug("ENTRE A insurances");
+//            LOGGER.debug("insuracePlan" + professionalForm.getInsurancePlan().size());
+//            LOGGER.debug("insurace" + professionalForm.getInsurance().size());
+//            doctorService.setDoctorInsurancePlans(doctor, professionalForm.getInsurancePlans());
+//        }
+
+//        LOGGER.debug("workH" + professionalForm.workingHoursList().size());
+//        doctorService.setWorkingHours(doctor, professionalForm.workingHoursList());
+
+
+        final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(doctor.getId())).build();
+
+        return Response.created(uri).entity(new DoctorDTO(doctor, buildBaseURI(uriInfo))).build();
     }
+
+
+
 
 }

@@ -25,6 +25,8 @@ public class Doctor {
     String sex;
     String address;
     byte[] profilePicture;
+    Integer licence;
+
     @ManyToMany(cascade = {CascadeType.ALL},
                 fetch = FetchType.EAGER
     )
@@ -65,7 +67,7 @@ public class Doctor {
     @OneToOne(mappedBy="doctor", cascade = {CascadeType.ALL})
     Description description;
 
-    Integer licence;
+
     String district;
 
     @OneToMany(mappedBy="doctor", cascade = {CascadeType.PERSIST})
@@ -117,13 +119,15 @@ public class Doctor {
 
     }
 
-    public Doctor(String firstName, String lastName, String phoneNumber, String sex, Integer licence, byte[] profilePicture, String address){
+    public Doctor(String firstName, String lastName, String phoneNumber, String sex,
+                  Integer licence, byte[] profilePicture, String address){
         this.firstName = firstName;
         this.lastName = lastName;
         this.sex = sex;
         this.address = address;
         this.profilePicture = profilePicture;
         this.phoneNumber = phoneNumber;
+        this.licence = licence;
     }
 
     public String getPhoneNumber() {

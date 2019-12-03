@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.dto;
 import ar.edu.itba.paw.models.Doctor;
 
+import java.net.URI;
+
 public class DoctorDTO {
     private Integer id;
     private String firstName;
@@ -19,8 +21,8 @@ public class DoctorDTO {
     // private String district;
 
 
-    // private URI uri;
-    /*
+     private URI uri;
+
     public DoctorDTO(Doctor doctor, URI baseURI){
         this.id = doctor.getId();
         this.firstName = doctor.getFirstName();
@@ -28,9 +30,9 @@ public class DoctorDTO {
         this.sex = doctor.getSex();
         this.address = doctor.getAddress();
         this.phoneNumber = doctor.getPhoneNumber();
-       // this.uri = baseURI.resolve(String.valueOf(this.id));
+        this.uri = baseURI.resolve(String.valueOf(this.id));
     }
-    */
+
     public DoctorDTO(){
     }
 

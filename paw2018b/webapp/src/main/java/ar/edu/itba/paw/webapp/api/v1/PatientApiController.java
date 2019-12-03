@@ -169,7 +169,7 @@ public class PatientApiController extends BaseApiController {
         final Patient patient = verification.getPatient();
         patientService.enableUser(patient);
 
-        /* Auto Login */
+        /* Auto Login - todo: se esta rompiendo ? */
         Authentication authentication = new UsernamePasswordAuthenticationToken(patient.getEmail(), patient.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
