@@ -13,10 +13,7 @@ import ar.edu.itba.paw.models.exceptions.*;
 
 
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
-import ar.edu.itba.paw.webapp.dto.DoctorDTO;
-import ar.edu.itba.paw.webapp.dto.DoctorListDTO;
-import ar.edu.itba.paw.webapp.dto.DoctorPatientDTO;
-import ar.edu.itba.paw.webapp.dto.PatientDTO;
+import ar.edu.itba.paw.webapp.dto.*;
 
 import ar.edu.itba.paw.webapp.forms.BasicProfessionalForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
@@ -33,6 +30,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.TemplateEngine;
 
@@ -73,7 +71,6 @@ public class DoctorApiController extends BaseApiController {
     private UriInfo uriInfo;
 
     @Autowired
-
     private MessageSource messageSource;
 
     @Autowired
@@ -305,7 +302,7 @@ public class DoctorApiController extends BaseApiController {
 
         /* Avatar */
 //        MultipartFile file = professionalForm.getAvatar();
-
+//
 //        if( file != null && file.getSize() != 0 ){
 //
 //            String mimetype = file.getContentType();
@@ -333,30 +330,33 @@ public class DoctorApiController extends BaseApiController {
         }
 
         if(professionalForm.getSpecialty() != null){
-            LOGGER.debug("ENTRE A SPECIALTY");
             Set<Specialty> specialties = new HashSet<>();
             for(String sp : professionalForm.getSpecialty()){
                 specialties.add(new Specialty(sp));
             }
             doctorService.setDoctorSpecialty(doctor,specialties);
         }
-//
-//        if(professionalForm.getInsurancePlan() != null && professionalForm.getInsurance() != null){
-//            LOGGER.debug("ENTRE A insurances");
-//            LOGGER.debug("insuracePlan" + professionalForm.getInsurancePlan().size());
-//            LOGGER.debug("insurace" + professionalForm.getInsurance().size());
-//            doctorService.setDoctorInsurancePlans(doctor, professionalForm.getInsurancePlans());
-//        }
 
-//        LOGGER.debug("workH" + professionalForm.workingHoursList().size());
-//        doctorService.setWorkingHours(doctor, professionalForm.workingHoursList());
+        if(professionalForm.getInsurancePlan() != null){
+            LOGGER.debug("ENTRE A insurances");
+            LOGGER.debug("insuracePlan" + professionalForm.getInsurancePlan().size());
+            doctorService.setDoctorInsurancePlans(doctor, professionalForm.getInsurancePlans());
+        }
+
+        List<WorkingHours> workingHoursList = new ArrayList<>();
+        for(WorkingHoursDTO w : professionalForm.getWorkingHours()){
+            WorkingHours workingHours = new WorkingHours(w.getDayOfWeek(), w.getStartTime(), w.getFinishTime());
+            workingHoursList.add(workingHours);
+        }
+
+        LOGGER.debug("workH" + workingHoursList.size());
+        doctorService.setWorkingHours(doctor, workingHoursList);
 
 
         final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(doctor.getId())).build();
 
         return Response.created(uri).entity(new DoctorDTO(doctor, buildBaseURI(uriInfo))).build();
     }
-
 
 
 

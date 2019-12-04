@@ -4,6 +4,8 @@ import ar.edu.itba.paw.interfaces.persistance.*;
 import ar.edu.itba.paw.interfaces.services.DoctorService;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -508,6 +510,10 @@ public class DoctorServiceImpl implements DoctorService {
     @Transactional
     public Optional<Doctor> setWorkingHours(Doctor doctor, List<WorkingHours> workingHours){
         LOGGER.debug("setWorkingHours");
+        if(!Hibernate.isInitialized(doctor)){
+            Hibernate.initialize(doctor);
+        }
+        Hibernate.initialize(doctor.getWorkingHours());
         doctorDao.setWorkingHours(doctor, workingHours);
         return Optional.ofNullable(doctor);
     }
