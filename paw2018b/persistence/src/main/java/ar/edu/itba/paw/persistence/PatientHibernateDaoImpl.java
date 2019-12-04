@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+
 @Repository
 public class PatientHibernateDaoImpl implements PatientDao {
 
@@ -29,8 +30,6 @@ public class PatientHibernateDaoImpl implements PatientDao {
     @PersistenceContext
     private EntityManager em;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Override
     public Patient createPatient(String firstName, String lastName, String phoneNumber, String email, String password) throws RepeatedEmailException {

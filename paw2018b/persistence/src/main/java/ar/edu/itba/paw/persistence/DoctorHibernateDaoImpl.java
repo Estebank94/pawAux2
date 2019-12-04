@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.persistance.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.NotCreateDoctorException;
 import ar.edu.itba.paw.models.exceptions.RepeatedLicenceException;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;

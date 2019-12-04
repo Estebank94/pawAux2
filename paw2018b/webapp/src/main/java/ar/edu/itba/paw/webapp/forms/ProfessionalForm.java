@@ -28,12 +28,13 @@ public class ProfessionalForm {
 
     private String languages;
 
-    @NotNull
-    private List<String> insurance;
+//    @NotNull
+//    private List<String> insurance;
     @NotNull
     private List<String> insurancePlan;
     @NotNull
     private Set<String> specialty;
+
 
 
     private LocalTime monStart;
@@ -199,13 +200,13 @@ public class ProfessionalForm {
         this.languages = languages;
     }
 
-    public List<String> getInsurance() {
-        return insurance;
-    }
-
-    public void setInsurance(List<String> insurance) {
-        this.insurance = insurance;
-    }
+//    public List<String> getInsurance() {
+//        return insurance;
+//    }
+//
+//    public void setInsurance(List<String> insurance) {
+//        this.insurance = insurance;
+//    }
 
     public String[] getWORKING_HOURS() {
         return WORKING_HOURS;
