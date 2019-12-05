@@ -1,13 +1,18 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistance.SearchDao;
-import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.Insurance;
+import ar.edu.itba.paw.models.InsurancePlan;
+import ar.edu.itba.paw.models.Specialty;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by estebankramer on 02/09/2018.
@@ -28,41 +33,7 @@ public class SearchDaoImpl implements SearchDao {
 
         return list.isEmpty() ? Collections.emptyList() : list;
     }
-
-//    @Override
-//    public List<Insurance> listInsurancesWithDoctors(){
-//
-//        CriteriaBuilder cb = em.getCriteriaBuilder();
-//        CriteriaQuery<Insurance> query = cb.createQuery(Insurance.class);
-//        Root<Insurance> root = query.from(Insurance.class);
-//
-//        Join<Insurance, Doctor> insuranceWithDoctors = root.join(Insurance.g)
-
-//        query.append("SELECT DISTINCT insuranceName, insurance.id ");
-//        query.append("FROM medicalCare ");
-//        query.append("JOIN insurancePlan ON medicalCare.insurancePlanId = insurancePlan.id " );
-//        query.append("JOIN insurance ON insurance.id = insurancePlan.insuranceId");
-
-//        return list;
-//    }
-
-
-//    @Override
-//    public Optional<List<ListItem>> listSpecialtiesWithDoctors() {
-//        StringBuilder query = new StringBuilder();
-//        query.append("SELECT DISTINCT specialtyName, specialty.id ");
-//        query.append("FROM specialty ");
-//        query.append("JOIN doctorSpecialty ON doctorSpecialty.specialtyId = specialty.id;");
-//
-//        final List<ListItem> list = jdbcTemplate.query(query.toString(), ROW_MAPPER_SPECIALTY);
-//
-//        if(list.isEmpty()){
-//            return Optional.empty();
-//        }
-//        return Optional.of(list);
-//    }
-
-
+    
     @Override
     public List<Specialty> listSpecialties() {
 
@@ -72,6 +43,19 @@ public class SearchDaoImpl implements SearchDao {
 
     }
 
+    @Override
+    public List<Specialty> listSpecialtiesWithDoctors() {
+        final TypedQuery<Specialty> query = em.createQuery("select distinct s from Doctor d join d.specialties s", Specialty.class);
+        final List<Specialty> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
+    @Override
+    public List<InsurancePlan> listInsuranceWithDoctors() {
+        final TypedQuery<InsurancePlan> query = em.createQuery("select distinct s from Doctor d join d.insurancePlans s", InsurancePlan.class);
+        final List<InsurancePlan> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
 
     @Override
     public List<InsurancePlan> listInsurancePlans() {

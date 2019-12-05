@@ -5,7 +5,9 @@ import ar.edu.itba.paw.models.InsurancePlan;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InsuranceDTO {
     // private Integer id;
@@ -51,4 +53,23 @@ public class InsuranceDTO {
                 ", plans=" + plans +
                 '}';
     }
+
+    public static List<InsuranceDTO> insurancePlanMapping (List<InsurancePlan> insurancePlans) {
+        Map<String, List<String>> map= new HashMap<>();
+        for (InsurancePlan ip : insurancePlans) {
+            String insurance = ip.getInsurance().getName();
+            if (!map.containsKey(insurance)){
+                List<String> insurancePlansList = new ArrayList<>();
+                map.put(insurance, insurancePlansList);
+            }
+            List<String> toAdd = map.get(insurance);
+            toAdd.add(ip.getPlan());
+        }
+        List<InsuranceDTO> insuranceDTOList = new ArrayList<>();
+        for (String insurance : map.keySet()){
+            insuranceDTOList.add(new InsuranceDTO(insurance, map.get(insurance)));
+        }
+        return insuranceDTOList;
+    }
+
 }
