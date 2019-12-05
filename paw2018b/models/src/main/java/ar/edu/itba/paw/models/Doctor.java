@@ -50,6 +50,7 @@ public class Doctor {
     String phoneNumber;
 
     @OneToMany(mappedBy = "doctor", cascade = {CascadeType.ALL})
+    @LazyCollection(LazyCollectionOption.TRUE)
     List<WorkingHours> workingHours;
 
 
