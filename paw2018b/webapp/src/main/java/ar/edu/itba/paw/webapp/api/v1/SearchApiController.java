@@ -2,9 +2,11 @@ package ar.edu.itba.paw.webapp.api.v1;
 
 import ar.edu.itba.paw.interfaces.services.SearchService;
 import ar.edu.itba.paw.models.Insurance;
+import ar.edu.itba.paw.models.InsurancePlan;
 import ar.edu.itba.paw.models.Specialty;
 import ar.edu.itba.paw.webapp.dto.FutureDayListDTO;
 import ar.edu.itba.paw.webapp.dto.InsuranceListDTO;
+import ar.edu.itba.paw.webapp.dto.InsurancePlanListDTO;
 import ar.edu.itba.paw.webapp.dto.SpecialtyListDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,12 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Context;
 import java.util.List;
 
 @Path("v1/")
@@ -48,6 +50,24 @@ public class SearchApiController extends BaseApiController {
         List<Insurance> insuranceList = searchService.listInsurances();
         LOGGER.info("Insurance List");
         return Response.ok(new InsuranceListDTO(insuranceList)).build();
+    }
+
+    @GET
+    @Path("specialtiesdoc")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getSpecialtiesWithDoctors(){
+        List<Specialty> specialtyList = searchService.listSpecialtiesWithDoctors();
+        LOGGER.info("Specialtys List");
+        return Response.ok(new SpecialtyListDTO(specialtyList)).build();
+    }
+
+    @GET
+    @Path("insurancesdoc")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getInsurancesWithDoctors(){
+        List<InsurancePlan> specialtyList = searchService.listInsuranceWithDoctors();
+        LOGGER.info("Specialtys List");
+        return Response.ok(new InsurancePlanListDTO(specialtyList)).build();
     }
 
     @GET
