@@ -1,10 +1,12 @@
 package ar.edu.itba.paw.interfaces.services;
 
+import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.Verification;
 import ar.edu.itba.paw.models.exceptions.*;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PatientService {
@@ -25,4 +27,7 @@ public interface PatientService {
 
     public void deleteUser(final Patient patient);
 
+    public List<Appointment> getHistoricalAppointments(Patient patient);
+
+    public List<Appointment> getFutureAppointments (Patient patient);
 }

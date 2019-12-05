@@ -4,7 +4,6 @@ import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
 
 public class PatientAppointmentDTO {
-    private Integer id;
     private String appointmentDay;
     private String appointmentTime;
     private Boolean appointmentCancelled;
@@ -13,19 +12,10 @@ public class PatientAppointmentDTO {
     public PatientAppointmentDTO (){}
 
     public PatientAppointmentDTO (Appointment appointment){
-        this.id = appointment.getId();
         this.appointmentDay = appointment.getAppointmentDay();
         this.appointmentTime = appointment.getAppointmentTime();
         this.appointmentCancelled = appointment.getAppointmentCancelled();
         this.doctor = new DoctorDTO(appointment.getDoctor());
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getAppointmentDay() {
