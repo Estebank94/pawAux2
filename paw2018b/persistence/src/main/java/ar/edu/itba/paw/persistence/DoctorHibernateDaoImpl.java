@@ -374,6 +374,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     }
 
     public Boolean setWorkingHours(Doctor doctor, List<WorkingHours> workingHours){
+
         doctor.addWorkingHours(workingHours);
         em.merge(doctor);
         workingHours.stream().forEach(workingHour -> workingHour.setDoctor(doctor));
@@ -389,12 +390,11 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     }
 
     public Boolean setDoctorInsurances(Doctor doctor, List<InsurancePlan> insurancePlans){
-
+        em.merge(doctor);
         doctor.addInsurancePlans(insurancePlans);
         for(InsurancePlan i : insurancePlans){
             i.setId(insurancePlanDao.findInsurancePlanByPlanName(i.getPlan()).getId());
         }
-        em.merge(doctor);
         return true;
     }
 
