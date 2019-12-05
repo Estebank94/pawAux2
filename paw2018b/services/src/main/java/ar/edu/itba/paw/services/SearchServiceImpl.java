@@ -29,17 +29,6 @@ public class SearchServiceImpl implements SearchService {
         return searchDao.listInsurances();
     }
 
-//    @Override
-//    public List<ListItem>> listInsurancesWithDoctors() {
-//        return searchDao.listInsurancesWithDoctors();
-//    }
-
-//    @Transactional
-//    @Override
-//    public Optional<List<ListItem>> listSpecialtiesWithDoctors() {
-//        return searchDao.listSpecialtiesWithDoctors();
-//    }
-//
     @Override
     public List<Specialty> listSpecialties() {
         return searchDao.listSpecialties();

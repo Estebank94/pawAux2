@@ -33,41 +33,7 @@ public class SearchDaoImpl implements SearchDao {
 
         return list.isEmpty() ? Collections.emptyList() : list;
     }
-
-//    @Override
-//    public List<Insurance> listInsurancesWithDoctors(){
-//
-//        CriteriaBuilder cb = em.getCriteriaBuilder();
-//        CriteriaQuery<Insurance> query = cb.createQuery(Insurance.class);
-//        Root<Insurance> root = query.from(Insurance.class);
-//
-//        Join<Insurance, Doctor> insuranceWithDoctors = root.join(Insurance.g)
-
-//        query.append("SELECT DISTINCT insuranceName, insurance.id ");
-//        query.append("FROM medicalCare ");
-//        query.append("JOIN insurancePlan ON medicalCare.insurancePlanId = insurancePlan.id " );
-//        query.append("JOIN insurance ON insurance.id = insurancePlan.insuranceId");
-
-//        return list;
-//    }
-
-
-//    @Override
-//    public Optional<List<ListItem>> listSpecialtiesWithDoctors() {
-//        StringBuilder query = new StringBuilder();
-//        query.append("SELECT DISTINCT specialtyName, specialty.id ");
-//        query.append("FROM specialty ");
-//        query.append("JOIN doctorSpecialty ON doctorSpecialty.specialtyId = specialty.id;");
-//
-//        final List<ListItem> list = jdbcTemplate.query(query.toString(), ROW_MAPPER_SPECIALTY);
-//
-//        if(list.isEmpty()){
-//            return Optional.empty();
-//        }
-//        return Optional.of(list);
-//    }
-
-
+    
     @Override
     public List<Specialty> listSpecialties() {
 

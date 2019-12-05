@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.models.Insurance;
+import ar.edu.itba.paw.models.InsurancePlan;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class InsuranceListDTO {
     private List<InsuranceDTO> insurances;
