@@ -79,14 +79,14 @@ public class SearchDaoImpl implements SearchDao {
 
     @Override
     public List<Specialty> listSpecialtiesWithDoctors() {
-        final TypedQuery<Specialty> query = em.createQuery("select s from Doctor d join d.specialties s", Specialty.class);
+        final TypedQuery<Specialty> query = em.createQuery("select distinct s from Doctor d join d.specialties s", Specialty.class);
         final List<Specialty> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
     }
 
     @Override
     public List<InsurancePlan> listInsuranceWithDoctors() {
-        final TypedQuery<InsurancePlan> query = em.createQuery("select s from Doctor d join d.insurancePlans s", InsurancePlan.class);
+        final TypedQuery<InsurancePlan> query = em.createQuery("select distinct s from Doctor d join d.insurancePlans s", InsurancePlan.class);
         final List<InsurancePlan> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
     }

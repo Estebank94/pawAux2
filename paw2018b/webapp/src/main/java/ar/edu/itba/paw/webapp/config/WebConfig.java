@@ -95,15 +95,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 //		ds.setUrl("jdbc:postgresql://10.16.1.110:5432/paw-2018b-06");
 
 		/* Palito - Development*/
-//		ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
-//		ds.setUsername("postgres");
-//		ds.setPassword("admin123");
+		ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
+		ds.setUsername("postgres");
+		ds.setPassword("admin123");
 
 
 		/* Development Martina */
-		ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
-		ds.setUsername("postgres");
-		ds.setPassword("987456Ms");
+//		ds.setUrl("jdbc:postgresql://localhost:5432/postgres");
+//		ds.setUsername("postgres");
+//		ds.setPassword("987456Ms");
 
 		return ds;
 	}
