@@ -5,7 +5,7 @@ import 'rc-steps/assets/index.css';
 import 'rc-steps/assets/iconfont.css';
 import Steps, { Step } from 'rc-steps';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import Form from 'react-bootstrap/Form';
 import Tab from 'react-bootstrap/Tab';
 import Nav from 'react-bootstrap/Nav';
@@ -53,14 +53,18 @@ class Register extends React.Component {
     },
     current: 0,
     submitted: false,
+    role: 'patient',
   };
 
   componentWillMount() {
+    const { role } = this.props.match.params;
+    console.log('Registering ' + role);
+    this.setState({ role });
     fetchApi('/specialties', 'GET')
       .then(response => {
         let allSpecialties = [];
         response.specialties.map(specialty => allSpecialties.push({value: specialty.id, label: specialty.speciality}))
-        this.setState({allSpecialties}, console.log(allSpecialties));
+        this.setState({allSpecialties});
       })
   }
 
@@ -106,13 +110,12 @@ class Register extends React.Component {
   handleCheckboxChange(e) {
     const item = e.target.name;
     const isChecked = e.target.checked;
-    console.log(item, isChecked);
     this.setState(prevState => ({ languages: prevState.languages.set(item, isChecked), submitted: false }));
   }
 
   handleSubmit() {
     const { email, password, confirmPassword, name, lastName, address, phoneNumber, gender, current,
-      license, photo, studies, languages, specialties, insurances, insurancePlans, workingHours
+      license, photo, studies, languages, specialties, insurances, insurancePlans, workingHours, role
     } = this.state;
     this.setState({ submitted: true });
     if(current === 0) {
@@ -121,6 +124,24 @@ class Register extends React.Component {
       }
     } else if(current === 1) {
       if(name && lastName && address && phoneNumber && gender) {
+        if(role === 'patient') {
+          const body = {
+            firstName: name,
+            lastName: lastName,
+            email,
+            password,
+            passwordConfirmation: confirmPassword,
+            phoneNumber,
+            address,
+            sex: gender
+          }
+          fetchApi('/patient/register', 'POST', body).then((response) => {
+            console.log('succes', response)
+            this.setState({ current: 3 });
+          }).catch(err => {
+            console.log({err});
+          })
+        }
         this.setState({ current: current + 1, submitted: false })
       }
     } else if(current === 2) {
@@ -302,10 +323,8 @@ class Register extends React.Component {
           <label className={errors.gender || this.isEmpty(gender) ? 'text-danger' : ''}>Sexo</label>
           <select name="gender" value={gender} className={'form-control ' + (errors.gender || this.isEmpty(gender) ? 'is-invalid' : '')} onChange={(e) =>this.handleChange(e)}>
             <option value="">Elegir una opcion</option>
-            <option value="male">Masculino</option>
-            <option value="female">Femenino</option>
-            <option value="nonbinary">No Binario</option>
-            <option value="other">Otro</option>
+            <option value="M">Masculino</option>
+            <option value="F">Femenino</option>
           </select>
           {
             this.renderEmptyError(gender)
@@ -577,34 +596,43 @@ class Register extends React.Component {
 
 
   render() {
-    const { current } = this.state;
-    const role = 'specialist';
+    const { current, role } = this.state;
     return (
       <div className="body-background">
         <div className="container col-12-sm w-p-20">
           <div className="login-card w-shadow">
             {
-              role === 'patient' &&
-              <div>
-                <h3>Registrate como paciente</h3>
-                <p style={{marginBottom: 24 }}>Estas a unos pasos de acceder a los mejores medicos!</p>
+              role === 'patient' && current <= 2 &&
+              <h3>Registrate como paciente</h3>
+            }
+            {
+              role === 'specialist' && current <= 2 &&
+              <h3>Registrate como especialista</h3>
+            }
+            {
+              current <= 2 &&
+              <div style={{ marginTop: 32, marginBottom: 16 }}>
+                <Steps labelPlacement="vertical" current={current} icons={ <FontAwesomeIcon icon={faCoffee}/>}>
+                  <Step title="Datos Basicos"/>
+                  <Step title="Datos Personales"/>
+                  {
+                    role === 'specialist' &&
+                    <Step title="Datos Profesionales"/>
+                  }
+                </Steps>
               </div>
             }
             {
-              role === 'specialist' &&
+              current === 3 &&
               <div>
-                <h3>Registrate como especialista</h3>
-                <div style={{ marginTop: 32, marginBottom: 16 }}>
-                  <Steps labelPlacement="vertical" current={current} icons={ <FontAwesomeIcon icon={faCoffee}/>}>
-                    <Step title="Datos Basicos"/>
-                    <Step title="Datos Personales"/>
-                    <Step title="Datos Profesionales"/>
-                  </Steps>
-                </div>
+                <FontAwesomeIcon icon={faCheckCircle} color="#46ce23" size="4x"/>
+                <h3 className="mt-4">Bienvenido a Waldoc</h3>
+                <p>En breve, vas recibir un email para confirmar tu cuenta.</p>
+                <Link className="btn btn-primary custom-btn" to="/">Ir a la pagina principal</Link>
               </div>
             }
 
-            <form>
+            <form className="mb-4">
               {
                 current === 0 &&
                 this.renderBasicForm() //TODO Pasar a componentes para evitar re-render
@@ -617,12 +645,14 @@ class Register extends React.Component {
                 current === 2 &&
                 this.renderProfessionalForm()
               }
-
             </form>
             {this.renderButton()}
-            <div style={{ marginTop: 8 }}>
-              <small><Link>Cancelar</Link></small>
-            </div>
+            {
+              current <= 2 &&
+              <div style={{ marginTop: 8 }}>
+                <small><Link>Cancelar</Link></small>
+              </div>
+            }
           </div>
         </div>
 

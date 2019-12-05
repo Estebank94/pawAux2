@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.api.v1;
 
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.PatientService;
+import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Patient;
 
 import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
@@ -13,7 +14,10 @@ import ar.edu.itba.paw.models.exceptions.NotValidPatientIdException;
 import ar.edu.itba.paw.models.Verification;
 import ar.edu.itba.paw.models.exceptions.*;
 
+import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
+import ar.edu.itba.paw.webapp.dto.PatientAppointmentDTO;
 import ar.edu.itba.paw.webapp.dto.PatientDTO;
+import ar.edu.itba.paw.webapp.dto.PatientPersonalInformationDTO;
 import ar.edu.itba.paw.webapp.forms.PatientForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +38,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 @Path("v1/patient")
 @Controller
@@ -60,6 +66,9 @@ public class PatientApiController extends BaseApiController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
 
     private static final String VERIFICATION_TOKEN_TEMPLATE_NAME = "welcomeMail.html";
 
@@ -109,7 +118,7 @@ public class PatientApiController extends BaseApiController {
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response createUser(@Valid final PatientForm userForm) throws NotCreatePatientException, NotValidPhoneNumberException, NotValidLastNameException, RepeatedEmailException, NotValidPasswordException, NotValidFirstNameException, NotValidEmailException {
+    public Response createUser(@Valid final PatientForm userForm) {
 
         if (userForm == null)
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -120,8 +129,23 @@ public class PatientApiController extends BaseApiController {
                     .entity(errorMessageToJSON(messageSource.getMessage("non_matching_passwords", null, LocaleContextHolder.getLocale())))
                     .build();
 
-        final Patient patient = patientService.createPatient(userForm.getFirstName(), userForm.getLastName(),
-                userForm.getPhoneNumber(), userForm.getEmail(), userForm.getPassword());
+        Patient patient = null;
+
+        try {
+            patient = patientService.createPatient(userForm.getFirstName(), userForm.getLastName(),
+                    userForm.getPhoneNumber(), userForm.getEmail(), userForm.getPassword());
+        } catch (RepeatedEmailException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Duplicated email")).build();
+        } catch (NotValidFirstNameException | NotValidLastNameException | NotValidPhoneNumberException |
+                NotValidEmailException | NotValidPasswordException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("There is an error on the form information")).build();
+        } catch(NotCreatePatientException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Patient not created")).build();
+        }
+
 
         final Verification verification = patientService.createToken(patient);
 
@@ -150,7 +174,7 @@ public class PatientApiController extends BaseApiController {
         final Patient patient = verification.getPatient();
         patientService.enableUser(patient);
 
-        /* Auto Login */
+        /* Auto Login - todo: se esta rompiendo ? */
         Authentication authentication = new UsernamePasswordAuthenticationToken(patient.getEmail(), patient.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -159,5 +183,36 @@ public class PatientApiController extends BaseApiController {
         return Response.created(uri).entity(new PatientDTO(patient, buildBaseURI(uriInfo))).build();
     }
 
+    @GET
+    @Path("/me")
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response loggedUser() throws NotFoundPacientException, NotValidEmailException {
+        final Patient patient = userDetailsService.getLoggedUser();
+        return Response.ok(new PatientDTO(patient)).build();
+    }
 
+    @GET
+    @Path("/{id}/personal")
+    @Produces (value = {MediaType.APPLICATION_JSON})
+    public Response historicalAppointments (@PathParam("id") final int id) {
+        Patient patient = new Patient();
+        try {
+            patient = patientService.findPatientById(id);
+        } catch (NotValidPatientIdException | NotFoundPacientException | NotCreatePatientException e){
+            e.printStackTrace();
+        }
+        if (patient == null){
+            Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("patient not found")) //messageSource.getMessage("patient not found", null, LocaleContextHolder.getLocale())))
+                    .build();
+        }
+        List<Appointment> historicalAppointments = patientService.getHistoricalAppointments(patient);
+        LOGGER.debug("appointments size = " + historicalAppointments.size());
+
+        List<Appointment> futureAppointments = patientService.getFutureAppointments(patient);
+        LOGGER.debug("appointments size = " +  futureAppointments.size());
+
+        return Response.ok(new PatientPersonalInformationDTO(historicalAppointments, futureAppointments)).build();
+    }
 }

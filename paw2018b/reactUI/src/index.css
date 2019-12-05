@@ -15,6 +15,7 @@ code {
 .body-background
 {
   background-color: #F3F3F4;
+  min-height: 85vh;
 }
 
 .navbar-brand-home
@@ -392,8 +393,8 @@ h4
 }
 
 .box:hover {
-  -webkit-transform: scale(1.02, 1.02);
-  transform: scale(1.02, 1.02);
+  -webkit-transform: scale(1.01, 1.01);
+  transform: scale(1.01, 1.01);
 }
 
 .box:hover::after {
@@ -570,3 +571,8 @@ a {
   margin-right: 4px;
   cursor: pointer;
 }
+
+.clickeable {
+  cursor: pointer;
+}
+

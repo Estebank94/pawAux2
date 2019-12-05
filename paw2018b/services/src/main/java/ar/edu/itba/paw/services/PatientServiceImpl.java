@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.persistance.DoctorDao;
 import ar.edu.itba.paw.interfaces.persistance.PatientDao;
 import ar.edu.itba.paw.interfaces.services.PatientService;
+import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.Verification;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -215,7 +217,7 @@ public class PatientServiceImpl implements PatientService {
             return null;
             // throw new NotFoundPacientException("Patient was not found");
         }
-        foundPatient.getFavorites();
+        // foundPatient.getFavorites();
 //        foundPatient.isPresent().getFavorites();
 //        LOGGER.debug("Patient found. Patient: {}", foundPatient.get());
 //        LOGGER.debug("Patient name: {}", foundPatient.get().getFirstName());
@@ -246,5 +248,13 @@ public class PatientServiceImpl implements PatientService {
         patientDao.deleteUser(patient);
     }
 
+    @Override
+    public List<Appointment> getHistoricalAppointments(Patient patient) {
+        return patientDao.getHistoricalAppointments(patient);
+    }
 
+    @Override
+    public List<Appointment> getFutureAppointments(Patient patient) {
+        return patientDao.getFutureAppointments(patient);
+    }
 }

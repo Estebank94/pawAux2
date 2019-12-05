@@ -18,9 +18,12 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 
 @Repository
 public class PatientHibernateDaoImpl implements PatientDao {
@@ -29,8 +32,6 @@ public class PatientHibernateDaoImpl implements PatientDao {
     @PersistenceContext
     private EntityManager em;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Override
     public Patient createPatient(String firstName, String lastName, String phoneNumber, String email, String password) throws RepeatedEmailException {
@@ -104,5 +105,26 @@ public class PatientHibernateDaoImpl implements PatientDao {
     public void deleteUser(final Patient patient) {
         final Patient u = em.merge(patient);
         em.remove(u);
+    }
+
+    @Override
+    public List<Appointment> getFutureAppointments(Patient patient) {
+        String today = LocalDate.now().toString();
+        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay >= :day AND ap.patient = :patient", Appointment.class);
+        query.setParameter("patient", patient);
+        query.setParameter("day", today);
+        final List<Appointment> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
+    @Override
+    public List<Appointment> getHistoricalAppointments(Patient patient) {
+        String today = LocalDate.now().toString();
+        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay <= :day AND ap.patient = :patient AND ap.appointmentCancelled = :cancel", Appointment.class);
+        query.setParameter("patient", patient);
+        query.setParameter("day", today);
+        query.setParameter("cancel", true);
+        final List<Appointment> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
     }
 }

@@ -4,9 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
-/**
- * Created by estebankramer on 17/10/2018.
- */
 
 @Entity
 @Table(name="insurancePlan")
