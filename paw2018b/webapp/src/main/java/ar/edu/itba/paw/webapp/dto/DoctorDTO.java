@@ -1,7 +1,13 @@
 package ar.edu.itba.paw.webapp.dto;
 import ar.edu.itba.paw.models.Doctor;
+import ar.edu.itba.paw.models.InsurancePlan;
+import ar.edu.itba.paw.models.Specialty;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DoctorDTO {
     private Integer id;
@@ -11,16 +17,12 @@ public class DoctorDTO {
     private String address;
     private String phoneNumber;
     private byte[] profilePicture;
-    private SpecialtyListDTO specialties;
-    private InsurancePlanListDTO insurancesPlans;
-    // private WorkingHoursListDTO workingHours;
-    // private ReviewListDTO reviews;
-    // private DescriptionDTO description;
+    private DescriptionDTO description;
     private Integer averageRating;
-    // private Integer licence;
-    // private String district;
-
-
+    private Integer licence;
+    private List<String> specialties;
+    // private List<InsurancePlanDTO> inssurancePlans;
+    private List<InsuranceDTO> insurances;
      private URI uri;
 
     public DoctorDTO(Doctor doctor, URI baseURI){
@@ -44,13 +46,19 @@ public class DoctorDTO {
         this.address = doctor.getAddress();
         this.phoneNumber = doctor.getPhoneNumber();
         this.profilePicture = doctor.getProfilePicture();
-        this.specialties = new SpecialtyListDTO(doctor.getSpecialties());
-        this.insurancesPlans = new InsurancePlanListDTO(doctor.getInsurancePlans());
-        // this.workingHours = new WorkingHoursListDTO(doctor.getWorkingHours());
-        // this.reviews = new ReviewListDTO(doctor.getReviews());
         this.averageRating = doctor.calculateAverageRating();
-        // this.licence = doctor.getLicence();
-        // this.district = doctor.getDistrict();
+        this.licence = doctor.getLicence();
+        this.insurances = insurancePlanMapping(doctor.getInsurancePlans());
+
+        this.specialties = new ArrayList<>();
+        for (Specialty sp: doctor.getSpecialties()){
+            this.specialties.add(sp.getSpeciality());
+        }
+        this.description = null;
+        if (doctor.getDescription() != null){
+            this.description = new DescriptionDTO(doctor.getDescription());
+        }
+
     }
 
     public Integer getId() {
@@ -109,38 +117,6 @@ public class DoctorDTO {
         this.profilePicture = profilePicture;
     }
 
-    public SpecialtyListDTO getSpecialties() {
-        return specialties;
-    }
-
-    public void setSpecialties(SpecialtyListDTO specialties) {
-        this.specialties = specialties;
-    }
-
-    public InsurancePlanListDTO getInsurancesPlans() {
-        return insurancesPlans;
-    }
-
-    public void setInsurancesPlans(InsurancePlanListDTO insurancesPlans) {
-        this.insurancesPlans = insurancesPlans;
-    }
-
-    /*
-    public WorkingHoursListDTO getWorkingHours() {
-        return workingHours;
-    }
-
-    public void setWorkingHours(WorkingHoursListDTO workingHours) {
-        this.workingHours = workingHours;
-    }
-
-    public ReviewListDTO getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(ReviewListDTO reviews) {
-        this.reviews = reviews;
-    }
 
     public DescriptionDTO getDescription() {
         return description;
@@ -149,7 +125,7 @@ public class DoctorDTO {
     public void setDescription(DescriptionDTO description) {
         this.description = description;
     }
-    */
+
     public Integer getAverageRating() {
         return averageRating;
     }
@@ -158,7 +134,6 @@ public class DoctorDTO {
         this.averageRating = averageRating;
     }
 
-    /*
     public Integer getLicence() {
         return licence;
     }
@@ -167,16 +142,24 @@ public class DoctorDTO {
         this.licence = licence;
     }
 
-    public String getDistrict() {
-        return district;
+    public List<String> getSpecialties() {
+        return specialties;
     }
 
-    public void setDistrict(String district) {
-        this.district = district;
+    public void setSpecialties(List<String> specialties) {
+        this.specialties = specialties;
     }
-    */
+
+    public List<InsuranceDTO> getInsurances() {
+        return insurances;
+    }
+
+    public void setInsurances(List<InsuranceDTO> insurances) {
+        this.insurances = insurances;
+    }
+
     @Override
-    public String toString() {
+    public String toString () {
         return "DoctorDTO{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
@@ -185,5 +168,23 @@ public class DoctorDTO {
                 ", address='" + address + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
+    }
+
+    private List<InsuranceDTO> insurancePlanMapping (List<InsurancePlan> insurancePlans) {
+        Map<String, List<String>> map= new HashMap<>();
+        for (InsurancePlan ip : insurancePlans) {
+            String insurance = ip.getInsurance().getName();
+            if (!map.containsKey(insurance)){
+                List<String> insurancePlansList = new ArrayList<>();
+                map.put(insurance, insurancePlansList);
+            }
+            List<String> toAdd = map.get(insurance);
+            toAdd.add(ip.getPlan());
+        }
+        List<InsuranceDTO> insuranceDTOList = new ArrayList<>();
+        for (String insurance : map.keySet()){
+            insuranceDTOList.add(new InsuranceDTO(insurance, map.get(insurance)));
+        }
+        return insuranceDTOList;
     }
 }
