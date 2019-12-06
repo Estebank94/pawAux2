@@ -199,69 +199,29 @@ public class PatientApiController extends BaseApiController {
     }
 
     @GET
-    @Path("/{id}/personal")
-    @Produces (value = {MediaType.APPLICATION_JSON})
-    public Response personalInformation (@PathParam("id") final int id) {
-        LOGGER.debug("Patient personal information {}", id);
-        Patient patient = null;
-
-        try {
-            patient = patientService.findPatientById(id);
-        } catch (NotValidPatientIdException | NotFoundPacientException | NotCreatePatientException e){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        if (patient == null){
-            LOGGER.warn("Patient with id {} not found", id);
-            Response
-                    .status(Response.Status.NOT_FOUND)
-                    .entity(errorMessageToJSON("patient not found")) //messageSource.getMessage("patient not found", null, LocaleContextHolder.getLocale())))
-                    .build();
-        }
-
-        List<Appointment> historicalAppointments = patientService.getHistoricalAppointments(patient);
-        List<Appointment> futureAppointments = patientService.getFutureAppointments(patient);
-        List<Favorite> favorites = patientService.getFavoriteDoctors(patient);
-
-        List<Appointment> futureAppointmentsDoctor = Collections.EMPTY_LIST;
-        List<Appointment> historicalAppointmentsDoctor = Collections.EMPTY_LIST;
-        List<Review> reviews = Collections.EMPTY_LIST;
-
-        Doctor doctor = patient.getDoctor();
-        if (patient.getDoctor() != null) {
-            futureAppointments = doctorService.getFutureAppointments(doctor);
-            historicalAppointments = doctorService.getHistoricalAppointments(doctor);
-            reviews = doctor.getReviews();
-        }
-
-        return Response.ok(new PatientPersonalInformationDTO(historicalAppointments, futureAppointments, favorites, futureAppointmentsDoctor, historicalAppointmentsDoctor, reviews)).build();
-    }
-
-    @GET
     @Path("/personal")
     @Produces (value = {MediaType.APPLICATION_JSON})
-    public Response personalInformationWithEmail (@QueryParam("email") final String email) {
-        LOGGER.debug("Patient personal information {}", email);
-        Patient patient = null;
+    public Response personalInformationWithLogged () {
+        LOGGER.debug("Patient personal information");
+        final Patient patient;
         try {
-            patient = patientService.findPatientByEmail(email);
-        } catch (NotValidPatientIdException | NotCreatePatientException |  NotFoundPacientException e) {
-            LOGGER.warn("Patient with email {} not found", email);
-            Response
+            patient = userDetailsService.getLoggedUser();
+        } catch (NotFoundPacientException e) {
+            return Response
                     .status(Response.Status.NOT_FOUND)
-                    .entity(errorMessageToJSON("patient not found")) //messageSource.getMessage("patient not found", null, LocaleContextHolder.getLocale())))
+                    .entity(errorMessageToJSON("patient logged not found"))
                     .build();
-        } catch (NotValidEmailException e) {
+        } catch ( NotValidEmailException e){
             return Response
                     .status(Response.Status.BAD_REQUEST)
-                    .entity(errorMessageToJSON(messageSource.getMessage("non_matching_passwords", null, LocaleContextHolder.getLocale())))
+                    .entity(errorMessageToJSON("Invalid email of patient"))
                     .build();
         }
 
         if (patient == null){
-            LOGGER.warn("Patient with email {} not found", email);
             Response
                     .status(Response.Status.NOT_FOUND)
-                    .entity(errorMessageToJSON("patient not found")) //messageSource.getMessage("patient not found", null, LocaleContextHolder.getLocale())))
+                    .entity(errorMessageToJSON("patient logged not found")) //messageSource.getMessage("patient not found", null, LocaleContextHolder.getLocale())))
                     .build();
         }
 
@@ -279,7 +239,7 @@ public class PatientApiController extends BaseApiController {
             historicalAppointmentsDoctor = doctorService.getHistoricalAppointments(doctor);
             reviews = doctor.getReviews();
             return Response.ok(new PatientPersonalInformationDTO(historicalAppointments, futureAppointments, favorites,
-                                futureAppointmentsDoctor, historicalAppointmentsDoctor, reviews)).build();
+                    futureAppointmentsDoctor, historicalAppointmentsDoctor, reviews)).build();
         }
 
         return Response.ok(new PatientPersonalInformationDTO(historicalAppointments, futureAppointments, favorites)).build();

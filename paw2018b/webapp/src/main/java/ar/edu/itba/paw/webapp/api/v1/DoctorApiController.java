@@ -251,7 +251,6 @@ public class DoctorApiController extends BaseApiController {
 //        return Response.created(uri).entity(new DoctorPatientDTO(patient, buildBaseURI(uriInfo))).build();
     }
 
-
     @POST
     @Path("/registerProfessional")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -332,22 +331,4 @@ public class DoctorApiController extends BaseApiController {
         return Response.created(uri).entity(new DoctorDTO(doctor, buildBaseURI(uriInfo))).build();
     }
 
-    @GET
-    @Path("/{id}/personal")
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response doctorPersonalInformation (@PathParam("id") final int id){
-        LOGGER.debug("Doctor Personal information");
-        Doctor doctor = null;
-        try {
-            doctor = doctorService.findDoctorById(String.valueOf(id));
-        } catch (NotFoundDoctorException | NotValidIDException e){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        List<Appointment> futureAppointments = doctorService.getFutureAppointments(doctor);
-        List<Appointment> historicalAppointments = doctorService.getHistoricalAppointments(doctor);
-        List<Review> reviews = doctor.getReviews();
-
-        return Response.ok(new DoctorPersonalDTO(futureAppointments, historicalAppointments, reviews)).build();
-    }
 }
