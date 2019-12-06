@@ -1,13 +1,11 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistance.PatientDao;
-import ar.edu.itba.paw.models.Appointment;
-import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.Patient;
-import ar.edu.itba.paw.models.Verification;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.RepeatedEmailException;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -28,10 +27,8 @@ import java.util.UUID;
 @Repository
 public class PatientHibernateDaoImpl implements PatientDao {
 
-
-    @PersistenceContext
+    @PersistenceContext (type = PersistenceContextType.EXTENDED)
     private EntityManager em;
-
 
     @Override
     public Patient createPatient(String firstName, String lastName, String phoneNumber, String email, String password) throws RepeatedEmailException {
@@ -71,7 +68,16 @@ public class PatientHibernateDaoImpl implements PatientDao {
 
     @Override
     public Optional<Patient> findPatientById(Integer id) {
-        return Optional.ofNullable(em.find(Patient.class, id));
+        Patient patient = em.find(Patient.class, id);
+        if (patient != null){
+            Hibernate.initialize(patient);
+            if (patient.getDoctor() != null) {
+                Hibernate.initialize(patient.getDoctor());
+                Hibernate.initialize(patient.getDoctor().getReviews());
+            }
+        }
+        //return Optional.ofNullable(em.find(Patient.class, id));
+        return Optional.ofNullable(patient);
     }
 
     @Override
@@ -110,9 +116,10 @@ public class PatientHibernateDaoImpl implements PatientDao {
     @Override
     public List<Appointment> getFutureAppointments(Patient patient) {
         String today = LocalDate.now().toString();
-        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay >= :day AND ap.patient = :patient", Appointment.class);
+        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay >= :day AND ap.patient = :patient AND ap.appointmentCancelled = :cancel", Appointment.class);
         query.setParameter("patient", patient);
         query.setParameter("day", today);
+        query.setParameter("cancel", false);
         final List<Appointment> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
     }
@@ -120,11 +127,28 @@ public class PatientHibernateDaoImpl implements PatientDao {
     @Override
     public List<Appointment> getHistoricalAppointments(Patient patient) {
         String today = LocalDate.now().toString();
-        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay <= :day AND ap.patient = :patient AND ap.appointmentCancelled = :cancel", Appointment.class);
+        Hibernate.initialize(patient.getDoctor());
+        final TypedQuery<Appointment> query;
+        if (patient.getDoctor() != null){
+            query = em.createQuery("FROM Appointment ap where ap.appointmentDay < :day AND ap.patient = :patient AND ap.appointmentCancelled = :cancel AND ap.doctor !=:doctor", Appointment.class);
+            query.setParameter("doctor", patient.getDoctor());
+        } else {
+            query = em.createQuery("FROM Appointment ap where ap.appointmentDay < :day AND ap.patient = :patient AND ap.appointmentCancelled = :cancel", Appointment.class);
+
+        }
         query.setParameter("patient", patient);
         query.setParameter("day", today);
-        query.setParameter("cancel", true);
+        query.setParameter("cancel", false);
         final List<Appointment> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
+    @Override
+    public List<Favorite> getFavoriteDoctors(Patient patient) {
+        final TypedQuery<Favorite> query = em.createQuery("FROM Favorite fav where fav.patient = :patient AND  fav.favoriteCancelled = :cancel", Favorite.class);
+        query.setParameter("patient", patient);
+        query.setParameter("cancel", false);
+        final List<Favorite> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
     }
 }

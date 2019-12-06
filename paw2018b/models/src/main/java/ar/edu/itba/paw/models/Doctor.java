@@ -26,20 +26,18 @@ public class Doctor {
     String address;
     byte[] profilePicture;
     Integer licence;
+    String district;
 
     @ManyToMany(cascade = {CascadeType.ALL},
-                fetch = FetchType.EAGER
-    )
+                fetch = FetchType.EAGER)
     @JoinTable(
             name="doctorSpecialty",
             joinColumns = {@JoinColumn(name = "doctorid", referencedColumnName="id")},
-            inverseJoinColumns = {@JoinColumn(name = "specialtyid", referencedColumnName="id")}
-    )
+            inverseJoinColumns = {@JoinColumn(name = "specialtyid", referencedColumnName="id")})
     Set<Specialty> specialties;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST},
-                fetch = FetchType.EAGER
-    )
+    @ManyToMany(cascade = {CascadeType.PERSIST}
+                , fetch = FetchType.EAGER)
     @JoinTable(
             name="medicalCare",
             joinColumns = {@JoinColumn(name="doctorid", referencedColumnName="id")},
@@ -52,13 +50,11 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor", cascade = {CascadeType.ALL})
     List<WorkingHours> workingHours;
 
-
     @OneToMany(mappedBy = "doctor")
     @LazyCollection(LazyCollectionOption.TRUE)
     Set<Appointment> appointments;
 
     @OneToMany(mappedBy = "doctor")
-    @LazyCollection(LazyCollectionOption.FALSE)
     List<Review> reviews;
 
     @OneToOne(mappedBy="doctor")
@@ -67,11 +63,24 @@ public class Doctor {
     @OneToOne(mappedBy="doctor", cascade = {CascadeType.ALL})
     Description description;
 
-
-    String district;
-
     @OneToMany(mappedBy="doctor", cascade = {CascadeType.PERSIST})
     List<Favorite> favorites;
+
+    @Autowired
+    public Doctor(){
+
+    }
+
+    public Doctor(String firstName, String lastName, String phoneNumber, String sex,
+                  Integer licence, byte[] profilePicture, String address){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.sex = sex;
+        this.address = address;
+        this.profilePicture = profilePicture;
+        this.phoneNumber = phoneNumber;
+        this.licence = licence;
+    }
 
     public List<Review> getReviews() {
         return reviews;
@@ -111,23 +120,6 @@ public class Doctor {
 
     public void setDistrict(String district) {
         this.district = district;
-    }
-
-
-    @Autowired
-    public Doctor(){
-
-    }
-
-    public Doctor(String firstName, String lastName, String phoneNumber, String sex,
-                  Integer licence, byte[] profilePicture, String address){
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.sex = sex;
-        this.address = address;
-        this.profilePicture = profilePicture;
-        this.phoneNumber = phoneNumber;
-        this.licence = licence;
     }
 
     public String getPhoneNumber() {
@@ -208,20 +200,6 @@ public class Doctor {
 
     public void setInsurancePlans(List<InsurancePlan> insurancePlans) {
         this.insurancePlans = insurancePlans;
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Doctor)) return false;
-        Doctor doctor = (Doctor) o;
-        return Objects.equals(getId(), doctor.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
     }
 
     public Map<LocalDate, List<Appointment>>getAvailableAppointments(){
@@ -333,14 +311,6 @@ public class Doctor {
         }
         return returnSet;
     }
-//
-//    public List<Review> getReviews() {
-//        return reviews;
-//    }
-//
-//    public void setReviews(List<Review> reviews) {
-//        this.reviews = reviews;
-//    }
 
     public Map<LocalDate, List<LocalTime>> appointmentsToMap (){
 
@@ -496,6 +466,29 @@ public class Doctor {
             sum = 0;
         }
         return Math.round(sum);
+    }
+
+    public void addReview(Review review){
+        reviews.add(review);
+        review.setDoctor(this);
+    }
+
+    public void removeReview(Review review){
+        reviews.remove(review);
+        review.setDoctor(null);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Doctor)) return false;
+        Doctor doctor = (Doctor) o;
+        return Objects.equals(getId(), doctor.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 
 }

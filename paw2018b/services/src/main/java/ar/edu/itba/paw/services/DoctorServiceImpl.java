@@ -97,10 +97,9 @@ public class DoctorServiceImpl implements DoctorService {
         return list;
     }
 
-
     @Override
     @Transactional
-    public Optional<Doctor> findDoctorById(String idAsString) throws NotFoundDoctorException, NotValidIDException {
+    public Doctor findDoctorById(String idAsString) throws NotFoundDoctorException, NotValidIDException {
         LOGGER.debug("DoctorServiceImpl: findDoctorById");
 
         if (idAsString == null ){
@@ -138,9 +137,11 @@ public class DoctorServiceImpl implements DoctorService {
         }
 
         thisdoctor.get().getWorkingHours().size();
-        // thisdoctor.get().getAppointments().size();
-        thisdoctor.get().getReviews().size();
 
+        thisdoctor.get().getAppointments().size();
+        Hibernate.initialize(thisdoctor.get().getReviews());
+        // thisdoctor.get().getReviews().size();
+        /*
         if(thisdoctor.get().getDescription() != null){
             if(thisdoctor.get().getDescription().getLanguages() != null){
                 thisdoctor.get().getDescription().getLanguages();
@@ -153,13 +154,15 @@ public class DoctorServiceImpl implements DoctorService {
             }
         }
 
+         */
         Doctor doc = thisdoctor.get();
         doctorDao.mergeDoctor(doc);
         //em.merge(doc);
 
         LOGGER.debug("Doctor with ID: {} found", idAsInt);
         LOGGER.debug("Doctor is: {}", thisdoctor);
-        return thisdoctor;
+
+        return doc;
     }
 
     @Override
@@ -535,6 +538,21 @@ public class DoctorServiceImpl implements DoctorService {
         }
 
         return Optional.ofNullable(doctor);
+    }
+
+    @Override
+    public List<Appointment> getFutureAppointments(Doctor doctor) {
+        return doctorDao.getFutureAppointments(doctor);
+    }
+
+    @Override
+    public List<Appointment> getHistoricalAppointments(Doctor doctor) {
+        return doctorDao.getHistoricalAppointments(doctor);
+    }
+
+    @Override
+    public List<Review> getReviews(Doctor doctor) {
+        return doctorDao.getReviews(doctor);
     }
 
 }

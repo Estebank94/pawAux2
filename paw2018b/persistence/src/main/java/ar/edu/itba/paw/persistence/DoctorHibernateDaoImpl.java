@@ -192,6 +192,9 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         typedQuery.setFirstResult(PAGESIZE * (page));
         typedQuery.setMaxResults(PAGESIZE);
         List<Doctor> list = typedQuery.getResultList();
+        for (Doctor doctor : list){
+            Hibernate.initialize(doctor.getReviews());
+        }
         return list.isEmpty() ? Collections.emptyList() : list;
     }
 
@@ -434,6 +437,42 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
     public void mergeDoctor(Doctor doctor){
         em.merge(doctor);
+    }
+
+    @Override
+    public List<Appointment> getFutureAppointments(Doctor doctor) {
+        String today = LocalDate.now().toString();
+        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay >= :day AND ap.doctor = :doctor AND ap.appointmentCancelled = :cancel", Appointment.class);
+        query.setParameter("doctor", doctor);
+        query.setParameter("day", today);
+        query.setParameter("cancel", false);
+        final List<Appointment> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
+    @Override
+    public List<Appointment> getHistoricalAppointments(Doctor doctor) {
+        String today = LocalDate.now().toString();
+        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay < :day AND ap.doctor = :doctor AND ap.appointmentCancelled = :cancel", Appointment.class);
+        query.setParameter("doctor", doctor);
+        query.setParameter("day", today);
+        query.setParameter("cancel", false);
+        final List<Appointment> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
+    @Override
+    public List<Review> getReviews(Doctor doctor) {
+        final TypedQuery<Review> query = em.createQuery("Select doctor.reviews FROM Doctor doctor where doctor = :doctor", Review.class);
+        query.setParameter("doctor", doctor);
+        final List<Review> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
+    @Override
+    public void createReview(Doctor doctor, Patient patient, Review review) {
+        doctor.addReview(review);
+        em.persist(doctor);
     }
 
     private String escapeSpecialCharacters(String input) {

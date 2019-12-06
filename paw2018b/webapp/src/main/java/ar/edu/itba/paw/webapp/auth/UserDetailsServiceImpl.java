@@ -2,9 +2,11 @@ package ar.edu.itba.paw.webapp.auth;
 
 import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.Patient;
+import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
 import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
 import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
 
+import ar.edu.itba.paw.models.exceptions.NotValidPatientIdException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -33,7 +35,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
 
         Patient user = null;
-        user = us.findPatientByEmail(email);
+        try {
+            user = us.findPatientByEmail(email);
+        } catch (NotValidPatientIdException | NotCreatePatientException | NotFoundPacientException | NotValidEmailException e) {
+            user = null;
+        }
 
         if (user == null) {
             throw new UsernameNotFoundException("No user found with email " + email);
@@ -55,11 +61,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public Patient getLoggedUser() throws NotFoundPacientException, NotValidEmailException {
         String hola = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         LOGGER.debug("HOLA!! : " + hola);
+
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
         if (auth == null) { // TODO: Ver que onda con esto
             return null;
         }
-        final Patient user = us.findPatientByEmail(auth.getName());
+
+        final Patient user;
+        try {
+            user = us.findPatientByEmail(auth.getName());
+        } catch (NotValidPatientIdException e) {
+            return null;
+        } catch (NotCreatePatientException e) {
+            return null;
+        }
+
         if(user == null){
             LOGGER.debug("Auth name " + auth.getName());
         }

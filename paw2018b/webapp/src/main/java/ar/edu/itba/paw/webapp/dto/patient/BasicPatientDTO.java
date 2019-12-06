@@ -1,40 +1,23 @@
-package ar.edu.itba.paw.webapp.dto;
+package ar.edu.itba.paw.webapp.dto.patient;
 
 import ar.edu.itba.paw.models.Patient;
-import ar.edu.itba.paw.webapp.dto.doctor.DoctorDTO;
 
-import java.net.URI;
-
-public class DoctorPatientDTO {
-
+public class BasicPatientDTO {
     private Integer id;
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private String email;
-    private String password;
-    private URI uri;
-    private DoctorDTO doctor;
 
-    public DoctorPatientDTO(){}
+    public BasicPatientDTO() {
+    }
 
-    public DoctorPatientDTO(Patient patient, URI uri) {
+    public BasicPatientDTO(Patient patient){
         this.id = patient.getId();
         this.firstName = patient.getFirstName();
         this.lastName = patient.getLastName();
         this.phoneNumber = patient.getPhoneNumber();
         this.email = patient.getEmail();
-        this.password = patient.getPassword();
-        this.uri = uri;
-        this.doctor = new DoctorDTO(patient.getDoctor());
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -69,27 +52,11 @@ public class DoctorPatientDTO {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public Integer getId() {
+        return id;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public URI getUri() {
-        return uri;
-    }
-
-    public void setUri(URI uri) {
-        this.uri = uri;
-    }
-
-    public DoctorDTO getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(DoctorDTO doctor) {
-        this.doctor = doctor;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

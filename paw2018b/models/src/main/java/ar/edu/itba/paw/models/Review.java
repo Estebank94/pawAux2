@@ -10,6 +10,7 @@ public class Review {
     private Integer stars;
     private String dayTime;
     private String description;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -22,7 +23,6 @@ public class Review {
     private String reviewerLastName;
 
     public Review(){
-
     }
 
     public Review(Integer stars, String description, Doctor doctor, String reviewerFirstName, String reviewerLastName){
@@ -89,4 +89,5 @@ public class Review {
     public void setReviewerLastName(String reviewerLastName) {
         this.reviewerLastName = reviewerLastName;
     }
+
 }

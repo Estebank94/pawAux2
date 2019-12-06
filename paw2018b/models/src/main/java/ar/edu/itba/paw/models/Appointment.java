@@ -15,8 +15,6 @@ public class Appointment implements Comparable<Appointment>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-//    private LocalDate appointmentDay;
-//    private LocalTime appointmentTime;
     private String appointmentDay;
     private String appointmentTime;
 

@@ -1,9 +1,8 @@
-package ar.edu.itba.paw.webapp.dto;
+package ar.edu.itba.paw.webapp.dto.insurance;
 
 import ar.edu.itba.paw.models.Insurance;
 import ar.edu.itba.paw.models.InsurancePlan;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
