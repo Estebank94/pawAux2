@@ -9,6 +9,7 @@ public class DoctorAppointmentDTO {
     private String appointmentTime;
     private BasicPatientDTO patient;
     private BasicReviewDTO review;
+    private Integer id;
 
     public DoctorAppointmentDTO() {
     }
@@ -17,9 +18,10 @@ public class DoctorAppointmentDTO {
         this.appointmentDay = appointment.getAppointmentDay();
         this.appointmentTime = appointment.getAppointmentTime();
         this.patient = new BasicPatientDTO(appointment.getPatient());
-        if (appointment.getReview() == null){
+        if (appointment.getReview() != null){
             review = new BasicReviewDTO(appointment.getReview());
         }
+        this.id = appointment.getId();
     }
 
     public String getAppointmentDay() {
@@ -52,5 +54,13 @@ public class DoctorAppointmentDTO {
 
     public void setReview(BasicReviewDTO review) {
         this.review = review;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

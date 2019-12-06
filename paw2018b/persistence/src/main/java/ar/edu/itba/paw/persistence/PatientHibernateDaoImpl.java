@@ -140,6 +140,9 @@ public class PatientHibernateDaoImpl implements PatientDao {
         query.setParameter("day", today);
         query.setParameter("cancel", false);
         final List<Appointment> list = query.getResultList();
+        for (Appointment ap: list){
+            Hibernate.initialize(ap.getReview());
+        }
         return list.isEmpty() ? Collections.emptyList() : list;
     }
 

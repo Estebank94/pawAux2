@@ -28,7 +28,7 @@ public class ReviewForm {
         return apponintmentId;
     }
 
-    public void setApponintment(Integer apponintmentId) {
+    public void setApponintmentId(Integer apponintmentId) {
         this.apponintmentId = apponintmentId;
     }
 }

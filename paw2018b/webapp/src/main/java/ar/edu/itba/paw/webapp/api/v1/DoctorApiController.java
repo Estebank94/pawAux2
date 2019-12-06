@@ -197,6 +197,8 @@ public class DoctorApiController extends BaseApiController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response createUser(@Valid final PersonalForm userForm) {
 
+        LOGGER.debug("Register doctor");
+
         if (userForm == null)
             return Response.status(Response.Status.BAD_REQUEST).build();
 
@@ -358,6 +360,9 @@ public class DoctorApiController extends BaseApiController {
                     .entity(errorMessageToJSON("No stars or description in review"))
                     .build();
         }
+        LOGGER.debug("Appointment id Form {}", reviewForm.getApponintmentId());
+        LOGGER.debug("Stars {}", reviewForm.getStars());
+        LOGGER.debug("Description {}", reviewForm.getDescription());
 
         if (reviewForm.getApponintmentId() == null){
             LOGGER.debug("No appointment");
@@ -424,14 +429,14 @@ public class DoctorApiController extends BaseApiController {
         Appointment appointment = null;
 
         try {
-            appointmentService.findAppointmentById(reviewForm.getApponintmentId());
+            appointment = appointmentService.findAppointmentById(reviewForm.getApponintmentId());
         } catch (NotFoundAppointmentException e) {
             LOGGER.debug("Appointment with id {} not found", reviewForm.getApponintmentId());
             return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("appointment not found")).build();
         }
         if (appointment == null){
             LOGGER.debug("Appointment with id {} not found", reviewForm.getApponintmentId());
-            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("appointment not found")).build();
+            return Response.status(Response.Status.NOT_FOUND).entity(errorMessageToJSON("appointment not found")).build();
         }
 
         if (appointment.getDoctor().getId() != doctorId || appointment.getPatient().getId() != patient.getId()){

@@ -72,11 +72,12 @@ public class ReviewServiceImpl implements ReviewService {
             throw new NotValidReviewException("appointment already has a review");
         }
 
-        try {
+        LOGGER.debug("Time to create review");
+        //try {
             return reviewDao.createReview(starsToInt, description, doctor, patient, appointment);
-        } catch (Exception e){
-            throw new NotValidReviewException();
-        }
+        //} catch (Exception e){
+        //    throw new NotValidReviewException();
+        //}
     }
 
     @Override

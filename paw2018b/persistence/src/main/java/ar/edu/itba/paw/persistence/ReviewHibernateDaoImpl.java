@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.Review;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,14 +21,13 @@ public class ReviewHibernateDaoImpl implements ReviewDao {
     @PersistenceContext
     private EntityManager em;
 
+    @Transactional
     @Override
     public Review createReview(Integer stars, String description, Doctor doctor, Patient patient, Appointment appointment) {
         Review review = new Review(stars, description , doctor, patient, appointment);
         appointment.setReview(review);
-        em.getTransaction().begin();
         em.persist(review);
-        em.persist(appointment);
-        em.getTransaction().commit();
+        em.merge(appointment);
         return review;
     }
 
