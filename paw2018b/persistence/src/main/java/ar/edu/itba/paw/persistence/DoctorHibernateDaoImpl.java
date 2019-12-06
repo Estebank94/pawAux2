@@ -192,6 +192,9 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         typedQuery.setFirstResult(PAGESIZE * (page));
         typedQuery.setMaxResults(PAGESIZE);
         List<Doctor> list = typedQuery.getResultList();
+        for (Doctor doctor : list){
+            Hibernate.initialize(doctor.getReviews());
+        }
         return list.isEmpty() ? Collections.emptyList() : list;
     }
 
