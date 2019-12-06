@@ -103,7 +103,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .addFilterBefore(statelessAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
-
     @Bean
     public AuthenticationSuccessHandler successHandler() {
         return new CustomLogInSuccessHandler("/");
@@ -114,7 +113,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
 
     @Bean
     public String authTokenKey() {

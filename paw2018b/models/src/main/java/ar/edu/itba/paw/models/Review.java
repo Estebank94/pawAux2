@@ -22,16 +22,26 @@ public class Review {
     private String reviewerFirstName;
     private String reviewerLastName;
 
+    @ManyToOne
+    @JoinColumn(name = "patientid")
+    private Patient patient;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "appointment")
+    private Appointment appointment;
+
     public Review(){
     }
 
-    public Review(Integer stars, String description, Doctor doctor, String reviewerFirstName, String reviewerLastName){
+    public Review(Integer stars, String description, Doctor doctor, Patient patient, Appointment appointment){
         this.stars = stars;
         this.dayTime = LocalDate.now().toString();
         this.description = description;
         this.doctor = doctor;
-        this.reviewerFirstName = reviewerFirstName;
-        this.reviewerLastName = reviewerLastName;
+        this.reviewerFirstName = patient.getLastName();
+        this.reviewerLastName = patient.getFirstName();
+        this.patient = patient;
+        this.appointment = appointment;
     }
 
     public Doctor getDoctor() {
@@ -90,4 +100,19 @@ public class Review {
         this.reviewerLastName = reviewerLastName;
     }
 
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Appointment getAppointment() {
+        return appointment;
+    }
+
+    public void setAppointment(Appointment appointment) {
+        this.appointment = appointment;
+    }
 }

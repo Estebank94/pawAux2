@@ -49,4 +49,11 @@ public class AppointmentHibernateDaoImpl implements AppointmentDao {
         appointment.setAppointmentCancelled(false);
         em.persist(appointment);
     }
+
+    @Override
+    public Optional<Appointment> findAppointmentById(Integer id) {
+        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment as a WHERE a.id = :id", Appointment.class);
+        query.setParameter("id", id);
+        return Optional.ofNullable(query.getSingleResult());
+    }
 }

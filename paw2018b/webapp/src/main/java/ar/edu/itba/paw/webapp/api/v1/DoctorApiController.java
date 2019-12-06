@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.webapp.api.v1;
 
-import ar.edu.itba.paw.interfaces.services.DoctorService;
-import ar.edu.itba.paw.interfaces.services.EmailService;
-import ar.edu.itba.paw.interfaces.services.PatientService;
+import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
 
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
@@ -18,9 +16,9 @@ import ar.edu.itba.paw.webapp.dto.doctor.DoctorDTO;
 import ar.edu.itba.paw.webapp.dto.doctor.DoctorListDTO;
 import ar.edu.itba.paw.webapp.dto.doctor.DoctorPersonalDTO;
 import ar.edu.itba.paw.webapp.dto.patient.PatientDTO;
+import ar.edu.itba.paw.webapp.dto.reviews.BasicReviewDTO;
 import ar.edu.itba.paw.webapp.dto.workingHours.WorkingHoursDTO;
-import ar.edu.itba.paw.webapp.forms.BasicProfessionalForm;
-import ar.edu.itba.paw.webapp.forms.PersonalForm;
+import ar.edu.itba.paw.webapp.forms.*;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +37,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
+import java.time.LocalDate;
 import java.util.*;
 
 
@@ -56,6 +55,13 @@ public class DoctorApiController extends BaseApiController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private AppointmentService appointmentService;
+
+    @Autowired
+    private ReviewService reviewService;
+
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
@@ -330,5 +336,168 @@ public class DoctorApiController extends BaseApiController {
 
         return Response.created(uri).entity(new DoctorDTO(doctor, buildBaseURI(uriInfo))).build();
     }
+
+    @POST
+    @Path("/{id}/review")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response createReview(@PathParam("id") final int doctorId , @Valid final ReviewForm reviewForm){
+
+        LOGGER.debug("Create Review");
+
+        /* Form revision */
+        if (reviewForm == null){
+            LOGGER.debug("Review Form is null");
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("Review can't be null")).build();
+        }
+
+        if (reviewForm.getStars() == null && reviewForm.getDescription() == null){
+            LOGGER.debug("No stars or description in review");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("No stars or description in review"))
+                    .build();
+        }
+
+        if (reviewForm.getApponintmentId() == null){
+            LOGGER.debug("No appointment");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("No appointment"))
+                    .build();
+        }
+
+
+        /* Patient Revision */
+        Patient patient = null;
+        try {
+            patient = userDetailsService.getLoggedUser();
+        } catch (NotFoundPacientException e) {
+            LOGGER.debug("Patient not found");
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Patient not found"))
+                    .build();
+        } catch (NotValidEmailException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Patient with bad email"))
+                    .build();
+        }
+        if (patient == null){
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Patient not found"))
+                    .build();
+        }
+        LOGGER.debug("Review patient {}", patient.getId());
+
+        if (patient.getDoctor().getId() == doctorId){
+            LOGGER.debug("Patient is the same as doctor");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Cannot set review a doctor to his own"))
+                    .build();
+        }
+
+        /* Doctor Revision */
+        Doctor doctor = null;
+        try {
+            doctor = doctorService.findDoctorById(String.valueOf(doctorId));
+        } catch (NotFoundDoctorException e) {
+            LOGGER.debug("Doctor with id {} not found", doctorId);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
+                    .build();
+        } catch (NotValidIDException e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Doctor with bad id"))
+                    .build();
+        }
+        if (doctor == null){
+            LOGGER.debug("Doctor with id {} not found", doctorId);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
+                    .build();
+        }
+        LOGGER.debug("Review doctor {}", doctor.getId());
+
+        /* Appointment revision */
+        Appointment appointment = null;
+
+        try {
+            appointmentService.findAppointmentById(reviewForm.getApponintmentId());
+        } catch (NotFoundAppointmentException e) {
+            LOGGER.debug("Appointment with id {} not found", reviewForm.getApponintmentId());
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("appointment not found")).build();
+        }
+        if (appointment == null){
+            LOGGER.debug("Appointment with id {} not found", reviewForm.getApponintmentId());
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("appointment not found")).build();
+        }
+
+        if (appointment.getDoctor().getId() != doctorId || appointment.getPatient().getId() != patient.getId()){
+            LOGGER.debug("Appointment with id {} found with others doctors/patients", reviewForm.getApponintmentId());
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("appointment found with others doctors/patients")).build();
+        }
+        LocalDate appointmentDay = LocalDate.parse(appointment.getAppointmentDay());
+        if (LocalDate.now().isBefore(appointmentDay)){
+            LOGGER.debug("Appointment with id {} found still not happen", reviewForm.getApponintmentId());
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("appointment found still not happen")).build();
+        }
+
+        if (appointment.getAppointmentCancelled()){
+            LOGGER.debug("Appointment is cancelled", reviewForm.getApponintmentId());
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("appointment is cancelled")).build();
+        }
+
+        if (appointment.getReview() != null) {
+            LOGGER.debug("Appointment already has review", reviewForm.getApponintmentId());
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("Appointment already has review")).build();
+        }
+            Review review = null;
+        try {
+            review = reviewService.createReview(reviewForm.getStars(), reviewForm.getDescription(), doctor, patient, appointment);
+        } catch (NotValidReviewException e) {
+            LOGGER.debug("Not valid review");
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("Not valid Review")).build();
+        }
+        if (review == null){
+            Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("Not created Review")).build();
+        }
+
+        return Response.ok(new BasicReviewDTO(review)).build();
+    }
+
+    @PUT
+    @Path("/{id}/appointment/add")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response addAppointment(@Valid final AppointmentForm appointmentForm){
+        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    }
+
+    @PUT
+    @Path("/{id}/appointment/cancel")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response cancelAppointment(@Valid final AppointmentForm appointmentForm){
+        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    }
+
+    @PUT
+    @Path("/{id}/favorite/add")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response addFavorite(@Valid final FavoriteForm favoriteForm){
+        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    }
+
+    @PUT
+    @Path("/{id}/favorite/cancel")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response cancelFavorite(@Valid final FavoriteForm favoriteForm){
+        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    }
+
 
 }
