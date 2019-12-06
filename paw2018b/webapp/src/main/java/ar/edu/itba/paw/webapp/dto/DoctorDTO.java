@@ -48,7 +48,7 @@ public class DoctorDTO {
         this.profilePicture = doctor.getProfilePicture();
         this.averageRating = doctor.calculateAverageRating();
         this.licence = doctor.getLicence();
-        this.insurances = insurancePlanMapping(doctor.getInsurancePlans());
+        this.insurances = InsuranceDTO.insurancePlanMapping(doctor.getInsurancePlans());
 
         this.specialties = new ArrayList<>();
         for (Specialty sp: doctor.getSpecialties()){
@@ -168,23 +168,5 @@ public class DoctorDTO {
                 ", address='" + address + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
-    }
-
-    private List<InsuranceDTO> insurancePlanMapping (List<InsurancePlan> insurancePlans) {
-        Map<String, List<String>> map= new HashMap<>();
-        for (InsurancePlan ip : insurancePlans) {
-            String insurance = ip.getInsurance().getName();
-            if (!map.containsKey(insurance)){
-                List<String> insurancePlansList = new ArrayList<>();
-                map.put(insurance, insurancePlansList);
-            }
-            List<String> toAdd = map.get(insurance);
-            toAdd.add(ip.getPlan());
-        }
-        List<InsuranceDTO> insuranceDTOList = new ArrayList<>();
-        for (String insurance : map.keySet()){
-            insuranceDTOList.add(new InsuranceDTO(insurance, map.get(insurance)));
-        }
-        return insuranceDTOList;
     }
 }
