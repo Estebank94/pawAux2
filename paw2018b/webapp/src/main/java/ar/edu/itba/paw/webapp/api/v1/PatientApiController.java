@@ -199,7 +199,8 @@ public class PatientApiController extends BaseApiController {
         try {
             patient = patientService.findPatientById(id);
         } catch (NotValidPatientIdException | NotFoundPacientException | NotCreatePatientException e){
-            e.printStackTrace();
+            return Response.status(Response.Status.NOT_FOUND).build();
+            // e.printStackTrace();
         }
         if (patient == null){
             Response

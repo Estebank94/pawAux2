@@ -70,7 +70,7 @@ public class FlowController {
 				Patient patient;
 				try {
 					patient = patientService.findPatientByEmail(authentication.getName());
-					doctor = doctorService.findDoctorById(String.valueOf(patient.getDoctor().getId())).get();
+					doctor = doctorService.findDoctorById(String.valueOf(patient.getDoctor().getId()));
 					LOGGER.debug("The User Logged in is a DOCTOR with ID: {}", doctor.getId());
 				}catch (NotFoundDoctorException ex1){
 					LOGGER.trace("404 error");
@@ -188,7 +188,7 @@ public class FlowController {
 			try {
 				Doctor doctor;
 				try {
-					doctor = doctorService.findDoctorById(doctorId).get();
+					doctor = doctorService.findDoctorById(doctorId);
 					if (doctor == null){
 						LOGGER.trace("404 error");
 						return new ModelAndView("404");
@@ -261,7 +261,7 @@ public class FlowController {
 											  throws NotFoundDoctorException, NotValidIDException, NotFoundPacientException,
 												NotValidPatientIdException, NotCreatePatientException {
 
-		Doctor doctor = doctorService.findDoctorById(String.valueOf(doctorId)).get();
+		Doctor doctor = doctorService.findDoctorById(String.valueOf(doctorId));
 		boolean appointment = false;
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

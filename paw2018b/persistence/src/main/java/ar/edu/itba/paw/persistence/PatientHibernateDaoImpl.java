@@ -110,9 +110,10 @@ public class PatientHibernateDaoImpl implements PatientDao {
     @Override
     public List<Appointment> getFutureAppointments(Patient patient) {
         String today = LocalDate.now().toString();
-        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay >= :day AND ap.patient = :patient", Appointment.class);
+        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay >= :day AND ap.patient = :patient AND ap.appointmentCancelled = :cancel", Appointment.class);
         query.setParameter("patient", patient);
         query.setParameter("day", today);
+        query.setParameter("cancel", false);
         final List<Appointment> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
     }
@@ -120,10 +121,10 @@ public class PatientHibernateDaoImpl implements PatientDao {
     @Override
     public List<Appointment> getHistoricalAppointments(Patient patient) {
         String today = LocalDate.now().toString();
-        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay <= :day AND ap.patient = :patient AND ap.appointmentCancelled = :cancel", Appointment.class);
+        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay < :day AND ap.patient = :patient AND ap.appointmentCancelled = :cancel", Appointment.class);
         query.setParameter("patient", patient);
         query.setParameter("day", today);
-        query.setParameter("cancel", true);
+        query.setParameter("cancel", false);
         final List<Appointment> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
     }

@@ -17,33 +17,22 @@ import ar.edu.itba.paw.webapp.dto.*;
 
 import ar.edu.itba.paw.webapp.forms.BasicProfessionalForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
-import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
-import com.fasterxml.jackson.databind.deser.Deserializers;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.TemplateEngine;
 
-import javax.print.Doc;
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 import javax.ws.rs.*;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.io.IOException;
 import java.net.URI;
 
 import java.util.*;
@@ -89,21 +78,17 @@ public class DoctorApiController extends BaseApiController {
     @Path("/{id}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getDoctorById(@PathParam("id") final int id){
-        Optional<Doctor> doctorOptional = Optional.empty();
+        Doctor doctor = null;
         try {
-            doctorOptional = doctorService.findDoctorById(id + "");
+            doctor = doctorService.findDoctorById(id + "");
         } catch (NotFoundDoctorException | NotValidIDException e) {
-            e.printStackTrace();
+            Response.status(Response.Status.NOT_FOUND).build();
+            // e.printStackTrace();
         }
-        if (doctorOptional.isPresent()){
-            // TODO: LIMPIAR ESTA PARTE
-            // DoctorDTO doctorDTO = new DoctorDTO(doctorOptional.get(), buildBaseURI(uriInfo));
-            // System.out.println(doctorDTO.toString());
-            // System.out.println(Response.ok(new DoctorDTO(doctorOptional.get(), buildBaseURI(uriInfo))).build().toString());
-            return Response.ok(new DoctorDTO(doctorOptional.get()))
+        if (doctor != null){
+            return Response.ok(new DoctorDTO(doctor))
                     .build();
         }
-        // System.out.println("No encontro a Doctor");
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
@@ -343,6 +328,22 @@ public class DoctorApiController extends BaseApiController {
         return Response.created(uri).entity(new DoctorDTO(doctor, buildBaseURI(uriInfo))).build();
     }
 
+    @GET
+    @Path("/{id}/personal")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response doctorPersonalInformation (@PathParam("id") final int id){
+        LOGGER.debug("Doctor Personal information");
+        Doctor doctor = null;
+        try {
+            doctor = doctorService.findDoctorById(String.valueOf(id));
+        } catch (NotFoundDoctorException | NotValidIDException e){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
 
+        List<Appointment> futureAppointments = doctorService.getFutureAppointments(doctor);
+        List<Appointment> historicalAppointments = doctorService.getHistoricalAppointments(doctor);
+        List<Review> reviews = doctorService.getReviews(doctor);
 
+        return Response.ok(new DoctorPersonalDTO(futureAppointments, historicalAppointments, reviews)).build();
+    }
 }

@@ -63,7 +63,7 @@ public class DoctorPanelController {
 
         Doctor doctor = null;
         try {
-            doctor = doctorService.findDoctorById(String.valueOf(doctorId)).get();
+            doctor = doctorService.findDoctorById(String.valueOf(doctorId));
         } catch (NotFoundDoctorException | NotValidIDException e) {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
@@ -123,8 +123,8 @@ public class DoctorPanelController {
          */
 
         if(form.getDay() != null){
-            Optional<Doctor> doctor = doctorService.findDoctorById(String.valueOf(form.getDoctorid()));
-            appointmentService.cancelAppointment(form.getDay(), form.getTime(), patient, doctor.get());
+            Doctor doctor = doctorService.findDoctorById(String.valueOf(form.getDoctorid()));
+            appointmentService.cancelAppointment(form.getDay(), form.getTime(), patient, doctor);
         }
         ModelAndView mav = new ModelAndView("redirect:/doctorPanel");
         return mav;

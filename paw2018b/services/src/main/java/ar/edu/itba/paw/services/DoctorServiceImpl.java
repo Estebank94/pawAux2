@@ -100,7 +100,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     @Transactional
-    public Optional<Doctor> findDoctorById(String idAsString) throws NotFoundDoctorException, NotValidIDException {
+    public Doctor findDoctorById(String idAsString) throws NotFoundDoctorException, NotValidIDException {
         LOGGER.debug("DoctorServiceImpl: findDoctorById");
 
         if (idAsString == null ){
@@ -159,7 +159,8 @@ public class DoctorServiceImpl implements DoctorService {
 
         LOGGER.debug("Doctor with ID: {} found", idAsInt);
         LOGGER.debug("Doctor is: {}", thisdoctor);
-        return thisdoctor;
+
+        return doc;
     }
 
     @Override
@@ -535,6 +536,21 @@ public class DoctorServiceImpl implements DoctorService {
         }
 
         return Optional.ofNullable(doctor);
+    }
+
+    @Override
+    public List<Appointment> getFutureAppointments(Doctor doctor) {
+        return doctorDao.getFutureAppointments(doctor);
+    }
+
+    @Override
+    public List<Appointment> getHistoricalAppointments(Doctor doctor) {
+        return doctorDao.getHistoricalAppointments(doctor);
+    }
+
+    @Override
+    public List<Review> getReviews(Doctor doctor) {
+        return doctorDao.getReviews(doctor);
     }
 
 }

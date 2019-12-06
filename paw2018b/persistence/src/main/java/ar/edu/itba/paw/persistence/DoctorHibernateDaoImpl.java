@@ -436,6 +436,36 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         em.merge(doctor);
     }
 
+    @Override
+    public List<Appointment> getFutureAppointments(Doctor doctor) {
+        String today = LocalDate.now().toString();
+        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay >= :day AND ap.doctor = :doctor AND ap.appointmentCancelled = :cancel", Appointment.class);
+        query.setParameter("doctor", doctor);
+        query.setParameter("day", today);
+        query.setParameter("cancel", false);
+        final List<Appointment> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
+    @Override
+    public List<Appointment> getHistoricalAppointments(Doctor doctor) {
+        String today = LocalDate.now().toString();
+        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay < :day AND ap.doctor = :doctor AND ap.appointmentCancelled = :cancel", Appointment.class);
+        query.setParameter("doctor", doctor);
+        query.setParameter("day", today);
+        query.setParameter("cancel", false);
+        final List<Appointment> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
+    @Override
+    public List<Review> getReviews(Doctor doctor) {
+        final TypedQuery<Review> query = em.createQuery("FROM Review rev where rev.doctor = :doctor", Review.class);
+        query.setParameter("doctor", doctor);
+        final List<Review> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
     private String escapeSpecialCharacters(String input) {
         StringBuilder resultStr = new StringBuilder();
         for (char ch : input.toCharArray()) {
