@@ -3,6 +3,7 @@
  */
 
 import axios from "axios";
+import queryString from 'query-string';
 import { API_URL } from "../constants/constants";
 
 //TODO Remove cross origin headers
@@ -16,19 +17,39 @@ export default (endpoint, method, body = {}) => {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Access-Control-Allow-Headers': 'Authorization',
                         'Access-Control-Allow-Origin': '*',
                     }
                 }).then(response => response.data)
+            } else if (method === 'XPOST') {
+              return axios({
+                url: API_URL + endpoint,
+                method: 'POST',
+                data: queryString.stringify(body),
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                  'Access-Control-Allow-Headers': 'Authorization',
+                  'Access-Control-Allow-Origin': '*',
+                }
+              }).then(response => {
+                return (response.headers['x-auth-token'])
+              }).catch(error => {
+                console.log('error:', error);
+              });
             } else {
                 return axios({
                     url: API_URL + endpoint,
                     method: method,
-                    data: body,
+                    data: queryString.stringify(body),
                     headers: {
                         'Content-Type': 'application/json',
+                        'Access-Control-Allow-Headers': 'x-access-token',
                         'Access-Control-Allow-Origin': '*',
                     }
-                }).then(response => response.data)
+                }).then(response => {
+                    console.log('POST Response', response);
+                    return (response.data)
+                })
             }
     }
 }
