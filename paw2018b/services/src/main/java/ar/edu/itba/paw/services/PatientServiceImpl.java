@@ -184,41 +184,32 @@ public class PatientServiceImpl implements PatientService {
             LOGGER.debug("Patient not found");
             throw new NotFoundPacientException("Patient was not found");
         }
-        patient.getDoctor();
-        patient.getDoctor().getReviews();
-        LOGGER.debug("Patient {}", patient.getId());
+        LOGGER.debug("Patient {}", patient);
+
         return patient;
     }
 
     @Override
-    public Patient findPatientByEmail(String email){
+    public Patient findPatientByEmail(String email) throws NotValidPatientIdException, NotCreatePatientException, NotFoundPacientException, NotValidEmailException {
         LOGGER.debug("PatientServiceImpl: findPatientByEmail(String email)");
         if (email == null){
             LOGGER.debug("Email is null");
-            return null;
-            // throw new NotValidEmailException("patient email can't be null");
+            throw new NotValidEmailException("patient email can't be null");
         }
         if (email.length() == 0){
             LOGGER.debug("Email length is 0");
-            return null;
-            // throw new NotValidEmailException("Patient email can't be negative or zero");
+            throw new NotValidEmailException("Patient email can't be negative or zero");
         }
         if (email.length() > 90){
             LOGGER.debug("Email has more than 90 characters. Email: {}", email);
-            return null;
-            // throw new NotValidEmailException("PatientMail can't have more than 90 characters");
+            throw new NotValidEmailException("PatientMail can't have more than 90 characters");
         }
         LOGGER.debug("Calling patientDao.findPatientByEmail(email)");
         Patient foundPatient = patientDao.findPatientByEmail(email);
         if (foundPatient == null){
             LOGGER.debug("No patient found");
-            return null;
-            // throw new NotFoundPacientException("Patient was not found");
+            throw new NotFoundPacientException("Patient was not found");
         }
-        // foundPatient.getFavorites();
-//        foundPatient.isPresent().getFavorites();
-//        LOGGER.debug("Patient found. Patient: {}", foundPatient.get());
-//        LOGGER.debug("Patient name: {}", foundPatient.get().getFirstName());
         return foundPatient;
     }
 

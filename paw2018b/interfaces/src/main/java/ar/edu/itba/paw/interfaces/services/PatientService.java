@@ -10,7 +10,7 @@ public interface PatientService {
 
     public Patient findPatientById(Integer id) throws NotValidPatientIdException, NotCreatePatientException, NotFoundPacientException;
 
-    public Patient findPatientByEmail(String email);
+    public Patient findPatientByEmail(String email) throws NotValidPatientIdException, NotCreatePatientException, NotFoundPacientException, NotValidEmailException;
 
     public Patient createPatient(String firstName, String lastName, String phoneNumber, String address, String sex) throws IllegalArgumentException, RepeatedEmailException, NotValidFirstNameException, NotValidLastNameException, NotValidPhoneNumberException, NotValidEmailException, NotValidPasswordException, NotCreatePatientException;
 

@@ -35,7 +35,9 @@ public class PatientDTO {
         this.uri = baseUri.resolve(String.valueOf(this.id));
         this.favorites = new ArrayList<>();
         for (Favorite favorite : patient.getFavorites()){
-            this.favorites.add(new FavoriteDoctorDTO(favorite));
+            if (!favorite.getFavoriteCancelled()){
+                this.favorites.add(new FavoriteDoctorDTO(favorite));
+            }
         }
     }
 
@@ -45,6 +47,15 @@ public class PatientDTO {
         lastName = patient.getLastName();
         phoneNumber = patient.getPhoneNumber();
         email = patient.getEmail();
+        if (patient.getDoctor() != null){
+            doctor = new BasicDoctorDTO(patient.getDoctor());
+        }
+        this.favorites = new ArrayList<>();
+        for (Favorite favorite : patient.getFavorites()){
+            if (!favorite.getFavoriteCancelled()){
+                this.favorites.add(new FavoriteDoctorDTO(favorite));
+            }
+        }
     }
 
     public Integer getId() {
@@ -93,6 +104,22 @@ public class PatientDTO {
 
     public void setUri(URI uri) {
         this.uri = uri;
+    }
+
+    public BasicDoctorDTO getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(BasicDoctorDTO doctor) {
+        this.doctor = doctor;
+    }
+
+    public List<FavoriteDoctorDTO> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<FavoriteDoctorDTO> favorites) {
+        this.favorites = favorites;
     }
 
     @Override

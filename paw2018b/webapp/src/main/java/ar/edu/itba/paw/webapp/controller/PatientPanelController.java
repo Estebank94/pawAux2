@@ -6,8 +6,10 @@ import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
+import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
 import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
 import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
+import ar.edu.itba.paw.models.exceptions.NotValidPatientIdException;
 import ar.edu.itba.paw.webapp.forms.CancelAppointmentForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +43,7 @@ public class PatientPanelController {
     DoctorService doctorService;
 
     @RequestMapping("/patientPanel")
-    public ModelAndView patientPanel(){
+    public ModelAndView patientPanel() throws NotCreatePatientException, NotValidPatientIdException, NotValidEmailException, NotFoundPacientException {
 
         LOGGER.debug("Calling: patientPanel GET");
 

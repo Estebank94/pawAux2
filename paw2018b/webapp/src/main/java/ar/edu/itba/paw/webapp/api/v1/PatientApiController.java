@@ -1,20 +1,14 @@
 package ar.edu.itba.paw.webapp.api.v1;
 
+import ar.edu.itba.paw.interfaces.services.DoctorService;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.PatientService;
-import ar.edu.itba.paw.models.Appointment;
-import ar.edu.itba.paw.models.Favorite;
-import ar.edu.itba.paw.models.Patient;
-
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
 import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
 import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
 import ar.edu.itba.paw.models.exceptions.NotValidPatientIdException;
-
-
-import ar.edu.itba.paw.models.Verification;
 import ar.edu.itba.paw.models.exceptions.*;
-
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
 import ar.edu.itba.paw.webapp.dto.patient.PatientDTO;
 import ar.edu.itba.paw.webapp.dto.patient.PatientPersonalInformationDTO;
@@ -30,7 +24,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.thymeleaf.TemplateEngine;
-
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -70,17 +63,23 @@ public class PatientApiController extends BaseApiController {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    private DoctorService doctorService;
+
     private static final String VERIFICATION_TOKEN_TEMPLATE_NAME = "welcomeMail.html";
 
     @GET
     @Path("/{id}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getPatientById(@PathParam("id")final int id) throws NotValidPatientIdException, NotFoundPacientException, NotCreatePatientException {
+    public Response getPatientById(@PathParam("id")final int id) {
         Patient patient = new Patient();
         try {
             patient = patientService.findPatientById(id);
-        } catch (NotValidPatientIdException | NotFoundPacientException | NotCreatePatientException e){
-            e.printStackTrace();
+        } catch (NotValidPatientIdException e){
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (NotFoundPacientException | NotCreatePatientException e){
+            return Response.status(Response.Status.NOT_FOUND)
+                    .build();
         }
         if (patient == null){
             LOGGER.warn("Patient with id {} not found", id);
@@ -92,19 +91,19 @@ public class PatientApiController extends BaseApiController {
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response getPatientByEmail(@QueryParam("email")final String email) throws NotValidPatientIdException, NotFoundPacientException, NotCreatePatientException {
+    public Response getPatientByEmail(@QueryParam("email")final String email) {
         Patient patient = new Patient();
-        patient = patientService.findPatientByEmail(email);
-
-        /*
         try {
             patient = patientService.findPatientByEmail(email);
-        } catch (NotFoundPacientException | NotValidEmailException e) {
-            e.printStackTrace();
+        } catch ( NotCreatePatientException | NotFoundPacientException e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (NotValidEmailException | NotValidPatientIdException e){
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON(messageSource.getMessage("non_matching_passwords", null, LocaleContextHolder.getLocale())))
+                    .build();
         }
-         */
 
-        System.out.println(patient.toString());
         if (patient == null){
             LOGGER.warn("Patient with email {} not found", email);
             return Response.status(Response.Status.NOT_FOUND)
@@ -185,8 +184,16 @@ public class PatientApiController extends BaseApiController {
     @GET
     @Path("/me")
     @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response loggedUser() throws NotFoundPacientException, NotValidEmailException {
-        final Patient patient = userDetailsService.getLoggedUser();
+    public Response loggedUser() {
+        final Patient patient;
+        try {
+            patient = userDetailsService.getLoggedUser();
+        } catch (NotFoundPacientException | NotValidEmailException e) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .build();
+        }
+
         return Response.ok(new PatientDTO(patient)).build();
     }
 
@@ -211,13 +218,68 @@ public class PatientApiController extends BaseApiController {
         }
 
         List<Appointment> historicalAppointments = patientService.getHistoricalAppointments(patient);
-        LOGGER.debug("appointments size = " + historicalAppointments.size());
-
         List<Appointment> futureAppointments = patientService.getFutureAppointments(patient);
-        LOGGER.debug("appointments size = " +  futureAppointments.size());
+        List<Favorite> favorites = patientService.getFavoriteDoctors(patient);
 
-        //List<Favorite> favorites = patientService.getFavoriteDoctors(patient);
-        List<Favorite> favorites = Collections.emptyList();
-        return Response.ok(new PatientPersonalInformationDTO(historicalAppointments, futureAppointments, favorites)).build();
+        List<Appointment> futureAppointmentsDoctor = Collections.EMPTY_LIST;
+        List<Appointment> historicalAppointmentsDoctor = Collections.EMPTY_LIST;
+        List<Review> reviews = Collections.EMPTY_LIST;
+
+        Doctor doctor = patient.getDoctor();
+        if (patient.getDoctor() != null) {
+            futureAppointments = doctorService.getFutureAppointments(doctor);
+            historicalAppointments = doctorService.getHistoricalAppointments(doctor);
+            reviews = doctor.getReviews();
+        }
+
+        return Response.ok(new PatientPersonalInformationDTO(historicalAppointments, futureAppointments, favorites, futureAppointmentsDoctor, historicalAppointmentsDoctor, reviews)).build();
     }
+
+    @GET
+    @Path("/personal")
+    @Produces (value = {MediaType.APPLICATION_JSON})
+    public Response personalInformationWithEmail (@QueryParam("email") final String email) {
+        LOGGER.debug("Patient personal information {}", email);
+        Patient patient = null;
+        try {
+            patient = patientService.findPatientByEmail(email);
+        } catch (NotValidPatientIdException | NotCreatePatientException |  NotFoundPacientException e) {
+            LOGGER.warn("Patient with email {} not found", email);
+            Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("patient not found")) //messageSource.getMessage("patient not found", null, LocaleContextHolder.getLocale())))
+                    .build();
+        } catch (NotValidEmailException e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON(messageSource.getMessage("non_matching_passwords", null, LocaleContextHolder.getLocale())))
+                    .build();
+        }
+
+        if (patient == null){
+            LOGGER.warn("Patient with email {} not found", email);
+            Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("patient not found")) //messageSource.getMessage("patient not found", null, LocaleContextHolder.getLocale())))
+                    .build();
+        }
+
+        List<Appointment> historicalAppointments = patientService.getHistoricalAppointments(patient);
+        List<Appointment> futureAppointments = patientService.getFutureAppointments(patient);
+        List<Favorite> favorites = patientService.getFavoriteDoctors(patient);
+
+        List<Appointment> futureAppointmentsDoctor = Collections.EMPTY_LIST;
+        List<Appointment> historicalAppointmentsDoctor = Collections.EMPTY_LIST;
+        List<Review> reviews = Collections.EMPTY_LIST;
+
+        Doctor doctor = patient.getDoctor();
+        if (patient.getDoctor() != null) {
+            futureAppointments = doctorService.getFutureAppointments(doctor);
+            historicalAppointments = doctorService.getHistoricalAppointments(doctor);
+            reviews = doctor.getReviews();
+        }
+
+        return Response.ok(new PatientPersonalInformationDTO(historicalAppointments, futureAppointments, favorites, futureAppointmentsDoctor, historicalAppointmentsDoctor, reviews)).build();
+    }
+
 }

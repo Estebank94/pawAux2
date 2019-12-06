@@ -3,8 +3,10 @@ package ar.edu.itba.paw.webapp.dto.patient;
 import ar.edu.itba.paw.interfaces.persistance.FavoriteDao;
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Favorite;
+import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.webapp.dto.FavoriteDoctorDTO;
 import ar.edu.itba.paw.webapp.dto.appointment.PatientAppointmentDTO;
+import ar.edu.itba.paw.webapp.dto.doctor.DoctorPersonalDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +15,12 @@ public class PatientPersonalInformationDTO {
     List<PatientAppointmentDTO> historicalAppointments;
     List<PatientAppointmentDTO> futureAppointments;
     List<FavoriteDoctorDTO> favorites;
+    DoctorPersonalDTO doctorInformation;
 
     public PatientPersonalInformationDTO (){}
 
-    public PatientPersonalInformationDTO(List<Appointment> historicalAppointments, List<Appointment> futureAppointments, List<Favorite> favorites) {
+    public PatientPersonalInformationDTO(List<Appointment> historicalAppointments, List<Appointment> futureAppointments, List<Favorite> favorites,
+                                         List<Appointment> historicalAppointmentsDoctor, List<Appointment> futureAppointmentsDoctor, List<Review> reviews) {
         this.historicalAppointments = new ArrayList<>();
         for (Appointment ap: historicalAppointments){
             this.historicalAppointments.add(new PatientAppointmentDTO(ap));
@@ -30,6 +34,8 @@ public class PatientPersonalInformationDTO {
         for (Favorite fav: favorites){
             this.favorites.add(new FavoriteDoctorDTO(fav));
         }
+
+        doctorInformation = new DoctorPersonalDTO(historicalAppointmentsDoctor, futureAppointmentsDoctor, reviews);
     }
 
     public List<PatientAppointmentDTO> getHistoricalAppointments() {
@@ -54,5 +60,13 @@ public class PatientPersonalInformationDTO {
 
     public void setFavorites(List<FavoriteDoctorDTO> favorites) {
         this.favorites = favorites;
+    }
+
+    public DoctorPersonalDTO getDoctorInformation() {
+        return doctorInformation;
+    }
+
+    public void setDoctorInformation(DoctorPersonalDTO doctorInformation) {
+        this.doctorInformation = doctorInformation;
     }
 }
