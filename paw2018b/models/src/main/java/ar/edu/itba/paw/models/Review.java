@@ -15,7 +15,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="doctorid")
     private Doctor doctor;
 
@@ -89,4 +89,5 @@ public class Review {
     public void setReviewerLastName(String reviewerLastName) {
         this.reviewerLastName = reviewerLastName;
     }
+
 }

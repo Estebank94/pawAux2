@@ -49,4 +49,6 @@ public interface DoctorDao {
     List<Appointment> getHistoricalAppointments(Doctor doctor);
 
     List<Review> getReviews(Doctor doctor);
+
+    void createReview(Doctor doctor, Patient patient, Review review);
 }

@@ -6,7 +6,6 @@ public class ReviewDTO {
     private Integer stars;
     private String dayTime;
     private String description;
-    private Integer id;
     private String reviewerFirstName;
     private String reviewerLastName;
 
@@ -16,7 +15,6 @@ public class ReviewDTO {
         this.stars = review.getStars();
         this.dayTime = review.getDayTime();
         this.description = review.getDescription();
-        this.id = review.getId();
         this.reviewerFirstName = review.getReviewerFirstName();
         this.reviewerLastName = review.getReviewerLastName();
     }
@@ -44,15 +42,7 @@ public class ReviewDTO {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
+    
     public String getReviewerFirstName() {
         return reviewerFirstName;
     }

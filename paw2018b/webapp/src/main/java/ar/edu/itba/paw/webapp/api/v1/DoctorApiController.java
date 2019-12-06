@@ -342,7 +342,7 @@ public class DoctorApiController extends BaseApiController {
 
         List<Appointment> futureAppointments = doctorService.getFutureAppointments(doctor);
         List<Appointment> historicalAppointments = doctorService.getHistoricalAppointments(doctor);
-        // List<Review> reviews = doctorService.getReviews(doctor);
+        List<Review> reviews = doctor.getReviews();
 
         return Response.ok(new DoctorPersonalDTO(futureAppointments, historicalAppointments, reviews)).build();
     }
