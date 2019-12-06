@@ -71,8 +71,10 @@ public class PatientHibernateDaoImpl implements PatientDao {
         Patient patient = em.find(Patient.class, id);
         if (patient != null){
             Hibernate.initialize(patient);
-            Hibernate.initialize(patient.getDoctor());
-            Hibernate.initialize(patient.getDoctor().getReviews());
+            if (patient.getDoctor() != null) {
+                Hibernate.initialize(patient.getDoctor());
+                Hibernate.initialize(patient.getDoctor().getReviews());
+            }
         }
         //return Optional.ofNullable(em.find(Patient.class, id));
         return Optional.ofNullable(patient);

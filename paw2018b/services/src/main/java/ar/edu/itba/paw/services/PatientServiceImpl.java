@@ -179,7 +179,15 @@ public class PatientServiceImpl implements PatientService {
             throw new NotValidPatientIdException("PatientId can't be negative or zero");
         }
         LOGGER.debug("find patient by id. ID {}", id);
-        Patient patient = patientDao.findPatientById(id).get();
+        Optional<Patient> patientOptional = patientDao.findPatientById(id);
+
+        if (!patientOptional.isPresent()){
+            LOGGER.debug("Patient not found");
+            throw new NotFoundPacientException("Patient was not found");
+        }
+
+        Patient patient = patientOptional.get();
+
         if (patient == null){
             LOGGER.debug("Patient not found");
             throw new NotFoundPacientException("Patient was not found");

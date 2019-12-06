@@ -10,6 +10,7 @@ import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
 import ar.edu.itba.paw.models.exceptions.NotValidPatientIdException;
 import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
+import ar.edu.itba.paw.webapp.dto.doctor.DoctorPersonalDTO;
 import ar.edu.itba.paw.webapp.dto.patient.PatientDTO;
 import ar.edu.itba.paw.webapp.dto.patient.PatientPersonalInformationDTO;
 import ar.edu.itba.paw.webapp.forms.PatientForm;
@@ -274,12 +275,14 @@ public class PatientApiController extends BaseApiController {
 
         Doctor doctor = patient.getDoctor();
         if (patient.getDoctor() != null) {
-            futureAppointments = doctorService.getFutureAppointments(doctor);
-            historicalAppointments = doctorService.getHistoricalAppointments(doctor);
+            futureAppointmentsDoctor = doctorService.getFutureAppointments(doctor);
+            historicalAppointmentsDoctor = doctorService.getHistoricalAppointments(doctor);
             reviews = doctor.getReviews();
+            return Response.ok(new PatientPersonalInformationDTO(historicalAppointments, futureAppointments, favorites,
+                                futureAppointmentsDoctor, historicalAppointmentsDoctor, reviews)).build();
         }
 
-        return Response.ok(new PatientPersonalInformationDTO(historicalAppointments, futureAppointments, favorites, futureAppointmentsDoctor, historicalAppointmentsDoctor, reviews)).build();
+        return Response.ok(new PatientPersonalInformationDTO(historicalAppointments, futureAppointments, favorites)).build();
     }
 
 }

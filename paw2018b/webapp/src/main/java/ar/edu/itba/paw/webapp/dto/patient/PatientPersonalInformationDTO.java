@@ -12,12 +12,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PatientPersonalInformationDTO {
-    List<PatientAppointmentDTO> historicalAppointments;
-    List<PatientAppointmentDTO> futureAppointments;
-    List<FavoriteDoctorDTO> favorites;
-    DoctorPersonalDTO doctorInformation;
+    private List<PatientAppointmentDTO> historicalAppointments;
+    private List<PatientAppointmentDTO> futureAppointments;
+    private List<FavoriteDoctorDTO> favorites;
+    private DoctorPersonalDTO doctorInformation;
 
     public PatientPersonalInformationDTO (){}
+
+    public PatientPersonalInformationDTO(List<Appointment> historicalAppointments, List<Appointment> futureAppointments, List<Favorite> favorites){
+        this.historicalAppointments = new ArrayList<>();
+        for (Appointment ap: historicalAppointments){
+            this.historicalAppointments.add(new PatientAppointmentDTO(ap));
+        }
+        this.futureAppointments = new ArrayList<>();
+        for (Appointment ap: futureAppointments){
+            this.futureAppointments.add(new PatientAppointmentDTO(ap));
+        }
+
+        this.favorites = new ArrayList<>();
+        for (Favorite fav: favorites){
+            this.favorites.add(new FavoriteDoctorDTO(fav));
+        }
+        this.doctorInformation = null;
+    }
 
     public PatientPersonalInformationDTO(List<Appointment> historicalAppointments, List<Appointment> futureAppointments, List<Favorite> favorites,
                                          List<Appointment> historicalAppointmentsDoctor, List<Appointment> futureAppointmentsDoctor, List<Review> reviews) {
@@ -69,4 +86,5 @@ public class PatientPersonalInformationDTO {
     public void setDoctorInformation(DoctorPersonalDTO doctorInformation) {
         this.doctorInformation = doctorInformation;
     }
+
 }
