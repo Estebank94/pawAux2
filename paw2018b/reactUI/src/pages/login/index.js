@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Shake from 'react-reveal/Shake';
 import Fade from 'react-reveal/Fade';
+import fetchApi from '../../utils/api'
+import queryString from 'query-string';
 
 class Login extends React.Component {
   state = {
@@ -17,21 +19,24 @@ class Login extends React.Component {
   handleChange(e) {
     const { name, value } = e.target;
     if(name !== 'rememberMe') {
-      this.setState({ [name]: value, [`${name}Error`]: false }, console.log(this.state[name]));
+      this.setState({ [name]: value, [`${name}Error`]: false });
     } else {
       this.setState({ rememberMe: !this.state.rememberMe });
     }
   }
 
   handleSubmit() {
-    const { email, password, rememberMe} = this.state;
+    const { email, password, rememberMe } = this.state;
+    if(email && password) {
+      fetchApi('/patient/login','XPOST', { Jusername: email, Jpassword: password }).then(response => console.log('respone',response))
+    }
     if(!email) {
       this.setState({ emailError: true })
     }
     if(!password) {
       this.setState({ passwordError: true })
     }
-    this.setState({ error: true })
+
   }
 
   render() {
