@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.models.InsurancePlan;
 import ar.edu.itba.paw.models.Specialty;
+import ar.edu.itba.paw.webapp.dto.insurance.InsuranceDTO;
 
 import java.util.ArrayList;
 import java.util.List;

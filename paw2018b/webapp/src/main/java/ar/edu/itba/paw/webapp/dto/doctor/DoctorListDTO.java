@@ -1,6 +1,7 @@
-package ar.edu.itba.paw.webapp.dto;
+package ar.edu.itba.paw.webapp.dto.doctor;
 
 import ar.edu.itba.paw.models.Doctor;
+import ar.edu.itba.paw.webapp.dto.doctor.DoctorDTO;
 
 import java.util.LinkedList;
 import java.util.List;

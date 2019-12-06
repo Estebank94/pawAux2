@@ -28,18 +28,15 @@ public class Doctor {
     Integer licence;
 
     @ManyToMany(cascade = {CascadeType.ALL},
-                fetch = FetchType.EAGER
-    )
+                fetch = FetchType.EAGER)
     @JoinTable(
             name="doctorSpecialty",
             joinColumns = {@JoinColumn(name = "doctorid", referencedColumnName="id")},
-            inverseJoinColumns = {@JoinColumn(name = "specialtyid", referencedColumnName="id")}
-    )
+            inverseJoinColumns = {@JoinColumn(name = "specialtyid", referencedColumnName="id")})
     Set<Specialty> specialties;
 
     @ManyToMany(cascade = {CascadeType.PERSIST},
-                fetch = FetchType.EAGER
-    )
+                fetch = FetchType.EAGER)
     @JoinTable(
             name="medicalCare",
             joinColumns = {@JoinColumn(name="doctorid", referencedColumnName="id")},
@@ -51,7 +48,6 @@ public class Doctor {
 
     @OneToMany(mappedBy = "doctor", cascade = {CascadeType.ALL})
     List<WorkingHours> workingHours;
-
 
     @OneToMany(mappedBy = "doctor")
     @LazyCollection(LazyCollectionOption.TRUE)
@@ -65,7 +61,6 @@ public class Doctor {
 
     @OneToOne(mappedBy="doctor", cascade = {CascadeType.ALL})
     Description description;
-
 
     String district;
 

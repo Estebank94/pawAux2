@@ -1,16 +1,19 @@
 package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.models.Favorite;
+import ar.edu.itba.paw.webapp.dto.doctor.BasicDoctorDTO;
+import ar.edu.itba.paw.webapp.dto.doctor.DoctorDTO;
 
 public class FavoriteDoctorDTO {
     private int id;
-    private DoctorDTO doctor;
+    private BasicDoctorDTO doctor;
     private boolean favoriteCancelled;
 
     public FavoriteDoctorDTO (){}
+
     public FavoriteDoctorDTO (Favorite favorite){
         this.id = favorite.getId();
-        this.doctor = new DoctorDTO(favorite.getDoctor());
+        this.doctor = new BasicDoctorDTO(favorite.getDoctor());
         this.favoriteCancelled = favorite.getFavoriteCancelled();
     }
 
@@ -22,11 +25,11 @@ public class FavoriteDoctorDTO {
         this.id = id;
     }
 
-    public DoctorDTO getDoctor() {
+    public BasicDoctorDTO getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(DoctorDTO doctor) {
+    public void setDoctor(BasicDoctorDTO doctor) {
         this.doctor = doctor;
     }
 

@@ -3,10 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.persistance.DoctorDao;
 import ar.edu.itba.paw.interfaces.persistance.PatientDao;
 import ar.edu.itba.paw.interfaces.services.PatientService;
-import ar.edu.itba.paw.models.Appointment;
-import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.Patient;
-import ar.edu.itba.paw.models.Verification;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -256,5 +253,10 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public List<Appointment> getFutureAppointments(Patient patient) {
         return patientDao.getFutureAppointments(patient);
+    }
+
+    @Override
+    public List<Favorite> getFavoriteDoctors(Patient patient) {
+        return patientDao.getFavoriteDoctors(patient);
     }
 }

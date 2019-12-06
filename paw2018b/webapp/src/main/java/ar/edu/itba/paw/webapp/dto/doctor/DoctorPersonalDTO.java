@@ -1,7 +1,9 @@
-package ar.edu.itba.paw.webapp.dto;
+package ar.edu.itba.paw.webapp.dto.doctor;
 
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Review;
+import ar.edu.itba.paw.webapp.dto.reviews.ReviewDTO;
+import ar.edu.itba.paw.webapp.dto.appointment.DoctorAppointmentDTO;
 
 import java.util.ArrayList;
 import java.util.List;

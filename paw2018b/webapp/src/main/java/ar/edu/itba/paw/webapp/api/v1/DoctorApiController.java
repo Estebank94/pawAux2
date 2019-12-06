@@ -13,8 +13,12 @@ import ar.edu.itba.paw.models.exceptions.*;
 
 
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
-import ar.edu.itba.paw.webapp.dto.*;
 
+import ar.edu.itba.paw.webapp.dto.doctor.DoctorDTO;
+import ar.edu.itba.paw.webapp.dto.doctor.DoctorListDTO;
+import ar.edu.itba.paw.webapp.dto.doctor.DoctorPersonalDTO;
+import ar.edu.itba.paw.webapp.dto.patient.PatientDTO;
+import ar.edu.itba.paw.webapp.dto.workingHours.WorkingHoursDTO;
 import ar.edu.itba.paw.webapp.forms.BasicProfessionalForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 import org.slf4j.LoggerFactory;

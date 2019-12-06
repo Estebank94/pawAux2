@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.api.v1;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.Appointment;
+import ar.edu.itba.paw.models.Favorite;
 import ar.edu.itba.paw.models.Patient;
 
 import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
@@ -15,9 +16,8 @@ import ar.edu.itba.paw.models.Verification;
 import ar.edu.itba.paw.models.exceptions.*;
 
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
-import ar.edu.itba.paw.webapp.dto.PatientAppointmentDTO;
-import ar.edu.itba.paw.webapp.dto.PatientDTO;
-import ar.edu.itba.paw.webapp.dto.PatientPersonalInformationDTO;
+import ar.edu.itba.paw.webapp.dto.patient.PatientDTO;
+import ar.edu.itba.paw.webapp.dto.patient.PatientPersonalInformationDTO;
 import ar.edu.itba.paw.webapp.forms.PatientForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 @Path("v1/patient")
@@ -82,7 +81,6 @@ public class PatientApiController extends BaseApiController {
         } catch (NotValidPatientIdException | NotFoundPacientException | NotCreatePatientException e){
             e.printStackTrace();
         }
-        System.out.println(patient.toString());
         if (patient == null){
             LOGGER.warn("Patient with id {} not found", id);
             return Response.status(Response.Status.NOT_FOUND)
@@ -194,26 +192,31 @@ public class PatientApiController extends BaseApiController {
     @GET
     @Path("/{id}/personal")
     @Produces (value = {MediaType.APPLICATION_JSON})
-    public Response historicalAppointments (@PathParam("id") final int id) {
-        Patient patient = new Patient();
+    public Response personalInformation (@PathParam("id") final int id) {
+        LOGGER.debug("Patient personal information {}", id);
+        Patient patient = null;
+
         try {
             patient = patientService.findPatientById(id);
         } catch (NotValidPatientIdException | NotFoundPacientException | NotCreatePatientException e){
             return Response.status(Response.Status.NOT_FOUND).build();
-            // e.printStackTrace();
         }
         if (patient == null){
+            LOGGER.warn("Patient with id {} not found", id);
             Response
                     .status(Response.Status.NOT_FOUND)
                     .entity(errorMessageToJSON("patient not found")) //messageSource.getMessage("patient not found", null, LocaleContextHolder.getLocale())))
                     .build();
         }
+
         List<Appointment> historicalAppointments = patientService.getHistoricalAppointments(patient);
         LOGGER.debug("appointments size = " + historicalAppointments.size());
 
         List<Appointment> futureAppointments = patientService.getFutureAppointments(patient);
         LOGGER.debug("appointments size = " +  futureAppointments.size());
 
-        return Response.ok(new PatientPersonalInformationDTO(historicalAppointments, futureAppointments)).build();
+        List<Favorite> favorites = patientService.getFavoriteDoctors(patient);
+
+        return Response.ok(new PatientPersonalInformationDTO(historicalAppointments, futureAppointments, favorites)).build();
     }
 }

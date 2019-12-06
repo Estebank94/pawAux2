@@ -1,10 +1,14 @@
-package ar.edu.itba.paw.webapp.dto;
+package ar.edu.itba.paw.webapp.dto.patient;
 
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Favorite;
 import ar.edu.itba.paw.models.Patient;
+import ar.edu.itba.paw.webapp.dto.FavoriteDoctorDTO;
+import ar.edu.itba.paw.webapp.dto.appointment.PatientAppointmentDTO;
+import ar.edu.itba.paw.webapp.dto.doctor.BasicDoctorDTO;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,14 +18,12 @@ public class PatientDTO {
     private String lastName;
     private String phoneNumber;
     private String email;
-    private String password;
-    private List<PatientAppointmentDTO> appointments;
-    private List<FavoriteDoctorDTO> favorites;
     private URI uri;
+    private BasicDoctorDTO doctor;
+    private List<FavoriteDoctorDTO> favorites;
 
     public PatientDTO(){
     }
-
 
     public PatientDTO(Patient patient, URI baseUri) {
         id = patient.getId();
@@ -29,23 +31,12 @@ public class PatientDTO {
         lastName = patient.getLastName();
         phoneNumber = patient.getPhoneNumber();
         email = patient.getEmail();
-        password = patient.getPassword();
-
-        this.appointments = new LinkedList<>();
-        if(!appointments.isEmpty()){
-            for (Appointment appointment: patient.getAppointments()){
-                this.appointments.add(new PatientAppointmentDTO(appointment));
-            }
-        }
-
-
-        this.favorites = new LinkedList<>();
-        if(!favorites.isEmpty()) {
-            for (Favorite favorite : patient.getFavorites()) {
-                this.favorites.add(new FavoriteDoctorDTO(favorite));
-            }
-        }
+        doctor = new BasicDoctorDTO(patient.getDoctor());
         this.uri = baseUri.resolve(String.valueOf(this.id));
+        this.favorites = new ArrayList<>();
+        for (Favorite favorite : patient.getFavorites()){
+            this.favorites.add(new FavoriteDoctorDTO(favorite));
+        }
     }
 
     public PatientDTO(Patient patient){
@@ -54,22 +45,6 @@ public class PatientDTO {
         lastName = patient.getLastName();
         phoneNumber = patient.getPhoneNumber();
         email = patient.getEmail();
-        password = patient.getPassword();
-
-        this.appointments = new LinkedList<>();
-        if(!appointments.isEmpty()){
-            for (Appointment appointment: patient.getAppointments()){
-                this.appointments.add(new PatientAppointmentDTO(appointment));
-            }
-        }
-
-
-        this.favorites = new LinkedList<>();
-        if(!favorites.isEmpty()) {
-            for (Favorite favorite : patient.getFavorites()) {
-                this.favorites.add(new FavoriteDoctorDTO(favorite));
-            }
-        }
     }
 
     public Integer getId() {
@@ -112,28 +87,12 @@ public class PatientDTO {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public URI getUri() {
+        return uri;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<PatientAppointmentDTO> getAppointments() {
-        return appointments;
-    }
-
-    public void setAppointments(List<PatientAppointmentDTO> appointments) {
-        this.appointments = appointments;
-    }
-
-    public List<FavoriteDoctorDTO> getFavorites() {
-        return favorites;
-    }
-
-    public void setFavorites(List<FavoriteDoctorDTO> favorites) {
-        this.favorites = favorites;
+    public void setUri(URI uri) {
+        this.uri = uri;
     }
 
     @Override
@@ -144,7 +103,6 @@ public class PatientDTO {
                 ", lastName='" + lastName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 '}';
     }
 }

@@ -1,7 +1,7 @@
-package ar.edu.itba.paw.webapp.dto;
+package ar.edu.itba.paw.webapp.dto.appointment;
 
 import ar.edu.itba.paw.models.Appointment;
-import ar.edu.itba.paw.models.Doctor;
+import ar.edu.itba.paw.webapp.dto.doctor.DoctorDTO;
 
 public class PatientAppointmentDTO {
     private String appointmentDay;

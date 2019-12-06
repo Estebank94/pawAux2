@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistance.PatientDao;
-import ar.edu.itba.paw.models.Appointment;
-import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.Patient;
-import ar.edu.itba.paw.models.Verification;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.RepeatedEmailException;
@@ -126,6 +123,15 @@ public class PatientHibernateDaoImpl implements PatientDao {
         query.setParameter("day", today);
         query.setParameter("cancel", false);
         final List<Appointment> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
+    @Override
+    public List<Favorite> getFavoriteDoctors(Patient patient) {
+        final TypedQuery<Favorite> query = em.createQuery("FROM Favorite fav where fav.patient = :patient AND  fav.favoriteCancelled = :cancel", Favorite.class);
+        query.setParameter("patient", patient);
+        query.setParameter("cancel", false);
+        final List<Favorite> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
     }
 }

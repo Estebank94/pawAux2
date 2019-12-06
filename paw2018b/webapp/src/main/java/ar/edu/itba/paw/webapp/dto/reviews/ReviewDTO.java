@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.dto;
+package ar.edu.itba.paw.webapp.dto.reviews;
 
 import ar.edu.itba.paw.models.Review;
 
@@ -42,7 +42,7 @@ public class ReviewDTO {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     public String getReviewerFirstName() {
         return reviewerFirstName;
     }

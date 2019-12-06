@@ -1,8 +1,9 @@
-package ar.edu.itba.paw.webapp.dto;
+package ar.edu.itba.paw.webapp.dto.patient;
 
 import ar.edu.itba.paw.models.Patient;
 
 public class BasicPatientDTO {
+    private Integer id;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -12,6 +13,7 @@ public class BasicPatientDTO {
     }
 
     public BasicPatientDTO(Patient patient){
+        this.id = patient.getId();
         this.firstName = patient.getFirstName();
         this.lastName = patient.getLastName();
         this.phoneNumber = patient.getPhoneNumber();
@@ -48,5 +50,13 @@ public class BasicPatientDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
