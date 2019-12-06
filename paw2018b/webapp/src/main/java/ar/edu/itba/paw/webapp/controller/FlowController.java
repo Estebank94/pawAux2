@@ -23,7 +23,7 @@ import java.util.*;
 
 @Controller
 public class FlowController {
-
+	/*
 	private static final Logger LOGGER = LoggerFactory.getLogger(FlowController.class);
 
 	 @Autowired
@@ -82,7 +82,7 @@ public class FlowController {
 					LOGGER.trace("404 error");
 					return new ModelAndView("404");
 				}
-				*/
+
 				mav.addObject("doctorID", doctor.getId());
 			}
 			hasUserRole = authentication.getAuthorities().stream()
@@ -98,7 +98,7 @@ public class FlowController {
 					return new ModelAndView("404");
 				}
 
-				 */
+
 				mav.addObject("patient", patient);
 				mav.addObject("hasFavorites", patient.getFavoriteDoctors().size() > 0 );
 			}
@@ -147,7 +147,7 @@ public class FlowController {
 					return new ModelAndView("404");
 				}
 
-				 */
+
 				mav.addObject("doctorID", patient.getDoctor().getId());
 			}
 		}
@@ -249,7 +249,7 @@ public class FlowController {
 				LOGGER.trace("404 error");
 				return new ModelAndView("404");
 			}
-			*/
+
 		return mav;
     }
 
@@ -276,7 +276,7 @@ public class FlowController {
 			return new ModelAndView("404");
 		}
 
-		 */
+
 		try {
 			if(appointmentForm.getDay() != null && appointmentForm.getTime() != null) {
 				appointment = true;
@@ -336,4 +336,8 @@ public class FlowController {
 	}
 
 
+}
+
+
+	 */
 }

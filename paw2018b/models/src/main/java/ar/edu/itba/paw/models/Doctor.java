@@ -26,6 +26,7 @@ public class Doctor {
     String address;
     byte[] profilePicture;
     Integer licence;
+    String district;
 
     @ManyToMany(cascade = {CascadeType.ALL},
                 fetch = FetchType.EAGER)
@@ -35,8 +36,8 @@ public class Doctor {
             inverseJoinColumns = {@JoinColumn(name = "specialtyid", referencedColumnName="id")})
     Set<Specialty> specialties;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST},
-                fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST}
+                , fetch = FetchType.EAGER)
     @JoinTable(
             name="medicalCare",
             joinColumns = {@JoinColumn(name="doctorid", referencedColumnName="id")},
@@ -53,7 +54,7 @@ public class Doctor {
     @LazyCollection(LazyCollectionOption.TRUE)
     Set<Appointment> appointments;
 
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "doctor")
     List<Review> reviews;
 
     @OneToOne(mappedBy="doctor")
@@ -61,8 +62,6 @@ public class Doctor {
 
     @OneToOne(mappedBy="doctor", cascade = {CascadeType.ALL})
     Description description;
-
-    String district;
 
     @OneToMany(mappedBy="doctor", cascade = {CascadeType.PERSIST})
     List<Favorite> favorites;
@@ -82,7 +81,6 @@ public class Doctor {
         this.phoneNumber = phoneNumber;
         this.licence = licence;
     }
-
 
     public List<Review> getReviews() {
         return reviews;

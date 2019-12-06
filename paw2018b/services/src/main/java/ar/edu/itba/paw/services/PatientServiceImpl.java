@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.persistance.PatientDao;
 import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
+import org.hibernate.Hibernate;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-@Service
-@Transactional
+@Service("PatientServiceImpl")
 public class PatientServiceImpl implements PatientService {
 
     @Autowired
@@ -180,12 +180,13 @@ public class PatientServiceImpl implements PatientService {
         }
         LOGGER.debug("find patient by id. ID {}", id);
         Patient patient = patientDao.findPatientById(id).get();
-
         if (patient == null){
             LOGGER.debug("Patient not found");
             throw new NotFoundPacientException("Patient was not found");
         }
-        LOGGER.debug("Patient {}", patient);
+        patient.getDoctor();
+        patient.getDoctor().getReviews();
+        LOGGER.debug("Patient {}", patient.getId());
         return patient;
     }
 

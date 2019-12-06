@@ -38,6 +38,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 
 @Path("v1/patient")
@@ -215,8 +216,8 @@ public class PatientApiController extends BaseApiController {
         List<Appointment> futureAppointments = patientService.getFutureAppointments(patient);
         LOGGER.debug("appointments size = " +  futureAppointments.size());
 
-        List<Favorite> favorites = patientService.getFavoriteDoctors(patient);
-
+        //List<Favorite> favorites = patientService.getFavoriteDoctors(patient);
+        List<Favorite> favorites = Collections.emptyList();
         return Response.ok(new PatientPersonalInformationDTO(historicalAppointments, futureAppointments, favorites)).build();
     }
 }

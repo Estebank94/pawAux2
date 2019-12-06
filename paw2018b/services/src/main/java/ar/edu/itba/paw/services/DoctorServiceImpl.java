@@ -97,7 +97,6 @@ public class DoctorServiceImpl implements DoctorService {
         return list;
     }
 
-
     @Override
     @Transactional
     public Doctor findDoctorById(String idAsString) throws NotFoundDoctorException, NotValidIDException {
@@ -138,9 +137,11 @@ public class DoctorServiceImpl implements DoctorService {
         }
 
         thisdoctor.get().getWorkingHours().size();
-        // thisdoctor.get().getAppointments().size();
-        // thisdoctor.get().getReviews().size();
 
+        thisdoctor.get().getAppointments().size();
+        Hibernate.initialize(thisdoctor.get().getReviews());
+        // thisdoctor.get().getReviews().size();
+        /*
         if(thisdoctor.get().getDescription() != null){
             if(thisdoctor.get().getDescription().getLanguages() != null){
                 thisdoctor.get().getDescription().getLanguages();
@@ -153,6 +154,7 @@ public class DoctorServiceImpl implements DoctorService {
             }
         }
 
+         */
         Doctor doc = thisdoctor.get();
         doctorDao.mergeDoctor(doc);
         //em.merge(doc);

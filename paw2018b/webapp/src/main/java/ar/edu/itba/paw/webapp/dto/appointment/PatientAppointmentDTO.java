@@ -1,19 +1,20 @@
 package ar.edu.itba.paw.webapp.dto.appointment;
 
 import ar.edu.itba.paw.models.Appointment;
+import ar.edu.itba.paw.webapp.dto.doctor.BasicDoctorDTO;
 import ar.edu.itba.paw.webapp.dto.doctor.DoctorDTO;
 
 public class PatientAppointmentDTO {
     private String appointmentDay;
     private String appointmentTime;
-    private DoctorDTO doctor;
+    private BasicDoctorDTO doctor;
 
     public PatientAppointmentDTO (){}
 
     public PatientAppointmentDTO (Appointment appointment){
         this.appointmentDay = appointment.getAppointmentDay();
         this.appointmentTime = appointment.getAppointmentTime();
-        this.doctor = new DoctorDTO(appointment.getDoctor());
+        this.doctor = new BasicDoctorDTO(appointment.getDoctor());
     }
 
     public String getAppointmentDay() {
@@ -32,11 +33,11 @@ public class PatientAppointmentDTO {
         this.appointmentTime = appointmentTime;
     }
 
-    public DoctorDTO getDoctor() {
+    public BasicDoctorDTO getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(DoctorDTO doctor) {
+    public void setDoctor(BasicDoctorDTO doctor) {
         this.doctor = doctor;
     }
 }
