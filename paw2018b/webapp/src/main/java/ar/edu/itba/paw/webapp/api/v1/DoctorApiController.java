@@ -300,35 +300,19 @@ public class DoctorApiController extends BaseApiController {
         }
 
         /* Avatar */
-//        String fileName = fileDetail.getFileName();
-//        boolean start = false;
-//        StringBuilder ext = new StringBuilder();
 //
-//        for(char c : fileName.toCharArray()){
-//            if(c == '.' || start){
-//                if(start){
-//                    ext.append(c);
-//                }else{
-//                    start = true;
-//                }
-//            }
-//        }
-//
-//        // Todo: solucionar fileNames con puntos
-//        String extension = ext.toString();
-//        if(!extension.equals("jpg") && !extension.equals("png") && !extension.equals("jpeg")){
-//            return Response.status(Response.Status.CONFLICT)
-//                    .entity(errorMessageToJSON("File not supported, if your file is jpg, png or jpeg, check to not have" +
-//                            ". in the file name")).build();
-//        }
-//
+//        String extension = FilenameUtils.getExtension(fileDetail.getFileName());
 //
 //        BufferedImage bImage = ImageIO.read(uploadedInputStream);
-//
 //        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 //
+//        if(!extension.equals("jpg") && !extension.equals("png") && !extension.equals("jpeg")){
+//            return Response.status(Response.Status.CONFLICT)
+//                    .entity(errorMessageToJSON("File not supported")).build();
+//        }
 //
-//        ImageIO.write( bImage, extension, baos);
+//
+//        ImageIO.write(bImage, extension, baos);
 //        baos.flush();
 //        byte[] imageInByte = baos.toByteArray();
 //
@@ -367,8 +351,8 @@ public class DoctorApiController extends BaseApiController {
     }
 
 
-    @POST
-    @Path("/registerPicture")
+    @PUT
+    @Path("/uploadPicture")
     @Consumes({MediaType.MULTIPART_FORM_DATA})
     public Response createProfessionalUser(@FormDataParam("file") InputStream uploadedInputStream,
                                            @FormDataParam("file") FormDataContentDisposition fileDetail) throws IOException, NotFoundDoctorException, NotValidIDException {
