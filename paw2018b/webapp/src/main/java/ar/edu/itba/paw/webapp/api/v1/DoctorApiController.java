@@ -18,6 +18,7 @@ import ar.edu.itba.paw.webapp.dto.*;
 
 import ar.edu.itba.paw.webapp.forms.BasicProfessionalForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
+import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.LoggerFactory;
@@ -386,22 +387,18 @@ public class DoctorApiController extends BaseApiController {
                     .entity(errorMessageToJSON("Doctor is NULL")).build();
         }
 
+        String extension = FilenameUtils.getExtension(fileDetail.getFileName());
 
-        InputStream is = new BufferedInputStream(uploadedInputStream);
-        String mimeType [] = URLConnection.guessContentTypeFromStream(is).split("/");
-        String extension = mimeType[1];
+        BufferedImage bImage = ImageIO.read(uploadedInputStream);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         if(!extension.equals("jpg") && !extension.equals("png") && !extension.equals("jpeg")){
             return Response.status(Response.Status.CONFLICT)
                     .entity(errorMessageToJSON("File not supported")).build();
         }
 
-        BufferedImage bImage = ImageIO.read(uploadedInputStream);
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-
-        ImageIO.write( bImage, extension, baos);
+        ImageIO.write(bImage, extension, baos);
         baos.flush();
         byte[] imageInByte = baos.toByteArray();
 
