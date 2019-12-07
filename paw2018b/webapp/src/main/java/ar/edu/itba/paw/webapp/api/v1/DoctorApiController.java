@@ -12,6 +12,7 @@ import ar.edu.itba.paw.models.exceptions.*;
 
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
 
+import ar.edu.itba.paw.webapp.dto.appointment.PatientAppointmentDTO;
 import ar.edu.itba.paw.webapp.dto.doctor.DoctorDTO;
 import ar.edu.itba.paw.webapp.dto.doctor.DoctorListDTO;
 import ar.edu.itba.paw.webapp.dto.doctor.DoctorPersonalDTO;
@@ -22,9 +23,11 @@ import ar.edu.itba.paw.webapp.forms.*;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.thymeleaf.TemplateEngine;
 
@@ -38,6 +41,9 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 
@@ -163,7 +169,7 @@ public class DoctorApiController extends BaseApiController {
                             .entity(errorMessageToJSON("DayWeek is not an Digit")).build();
                 }
 
-                if ((Integer.valueOf(dayIterator) > 7) || (Integer.valueOf(dayIterator) < 1)){
+                if ((Integer.parseInt(dayIterator) > 7) || (Integer.parseInt(dayIterator) < 1)){
                     return Response.status(Response.Status.BAD_REQUEST)
                             .entity(errorMessageToJSON("DayWeek is not an Digit between 1-7")).build();
                 }
@@ -374,7 +380,7 @@ public class DoctorApiController extends BaseApiController {
 
 
         /* Patient Revision */
-        Patient patient = null;
+        Patient patient;
         try {
             patient = userDetailsService.getLoggedUser();
         } catch (NotFoundPacientException e) {
@@ -405,7 +411,7 @@ public class DoctorApiController extends BaseApiController {
         }
 
         /* Doctor Revision */
-        Doctor doctor = null;
+        Doctor doctor;
         try {
             doctor = doctorService.findDoctorById(String.valueOf(doctorId));
         } catch (NotFoundDoctorException e) {
@@ -478,9 +484,143 @@ public class DoctorApiController extends BaseApiController {
     @Path("/{id}/appointment/add")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = MediaType.APPLICATION_JSON)
-    public Response addAppointment(@Valid final AppointmentForm appointmentForm){
-        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    public Response addAppointment(@Valid final AppointmentForm appointmentForm, @PathParam("id") final int doctorId){
+       if (appointmentForm == null){
+           LOGGER.debug("No stars or description in review");
+           return Response
+                   .status(Response.Status.BAD_REQUEST)
+                   .entity(errorMessageToJSON("Appointment Form is null"))
+                   .build();
+       }
+
+        if (appointmentForm.getDay() == null){
+            LOGGER.debug("Appointment day is null");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Appointment Day is null"))
+                    .build();
+        }
+
+        LocalDate appointmentDate = null;
+
+        try {
+            appointmentDate = LocalDate.parse(appointmentForm.getDay());
+        } catch (DateTimeParseException e){
+            LOGGER.debug("Appointment day is not ISO FORMAT 'YYYY-MM-DD'");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Appointment day is not ISO FORMAT 'YYYY-MM-DD'"))
+                    .build();
+        } catch (Exception e){
+            LOGGER.debug("Appointment day is not ISO FORMAT 'YYYY-MM-DD'");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Appointment day is not ISO FORMAT 'YYYY-MM-DD'"))
+                    .build();
+        }
+
+        if (appointmentForm.getTime() == null){
+            LOGGER.debug("No appointment time");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("No appointment time"))
+                    .build();
+        }
+        LocalTime appointmentTime = null;
+        try{
+            appointmentTime = LocalTime.parse(appointmentForm.getTime());
+        } catch (DateTimeParseException e){
+            LOGGER.debug("Appointment time is not FORMAT 'HH:mm'");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Appointment time is not FORMAT 'HH:mm'"))
+                    .build();
+        } catch (Exception e) {
+            LOGGER.debug("Appointment time is not FORMAT 'HH:mm'");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Appointment time is not FORMAT 'HH:mm'"))
+                    .build();
+        }
+
+        LocalDateTime appointmentDayTime = LocalDateTime.of(appointmentDate, appointmentTime);
+        LocalDateTime now = LocalDateTime.now();
+
+        if (now.isAfter(appointmentDayTime)){
+            LOGGER.debug("Appointment is not in future");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Appointment is not in future"))
+                    .build();
+        }
+
+        /* Patient Revision */
+        Patient patient;
+        try {
+            patient = userDetailsService.getLoggedUser();
+        } catch (NotFoundPacientException e) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("patient logged not found"))
+                    .build();
+        } catch ( NotValidEmailException e){
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Invalid email of patient"))
+                    .build();
+        }
+        if (patient == null){
+            Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("patient logged not found")) //messageSource.getMessage("patient not found", null, LocaleContextHolder.getLocale())))
+                    .build();
+        }
+        LOGGER.debug("Appointment patient {}", patient.getId());
+
+        /* Doctor Revision */
+        Doctor doctor;
+        try {
+            doctor = doctorService.findDoctorById(String.valueOf(doctorId));
+        } catch (NotFoundDoctorException e) {
+            LOGGER.debug("Doctor with id {} not found", doctorId);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
+                    .build();
+        } catch (NotValidIDException e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Doctor with bad id"))
+                    .build();
+        }
+        if (doctor == null){
+            LOGGER.debug("Doctor with id {} not found", doctorId);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
+                    .build();
+        }
+        LOGGER.debug("Appointment doctor {}", doctor.getId());
+
+        Appointment appointmentCreated;
+        try {
+            appointmentCreated = appointmentService.createAppointment(appointmentForm.getDay(), appointmentForm.getTime(), patient, doctor);
+        } catch (RepeatedAppointmentException | NotValidDoctorIdException |
+                NotValidAppointmentDayException | NotValidAppointmentTimeException |
+                NotValidPatientIdException | NotCreatedAppointmentException | NotFoundDoctorException e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON(e.getMessage()))
+                    .build();
+        }
+        if (appointmentCreated == null){
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Appointment not created"))
+                    .build();
+        }
+
+        return Response.ok(new PatientAppointmentDTO(appointmentCreated)).build();
     }
+
 
     @PUT
     @Path("/{id}/appointment/cancel")

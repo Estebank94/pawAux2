@@ -31,7 +31,7 @@ public class AppointmentHibernateDaoImpl implements AppointmentDao {
     @Override
     public void cancelAppointment(Appointment appointment){
         appointment.setAppointmentCancelled(true);
-        em.persist(appointment);
+        em.merge(appointment);
     }
 
     @Override
@@ -45,9 +45,19 @@ public class AppointmentHibernateDaoImpl implements AppointmentDao {
     }
 
     @Override
+    public Optional<Appointment> findAppointmentByDoctor (String appointmentDay, String appointmentTime, Doctor doctor) throws Exception{
+        final TypedQuery<Appointment> query = em.createQuery("from Appointment as a WHERE a.appointmentDay = :appointmentDay AND a.appointmentTime = :appointmentTime AND a.doctor = :doctor AND a.appointmentCancelled := cancelled",Appointment.class);
+        query.setParameter("appointmentDay", appointmentDay);
+        query.setParameter("appointmentTime", appointmentTime);
+        query.setParameter("doctor", doctor);
+        query.setParameter("cancelled", false);
+        return Optional.ofNullable(query.getSingleResult());
+    }
+
+    @Override
     public void undoCancelAppointment(Appointment appointment) {
         appointment.setAppointmentCancelled(false);
-        em.persist(appointment);
+        em.merge(appointment);
     }
 
     @Override

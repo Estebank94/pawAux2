@@ -33,24 +33,45 @@ public class AppointmentServiceImpl implements AppointmentService {
         LOGGER.debug("AppointmentServiceImpl: CreateAppointment");
 
         Appointment appointment = null;
+        Optional<Appointment> repeated = Optional.empty();
         Optional<Appointment> app = Optional.empty();
+        try {
+            repeated = appointmentDao.findAppointmentByDoctor(appointmentDay, appointmentTime, doctor);
+        } catch (Exception e){
+            LOGGER.debug("No appointment");
+        }
+        if (repeated.isPresent()){
+            if (repeated.get().getPatient().getId() == patient.getId()){
+                LOGGER.debug("Appointment already Exists by the patient");
+                throw new RepeatedAppointmentException("Appointment already exits by the patient");
+            }
+            LOGGER.debug("Appointment already Exists by the another patient");
+            throw new RepeatedAppointmentException("Appointment already Exists by the another patient");
+        }
+
         try{
             app = appointmentDao.findAppointment(appointmentDay, appointmentTime, patient, doctor);
         }catch (Exception e){
             LOGGER.debug("No appointment");
         }
         if (app.isPresent()){
-            appointmentDao.undoCancelAppointment(app.get());
-            return app.get();
+            if (app.get().getAppointmentCancelled()){
+                LOGGER.debug("Appointment exits but was cancelled. Undoing cancel");
+                appointmentDao.undoCancelAppointment(app.get());
+                return app.get();
+            }
         }
 
         try{
+            LOGGER.debug("Creating Appointment");
            appointment =  appointmentDao.createAppointment(appointmentDay, appointmentTime, patient, doctor);
         } catch (RepeatedAppointmentException e) {
-            throw new RepeatedAppointmentException();
+            LOGGER.debug("Appointment already Exists");
+            throw new RepeatedAppointmentException("Appointment already exits");
         } catch (Exception e) {
             throw new NotCreatedAppointmentException();
         }
+        LOGGER.debug("Appointment create with id {}", appointment.getId());
         return appointment;
     }
 
