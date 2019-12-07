@@ -510,11 +510,9 @@ public class DoctorServiceImpl implements DoctorService {
     @Transactional
     public Optional<Doctor> setWorkingHours(Doctor doctor, List<WorkingHours> workingHours){
         LOGGER.debug("setWorkingHours");
-//        if(!Hibernate.isInitialized(doctor)){
-//            Hibernate.initialize(doctor);
-//        }
-//        Hibernate.initialize(doctor);
-//        Hibernate.initialize(doctor.getWorkingHours());
+        if(doctor != null){
+            doctor.getWorkingHours().size();
+        }
         doctorDao.setWorkingHours(doctor, workingHours);
         return Optional.ofNullable(doctor);
     }

@@ -15,38 +15,36 @@ import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
 import ar.edu.itba.paw.webapp.dto.*;
 
+
 import ar.edu.itba.paw.webapp.forms.BasicProfessionalForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
-import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
-import com.fasterxml.jackson.databind.deser.Deserializers;
+import org.apache.commons.io.FilenameUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.TemplateEngine;
 
-import javax.print.Doc;
+import javax.imageio.ImageIO;
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 import javax.ws.rs.*;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.URI;
 
 import java.util.*;
+import java.util.List;
 
 
 @Path("v1/doctor")
@@ -279,9 +277,11 @@ public class DoctorApiController extends BaseApiController {
 
     @POST
     @Path("/registerProfessional")
+//    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response createProfessionalUser(@Valid final BasicProfessionalForm professionalForm) {
+
 
         Patient patient = null;
         try {
@@ -293,14 +293,15 @@ public class DoctorApiController extends BaseApiController {
 
         Doctor doctor = patient.getDoctor();
         if (doctor == null) {
-            //hacer algo
             return Response.status(Response.Status.CONFLICT)
                     .entity(errorMessageToJSON("Doctor is NULL")).build();
         }
 
         /* Avatar */
-//        MultipartFile file = professionalForm.getAvatar();
+//        AvatarForm file = professionalForm.getAvatar();
 //
+//        doctorService.setDoctorAvatar(doctor, file.getFileBytes());
+
 //        if( file != null && file.getSize() != 0 ){
 //
 //            String mimetype = file.getContentType();
@@ -317,11 +318,6 @@ public class DoctorApiController extends BaseApiController {
 //            }
 //        }
 
-        LOGGER.debug("hola certificate " + professionalForm.getDescription().getCertificate());
-        LOGGER.debug("language " + professionalForm.getDescription().getLanguages());
-        LOGGER.debug("education " + professionalForm.getDescription().getEducation());
-
-
         if (professionalForm.getSpecialty() != null) {
             Set<Specialty> specialties = new HashSet<>();
             for (String sp : professionalForm.getSpecialty()) {
@@ -331,7 +327,6 @@ public class DoctorApiController extends BaseApiController {
         }
 
         if (professionalForm.getDescription() != null) {
-            //todo: lo esta insertando 3 veces
             Description description = new Description(professionalForm.getDescription().getCertificate(),
                     professionalForm.getDescription().getLanguages(), professionalForm.getDescription().getEducation());
             doctorService.setDescription(doctor, description);
@@ -341,24 +336,55 @@ public class DoctorApiController extends BaseApiController {
             doctorService.setDoctorInsurancePlans(doctor, professionalForm.getInsurancePlans());
         }
 
-//        LOGGER.debug("working Hours " + professionalForm.getWorkingHour().size());
-//        for (WorkingHoursDTO wh : professionalForm.getWorkingHour()){
-//            LOGGER.debug("Working hours dayOfWeek:" + wh.getDayOfWeek() + ", start:" + wh.getStartTime() + ", finish:" + wh.getFinishTime());
-//        }
+        List<WorkingHours> workingHoursList = new ArrayList<>();
+        for (WorkingHoursDTO w : professionalForm.getWorkingHours()) {
+            WorkingHours workingHours = new WorkingHours(w.getDayOfWeek(), w.getStartTime(), w.getFinishTime());
+            workingHoursList.add(workingHours);
+        }
 
-//        List<WorkingHours> workingHoursList = new ArrayList<>();
-//        for(WorkingHoursDTO w : professionalForm.getWorkingHours()){
-//            WorkingHours workingHours = new WorkingHours(w.getDayOfWeek(), w.getStartTime(), w.getFinishTime());
-//            workingHoursList.add(workingHours);
-//        }
-////
-////        LOGGER.debug("workH" + workingHoursList.size());
-//        doctorService.setWorkingHours(doctor, workingHoursList);
-
+        doctorService.setWorkingHours(doctor, workingHoursList);
 
         final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(doctor.getId())).build();
 
         return Response.created(uri).entity(new DoctorDTO(doctor, buildBaseURI(uriInfo))).build();
     }
+
+
+    @POST
+    @Path("/registerPicture")
+    @Consumes({MediaType.MULTIPART_FORM_DATA})
+    public Response createProfessionalUser(@FormDataParam("file") InputStream uploadedInputStream,
+                                           @FormDataParam("file") FormDataContentDisposition fileDetail) throws IOException {
+
+        Patient patient = null;
+        try {
+            patient = userDetailsService.getLoggedUser();
+        } catch (NotFoundPacientException | NotValidEmailException e) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Doctor/Patient not found")).build();
+        }
+
+        Doctor doctor = patient.getDoctor();
+        if (doctor == null) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Doctor is NULL")).build();
+        }
+
+        BufferedImage bImage = ImageIO.read(uploadedInputStream);
+        String extesion = FilenameUtils.getExtension(fileDetail.getFileName());
+        long size = fileDetail.getSize();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write( bImage, "jpg", baos );
+        baos.flush();
+        byte[] imageInByte = baos.toByteArray();
+
+        doctorService.setDoctorAvatar(doctor, imageInByte);
+        baos.close();
+
+        return Response.ok().build();
+    }
+
+
 
 }

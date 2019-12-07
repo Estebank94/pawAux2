@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.Verification;
 import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.RepeatedEmailException;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +78,13 @@ public class PatientHibernateDaoImpl implements PatientDao {
         final TypedQuery<Patient> query = em.createQuery("FROM Patient as p where p.email = :email", Patient.class);
         query.setParameter("email", email);
         final List<Patient> list = query.getResultList();
-        return list.isEmpty() ? null : list.get(0);
+        Patient patient = list.isEmpty() ? null : list.get(0);
+        if(patient!=null){
+            Hibernate.initialize(patient);
+            Hibernate.initialize(patient.getDoctor());
+            Hibernate.initialize(patient.getDoctor().getWorkingHours());
+        }
+        return patient;
     }
 
     private List<Appointment> findPacientAppointmentsById(Integer id){

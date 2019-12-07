@@ -4,29 +4,40 @@ package ar.edu.itba.paw.webapp.forms;
 import ar.edu.itba.paw.models.InsurancePlan;
 import ar.edu.itba.paw.models.Specialty;
 import ar.edu.itba.paw.webapp.dto.WorkingHoursDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
 public class BasicProfessionalForm {
 
+//    private AvatarForm avatar;
+
     private DescriptionForm description;
 
     @NotNull
     private List<String> insurancePlan;
 
-//    private List<WorkingHoursDTO> workingHours;
+    private List<WorkingHoursDTO> workingHours;
 
     @NotNull
     private List<String> specialty;
 
-//    public List<WorkingHoursDTO> getWorkingHours() {
-//        return workingHours;
+//    public AvatarForm getAvatar() {
+//        return avatar;
 //    }
 //
-//    public void setWorkingHours(List<WorkingHoursDTO> workingHours) {
-//        this.workingHours = workingHours;
+//    public void setAvatar(AvatarForm avatar) {
+//        this.avatar = avatar;
 //    }
+
+    public List<WorkingHoursDTO> getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(List<WorkingHoursDTO> workingHours) {
+        this.workingHours = workingHours;
+    }
 
     public List<String> getInsurancePlan() {
         return insurancePlan;

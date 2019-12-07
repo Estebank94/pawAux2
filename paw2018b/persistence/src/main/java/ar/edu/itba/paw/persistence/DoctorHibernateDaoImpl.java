@@ -7,6 +7,8 @@ import ar.edu.itba.paw.models.exceptions.RepeatedLicenceException;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -373,11 +375,15 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         return true;
     }
 
+
     public Boolean setWorkingHours(Doctor doctor, List<WorkingHours> workingHours){
+        Hibernate.initialize(doctor.getWorkingHours());
 
         doctor.addWorkingHours(workingHours);
-        em.merge(doctor);
+
         workingHours.stream().forEach(workingHour -> workingHour.setDoctor(doctor));
+
+        em.merge(doctor);
 
         return true;
     }
