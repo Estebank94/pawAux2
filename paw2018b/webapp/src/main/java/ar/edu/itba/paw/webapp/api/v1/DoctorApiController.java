@@ -281,7 +281,9 @@ public class DoctorApiController extends BaseApiController {
     @Path("/registerProfessional")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response createProfessionalUser(@Valid final BasicProfessionalForm professionalForm) throws IOException {
+    public Response createProfessionalUser(/* @FormDataParam("file") InputStream uploadedInputStream,
+                                           @FormDataParam("file") FormDataContentDisposition fileDetail*/
+            @Valid final BasicProfessionalForm professionalForm) throws IOException {
 
         Patient patient = null;
         try {
@@ -403,8 +405,8 @@ public class DoctorApiController extends BaseApiController {
         String extension = ext.toString();
         if(!extension.equals("jpg") && !extension.equals("png") && !extension.equals("jpeg")){
             return Response.status(Response.Status.CONFLICT)
-                    .entity(errorMessageToJSON("File not supported, if your file is jpg, png or jpeg, check to not have" +
-                                    ". in the file name")).build();
+                    .entity(errorMessageToJSON("File not supported, if your file is jpg, png or jpeg, check if you have" +
+                                    ". in the file name, if you do, rename the file without it")).build();
         }
 
         BufferedImage bImage = ImageIO.read(uploadedInputStream);
