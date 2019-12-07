@@ -18,7 +18,6 @@ import ar.edu.itba.paw.webapp.dto.*;
 
 import ar.edu.itba.paw.webapp.forms.BasicProfessionalForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
-import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.LoggerFactory;
@@ -387,26 +386,14 @@ public class DoctorApiController extends BaseApiController {
                     .entity(errorMessageToJSON("Doctor is NULL")).build();
         }
 
-        String fileName = fileDetail.getFileName();
-        boolean start = false;
-        StringBuilder ext = new StringBuilder();
 
-        for(char c : fileName.toCharArray()){
-            if(c == '.' || start){
-                if(start){
-                    ext.append(c);
-                }else{
-                    start = true;
-                }
-            }
-        }
+        InputStream is = new BufferedInputStream(uploadedInputStream);
+        String mimeType [] = URLConnection.guessContentTypeFromStream(is).split("/");
+        String extension = mimeType[1];
 
-        // Todo: solucionar fileNames con puntos
-        String extension = ext.toString();
         if(!extension.equals("jpg") && !extension.equals("png") && !extension.equals("jpeg")){
             return Response.status(Response.Status.CONFLICT)
-                    .entity(errorMessageToJSON("File not supported, if your file is jpg, png or jpeg, check if you have" +
-                                    ". in the file name, if you do, rename the file without it")).build();
+                    .entity(errorMessageToJSON("File not supported")).build();
         }
 
         BufferedImage bImage = ImageIO.read(uploadedInputStream);
