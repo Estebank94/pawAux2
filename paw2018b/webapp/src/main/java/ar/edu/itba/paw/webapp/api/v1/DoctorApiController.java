@@ -41,8 +41,10 @@ import javax.ws.rs.core.UriInfo;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.FileNameMap;
 import java.net.URI;
 
+import java.net.URLConnection;
 import java.util.*;
 import java.util.List;
 
@@ -277,11 +279,9 @@ public class DoctorApiController extends BaseApiController {
 
     @POST
     @Path("/registerProfessional")
-//    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response createProfessionalUser(@Valid final BasicProfessionalForm professionalForm) {
-
+    public Response createProfessionalUser(@Valid final BasicProfessionalForm professionalForm) throws IOException {
 
         Patient patient = null;
         try {
@@ -298,25 +298,40 @@ public class DoctorApiController extends BaseApiController {
         }
 
         /* Avatar */
-//        AvatarForm file = professionalForm.getAvatar();
+//        String fileName = fileDetail.getFileName();
+//        boolean start = false;
+//        StringBuilder ext = new StringBuilder();
 //
-//        doctorService.setDoctorAvatar(doctor, file.getFileBytes());
-
-//        if( file != null && file.getSize() != 0 ){
-//
-//            String mimetype = file.getContentType();
-//            String type = mimetype.split("/")[0];
-//
-//            if (!type.equals("image")) {
-//                LOGGER.warn("File is not an image");
-//            }else {
-//                try {
-//                    doctorService.setDoctorAvatar(doctor, file.getBytes());
-//                } catch (IOException e) {
-//                    LOGGER.warn("Could not upload image");
+//        for(char c : fileName.toCharArray()){
+//            if(c == '.' || start){
+//                if(start){
+//                    ext.append(c);
+//                }else{
+//                    start = true;
 //                }
 //            }
 //        }
+//
+//        // Todo: solucionar fileNames con puntos
+//        String extension = ext.toString();
+//        if(!extension.equals("jpg") && !extension.equals("png") && !extension.equals("jpeg")){
+//            return Response.status(Response.Status.CONFLICT)
+//                    .entity(errorMessageToJSON("File not supported, if your file is jpg, png or jpeg, check to not have" +
+//                            ". in the file name")).build();
+//        }
+//
+//
+//        BufferedImage bImage = ImageIO.read(uploadedInputStream);
+//
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//
+//
+//        ImageIO.write( bImage, extension, baos);
+//        baos.flush();
+//        byte[] imageInByte = baos.toByteArray();
+//
+//        doctorService.setDoctorAvatar(doctor, imageInByte);
+//        baos.close();
 
         if (professionalForm.getSpecialty() != null) {
             Set<Specialty> specialties = new HashSet<>();
@@ -354,7 +369,7 @@ public class DoctorApiController extends BaseApiController {
     @Path("/registerPicture")
     @Consumes({MediaType.MULTIPART_FORM_DATA})
     public Response createProfessionalUser(@FormDataParam("file") InputStream uploadedInputStream,
-                                           @FormDataParam("file") FormDataContentDisposition fileDetail) throws IOException {
+                                           @FormDataParam("file") FormDataContentDisposition fileDetail) throws IOException, NotFoundDoctorException, NotValidIDException {
 
         Patient patient = null;
         try {
@@ -370,12 +385,34 @@ public class DoctorApiController extends BaseApiController {
                     .entity(errorMessageToJSON("Doctor is NULL")).build();
         }
 
+        String fileName = fileDetail.getFileName();
+        boolean start = false;
+        StringBuilder ext = new StringBuilder();
+
+        for(char c : fileName.toCharArray()){
+            if(c == '.' || start){
+                if(start){
+                    ext.append(c);
+                }else{
+                    start = true;
+                }
+            }
+        }
+
+        // Todo: solucionar fileNames con puntos
+        String extension = ext.toString();
+        if(!extension.equals("jpg") && !extension.equals("png") && !extension.equals("jpeg")){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("File not supported, if your file is jpg, png or jpeg, check to not have" +
+                                    ". in the file name")).build();
+        }
+
         BufferedImage bImage = ImageIO.read(uploadedInputStream);
-        String extesion = FilenameUtils.getExtension(fileDetail.getFileName());
-        long size = fileDetail.getSize();
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write( bImage, "jpg", baos );
+
+
+        ImageIO.write( bImage, extension, baos);
         baos.flush();
         byte[] imageInByte = baos.toByteArray();
 
