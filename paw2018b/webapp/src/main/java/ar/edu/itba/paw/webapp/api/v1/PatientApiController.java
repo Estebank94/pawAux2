@@ -217,7 +217,6 @@ public class PatientApiController extends BaseApiController {
                     .entity(errorMessageToJSON("Invalid email of patient"))
                     .build();
         }
-
         if (patient == null){
             Response
                     .status(Response.Status.NOT_FOUND)

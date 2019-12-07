@@ -378,23 +378,25 @@ public class DoctorApiController extends BaseApiController {
         try {
             patient = userDetailsService.getLoggedUser();
         } catch (NotFoundPacientException e) {
-            LOGGER.debug("Patient not found");
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(errorMessageToJSON("Patient not found"))
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("patient logged not found"))
                     .build();
-        } catch (NotValidEmailException e) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(errorMessageToJSON("Patient with bad email"))
+        } catch ( NotValidEmailException e){
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Invalid email of patient"))
                     .build();
         }
         if (patient == null){
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(errorMessageToJSON("Patient not found"))
+            Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("patient logged not found")) //messageSource.getMessage("patient not found", null, LocaleContextHolder.getLocale())))
                     .build();
         }
         LOGGER.debug("Review patient {}", patient.getId());
 
-        if (patient.getDoctor().getId() == doctorId){
+        if (patient.getDoctor() != null && patient.getDoctor().getId() == doctorId){
             LOGGER.debug("Patient is the same as doctor");
             return Response
                     .status(Response.Status.BAD_REQUEST)

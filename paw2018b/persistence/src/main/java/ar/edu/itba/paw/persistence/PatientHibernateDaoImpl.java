@@ -134,14 +134,15 @@ public class PatientHibernateDaoImpl implements PatientDao {
             query.setParameter("doctor", patient.getDoctor());
         } else {
             query = em.createQuery("FROM Appointment ap where ap.appointmentDay < :day AND ap.patient = :patient AND ap.appointmentCancelled = :cancel", Appointment.class);
-
         }
         query.setParameter("patient", patient);
         query.setParameter("day", today);
         query.setParameter("cancel", false);
         final List<Appointment> list = query.getResultList();
         for (Appointment ap: list){
-            Hibernate.initialize(ap.getReview());
+            if (ap.getReview() != null){
+                Hibernate.initialize(ap.getReview());
+            }
         }
         return list.isEmpty() ? Collections.emptyList() : list;
     }
