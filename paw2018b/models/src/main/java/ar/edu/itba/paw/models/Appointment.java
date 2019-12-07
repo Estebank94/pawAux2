@@ -28,6 +28,9 @@ public class Appointment implements Comparable<Appointment>{
     @JoinColumn(name="doctorid")
     private Doctor doctor;
 
+    @OneToOne(mappedBy = "appointment")
+    private Review review;
+
     public Appointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) {
         this.appointmentDay = appointmentDay;
         this.appointmentTime = appointmentTime;
@@ -151,6 +154,15 @@ public class Appointment implements Comparable<Appointment>{
     public void setAppointmentCancelled(Boolean appointmentCancelled) {
         this.appointmentCancelled = appointmentCancelled;
     }
+
+    public Review getReview() {
+        return review;
+    }
+
+    public void setReview(Review review) {
+        this.review = review;
+    }
+
     public void cancelAppointment(){
         setAppointmentCancelled(true);
     }

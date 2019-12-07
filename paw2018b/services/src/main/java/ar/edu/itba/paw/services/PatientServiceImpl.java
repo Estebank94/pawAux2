@@ -247,7 +247,11 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public List<Appointment> getHistoricalAppointments(Patient patient) {
-        return patientDao.getHistoricalAppointments(patient);
+        List<Appointment> appointmentList = patientDao.getHistoricalAppointments(patient);
+        for (Appointment ap: appointmentList){
+            ap.getReview();
+        }
+        return appointmentList;
     }
 
     @Override

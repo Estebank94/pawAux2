@@ -199,9 +199,5 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return templateEngine;
     }
 
-
-
-
-
 }
 
