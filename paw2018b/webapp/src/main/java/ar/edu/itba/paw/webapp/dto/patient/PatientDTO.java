@@ -1,10 +1,14 @@
-package ar.edu.itba.paw.webapp.dto;
+package ar.edu.itba.paw.webapp.dto.patient;
 
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Favorite;
 import ar.edu.itba.paw.models.Patient;
+import ar.edu.itba.paw.webapp.dto.FavoriteDoctorDTO;
+import ar.edu.itba.paw.webapp.dto.appointment.PatientAppointmentDTO;
+import ar.edu.itba.paw.webapp.dto.doctor.BasicDoctorDTO;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,14 +18,12 @@ public class PatientDTO {
     private String lastName;
     private String phoneNumber;
     private String email;
-    private String password;
-    private List<PatientAppointmentDTO> appointments;
-    private List<FavoriteDoctorDTO> favorites;
     private URI uri;
+    private BasicDoctorDTO doctor;
+    private List<FavoriteDoctorDTO> favorites;
 
     public PatientDTO(){
     }
-
 
     public PatientDTO(Patient patient, URI baseUri) {
         id = patient.getId();
@@ -29,23 +31,14 @@ public class PatientDTO {
         lastName = patient.getLastName();
         phoneNumber = patient.getPhoneNumber();
         email = patient.getEmail();
-        password = patient.getPassword();
-
-        this.appointments = new LinkedList<>();
-        if(!appointments.isEmpty()){
-            for (Appointment appointment: patient.getAppointments()){
-                this.appointments.add(new PatientAppointmentDTO(appointment));
-            }
-        }
-
-
-        this.favorites = new LinkedList<>();
-        if(!favorites.isEmpty()) {
-            for (Favorite favorite : patient.getFavorites()) {
+        doctor = new BasicDoctorDTO(patient.getDoctor());
+        this.uri = baseUri.resolve(String.valueOf(this.id));
+        this.favorites = new ArrayList<>();
+        for (Favorite favorite : patient.getFavorites()){
+            if (!favorite.getFavoriteCancelled()){
                 this.favorites.add(new FavoriteDoctorDTO(favorite));
             }
         }
-        this.uri = baseUri.resolve(String.valueOf(this.id));
     }
 
     public PatientDTO(Patient patient){
@@ -54,19 +47,12 @@ public class PatientDTO {
         lastName = patient.getLastName();
         phoneNumber = patient.getPhoneNumber();
         email = patient.getEmail();
-        password = patient.getPassword();
-
-        this.appointments = new LinkedList<>();
-        if(!appointments.isEmpty()){
-            for (Appointment appointment: patient.getAppointments()){
-                this.appointments.add(new PatientAppointmentDTO(appointment));
-            }
+        if (patient.getDoctor() != null){
+            doctor = new BasicDoctorDTO(patient.getDoctor());
         }
-
-
-        this.favorites = new LinkedList<>();
-        if(!favorites.isEmpty()) {
-            for (Favorite favorite : patient.getFavorites()) {
+        this.favorites = new ArrayList<>();
+        for (Favorite favorite : patient.getFavorites()){
+            if (!favorite.getFavoriteCancelled()){
                 this.favorites.add(new FavoriteDoctorDTO(favorite));
             }
         }
@@ -112,20 +98,20 @@ public class PatientDTO {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public URI getUri() {
+        return uri;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUri(URI uri) {
+        this.uri = uri;
     }
 
-    public List<PatientAppointmentDTO> getAppointments() {
-        return appointments;
+    public BasicDoctorDTO getDoctor() {
+        return doctor;
     }
 
-    public void setAppointments(List<PatientAppointmentDTO> appointments) {
-        this.appointments = appointments;
+    public void setDoctor(BasicDoctorDTO doctor) {
+        this.doctor = doctor;
     }
 
     public List<FavoriteDoctorDTO> getFavorites() {
@@ -144,7 +130,6 @@ public class PatientDTO {
                 ", lastName='" + lastName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 '}';
     }
 }

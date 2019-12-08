@@ -87,6 +87,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.POST, "/api/**/patient/login").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/**/patient/register").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/**/doctor/register").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/**/patient/personal").authenticated()
                      //para ver si estoy loggeado
 //                    .antMatchers("/api/users/me/**").authenticated()
                     .antMatchers(HttpMethod.POST).authenticated()
@@ -109,7 +110,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .addFilterBefore(statelessAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
-
     @Bean
     public AuthenticationSuccessHandler successHandler() {
         return new CustomLogInSuccessHandler("/");
@@ -120,7 +120,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
 
     @Bean
     public String authTokenKey() {

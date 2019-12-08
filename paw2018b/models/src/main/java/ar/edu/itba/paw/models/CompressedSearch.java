@@ -6,9 +6,9 @@ import java.util.*;
  * Created by estebankramer on 08/09/2018.
  */
 public class CompressedSearch {
-    List<Doctor> doctors;
-    Map<String, Set<String>> insurance;
-    Set<String> sex;
+    private List<Doctor> doctors;
+    private Map<String, Set<String>> insurance;
+    private Set<String> sex;
 
     public  CompressedSearch(){
         this.doctors = new ArrayList<Doctor>();

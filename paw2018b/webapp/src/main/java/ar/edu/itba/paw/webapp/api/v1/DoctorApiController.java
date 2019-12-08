@@ -1,52 +1,58 @@
 package ar.edu.itba.paw.webapp.api.v1;
 
+
 import ar.edu.itba.paw.interfaces.services.DoctorService;
 import ar.edu.itba.paw.interfaces.services.EmailService;
+import ar.edu.itba.paw.interfaces.services.FavoriteService;
 import ar.edu.itba.paw.interfaces.services.PatientService;
+import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
-
 import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
 import ar.edu.itba.paw.models.exceptions.NotValidIDException;
 import ar.edu.itba.paw.models.exceptions.NotValidPageException;
-
 import ar.edu.itba.paw.models.exceptions.*;
-
-
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
-import ar.edu.itba.paw.webapp.dto.*;
-
 import ar.edu.itba.paw.webapp.forms.BasicProfessionalForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
-import ar.edu.itba.paw.webapp.forms.ProfessionalForm;
-import com.fasterxml.jackson.databind.deser.Deserializers;
+
+import org.apache.commons.io.FilenameUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+
+import ar.edu.itba.paw.webapp.dto.doctor.DoctorDTO;
+import ar.edu.itba.paw.webapp.dto.doctor.DoctorListDTO;
+import ar.edu.itba.paw.webapp.dto.patient.PatientDTO;
+import ar.edu.itba.paw.webapp.dto.reviews.BasicReviewDTO;
+import ar.edu.itba.paw.webapp.dto.workingHours.WorkingHoursDTO;
+import ar.edu.itba.paw.webapp.forms.*;
+
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.TemplateEngine;
 
-import javax.print.Doc;
+
+import javax.imageio.ImageIO;
+import javax.persistence.NoResultException;
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 import javax.ws.rs.*;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.io.IOException;
+
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.URI;
 
+import java.time.LocalDate;
 import java.util.*;
+import java.util.List;
 
 
 @Path("v1/doctor")
@@ -63,6 +69,16 @@ public class DoctorApiController extends BaseApiController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+
+    private FavoriteService favoriteService;
+
+    private AppointmentService appointmentService;
+
+    @Autowired
+    private ReviewService reviewService;
+
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
@@ -84,26 +100,21 @@ public class DoctorApiController extends BaseApiController {
     @Autowired
     private String frontUrl;
 
-
     @GET
     @Path("/{id}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getDoctorById(@PathParam("id") final int id){
-        Optional<Doctor> doctorOptional = Optional.empty();
+        Doctor doctor = null;
         try {
-            doctorOptional = doctorService.findDoctorById(id + "");
+            doctor = doctorService.findDoctorById(id + "");
         } catch (NotFoundDoctorException | NotValidIDException e) {
-            e.printStackTrace();
+            Response.status(Response.Status.NOT_FOUND).build();
+            // e.printStackTrace();
         }
-        if (doctorOptional.isPresent()){
-            // TODO: LIMPIAR ESTA PARTE
-            // DoctorDTO doctorDTO = new DoctorDTO(doctorOptional.get(), buildBaseURI(uriInfo));
-            // System.out.println(doctorDTO.toString());
-            // System.out.println(Response.ok(new DoctorDTO(doctorOptional.get(), buildBaseURI(uriInfo))).build().toString());
-            return Response.ok(new DoctorDTO(doctorOptional.get()))
+        if (doctor != null){
+            return Response.ok(new DoctorDTO(doctor))
                     .build();
         }
-        // System.out.println("No encontro a Doctor");
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
@@ -113,62 +124,63 @@ public class DoctorApiController extends BaseApiController {
     public Response listDoctors(@QueryParam("page") @DefaultValue("0") int page,
                                 @QueryParam("specialty") String specialty,
                                 @QueryParam("name") String name,
-                                @QueryParam("insurance")String insurance,
+                                @QueryParam("insurance") String insurance,
                                 @QueryParam("sex") String sex,
-                                @QueryParam("insurancePlan")List<String> insurancePlan,
+                                @QueryParam("insurancePlan") List<String> insurancePlan,
                                 @QueryParam("days") List<String> days) {
 
         Search search = new Search();
         if (specialty != null) {
-            if (specialty.length() == 0){
+            if (specialty.length() == 0) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity(errorMessageToJSON("Specialty bad format")).build();
             }
             search.setSpecialty(specialty);
         }
         if (name != null) {
-            if (name.length() == 0){
+            if (name.length() == 0) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity(errorMessageToJSON("name bad format")).build();
             }
             search.setName(name);
         }
-        if (insurance != null){
-            if (insurance.length() == 0){
+        if (insurance != null) {
+            if (insurance.length() == 0) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity(errorMessageToJSON("Insurance bad format")).build();
             }
             search.setInsurance(insurance);
         }
-        if (sex != null){
-            if (sex.length() == 0){
+        if (sex != null) {
+            if (sex.length() == 0) {
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity(errorMessageToJSON("sex bad format")).build();
             }
             search.setSex(sex);
         }
-        if (insurancePlan != null && insurancePlan.size() > 0){
-            for (String ip : insurancePlan){
-                if (ip.length() == 0){
+        if (insurancePlan != null && insurancePlan.size() > 0) {
+            for (String ip : insurancePlan) {
+                if (ip.length() == 0) {
                     return Response.status(Response.Status.BAD_REQUEST)
                             .entity(errorMessageToJSON("insurancePlan bad format")).build();
                 }
             }
             search.setInsurancePlan(insurancePlan);
         }
-        if (days != null && days.size() > 0){
-            for (String dayIterator: days){
+        if (days != null && days.size() > 0) {
+            for (String dayIterator : days) {
                 if (dayIterator.length() != 1) {
                     return Response.status(Response.Status.BAD_REQUEST)
                             .entity(errorMessageToJSON("DayWeek is not an Digit between 1-7")).build();
                 }
 
-                if (!Character.isDigit(dayIterator.charAt(0))){
+                if (!Character.isDigit(dayIterator.charAt(0))) {
                     return Response.status(Response.Status.BAD_REQUEST)
-                            .entity(errorMessageToJSON("DayWeek is not an Digit between 1-7")).build();
+                            .entity(errorMessageToJSON("DayWeek is not an Digit")).build();
                 }
 
-                if ((int) dayIterator.charAt(0) > 7 || (int) dayIterator.charAt(0) < 1){
+                if ((Integer.valueOf(dayIterator) > 7) || (Integer.valueOf(dayIterator) < 1)){
+
                     return Response.status(Response.Status.BAD_REQUEST)
                             .entity(errorMessageToJSON("DayWeek is not an Digit between 1-7")).build();
                 }
@@ -179,7 +191,7 @@ public class DoctorApiController extends BaseApiController {
         List<Doctor> doctors;
         try {
             doctors = doctorService.listDoctors(search, String.valueOf(page));
-        } catch (NotValidPageException e){
+        } catch (NotValidPageException e) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(errorMessageToJSON("DayWeek is not an Digit between 1-7")).build();
         }
@@ -196,11 +208,29 @@ public class DoctorApiController extends BaseApiController {
         return Response.ok(new DoctorListDTO(doctorList, totalPageCount)).build();
     }
 
+
+    @GET
+    @Path("/search")
+    public Response searchDoctors(@Context UriInfo uriInfo) {
+        String result = "";
+        for (Map.Entry entry : uriInfo.getQueryParameters().entrySet()) {
+            result += entry.getKey() + "=" + entry.getValue() + ", ";
+        }
+        /*
+        Search search = new Search();
+        List<Doctor> doctorList = doctorService.listDoctors(search , pageNumber)
+        Long totalPageCount = doctorService.getLastPage(search);
+        */
+        return Response.ok(result).build();
+    }
+
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response createUser(@Valid final PersonalForm userForm) {
+
+        LOGGER.debug("Register doctor");
 
         if (userForm == null)
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -216,28 +246,27 @@ public class DoctorApiController extends BaseApiController {
         Doctor doctor = null;
         Patient patient = null;
 
-        try{
+        try {
             patient = patientService.createPatient(userForm.getFirstName(), userForm.getLastName(),
                     userForm.getPhoneNumber(), userForm.getEmail(), userForm.getPassword());
             doctor = doctorService.createDoctor(userForm.getFirstName(), userForm.getLastName(), userForm.getPhoneNumber(),
                     userForm.getSex(), userForm.getLicence(), null, userForm.getAddress());
             patientService.setDoctorId(patient, doctor);
-        }
-        catch (RepeatedEmailException e){
+        } catch (RepeatedEmailException e) {
             return Response.status(Response.Status.CONFLICT)
                     .entity(errorMessageToJSON("Duplicated email")).build();
-        }catch (NotValidFirstNameException | NotValidLastNameException | NotValidPhoneNumberException |
-              RepeatedLicenceException | NotValidLicenceException | NotValidAddressException |
-                NotValidSexException | NotValidPasswordException | NotValidEmailException e){
+        } catch (NotValidFirstNameException | NotValidLastNameException | NotValidPhoneNumberException |
+                RepeatedLicenceException | NotValidLicenceException | NotValidAddressException |
+                NotValidSexException | NotValidPasswordException | NotValidEmailException e) {
             return Response.status(Response.Status.CONFLICT)
                     .entity(errorMessageToJSON("There is an error on the form information")).build();
-        }catch (NotFoundDoctorException | NotCreateDoctorException e){
+        } catch (NotFoundDoctorException | NotCreateDoctorException e) {
             return Response.status(Response.Status.CONFLICT)
                     .entity(errorMessageToJSON("Doctor not found")).build();
-        }catch(NotCreatePatientException e){
+        } catch (NotCreatePatientException e) {
             return Response.status(Response.Status.CONFLICT)
                     .entity(errorMessageToJSON("Patient not created")).build();
-        }catch(NotValidPatientIdException | NotValidDoctorIdException e){
+        } catch (NotValidPatientIdException | NotValidDoctorIdException e) {
             return Response.status(Response.Status.CONFLICT)
                     .entity(errorMessageToJSON("Id from doctor or patient not valid. Error associating")).build();
         }
@@ -262,81 +291,74 @@ public class DoctorApiController extends BaseApiController {
 //        return Response.created(uri).entity(new DoctorPatientDTO(patient, buildBaseURI(uriInfo))).build();
     }
 
-
     @POST
     @Path("/registerProfessional")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response createProfessionalUser(@Valid final BasicProfessionalForm professionalForm){
+    public Response createProfessionalUser(/* @FormDataParam("file") InputStream uploadedInputStream,
+                                            @FormDataParam("file") FormDataContentDisposition fileDetail*/
+                                            @Valid final BasicProfessionalForm professionalForm)
+                                            throws IOException {
 
-        LOGGER.debug("entre");
         Patient patient = null;
-        try{
+        try {
             patient = userDetailsService.getLoggedUser();
-        } catch (NotFoundPacientException | NotValidEmailException e){
+        } catch (NotFoundPacientException | NotValidEmailException e) {
             return Response.status(Response.Status.CONFLICT)
                     .entity(errorMessageToJSON("Doctor/Patient not found")).build();
         }
 
         Doctor doctor = patient.getDoctor();
-        if(doctor == null){
-            //hacer algo
+        if (doctor == null) {
             return Response.status(Response.Status.CONFLICT)
                     .entity(errorMessageToJSON("Doctor is NULL")).build();
         }
 
         /* Avatar */
-//        MultipartFile file = professionalForm.getAvatar();
 //
-//        if( file != null && file.getSize() != 0 ){
+//        String extension = FilenameUtils.getExtension(fileDetail.getFileName());
 //
-//            String mimetype = file.getContentType();
-//            String type = mimetype.split("/")[0];
+//        BufferedImage bImage = ImageIO.read(uploadedInputStream);
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 //
-//            if (!type.equals("image")) {
-//                LOGGER.warn("File is not an image");
-//            }else {
-//                try {
-//                    doctorService.setDoctorAvatar(doctor, file.getBytes());
-//                } catch (IOException e) {
-//                    LOGGER.warn("Could not upload image");
-//                }
-//            }
+//        if(!extension.equals("jpg") && !extension.equals("png") && !extension.equals("jpeg")){
+//            return Response.status(Response.Status.CONFLICT)
+//                    .entity(errorMessageToJSON("File not supported")).build();
 //        }
+//
+//
+//        ImageIO.write(bImage, extension, baos);
+//        baos.flush();
+//        byte[] imageInByte = baos.toByteArray();
+//
+//        doctorService.setDoctorAvatar(doctor, imageInByte);
+//        baos.close();
 
-        Description description;
-        if(professionalForm.getCertificate() != null && professionalForm.getLanguages()
-                != null && professionalForm.getEducation() != null){
-
-            description = new Description(professionalForm.getCertificate(),
-                    professionalForm.getLanguages(), professionalForm.getEducation());
-
-            doctorService.setDescription(doctor,description);
-        }
-
-        if(professionalForm.getSpecialty() != null){
+        if (professionalForm.getSpecialty() != null) {
             Set<Specialty> specialties = new HashSet<>();
-            for(String sp : professionalForm.getSpecialty()){
+            for (String sp : professionalForm.getSpecialty()) {
                 specialties.add(new Specialty(sp));
             }
-            doctorService.setDoctorSpecialty(doctor,specialties);
+            doctorService.setDoctorSpecialty(doctor, specialties);
         }
 
-        if(professionalForm.getInsurancePlan() != null){
-            LOGGER.debug("ENTRE A insurances");
-            LOGGER.debug("insuracePlan" + professionalForm.getInsurancePlan().size());
+        if (professionalForm.getDescription() != null) {
+            Description description = new Description(professionalForm.getDescription().getCertificate(),
+                    professionalForm.getDescription().getLanguages(), professionalForm.getDescription().getEducation());
+            doctorService.setDescription(doctor, description);
+        }
+
+        if (professionalForm.getInsurancePlans() != null) {
             doctorService.setDoctorInsurancePlans(doctor, professionalForm.getInsurancePlans());
         }
 
         List<WorkingHours> workingHoursList = new ArrayList<>();
-        for(WorkingHoursDTO w : professionalForm.getWorkingHours()){
+        for (WorkingHoursDTO w : professionalForm.getWorkingHours()) {
             WorkingHours workingHours = new WorkingHours(w.getDayOfWeek(), w.getStartTime(), w.getFinishTime());
             workingHoursList.add(workingHours);
         }
 
-        LOGGER.debug("workH" + workingHoursList.size());
         doctorService.setWorkingHours(doctor, workingHoursList);
-
 
         final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(doctor.getId())).build();
 
@@ -344,5 +366,272 @@ public class DoctorApiController extends BaseApiController {
     }
 
 
+    @PUT
+    @Path("/uploadPicture")
+    @Consumes({MediaType.MULTIPART_FORM_DATA})
+    public Response createProfessionalUser(@FormDataParam("file") InputStream uploadedInputStream,
+                                           @FormDataParam("file") FormDataContentDisposition fileDetail) throws IOException, NotFoundDoctorException, NotValidIDException {
 
+        Patient patient = null;
+        try {
+            patient = userDetailsService.getLoggedUser();
+        } catch (NotFoundPacientException | NotValidEmailException e) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Doctor/Patient not found")).build();
+        }
+
+        Doctor doctor = patient.getDoctor();
+        if (doctor == null) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Doctor is NULL")).build();
+        }
+
+        String extension = FilenameUtils.getExtension(fileDetail.getFileName());
+
+        BufferedImage bImage = ImageIO.read(uploadedInputStream);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        if(!extension.equals("jpg") && !extension.equals("png") && !extension.equals("jpeg")){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("File not supported")).build();
+        }
+
+
+        ImageIO.write(bImage, extension, baos);
+        baos.flush();
+        byte[] imageInByte = baos.toByteArray();
+
+        doctorService.setDoctorAvatar(doctor, imageInByte);
+        baos.close();
+
+        return Response.ok().build();
+    }
+
+
+    @POST
+    @Path("/{id}/review")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response createReview(@PathParam("id") final int doctorId , @Valid final ReviewForm reviewForm){
+
+        LOGGER.debug("Create Review");
+
+        /* Form revision */
+        if (reviewForm == null){
+            LOGGER.debug("Review Form is null");
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("Review can't be null")).build();
+        }
+
+        if (reviewForm.getStars() == null && reviewForm.getDescription() == null){
+            LOGGER.debug("No stars or description in review");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("No stars or description in review"))
+                    .build();
+        }
+        LOGGER.debug("Appointment id Form {}", reviewForm.getApponintmentId());
+        LOGGER.debug("Stars {}", reviewForm.getStars());
+        LOGGER.debug("Description {}", reviewForm.getDescription());
+
+        if (reviewForm.getApponintmentId() == null){
+            LOGGER.debug("No appointment");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("No appointment"))
+                    .build();
+        }
+
+
+        /* Patient Revision */
+        Patient patient = null;
+        try {
+            patient = userDetailsService.getLoggedUser();
+        } catch (NotFoundPacientException e) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("patient logged not found"))
+                    .build();
+        } catch ( NotValidEmailException e){
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Invalid email of patient"))
+                    .build();
+        }
+        if (patient == null){
+            Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("patient logged not found")) //messageSource.getMessage("patient not found", null, LocaleContextHolder.getLocale())))
+                    .build();
+        }
+        LOGGER.debug("Review patient {}", patient.getId());
+
+        if (patient.getDoctor() != null && patient.getDoctor().getId() == doctorId){
+            LOGGER.debug("Patient is the same as doctor");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Cannot set review a doctor to his own"))
+                    .build();
+        }
+
+        /* Doctor Revision */
+        Doctor doctor = null;
+        try {
+            doctor = doctorService.findDoctorById(String.valueOf(doctorId));
+        } catch (NotFoundDoctorException e) {
+            LOGGER.debug("Doctor with id {} not found", doctorId);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
+                    .build();
+        } catch (NotValidIDException e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Doctor with bad id"))
+                    .build();
+        }
+        if (doctor == null){
+            LOGGER.debug("Doctor with id {} not found", doctorId);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
+                    .build();
+        }
+        LOGGER.debug("Review doctor {}", doctor.getId());
+
+        /* Appointment revision */
+        Appointment appointment = null;
+
+        try {
+            appointment = appointmentService.findAppointmentById(reviewForm.getApponintmentId());
+        } catch (NotFoundAppointmentException e) {
+            LOGGER.debug("Appointment with id {} not found", reviewForm.getApponintmentId());
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("appointment not found")).build();
+        }
+        if (appointment == null){
+            LOGGER.debug("Appointment with id {} not found", reviewForm.getApponintmentId());
+            return Response.status(Response.Status.NOT_FOUND).entity(errorMessageToJSON("appointment not found")).build();
+        }
+
+        if (appointment.getDoctor().getId() != doctorId || appointment.getPatient().getId() != patient.getId()){
+            LOGGER.debug("Appointment with id {} found with others doctors/patients", reviewForm.getApponintmentId());
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("appointment found with others doctors/patients")).build();
+        }
+        LocalDate appointmentDay = LocalDate.parse(appointment.getAppointmentDay());
+        if (LocalDate.now().isBefore(appointmentDay)){
+            LOGGER.debug("Appointment with id {} found still not happen", reviewForm.getApponintmentId());
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("appointment found still not happen")).build();
+        }
+
+        if (appointment.getAppointmentCancelled()){
+            LOGGER.debug("Appointment is cancelled", reviewForm.getApponintmentId());
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("appointment is cancelled")).build();
+        }
+
+        if (appointment.getReview() != null) {
+            LOGGER.debug("Appointment already has review", reviewForm.getApponintmentId());
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("Appointment already has review")).build();
+        }
+            Review review = null;
+        try {
+            review = reviewService.createReview(reviewForm.getStars(), reviewForm.getDescription(), doctor, patient, appointment);
+        } catch (NotValidReviewException e) {
+            LOGGER.debug("Not valid review");
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("Not valid Review")).build();
+        }
+        if (review == null){
+            Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("Not created Review")).build();
+        }
+
+        return Response.ok(new BasicReviewDTO(review)).build();
+    }
+
+    @PUT
+    @Path("/{id}/appointment/add")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response addAppointment(@Valid final AppointmentForm appointmentForm){
+        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    }
+
+    @PUT
+    @Path("/{id}/appointment/cancel")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response cancelAppointment(@Valid final AppointmentForm appointmentForm){
+        return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    }
+
+    @PUT
+    @Path("/{id}/favorite/add")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response addFavorite(@PathParam("id") final int id){
+
+        Patient patient = null;
+        try {
+            patient = userDetailsService.getLoggedUser();
+        } catch (NotFoundPacientException | NotValidEmailException e) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Patient not found")).build();
+        }
+
+        Doctor doctor = null;
+        try{
+            doctor = doctorService.findDoctorById(id + "");
+        }catch (NotFoundDoctorException | NotValidIDException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Doctor not found")).build();
+        }
+
+        if(patient.getFavorites()!= null){
+            try{
+                favoriteService.addFavorite(doctor, patient);
+            }catch(NotCreatedFavoriteException e){
+                return Response.status(Response.Status.CONFLICT)
+                        .entity(errorMessageToJSON("Could not add favorite")).build();
+            }catch (FavoriteExistsException e){
+                return Response.status(Response.Status.CONFLICT)
+                        .entity(errorMessageToJSON("Could not add favorite. It is already on your favorites"))
+                        .build();
+            }
+        }
+
+        final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(doctor.getId())).build();
+
+        return Response.created(uri).entity(new DoctorDTO(doctor, buildBaseURI(uriInfo))).build();
+    }
+
+    @PUT
+    @Path("/{id}/favorite/remove")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response removeFavorite(@PathParam("id") final int id){
+
+        Patient patient = null;
+        try {
+            patient = userDetailsService.getLoggedUser();
+        } catch (NotFoundPacientException | NotValidEmailException e) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Patient not found")).build();
+        }
+
+        Doctor doctor = null;
+        try{
+            doctor = doctorService.findDoctorById(id + "");
+        }catch (NotFoundDoctorException | NotValidIDException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Doctor not found")).build();
+        }
+
+        if(patient.getFavorites()!=null){
+            try{
+                favoriteService.removeFavorite(doctor, patient);
+            }catch(NotRemoveFavoriteException | NoResultException e){
+                return Response.status(Response.Status.CONFLICT)
+                        .entity(errorMessageToJSON("Could not remove favorite")).build();
+            }
+        }
+
+        final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(doctor.getId())).build();
+
+        return Response.created(uri).entity(new DoctorDTO(doctor, buildBaseURI(uriInfo))).build();
+    }
 }

@@ -1,11 +1,11 @@
 package ar.edu.itba.paw.webapp.forms;
 
-/**
- * Created by estebankramer on 07/11/2018.
- */
+
+import ar.edu.itba.paw.models.Doctor;
+
 public class FavoriteForm {
 
-    String action;
+    private String action;
 
     public String getAction() {
         return action;

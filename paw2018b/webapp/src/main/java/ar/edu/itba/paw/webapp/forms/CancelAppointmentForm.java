@@ -5,9 +5,9 @@ import ar.edu.itba.paw.models.Patient;
 
 public class CancelAppointmentForm {
 
-    Integer doctorid;
-    String day;
-    String time;
+    private Integer doctorid;
+    private String day;
+    private String time;
 
     public Integer getDoctorid() {
         return doctorid;

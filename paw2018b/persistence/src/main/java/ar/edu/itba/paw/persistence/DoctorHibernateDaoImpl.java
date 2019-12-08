@@ -7,6 +7,8 @@ import ar.edu.itba.paw.models.exceptions.RepeatedLicenceException;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -192,6 +194,9 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         typedQuery.setFirstResult(PAGESIZE * (page));
         typedQuery.setMaxResults(PAGESIZE);
         List<Doctor> list = typedQuery.getResultList();
+        for (Doctor doctor : list){
+            Hibernate.initialize(doctor.getReviews());
+        }
         return list.isEmpty() ? Collections.emptyList() : list;
     }
 
@@ -367,16 +372,22 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         for(Specialty s : specialty){
            s.setId(specialtyDao.findSpecialtyByName(s.getSpeciality()).getId());
         }
-
-        doctor.setSpecialties(specialty);
         em.merge(doctor);
+        doctor.setSpecialties(specialty);
+
         return true;
     }
 
+
     public Boolean setWorkingHours(Doctor doctor, List<WorkingHours> workingHours){
+        Hibernate.initialize(doctor.getWorkingHours());
+
         doctor.addWorkingHours(workingHours);
+
         workingHours.stream().forEach(workingHour -> workingHour.setDoctor(doctor));
+
         em.merge(doctor);
+
         return true;
     }
 
@@ -388,18 +399,18 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     }
 
     public Boolean setDoctorInsurances(Doctor doctor, List<InsurancePlan> insurancePlans){
+        em.merge(doctor);
         doctor.addInsurancePlans(insurancePlans);
         for(InsurancePlan i : insurancePlans){
             i.setId(insurancePlanDao.findInsurancePlanByPlanName(i.getPlan()).getId());
         }
-        em.merge(doctor);
         return true;
     }
 
     public Boolean setDoctorDescription(Doctor doctor, Description description){
+        em.merge(doctor);
         doctor.setDescription(description);
         description.setDoctor(doctor);
-        em.merge(doctor);
         return true;
     }
 
@@ -434,6 +445,45 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
     public void mergeDoctor(Doctor doctor){
         em.merge(doctor);
+    }
+
+    @Override
+    public List<Appointment> getFutureAppointments(Doctor doctor) {
+        String today = LocalDate.now().toString();
+        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay >= :day AND ap.doctor = :doctor AND ap.appointmentCancelled = :cancel", Appointment.class);
+        query.setParameter("doctor", doctor);
+        query.setParameter("day", today);
+        query.setParameter("cancel", false);
+        final List<Appointment> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
+    @Override
+    public List<Appointment> getHistoricalAppointments(Doctor doctor) {
+        String today = LocalDate.now().toString();
+        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay < :day AND ap.doctor = :doctor AND ap.appointmentCancelled = :cancel", Appointment.class);
+        query.setParameter("doctor", doctor);
+        query.setParameter("day", today);
+        query.setParameter("cancel", false);
+        final List<Appointment> list = query.getResultList();
+        for (Appointment ap: list){
+            Hibernate.initialize(ap.getReview());
+        }
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
+    @Override
+    public List<Review> getReviews(Doctor doctor) {
+        final TypedQuery<Review> query = em.createQuery("Select doctor.reviews FROM Doctor doctor where doctor = :doctor", Review.class);
+        query.setParameter("doctor", doctor);
+        final List<Review> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
+    @Override
+    public void createReview(Doctor doctor, Patient patient, Review review) {
+        doctor.addReview(review);
+        em.persist(doctor);
     }
 
     private String escapeSpecialCharacters(String input) {
