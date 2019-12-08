@@ -8,7 +8,20 @@ CREATE TABLE IF NOT EXISTS doctor (
   avatar varchar(100) UNIQUE,
   id IDENTITY PRIMARY KEY,
   workingHours varchar(100),
-  district varchar (50)
+  district varchar (50),
+  profilePicture blob
+);
+
+CREATE TABLE IF NOT EXISTS patient(
+    doctorId INTEGER,
+    firstname VARCHAR(50),
+    lastname VARCHAR(50),
+    phonenumber VARCHAR(20),
+    email VARCHAR(90) UNIQUE,
+    password VARCHAR(72),
+    enabled boolean,
+    id IDENTITY PRIMARY KEY,
+    FOREIGN KEY (doctorId) REFERENCES doctor(id)
 );
 
 CREATE TABLE IF NOT EXISTS insurance (
@@ -42,23 +55,40 @@ CREATE TABLE IF NOT EXISTS doctorSpecialty(
   FOREIGN KEY (doctorID) REFERENCES doctor(id)
 );
 
-CREATE TABLE IF NOT EXISTS review(
-    description varchar(100),
-    stars integer,
-    doctorID integer,
-    userID integer,
-    userrole varchar (10),
-    daytime varchar (20),
+CREATE TABLE IF NOT EXISTS appointment(
+    doctorId integer,
+    clientId integer,
+    appointmentDay varchar(10),
+    appointmentTime VARCHAR (10),
+    identifier VARCHAR (30),
+    appointmentcancelled boolean,
     id IDENTITY PRIMARY KEY,
-    FOREIGN KEY (doctorID) REFERENCES doctor(id)
+    FOREIGN KEY (doctorId) REFERENCES doctor(id),
+    FOREIGN KEY (clientId) REFERENCES patient(id)
 );
 
-CREATE TABLE IF NOT EXISTS information(
- doctorId integer,
+CREATE TABLE IF NOT EXISTS review(
+  daytime varchar(20),
+  reviewerfirstname varchar(12),
+  reviewerlastname varchar(12),
+  description varchar(100),
+  stars integer,
+  doctorID integer,
+  patientID integer,
+  appointment integer,
+  id IDENTITY PRIMARY KEY,
+  FOREIGN KEY (doctorID) REFERENCES doctor(id),
+  FOREIGN KEY (patientID) REFERENCES patient(id),
+  FOREIGN KEY (appointment) REFERENCES appointment(id)
+);
+
+CREATE TABLE IF NOT EXISTS information (
+  doctorID integer,
  certificate varchar(100),
  languages varchar(20),
  education varchar(10),
- id IDENTITY PRIMARY KEY
+ id IDENTITY PRIMARY KEY,
+ FOREIGN KEY (doctorID) REFERENCES doctor(id)
  );
 
 CREATE TABLE IF NOT EXISTS workingHour(
@@ -70,25 +100,25 @@ CREATE TABLE IF NOT EXISTS workingHour(
     FOREIGN KEY (doctorId) REFERENCES doctor(id)
 );
 
-CREATE TABLE IF NOT EXISTS patient(
-    doctorId INTEGER,
-    firstname VARCHAR(50),
-    lastname VARCHAR(50),
-    phonenumber VARCHAR(20),
-    email VARCHAR(90) UNIQUE,
-    password VARCHAR(72),
-    id IDENTITY PRIMARY KEY
-);
-
-CREATE TABLE IF NOT EXISTS appointment(
+CREATE TABLE IF NOT EXISTS favorite(
     doctorId integer,
-    clientId integer,
-    appointmentDay varchar(10),
-    appointmentTime VARCHAR (10),
-    identifier VARCHAR (30),
+    patientId integer,
+    favoritecancelled boolean,
     id IDENTITY PRIMARY KEY,
     FOREIGN KEY (doctorId) REFERENCES doctor(id),
-    FOREIGN KEY (clientId) REFERENCES patient(id)
+    FOREIGN KEY (patientId) REFERENCES patient(id)
+);
+
+CREATE TABLE IF NOT EXISTS userinfo(
+    password VARCHAR(50),
+    email varchar(50),
+    role varchar(50),
+    id IDENTITY PRIMARY KEY,
+);
+
+create table if not exists verification(
+token varchar(36),
+patientid INTEGER
 );
 
 INSERT INTO doctor (firstName, lastName, sex, phoneNumber, address, licence, avatar, id, district)
@@ -101,9 +131,6 @@ VALUES ('Ramiro', 'Roca', 'M', '4777-7778', 'Maure 211', '4567',
 INSERT INTO doctor (firstName, lastName, sex, phoneNumber, address, licence, avatar, id, district)
 VALUES ('Rihanna', 'Remo', 'F', '4777-7771', 'Bulnes 211', '4321',
 'https://dsw5h1xg5uvx.cloudfront.net/93af945e-50b0-45ef-a181-c1b638a0c898circle_medium.png', '3', 'Recoleta');
-
-INSERT INTO PATIENT (firstname, lastname, phonenumber, email, password, id) VALUES ('Roberto Nicolas Agustin', 'Rosa', '444444444', 'Roberto@rosa.com', 'ThisIsSecret', 5);
-INSERT INTO PATIENT (firstname, lastname, phonenumber, email, password, id) VALUES ('Imanol', 'Alonso', '44444321', 'imanol@waldocclient.com', 'password', 6);
 
 INSERT INTO insurance (insuranceName, id) VALUES ('Accord', 206);
 INSERT INTO insurance (insuranceName, id) VALUES ('OSECAC', 210);
@@ -138,3 +165,6 @@ INSERT INTO doctorSpecialty (specialtyID, doctorID) VALUES (555, 2);
 INSERT INTO workingHour (doctorId, starttime, finishtime, dayweek, id) VALUES (1, '00:00:00', '23:59:59', 7, 7);
 INSERT INTO workingHour (doctorId, starttime, finishtime, dayweek, id) VALUES (2, '00:00:00', '23:59:59', 7, 8);
 INSERT INTO workingHour (doctorId, starttime, finishtime, dayweek, id) VALUES (3, '00:00:00', '23:59:59', 7, 9);
+
+update patient set enabled = TRUE;
+
