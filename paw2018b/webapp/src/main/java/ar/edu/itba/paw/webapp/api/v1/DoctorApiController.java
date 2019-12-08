@@ -486,7 +486,7 @@ public class DoctorApiController extends BaseApiController {
     @Produces(value = MediaType.APPLICATION_JSON)
     public Response addAppointment(@Valid final AppointmentForm appointmentForm, @PathParam("id") final int doctorId){
        if (appointmentForm == null){
-           LOGGER.debug("No stars or description in review");
+           LOGGER.debug("Appointment form is null");
            return Response
                    .status(Response.Status.BAD_REQUEST)
                    .entity(errorMessageToJSON("Appointment Form is null"))
@@ -600,6 +600,24 @@ public class DoctorApiController extends BaseApiController {
         }
         LOGGER.debug("Appointment doctor {}", doctor.getId());
 
+        boolean whfound = false;
+        for (WorkingHours wh : doctor.getWorkingHours()){
+            if (wh.getDayOfWeek() == appointmentDate.getDayOfWeek().getValue() && whfound == false) {
+                LocalTime startTime = LocalTime.parse(wh.getStartTime());
+                LocalTime finishTime = LocalTime.parse(wh.getFinishTime());
+                if ((startTime.equals(appointmentTime) || startTime.isBefore(appointmentTime)) &&
+                        finishTime.isAfter(appointmentTime)){
+                    whfound = true;
+                }
+            }
+        }
+        if (!whfound){
+            LOGGER.debug("Doctor does not work in that day in that time", doctorId);
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Doctor does not work in that day in that time"))
+                    .build();
+        }
+
         Appointment appointmentCreated;
         try {
             appointmentCreated = appointmentService.createAppointment(appointmentForm.getDay(), appointmentForm.getTime(), patient, doctor);
@@ -634,7 +652,7 @@ public class DoctorApiController extends BaseApiController {
     @Path("/{id}/favorite/add")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = MediaType.APPLICATION_JSON)
-    public Response addFavorite(@Valid final FavoriteForm favoriteForm){
+    public Response addFavorite(){
         return Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }
 
@@ -642,7 +660,7 @@ public class DoctorApiController extends BaseApiController {
     @Path("/{id}/favorite/cancel")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = MediaType.APPLICATION_JSON)
-    public Response cancelFavorite(@Valid final FavoriteForm favoriteForm){
+    public Response cancelFavorite(){
         return Response.status(Response.Status.NOT_IMPLEMENTED).build();
     }
 

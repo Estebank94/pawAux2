@@ -46,7 +46,7 @@ public class AppointmentHibernateDaoImpl implements AppointmentDao {
 
     @Override
     public Optional<Appointment> findAppointmentByDoctor (String appointmentDay, String appointmentTime, Doctor doctor) throws Exception{
-        final TypedQuery<Appointment> query = em.createQuery("from Appointment as a WHERE a.appointmentDay = :appointmentDay AND a.appointmentTime = :appointmentTime AND a.doctor = :doctor AND a.appointmentCancelled := cancelled",Appointment.class);
+        final TypedQuery<Appointment> query = em.createQuery("from Appointment as a WHERE a.appointmentDay = :appointmentDay AND a.appointmentTime = :appointmentTime AND a.doctor = :doctor AND a.appointmentCancelled = :cancelled",Appointment.class);
         query.setParameter("appointmentDay", appointmentDay);
         query.setParameter("appointmentTime", appointmentTime);
         query.setParameter("doctor", doctor);
