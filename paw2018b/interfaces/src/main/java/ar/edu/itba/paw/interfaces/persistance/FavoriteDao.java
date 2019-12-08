@@ -16,5 +16,5 @@ public interface FavoriteDao {
 
     Optional<Favorite> findFavorite (Doctor doctor, Patient patient) throws  Exception;
 
-    public void undoRemoveFavorite(Favorite favorite);
+    void undoRemoveFavorite(Favorite favorite);
 }

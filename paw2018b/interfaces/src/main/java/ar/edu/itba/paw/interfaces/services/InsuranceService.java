@@ -8,5 +8,5 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public interface InsuranceService {
 
-    public Insurance getInsuranceByName(String name);
+    Insurance getInsuranceByName(String name);
 }

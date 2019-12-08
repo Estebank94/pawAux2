@@ -5,7 +5,7 @@ package ar.edu.itba.paw.webapp.forms;
  */
 public class FavoriteForm {
 
-    String action;
+    private String action;
 
     public String getAction() {
         return action;

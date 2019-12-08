@@ -24,7 +24,7 @@ import java.util.Optional;
 public class FavoriteServiceImpl implements FavoriteService {
 
     @Autowired
-    FavoriteDao favoriteDao;
+    private FavoriteDao favoriteDao;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FavoriteServiceImpl.class);
 

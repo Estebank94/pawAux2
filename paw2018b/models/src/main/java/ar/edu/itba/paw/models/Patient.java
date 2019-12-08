@@ -38,7 +38,7 @@ public class Patient {
 
     @OneToMany(mappedBy="patient", cascade = {CascadeType.PERSIST})
     @LazyCollection(LazyCollectionOption.TRUE)
-    List<Favorite> favorites;
+    private List<Favorite> favorites;
 
     @OneToOne(fetch = FetchType.LAZY, optional = true, mappedBy = "patient")
     private Verification verification;

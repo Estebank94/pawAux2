@@ -2,8 +2,8 @@ package ar.edu.itba.paw.webapp.forms;
 
 public class AppointmentForm {
 
-    String day;
-    String time;
+    private String day;
+    private String time;
 
     public AppointmentForm() {
 

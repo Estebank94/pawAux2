@@ -33,7 +33,7 @@ public class DoctorPanelController {
     private PatientService patientService;
 
     @Autowired
-    AppointmentService appointmentService;
+    private AppointmentService appointmentService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DoctorPanelController.class);
 

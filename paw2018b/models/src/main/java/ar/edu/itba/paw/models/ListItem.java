@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class ListItem {
 
-    String name;
-    Integer id;
+    private String name;
+    private Integer id;
 
     @Autowired
     public ListItem(String name, Integer id) {

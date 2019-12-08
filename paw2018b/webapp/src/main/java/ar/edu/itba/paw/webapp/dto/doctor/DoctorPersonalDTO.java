@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DoctorPersonalDTO {
-    List<DoctorAppointmentDTO> futureAppointments;
-    List<DoctorAppointmentDTO> historicalAppointments;
-    List<ReviewDTO> reviews;
+    private List<DoctorAppointmentDTO> futureAppointments;
+    private List<DoctorAppointmentDTO> historicalAppointments;
+    private List<ReviewDTO> reviews;
 
     public DoctorPersonalDTO() {
     }
