@@ -29,7 +29,7 @@ const Steps = () => {
             </div>
         </div>
 
-        <div class="d-flex flex-row margin-bottom-medium">
+        <div class="d-flex flex-row pb-5">
             <img src="https://i.imgur.com/yjHKj1P.jpg" class="image-rectangle" />
             <div>
                 <div class="list-home">

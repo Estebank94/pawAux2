@@ -576,3 +576,10 @@ a {
   cursor: pointer;
 }
 
+.w-text-color {
+  color: #257cbf !important;
+}
+
+.w-text-light {
+  color: #888889;
+}
