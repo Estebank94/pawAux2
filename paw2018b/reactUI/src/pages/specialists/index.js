@@ -23,6 +23,7 @@ class Specialists extends React.Component {
       insurances: null,
       insurancePlans: null,
       specialties: null,
+      auxName: null,
       filters: {
         name: null,
         insurance: null,
@@ -44,6 +45,7 @@ class Specialists extends React.Component {
       insurances: null,
       insurancePlans: null,
       specialties: null,
+      auxName: null,
       filters: {
         name: null,
         insurance: null,
@@ -140,6 +142,19 @@ class Specialists extends React.Component {
     this.getSpecialists();
   }
 
+  handleInputChange(e) {
+    this.setState({ auxName: e.target.value });
+  }
+
+  async handleNameSearch() {
+    const filters = this.state.filters;
+    filters.name = this.state.auxName;
+    await this.setState({ filters, auxName: null, filtering: true });
+    this.getSpecialists();
+  }
+
+
+
   dayToString(day){
     switch(day) {
       case 1:
@@ -152,7 +167,7 @@ class Specialists extends React.Component {
         return 'Miercoles'
         break;
       case 4:
-        return 'Juevex'
+        return 'Jueves'
         break;
       case 5:
         return 'Viernes'
@@ -275,10 +290,12 @@ class Specialists extends React.Component {
                         !name &&
                         <div>
                           <h5 className="mb-1 mt-3">Nombre</h5>
-                            <div className="form-group">
-                              <input name="name" value={name} type="text" className="form-control w-shadow" onChange={(e) => this.handleChange('name', e.target.value)}/>
+                            <div className="input-group mb-3">
+                              <input name="name" value={name} type="text" className="form-control w-shadow" placeholder="Nombre..." onChange={(e) => this.handleInputChange(e)}/>
+                                <div className="input-group-append">
+                                  <span className="input-group-text w-shadow" onClick={() => this.handleNameSearch()}>Buscar</span>
+                                </div>
                             </div>
-                            {/*<div className="btn btn-primary custom-btn">Buscar</div>*/}
                         </div>
                       }
                       {
