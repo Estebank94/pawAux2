@@ -4,14 +4,12 @@ package ar.edu.itba.paw.webapp.forms;
 import ar.edu.itba.paw.models.InsurancePlan;
 import ar.edu.itba.paw.models.Specialty;
 import ar.edu.itba.paw.webapp.dto.WorkingHoursDTO;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
 public class BasicProfessionalForm {
 
-//    private AvatarForm avatar;
 
     private DescriptionForm description;
 
@@ -23,13 +21,6 @@ public class BasicProfessionalForm {
     @NotNull
     private List<String> specialty;
 
-//    public AvatarForm getAvatar() {
-//        return avatar;
-//    }
-//
-//    public void setAvatar(AvatarForm avatar) {
-//        this.avatar = avatar;
-//    }
 
     public List<WorkingHoursDTO> getWorkingHours() {
         return workingHours;

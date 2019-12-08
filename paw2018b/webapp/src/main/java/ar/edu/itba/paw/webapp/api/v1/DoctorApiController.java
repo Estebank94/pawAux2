@@ -278,7 +278,6 @@ public class DoctorApiController extends BaseApiController {
 //        return Response.created(uri).entity(new DoctorPatientDTO(patient, buildBaseURI(uriInfo))).build();
     }
 
-
     @POST
     @Path("/registerProfessional")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -353,7 +352,6 @@ public class DoctorApiController extends BaseApiController {
         return Response.created(uri).entity(new DoctorDTO(doctor, buildBaseURI(uriInfo))).build();
     }
 
-
     @PUT
     @Path("/uploadPicture")
     @Consumes({MediaType.MULTIPART_FORM_DATA})
@@ -424,6 +422,10 @@ public class DoctorApiController extends BaseApiController {
             }catch(NotCreatedFavoriteException e){
                 return Response.status(Response.Status.CONFLICT)
                         .entity(errorMessageToJSON("Could not add favorite")).build();
+            }catch (FavoriteExistsException e){
+                return Response.status(Response.Status.CONFLICT)
+                        .entity(errorMessageToJSON("Could not add favorite. It is already on your favorites"))
+                        .build();
             }
         }
 

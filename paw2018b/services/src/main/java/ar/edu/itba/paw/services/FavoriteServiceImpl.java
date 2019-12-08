@@ -18,9 +18,7 @@ import javax.persistence.NoResultException;
 import java.sql.SQLException;
 import java.util.Optional;
 
-/**
- * Created by estebankramer on 04/11/2018.
- */
+
 @Service
 public class FavoriteServiceImpl implements FavoriteService {
 
@@ -31,7 +29,9 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Transactional(rollbackFor = SQLException.class)
     @Override
-    public void addFavorite(Doctor doctor, Patient patient) throws NotCreatedFavoriteException {
+    public void addFavorite(Doctor doctor, Patient patient) throws NotCreatedFavoriteException,
+            FavoriteExistsException {
+
         LOGGER.debug("FavoriteServiceImpl: addFavorite");
 
         Favorite favorite = null;
@@ -44,6 +44,9 @@ public class FavoriteServiceImpl implements FavoriteService {
         }
 
         if (fav.isPresent()){
+            if(!fav.get().getFavoriteCancelled()){
+                throw new FavoriteExistsException();
+            }
             favoriteDao.undoRemoveFavorite(fav.get());
             return;
         }
