@@ -1,14 +1,17 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
 
-const Footer = () => {
-  return(
-    <div>
-      <div class="container">
-        <p class="footer-text">© Copyright 2019. Waldoc</p>
+class Footer extends React.Component {
+  render() {
+    const { pathname } = this.props.location;
+    return(
+      <div style={{ backgroundColor: pathname === '/' ? '#FFFFFF' : '#F3F3F4' }}>
+        <div class="container">
+          <p class="footer-text">© Copyright 2019. Waldoc</p>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
-export default Footer
+export default Footer;
+

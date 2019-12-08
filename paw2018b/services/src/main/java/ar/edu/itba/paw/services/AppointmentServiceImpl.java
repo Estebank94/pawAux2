@@ -76,4 +76,15 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
         return ans;
     }
+
+    @Override
+    public Appointment findAppointmentById(Integer id) throws NotFoundAppointmentException {
+        LOGGER.debug("Find appointment by id with id {}", id);
+        Optional<Appointment> appointmentOptional = appointmentDao.findAppointmentById(id);
+        if (!appointmentOptional.isPresent()){
+            LOGGER.debug("Appointment with id {} not found", id);
+            throw new NotFoundAppointmentException("Appointment not found");
+        }
+        return appointmentOptional.get();
+    }
 }

@@ -14,4 +14,6 @@ public interface AppointmentService {
     Appointment createAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) throws RepeatedAppointmentException, NotCreatedAppointmentException, NotValidDoctorIdException, NotValidAppointmentDayException, NotValidAppointmentTimeException, NotFoundDoctorException, NotValidPatientIdException;
 
     Boolean cancelAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor);
+
+    Appointment findAppointmentById(Integer id) throws NotFoundAppointmentException;
 }

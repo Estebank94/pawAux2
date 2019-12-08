@@ -6,8 +6,10 @@ import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
+import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
 import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
 import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
+import ar.edu.itba.paw.models.exceptions.NotValidPatientIdException;
 import ar.edu.itba.paw.webapp.forms.CancelAppointmentForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,16 +34,16 @@ public class PatientPanelController {
     private static final Logger LOGGER = LoggerFactory.getLogger(PatientPanelController.class);
 
     @Autowired
-    PatientService patientService;
+    private PatientService patientService;
 
     @Autowired
-    AppointmentService appointmentService;
+    private AppointmentService appointmentService;
 
     @Autowired
-    DoctorService doctorService;
+    private DoctorService doctorService;
 
     @RequestMapping("/patientPanel")
-    public ModelAndView patientPanel(){
+    public ModelAndView patientPanel() throws NotCreatePatientException, NotValidPatientIdException, NotValidEmailException, NotFoundPacientException {
 
         LOGGER.debug("Calling: patientPanel GET");
 
@@ -87,8 +89,8 @@ public class PatientPanelController {
          */
 
         if(form.getDay() != null){
-            Optional<Doctor> doctor = doctorService.findDoctorById(String.valueOf(form.getDoctorid()));
-            appointmentService.cancelAppointment(form.getDay(), form.getTime(), patient, doctor.get());
+            Doctor doctor = doctorService.findDoctorById(String.valueOf(form.getDoctorid()));
+            appointmentService.cancelAppointment(form.getDay(), form.getTime(), patient, doctor);
         }
 
         ModelAndView mav = new ModelAndView("redirect:/patientPanel");

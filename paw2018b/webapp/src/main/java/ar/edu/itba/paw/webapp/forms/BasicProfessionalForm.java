@@ -3,7 +3,10 @@ package ar.edu.itba.paw.webapp.forms;
 
 import ar.edu.itba.paw.models.InsurancePlan;
 import ar.edu.itba.paw.models.Specialty;
-import ar.edu.itba.paw.webapp.dto.WorkingHoursDTO;
+
+import ar.edu.itba.paw.webapp.dto.workingHours.WorkingHoursDTO;
+
+
 
 import javax.validation.constraints.NotNull;
 import java.util.*;

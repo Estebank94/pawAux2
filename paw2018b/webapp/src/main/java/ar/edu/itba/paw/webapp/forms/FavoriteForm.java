@@ -5,9 +5,7 @@ import ar.edu.itba.paw.models.Doctor;
 
 public class FavoriteForm {
 
-    /* add, remove */
-    String action;
-    Doctor doctor;
+    private String action;
 
     public String getAction() {
         return action;

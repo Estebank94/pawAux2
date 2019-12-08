@@ -20,18 +20,19 @@ const App = props => {
     ...everyoneRoutes
   ];
   const HeaderWithRouter = withRouter(Header);
+  const FooterWithRouter = withRouter(Footer);
   return(
-    <div>
-      <HeaderWithRouter />
-      <main>
+      <div>
+        <HeaderWithRouter />
+        <main>
           <Route exact path="/" component={Home} />
           <Route exact path="/specialists" component={Specialists} />
           <Route exact path="/specialist/:id" component={Specialist} />
           <Route exact path="/login" component={Login} />
-          <Route exact path="/register" component={Register} />
-      </main>
-      <Footer />
-    </div>
+          <Route exact path="/register/:role" component={Register} />
+        </main>
+        <FooterWithRouter />
+      </div>
   )
 }
 

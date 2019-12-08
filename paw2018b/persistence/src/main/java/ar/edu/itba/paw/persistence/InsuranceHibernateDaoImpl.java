@@ -29,7 +29,7 @@ public class InsuranceHibernateDaoImpl implements InsuranceDao {
     public Insurance findInsuranceByName(String name) {
         final TypedQuery<Insurance> query = em.createQuery("FROM Insurance " +
                 "WHERE name = :name ", Insurance.class);
-        query.setParameter("name", "%" + name + "%");
+        query.setParameter("name", name);
         Insurance insurance = query.getSingleResult();
         return insurance;
     }

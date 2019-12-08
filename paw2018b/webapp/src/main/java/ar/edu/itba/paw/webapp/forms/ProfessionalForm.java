@@ -3,7 +3,7 @@ package ar.edu.itba.paw.webapp.forms;
 import ar.edu.itba.paw.models.InsurancePlan;
 import ar.edu.itba.paw.models.Specialty;
 import ar.edu.itba.paw.models.WorkingHours;
-import ar.edu.itba.paw.webapp.dto.WorkingHoursDTO;
+import ar.edu.itba.paw.webapp.dto.workingHours.WorkingHoursDTO;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 

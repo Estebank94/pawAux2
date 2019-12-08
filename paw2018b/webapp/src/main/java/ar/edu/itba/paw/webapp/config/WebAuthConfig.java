@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.config;
 
+import ar.edu.itba.paw.webapp.auth.CorsFilter;
 import ar.edu.itba.paw.webapp.auth.StatelessAuthenticationFilter;
 import ar.edu.itba.paw.webapp.auth.StatelessAuthenticationSuccessHandler;
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
@@ -19,6 +20,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -49,6 +51,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CorsFilter corsFilter;
 
     @Bean
     public DaoAuthenticationProvider authProvider(){
@@ -82,6 +87,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.POST, "/api/**/patient/login").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/**/patient/register").anonymous()
                     .antMatchers(HttpMethod.POST, "/api/**/doctor/register").anonymous()
+                    .antMatchers(HttpMethod.GET, "/api/**/patient/personal").authenticated()
                      //para ver si estoy loggeado
 //                    .antMatchers("/api/users/me/**").authenticated()
                     .antMatchers(HttpMethod.POST).authenticated()
@@ -98,10 +104,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .failureHandler(new SimpleUrlAuthenticationFailureHandler())
                 .and().exceptionHandling()
                     .authenticationEntryPoint(new Http403ForbiddenEntryPoint())
-                .and().csrf().disable()
+                .and()
+                .addFilterBefore(corsFilter, ChannelProcessingFilter.class)
+                .csrf().disable()
                     .addFilterBefore(statelessAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
-
 
     @Bean
     public AuthenticationSuccessHandler successHandler() {
@@ -113,7 +120,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
 
     @Bean
     public String authTokenKey() {

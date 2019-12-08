@@ -3,10 +3,9 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.persistance.DoctorDao;
 import ar.edu.itba.paw.interfaces.persistance.PatientDao;
 import ar.edu.itba.paw.interfaces.services.PatientService;
-import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.Patient;
-import ar.edu.itba.paw.models.Verification;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
+import org.hibernate.Hibernate;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
-@Service
-@Transactional
+@Service("PatientServiceImpl")
 public class PatientServiceImpl implements PatientService {
 
     @Autowired
@@ -180,45 +179,45 @@ public class PatientServiceImpl implements PatientService {
             throw new NotValidPatientIdException("PatientId can't be negative or zero");
         }
         LOGGER.debug("find patient by id. ID {}", id);
-        Patient patient = patientDao.findPatientById(id).get();
+        Optional<Patient> patientOptional = patientDao.findPatientById(id);
+
+        if (!patientOptional.isPresent()){
+            LOGGER.debug("Patient not found");
+            throw new NotFoundPacientException("Patient was not found");
+        }
+
+        Patient patient = patientOptional.get();
 
         if (patient == null){
             LOGGER.debug("Patient not found");
             throw new NotFoundPacientException("Patient was not found");
         }
         LOGGER.debug("Patient {}", patient);
+
         return patient;
     }
 
     @Override
-    public Patient findPatientByEmail(String email){
+    public Patient findPatientByEmail(String email) throws NotValidPatientIdException, NotCreatePatientException, NotFoundPacientException, NotValidEmailException {
         LOGGER.debug("PatientServiceImpl: findPatientByEmail(String email)");
         if (email == null){
             LOGGER.debug("Email is null");
-            return null;
-            // throw new NotValidEmailException("patient email can't be null");
+            throw new NotValidEmailException("patient email can't be null");
         }
         if (email.length() == 0){
             LOGGER.debug("Email length is 0");
-            return null;
-            // throw new NotValidEmailException("Patient email can't be negative or zero");
+            throw new NotValidEmailException("Patient email can't be negative or zero");
         }
         if (email.length() > 90){
             LOGGER.debug("Email has more than 90 characters. Email: {}", email);
-            return null;
-            // throw new NotValidEmailException("PatientMail can't have more than 90 characters");
+            throw new NotValidEmailException("PatientMail can't have more than 90 characters");
         }
         LOGGER.debug("Calling patientDao.findPatientByEmail(email)");
         Patient foundPatient = patientDao.findPatientByEmail(email);
         if (foundPatient == null){
             LOGGER.debug("No patient found");
-            return null;
-            // throw new NotFoundPacientException("Patient was not found");
+            throw new NotFoundPacientException("Patient was not found");
         }
-        // foundPatient.getFavorites();
-//        foundPatient.isPresent().getFavorites();
-//        LOGGER.debug("Patient found. Patient: {}", foundPatient.get());
-//        LOGGER.debug("Patient name: {}", foundPatient.get().getFirstName());
         return foundPatient;
     }
 
@@ -246,5 +245,22 @@ public class PatientServiceImpl implements PatientService {
         patientDao.deleteUser(patient);
     }
 
+    @Override
+    public List<Appointment> getHistoricalAppointments(Patient patient) {
+        List<Appointment> appointmentList = patientDao.getHistoricalAppointments(patient);
+        for (Appointment ap: appointmentList){
+            ap.getReview();
+        }
+        return appointmentList;
+    }
 
+    @Override
+    public List<Appointment> getFutureAppointments(Patient patient) {
+        return patientDao.getFutureAppointments(patient);
+    }
+
+    @Override
+    public List<Favorite> getFavoriteDoctors(Patient patient) {
+        return patientDao.getFavoriteDoctors(patient);
+    }
 }

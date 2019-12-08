@@ -43,4 +43,12 @@ public interface DoctorDao {
     boolean mergeDoctorDescription(Description original, Description toMerge);
 
     void mergeDoctor(Doctor doctor);
+
+    List<Appointment> getFutureAppointments(Doctor doctor);
+
+    List<Appointment> getHistoricalAppointments(Doctor doctor);
+
+    List<Review> getReviews(Doctor doctor);
+
+    void createReview(Doctor doctor, Patient patient, Review review);
 }

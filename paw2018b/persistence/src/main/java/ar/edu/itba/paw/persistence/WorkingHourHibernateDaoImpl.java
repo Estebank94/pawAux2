@@ -43,7 +43,7 @@ public class WorkingHourHibernateDaoImpl implements WorkingHoursDao {
     @Override
     public List<WorkingHours> findWorkingHoursByDayWeek(Integer dayOfWeek){
         final TypedQuery<WorkingHours> query = em.createQuery("FROM WorkingHours WHERE dayweek = :dayweek", WorkingHours.class);
-        query.setParameter("dayweek", "%" + dayOfWeek + "%");
+        query.setParameter("dayweek", dayOfWeek);
         List<WorkingHours> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
     }

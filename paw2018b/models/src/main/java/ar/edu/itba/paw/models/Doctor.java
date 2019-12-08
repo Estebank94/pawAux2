@@ -19,60 +19,69 @@ import java.util.*;
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
-    String firstName;
-    String lastName;
-    String sex;
-    String address;
-    byte[] profilePicture;
-    Integer licence;
+    private Integer id;
+    private String firstName;
+    private String lastName;
+    private String sex;
+    private String address;
+    private byte[] profilePicture;
+    private Integer licence;
+    private String district;
 
     @ManyToMany(cascade = {CascadeType.ALL},
-                fetch = FetchType.EAGER
-    )
+                fetch = FetchType.EAGER)
     @JoinTable(
             name="doctorSpecialty",
             joinColumns = {@JoinColumn(name = "doctorid", referencedColumnName="id")},
-            inverseJoinColumns = {@JoinColumn(name = "specialtyid", referencedColumnName="id")}
-    )
-    Set<Specialty> specialties;
+            inverseJoinColumns = {@JoinColumn(name = "specialtyid", referencedColumnName="id")})
+    private Set<Specialty> specialties;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST},
-                fetch = FetchType.EAGER
-    )
+    @ManyToMany(cascade = {CascadeType.PERSIST}
+                , fetch = FetchType.EAGER)
     @JoinTable(
             name="medicalCare",
             joinColumns = {@JoinColumn(name="doctorid", referencedColumnName="id")},
             inverseJoinColumns = {@JoinColumn(name="insuranceplanid", referencedColumnName="id")}
     )
-    List<InsurancePlan> insurancePlans;
+    private List<InsurancePlan> insurancePlans;
 
-    String phoneNumber;
+    private String phoneNumber;
 
     @OneToMany(mappedBy = "doctor", cascade = {CascadeType.ALL})
-    @LazyCollection(LazyCollectionOption.TRUE)
-    List<WorkingHours> workingHours;
+    private List<WorkingHours> workingHours;
 
 
     @OneToMany(mappedBy = "doctor")
     @LazyCollection(LazyCollectionOption.TRUE)
-    Set<Appointment> appointments;
+    private Set<Appointment> appointments;
 
     @OneToMany(mappedBy = "doctor")
-    @LazyCollection(LazyCollectionOption.FALSE)
-    List<Review> reviews;
+    private List<Review> reviews;
 
     @OneToOne(mappedBy="doctor")
-    Patient patient;
+    private Patient patient;
 
     @OneToOne(mappedBy="doctor", cascade = {CascadeType.ALL})
-    Description description;
-
-
-    String district;
+    private Description description;
 
     @OneToMany(mappedBy="doctor", cascade = {CascadeType.PERSIST})
-    List<Favorite> favorites;
+    private List<Favorite> favorites;
+
+    @Autowired
+    public Doctor(){
+
+    }
+
+    public Doctor(String firstName, String lastName, String phoneNumber, String sex,
+                  Integer licence, byte[] profilePicture, String address){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.sex = sex;
+        this.address = address;
+        this.profilePicture = profilePicture;
+        this.phoneNumber = phoneNumber;
+        this.licence = licence;
+    }
 
     public List<Review> getReviews() {
         return reviews;
@@ -112,23 +121,6 @@ public class Doctor {
 
     public void setDistrict(String district) {
         this.district = district;
-    }
-
-
-    @Autowired
-    public Doctor(){
-
-    }
-
-    public Doctor(String firstName, String lastName, String phoneNumber, String sex,
-                  Integer licence, byte[] profilePicture, String address){
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.sex = sex;
-        this.address = address;
-        this.profilePicture = profilePicture;
-        this.phoneNumber = phoneNumber;
-        this.licence = licence;
     }
 
     public String getPhoneNumber() {
@@ -209,20 +201,6 @@ public class Doctor {
 
     public void setInsurancePlans(List<InsurancePlan> insurancePlans) {
         this.insurancePlans = insurancePlans;
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Doctor)) return false;
-        Doctor doctor = (Doctor) o;
-        return Objects.equals(getId(), doctor.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
     }
 
     public Map<LocalDate, List<Appointment>>getAvailableAppointments(){
@@ -334,14 +312,6 @@ public class Doctor {
         }
         return returnSet;
     }
-//
-//    public List<Review> getReviews() {
-//        return reviews;
-//    }
-//
-//    public void setReviews(List<Review> reviews) {
-//        this.reviews = reviews;
-//    }
 
     public Map<LocalDate, List<LocalTime>> appointmentsToMap (){
 
@@ -497,6 +467,29 @@ public class Doctor {
             sum = 0;
         }
         return Math.round(sum);
+    }
+
+    public void addReview(Review review){
+        reviews.add(review);
+        review.setDoctor(this);
+    }
+
+    public void removeReview(Review review){
+        reviews.remove(review);
+        review.setDoctor(null);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Doctor)) return false;
+        Doctor doctor = (Doctor) o;
+        return Objects.equals(getId(), doctor.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 
 }

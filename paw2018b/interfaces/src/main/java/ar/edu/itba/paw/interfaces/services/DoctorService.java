@@ -24,7 +24,7 @@ public interface DoctorService {
 
    List<Doctor> listDoctors(Search search, String pageAsString) throws NotValidPageException;
 
-   Optional<Doctor> findDoctorById(String id) throws NotFoundDoctorException, NotValidIDException;
+   Doctor findDoctorById(String id) throws NotFoundDoctorException, NotValidIDException;
 
 //   Doctor createDoctor(String firstName, String lastName, String sex, String address,
 //                       String avatar, Set<String> specialty, Map<String, Set<String>> insurance,
@@ -44,4 +44,9 @@ public interface DoctorService {
    Optional<Doctor> setDescription(Doctor doctor, Description description);
 
 
+   List<Appointment> getFutureAppointments(Doctor doctor);
+
+   List<Appointment> getHistoricalAppointments(Doctor doctor);
+
+   List<Review> getReviews(Doctor doctor);
 }

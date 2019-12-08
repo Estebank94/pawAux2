@@ -7,10 +7,7 @@ import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
-import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
-import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
-import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
-import ar.edu.itba.paw.models.exceptions.NotValidIDException;
+import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.forms.CancelAppointmentForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +33,7 @@ public class DoctorPanelController {
     private PatientService patientService;
 
     @Autowired
-    AppointmentService appointmentService;
+    private AppointmentService appointmentService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DoctorPanelController.class);
 
@@ -47,8 +44,18 @@ public class DoctorPanelController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        Patient patient;
-        patient = patientService.findPatientByEmail(authentication.getName());
+        Patient patient = null;
+        try {
+            patient = patientService.findPatientByEmail(authentication.getName());
+        } catch (NotValidPatientIdException e) {
+            e.printStackTrace();
+        } catch (NotCreatePatientException e) {
+            e.printStackTrace();
+        } catch (NotFoundPacientException e) {
+            e.printStackTrace();
+        } catch (NotValidEmailException e) {
+            e.printStackTrace();
+        }
 
         /*
         try {
@@ -63,7 +70,7 @@ public class DoctorPanelController {
 
         Doctor doctor = null;
         try {
-            doctor = doctorService.findDoctorById(String.valueOf(doctorId)).get();
+            doctor = doctorService.findDoctorById(String.valueOf(doctorId));
         } catch (NotFoundDoctorException | NotValidIDException e) {
             LOGGER.trace("Error 404");
             return new ModelAndView("404");
@@ -123,8 +130,8 @@ public class DoctorPanelController {
          */
 
         if(form.getDay() != null){
-            Optional<Doctor> doctor = doctorService.findDoctorById(String.valueOf(form.getDoctorid()));
-            appointmentService.cancelAppointment(form.getDay(), form.getTime(), patient, doctor.get());
+            Doctor doctor = doctorService.findDoctorById(String.valueOf(form.getDoctorid()));
+            appointmentService.cancelAppointment(form.getDay(), form.getTime(), patient, doctor);
         }
         ModelAndView mav = new ModelAndView("redirect:/doctorPanel");
         return mav;

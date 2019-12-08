@@ -4,8 +4,9 @@ package ar.edu.itba.paw.webapp.forms;
  * Created by estebankramer on 02/11/2018.
  */
 public class ReviewForm {
-    String stars;
-    String description;
+    private String stars;
+    private String description;
+    private Integer apponintmentId;
 
     public String getStars() {
         return stars;
@@ -21,5 +22,13 @@ public class ReviewForm {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getApponintmentId() {
+        return apponintmentId;
+    }
+
+    public void setApponintmentId(Integer apponintmentId) {
+        this.apponintmentId = apponintmentId;
     }
 }

@@ -6,29 +6,18 @@ import java.net.URI;
 
 public class SpecialtyDTO {
 
-    private Integer id;
+    // private Integer id;
     private String speciality;
     private URI uri;
 
     public SpecialtyDTO () {}
 
     public SpecialtyDTO (Specialty specialty) {
-        this.id = specialty.getId();
         this.speciality = specialty.getSpeciality();
     }
 
     public SpecialtyDTO (Specialty specialty, URI baseUri){
-        this.id = specialty.getId();
         this.speciality = specialty.getSpeciality();
-        this.uri = baseUri.resolve(String.valueOf(this.id));
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getSpeciality() {
@@ -50,7 +39,6 @@ public class SpecialtyDTO {
     @Override
     public String toString() {
         return "SpecialtyDTO{" +
-                "id=" + id +
                 ", speciality='" + speciality + '\'' +
                 ", uri=" + uri +
                 '}';
