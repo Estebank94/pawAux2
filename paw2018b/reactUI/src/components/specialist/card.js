@@ -24,7 +24,6 @@ class SpecialistCard extends React.Component {
 
     render() {
       const { profilePicture, firstName, lastName, phoneNumber, specialties, averageRating, address } = this.props.data;
-      console.log(this.props.data);
     return(
       <div className="card-doctor d-flex flex-row box" onClick={() => this.handleClick()}>
           <img class="avatar big" src={`data:image/jpeg;base64,${profilePicture}`} className="avatar" />
@@ -32,7 +31,7 @@ class SpecialistCard extends React.Component {
               <div className="card-text">
                   <h3 className="doctor-name">{firstName} {lastName}</h3>
                   <div className="row container">
-                      <p className="doctor-specialty" style={{ paddingRight: 20 }}>{specialties.specialties.map(s => s.speciality + ' ')}</p>
+                      <p className="doctor-specialty" style={{ paddingRight: 20 }}>{specialties.map(s => s + ' ')}</p>
                   </div>
                   <p className="doctor-text">Certificado</p>
                   { averageRating !== 0 &&
