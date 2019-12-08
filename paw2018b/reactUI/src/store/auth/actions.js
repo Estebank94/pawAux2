@@ -1,15 +1,16 @@
-import fetchApi from "../api";
+import fetchApi from "../../utils/api";
+import { ApiClient } from '../../utils/apiClient'
 import { authTypes } from "./types";
 
-export const doAuth = () => {
+export const doSignIn = () => {
   return {
-    type: authTypes.DO_AUTH
+    type: authTypes.DO_SIGN_IN
   }
 }
 
 export const doSignOut = () => {
   return {
-    type: authTypes.DO_SIGNOUT
+    type: authTypes.DO_SIGN_OUT
   }
 }
 
@@ -29,25 +30,41 @@ export const onRegisterError = error => {
 
 export const onSigninSuccess = data => {
   return {
-    type: authTypes.SIGNIN_SUCCESS,
+    type: authTypes.SIGN_IN_SUCCESS,
     data
   }
 }
 
 export const onSigninError = error => {
   return {
-    type: authTypes.SIGNIN_ERROR,
+    type: authTypes.SIGN_IN_ERROR,
     error
   }
 }
 
-export const doLogin = (credential) => {
+export const doLogin = (credentials) => {
+  console.log('DO LOGIN')
   return async (dispatch) => {
-    dispatch(doAuth());
-    let onLogin = fetchApi('/patient/login', 'XPOST', credential).then((auth) => {
+    dispatch(doSignIn());
+    let onLogin = fetchApi('/patient/login', 'XPOST', credentials).then((auth) => {
+      console.log('AUTH', auth);
       if (auth !== undefined && auth !== null) {
-        fetchApi('/patient/me', 'GET', { auth })
-        dispatch(onSigninSuccess(auth))
+        // const API = new ApiClient(auth);
+        // API.get('/patient/me').then((data => {
+        //   console.log('login', data)
+          // dispatch(onSigninSuccess({auth}))
+        // }))
+        const user = {
+          "appointments": [],
+          "email": "prueba0001@gmail.com",
+          "favorites": [],
+          "firstName": "Esteban",
+          "id": 1,
+          "lastName": "Kramer",
+          "password": "$2a$10$QX42GFlLX7P8UNz23LnSle3469xrjRBIPvemcq1qZmGIFyauEOWuK",
+          "phoneNumber": "1140283690"
+        }
+        dispatch(onSigninSuccess({auth, user}))
         return { status: 'authenticated', message: auth};
       } else {
         dispatch(onSigninError())
@@ -63,7 +80,7 @@ export const doLogin = (credential) => {
 
 export const doSignUp = (newUser) => {
   return async (dispatch) => {
-    dispatch(doAuth());
+    dispatch(doSignIn());
     let onRegister = fetchApi("/users/signup", "POST", newUser).then((auth) => {
       dispatch(onRegisterCompleted(auth))
       return { status: 'authenticated', message: auth};
