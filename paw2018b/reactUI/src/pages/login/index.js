@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Shake from 'react-reveal/Shake';
 import Fade from 'react-reveal/Fade';
-import fetchApi from '../../utils/api'
-import queryString from 'query-string';
+import { connect } from 'react-redux';
+import { doLogin } from '../../store/auth/actions';
 
 class Login extends React.Component {
   state = {
@@ -25,10 +25,10 @@ class Login extends React.Component {
     }
   }
 
-  handleSubmit() {
+  async handleSubmit() {
     const { email, password, rememberMe } = this.state;
     if(email && password) {
-      fetchApi('/patient/login','XPOST', { Jusername: email, Jpassword: password }).then(response => console.log('respone',response))
+      await this.props.doLogin({ Jusername: email, Jpassword: password }).then(auth => this.manageAccess(auth));
     }
     if(!email) {
       this.setState({ emailError: true })
@@ -36,7 +36,21 @@ class Login extends React.Component {
     if(!password) {
       this.setState({ passwordError: true })
     }
+  }
 
+  manageAccess = async (auth) => {
+    if (auth.status === 'failed') {
+      let messageError;
+      if (auth.message.response !== undefined) {
+        messageError = auth.message.response.data.message;
+      } else {
+        messageError = auth.message;
+      }
+      // this.setState({ authenticated: false });
+      alert(messageError.toString())
+    } else if (auth.status === 'authenticated') {
+      this.props.history.push('/');
+    }
   }
 
   render() {
@@ -62,7 +76,7 @@ class Login extends React.Component {
               { error &&
                 <Fade>
                   <div className="form-group">
-                    <div class="alert alert-danger" role="alert">
+                    <div className="alert alert-danger" role="alert">
                       Email o contraseña invalidos
                     </div>
                   </div>
@@ -72,9 +86,9 @@ class Login extends React.Component {
               <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn">Iniciar Sesion</div>
             </form>
             <div style={{ marginTop: 8 }}>
-              <small>¿No tenes una cuenta? <Link>Registrate</Link></small>
+              <small>¿No tenes una cuenta? <Link to="/register">Registrate</Link></small>
               <br/>
-              <small><Link>Olvidé mi contraseña</Link></small>
+              <small><Link to="/">Cancelar</Link></small>
             </div>
           </div>
         </Shake>
@@ -83,4 +97,10 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+function bindActions(dispatch) {
+  return {
+    doLogin: (credentials) => dispatch(doLogin(credentials)),
+  };
+}
+
+export default connect(null, bindActions)(Login);
