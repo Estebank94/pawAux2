@@ -5,6 +5,7 @@ import React from 'react'
 import BounceLoader from 'react-spinners/BounceLoader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faMapMarker } from '@fortawesome/free-solid-svg-icons';
+import Review from '../../components/specialist/review'
 
 import fetchApi from '../../utils/api'
 
@@ -13,6 +14,7 @@ class Specialist extends React.Component {
         loading: true,
         error: false,
         specialist: null,
+        review: '',
     }
 
     componentDidMount() {
@@ -24,8 +26,15 @@ class Specialist extends React.Component {
             })
             .catch(() => this.setState({ loading: false, error: true }));
     }
+
+  handleChange(e) {
+    e.preventDefault();
+    const { name, value } = e.target;
+    this.setState({[name]: value });
+  }
+
     render() {
-        const { error, loading, specialist } = this.state;
+        const { error, loading, specialist, review } = this.state;
 
         if(loading) {
             return (
@@ -53,25 +62,29 @@ class Specialist extends React.Component {
         return (
             <div className="body-background">
                 <div className="main-container">
-                    <div className="container">
-                        <div className="pt-4 pb-3">
-                            <div className="login-card w-shadow flex-row">
-                                <div className="card-body">
-                                    <div className="card-text">
-                                        <div className="row">
-                                            <img className="avatar big" src={`data:image/jpeg;base64,${profilePicture}`} />
-                                            <div className="doctor-info-container">
-                                                <div>
-                                                    <div className="row center-vertical">
-                                                        <h3 className="doctor-name" style={{marginLeft: 14 }}>{firstName} {lastName}</h3>
-                                                    </div>
-                                                    <p className="doctor-specialty" style={{ paddingRight: 20 }}>{specialties.specialties.map(s => s.speciality + ' ')}</p>
-                                                    <p className="doctor-text"><FontAwesomeIcon className="mr-2" icon={faPhone} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{phoneNumber}</p>
-                                                    <p className="doctor-text"><FontAwesomeIcon className="mr-2" icon={faMapMarker} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{address}, CABA</p>
+                    <div className="container pt-4">
+                        <div className="login-card w-shadow flex-row">
+                            <div className="card-body">
+                                <div className="card-text">
+                                    <div className="row">
+                                        <img className="avatar big" src={`data:image/jpeg;base64,${profilePicture}`} />
+                                        <div className="doctor-info-container">
+                                            <div>
+                                                <div className="row center-vertical">
+                                                    <h3 className="doctor-name" style={{marginLeft: 14 }}>{firstName} {lastName}</h3>
                                                 </div>
+                                                <p className="doctor-specialty" style={{ paddingRight: 20 }}>{specialties.map(s => s+ ' ')}</p>
+                                                <p className="doctor-text"><FontAwesomeIcon className="mr-2" icon={faPhone} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{phoneNumber}</p>
+                                                <p className="doctor-text"><FontAwesomeIcon className="mr-2" icon={faMapMarker} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{address}, CABA</p>
                                             </div>
                                         </div>
                                     </div>
+                                    <hr />
+                                    <h3>Reseñas</h3>
+                                    <Review />
+                                    <h4 className="mt-3">Dejá tu reseña</h4>
+                                    <textarea name="review" value={review} type="text" rows="3" className={'form-control'}  placeholder="Ingresa tu reseña" onChange={(e) =>this.handleChange(e)}/>
+                                    <span className="btn btn-primary custom-btn mt-2">Dejar reseña</span>
                                 </div>
                             </div>
                         </div>
