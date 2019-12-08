@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.forms;
 import ar.edu.itba.paw.models.InsurancePlan;
 import ar.edu.itba.paw.models.Specialty;
 import ar.edu.itba.paw.models.WorkingHours;
+import ar.edu.itba.paw.webapp.dto.workingHours.WorkingHoursDTO;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,141 +21,154 @@ public class ProfessionalForm {
 
     private MultipartFile avatar;
 
-    @Length(max=250)
-    private String certificate;
+    private DescriptionForm descriptionForm;
 
-    @Length(max=250)
-    private String education;
-
-    private String languages;
-
-//    @NotNull
-//    private List<String> insurance;
     @NotNull
     private List<String> insurancePlan;
+
+    private List<WorkingHoursDTO> workingHours;
+
     @NotNull
     private Set<String> specialty;
 
+    private List<WorkingHoursDTO> workingHour;
 
+    public DescriptionForm getDescriptionForm() {
+        return descriptionForm;
+    }
 
-    private LocalTime monStart;
-    private LocalTime monEnd;
+    public void setDescriptionForm(DescriptionForm descriptionForm) {
+        this.descriptionForm = descriptionForm;
+    }
 
-    private LocalTime tueStart;
-    private LocalTime tueEnd;
+    public void setWorkingHour(List<WorkingHoursDTO> workingHours) {
+        this.workingHour = workingHour;
+    }
 
-    private LocalTime wedStart;
-    private LocalTime wedEnd;
+    public List<WorkingHoursDTO> getWorkingHour(){
+        return this.workingHour;
+    }
 
-    private LocalTime thuStart;
-    private LocalTime thuEnd;
-
-    private LocalTime friStart;
-    private LocalTime friEnd;
-
-    private LocalTime satStart;
-    private LocalTime satEnd;
+    //
+//
+//    private LocalTime monStart;
+//    private LocalTime monEnd;
+//
+//    private LocalTime tueStart;
+//    private LocalTime tueEnd;
+//
+//    private LocalTime wedStart;
+//    private LocalTime wedEnd;
+//
+//    private LocalTime thuStart;
+//    private LocalTime thuEnd;
+//
+//    private LocalTime friStart;
+//    private LocalTime friEnd;
+//
+//    private LocalTime satStart;
+//    private LocalTime satEnd;
 
 
     public void setWORKING_HOURS(String[] WORKING_HOURS) {
         this.WORKING_HOURS = WORKING_HOURS;
     }
 
-    public LocalTime getMonStart() {
-        return monStart;
-    }
-
-    public void setMonStart(LocalTime monStart) {
-        this.monStart = monStart;
-    }
-
-    public LocalTime getMonEnd() {
-        return monEnd;
-    }
-
-    public void setMonEnd(LocalTime monEnd) {
-        this.monEnd = monEnd;
-    }
-
-    public LocalTime getTueStart() {
-        return tueStart;
-    }
-
-    public void setTueStart(LocalTime tueStart) {
-        this.tueStart = tueStart;
-    }
-
-    public LocalTime getTueEnd() {
-        return tueEnd;
-    }
-
-    public void setTueEnd(LocalTime tueEnd) {
-        this.tueEnd = tueEnd;
-    }
-
-    public LocalTime getWedStart() {
-        return wedStart;
-    }
-
-    public void setWedStart(LocalTime wedStart) {
-        this.wedStart = wedStart;
-    }
-
-    public LocalTime getWedEnd() {
-        return wedEnd;
-    }
-
-    public void setWedEnd(LocalTime wedEnd) {
-        this.wedEnd = wedEnd;
-    }
-
-    public LocalTime getThuStart() {
-        return thuStart;
-    }
-
-    public void setThuStart(LocalTime thuStart) {
-        this.thuStart = thuStart;
-    }
-
-    public LocalTime getThuEnd() {
-        return thuEnd;
-    }
-
-    public void setThuEnd(LocalTime thuEnd) {
-        this.thuEnd = thuEnd;
-    }
-
-    public LocalTime getFriStart() {
-        return friStart;
-    }
-
-    public void setFriStart(LocalTime friStart) {
-        this.friStart = friStart;
-    }
-
-    public LocalTime getFriEnd() {
-        return friEnd;
-    }
-
-    public void setFriEnd(LocalTime friEnd) {
-        this.friEnd = friEnd;
-    }
-
-    public LocalTime getSatStart() {
-        return satStart;
-    }
-
-    public void setSatStart(LocalTime satStart) {
-        this.satStart = satStart;
-    }
-
-    public LocalTime getSatEnd() {
-        return satEnd;
-    }
-
-    public void setSatEnd(LocalTime satEnd) {
-        this.satEnd = satEnd;
-    }
+//    public LocalTime getMonStart() {
+//        return monStart;
+//    }
+//
+//    public void setMonStart(LocalTime monStart) {
+//        this.monStart = monStart;
+//    }
+//
+//    public LocalTime getMonEnd() {
+//        return monEnd;
+//    }
+//
+//    public void setMonEnd(LocalTime monEnd) {
+//        this.monEnd = monEnd;
+//    }
+//
+//    public LocalTime getTueStart() {
+//        return tueStart;
+//    }
+//
+//    public void setTueStart(LocalTime tueStart) {
+//        this.tueStart = tueStart;
+//    }
+//
+//    public LocalTime getTueEnd() {
+//        return tueEnd;
+//    }
+//
+//    public void setTueEnd(LocalTime tueEnd) {
+//        this.tueEnd = tueEnd;
+//    }
+//
+//    public LocalTime getWedStart() {
+//        return wedStart;
+//    }
+//
+//    public void setWedStart(LocalTime wedStart) {
+//        this.wedStart = wedStart;
+//    }
+//
+//    public LocalTime getWedEnd() {
+//        return wedEnd;
+//    }
+//
+//    public void setWedEnd(LocalTime wedEnd) {
+//        this.wedEnd = wedEnd;
+//    }
+//
+//    public LocalTime getThuStart() {
+//        return thuStart;
+//    }
+//
+//    public void setThuStart(LocalTime thuStart) {
+//        this.thuStart = thuStart;
+//    }
+//
+//    public LocalTime getThuEnd() {
+//        return thuEnd;
+//    }
+//
+//    public void setThuEnd(LocalTime thuEnd) {
+//        this.thuEnd = thuEnd;
+//    }
+//
+//    public LocalTime getFriStart() {
+//        return friStart;
+//    }
+//
+//    public void setFriStart(LocalTime friStart) {
+//        this.friStart = friStart;
+//    }
+//
+//    public LocalTime getFriEnd() {
+//        return friEnd;
+//    }
+//
+//    public void setFriEnd(LocalTime friEnd) {
+//        this.friEnd = friEnd;
+//    }
+//
+//    public LocalTime getSatStart() {
+//        return satStart;
+//    }
+//
+//    public void setSatStart(LocalTime satStart) {
+//        this.satStart = satStart;
+//    }
+//
+//    public LocalTime getSatEnd() {
+//        return satEnd;
+//    }
+//
+//    public void setSatEnd(LocalTime satEnd) {
+//        this.satEnd = satEnd;
+//    }
 
     public String[] getWorkingHours() {
         return WORKING_HOURS;
@@ -176,29 +190,6 @@ public class ProfessionalForm {
         this.avatar = avatar;
     }
 
-    public String getCertificate() {
-        return certificate;
-    }
-
-    public void setCertificate(String certificate) {
-        this.certificate = certificate;
-    }
-
-    public String getEducation() {
-        return education;
-    }
-
-    public void setEducation(String education) {
-        this.education = education;
-    }
-
-    public String getLanguages() {
-        return languages;
-    }
-
-    public void setLanguages(String languages) {
-        this.languages = languages;
-    }
 
 //    public List<String> getInsurance() {
 //        return insurance;
@@ -230,29 +221,29 @@ public class ProfessionalForm {
         return map;
     }
 
-    public List<WorkingHours> workingHoursList() {
-
-        List<WorkingHours> list = new ArrayList<>();
-        if(getMonStart()!=null && getMonEnd()!=null){
-            list.add(new WorkingHours(DayOfWeek.MONDAY.getValue(), getMonStart().toString(), getMonEnd().toString()));
-        }
-        if(getTueStart() != null && getTueEnd()!=null){
-            list.add(new WorkingHours(DayOfWeek.TUESDAY.getValue(), getTueStart().toString(), getTueEnd().toString()));
-        }
-        if(getWedStart() != null && getWedEnd()!=null){
-            list.add(new WorkingHours(DayOfWeek.WEDNESDAY.getValue(), getWedStart().toString(), getWedEnd().toString()));
-        }
-        if(getThuStart() != null && getThuEnd()!=null){
-            list.add(new WorkingHours(DayOfWeek.THURSDAY.getValue(), getThuStart().toString(), getThuEnd().toString()));
-        }
-        if(getFriStart() !=null && getFriEnd()!=null){
-            list.add(new WorkingHours(DayOfWeek.FRIDAY.getValue(), getFriStart().toString(), getFriEnd().toString()));
-        }
-        if(getSatStart() != null && getSatEnd()!=null){
-            list.add(new WorkingHours(DayOfWeek.SATURDAY.getValue(), getSatStart().toString(), getSatEnd().toString()));
-        }
-        return list;
-    }
+//    public List<WorkingHours> workingHoursList() {
+//
+//        List<WorkingHours> list = new ArrayList<>();
+//        if(getMonStart()!=null && getMonEnd()!=null){
+//            list.add(new WorkingHours(DayOfWeek.MONDAY.getValue(), getMonStart().toString(), getMonEnd().toString()));
+//        }
+//        if(getTueStart() != null && getTueEnd()!=null){
+//            list.add(new WorkingHours(DayOfWeek.TUESDAY.getValue(), getTueStart().toString(), getTueEnd().toString()));
+//        }
+//        if(getWedStart() != null && getWedEnd()!=null){
+//            list.add(new WorkingHours(DayOfWeek.WEDNESDAY.getValue(), getWedStart().toString(), getWedEnd().toString()));
+//        }
+//        if(getThuStart() != null && getThuEnd()!=null){
+//            list.add(new WorkingHours(DayOfWeek.THURSDAY.getValue(), getThuStart().toString(), getThuEnd().toString()));
+//        }
+//        if(getFriStart() !=null && getFriEnd()!=null){
+//            list.add(new WorkingHours(DayOfWeek.FRIDAY.getValue(), getFriStart().toString(), getFriEnd().toString()));
+//        }
+//        if(getSatStart() != null && getSatEnd()!=null){
+//            list.add(new WorkingHours(DayOfWeek.SATURDAY.getValue(), getSatStart().toString(), getSatEnd().toString()));
+//        }
+//        return list;
+//    }
 
     public Set<Specialty> getSpecialties(){
         Set<Specialty> list = new HashSet<>();

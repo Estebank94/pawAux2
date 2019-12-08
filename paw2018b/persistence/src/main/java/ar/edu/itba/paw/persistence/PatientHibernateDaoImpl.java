@@ -85,7 +85,13 @@ public class PatientHibernateDaoImpl implements PatientDao {
         final TypedQuery<Patient> query = em.createQuery("FROM Patient as p where p.email = :email", Patient.class);
         query.setParameter("email", email);
         final List<Patient> list = query.getResultList();
-        return list.isEmpty() ? null : list.get(0);
+        Patient patient = list.isEmpty() ? null : list.get(0);
+        if(patient!=null){
+            Hibernate.initialize(patient);
+            Hibernate.initialize(patient.getDoctor());
+            Hibernate.initialize(patient.getDoctor().getWorkingHours());
+        }
+        return patient;
     }
 
     private List<Appointment> findPacientAppointmentsById(Integer id){

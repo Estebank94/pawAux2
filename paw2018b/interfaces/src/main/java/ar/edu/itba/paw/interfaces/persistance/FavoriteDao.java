@@ -6,9 +6,6 @@ import ar.edu.itba.paw.models.Patient;
 
 import java.util.Optional;
 
-/**
- * Created by estebankramer on 04/11/2018.
- */
 public interface FavoriteDao {
     void addFavorite(Doctor doctor, Patient patient);
 
@@ -17,4 +14,5 @@ public interface FavoriteDao {
     Optional<Favorite> findFavorite (Doctor doctor, Patient patient) throws  Exception;
 
     void undoRemoveFavorite(Favorite favorite);
+
 }

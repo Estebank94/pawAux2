@@ -309,7 +309,11 @@ public class FlowController {
 				} catch (NotCreatedFavoriteException e) {
 					LOGGER.trace("404 Error");
 					return new ModelAndView("404");
+				} catch (FavoriteExistsException e){
+					///mandre frula
+					return new ModelAndView("404");
 				}
+
 			} else {
 				try {
 					favoriteService.removeFavorite(doctor, patient);

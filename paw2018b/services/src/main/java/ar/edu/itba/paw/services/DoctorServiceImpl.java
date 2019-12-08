@@ -509,10 +509,9 @@ public class DoctorServiceImpl implements DoctorService {
     @Transactional
     public Optional<Doctor> setWorkingHours(Doctor doctor, List<WorkingHours> workingHours){
         LOGGER.debug("setWorkingHours");
-        if(!Hibernate.isInitialized(doctor)){
-            Hibernate.initialize(doctor);
+        if(doctor != null){
+            doctor.getWorkingHours().size();
         }
-        Hibernate.initialize(doctor.getWorkingHours());
         doctorDao.setWorkingHours(doctor, workingHours);
         return Optional.ofNullable(doctor);
     }
@@ -534,7 +533,7 @@ public class DoctorServiceImpl implements DoctorService {
         if (des.isPresent()){
             doctorDao.mergeDoctorDescription(des.get(), description);
         } else {
-                doctorDao.setDoctorDescription(doctor, description);
+            doctorDao.setDoctorDescription(doctor, description);
         }
 
         return Optional.ofNullable(doctor);

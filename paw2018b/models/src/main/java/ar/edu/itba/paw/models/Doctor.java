@@ -50,6 +50,7 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor", cascade = {CascadeType.ALL})
     private List<WorkingHours> workingHours;
 
+
     @OneToMany(mappedBy = "doctor")
     @LazyCollection(LazyCollectionOption.TRUE)
     private Set<Appointment> appointments;
