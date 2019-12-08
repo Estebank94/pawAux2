@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.persistance.FavoriteDao;
 import ar.edu.itba.paw.interfaces.services.FavoriteService;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Favorite;
+import ar.edu.itba.paw.models.exceptions.FavoriteExistsException;
 import ar.edu.itba.paw.models.exceptions.NotCreatedFavoriteException;
 import ar.edu.itba.paw.models.exceptions.NotRemoveFavoriteException;
 import org.slf4j.Logger;
@@ -46,6 +47,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             favoriteDao.undoRemoveFavorite(fav.get());
             return;
         }
+
         try{
             favoriteDao.addFavorite(doctor, patient);
         } catch (Exception e){
@@ -63,7 +65,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         try {
             favorite = favoriteDao.findFavorite(doctor, patient);
         } catch (NoResultException e){
-            return;
+            throw new NoResultException();
         } catch (Exception e){
             throw new NotRemoveFavoriteException();
         }
@@ -72,7 +74,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             try {
                favoriteDao.removeFavorite(favorite.get());
             } catch (Exception e){
-                return;
+                throw new NotRemoveFavoriteException();
             }
         }
         return;

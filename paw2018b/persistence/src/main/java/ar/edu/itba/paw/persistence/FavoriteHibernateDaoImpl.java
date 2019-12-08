@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.persistance.FavoriteDao;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Favorite;
 import ar.edu.itba.paw.models.Patient;
+import ar.edu.itba.paw.models.exceptions.ExceptionWithAttributeName;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,9 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Optional;
 
-/**
- * Created by estebankramer on 04/11/2018.
- */
+
 @Repository
 public class FavoriteHibernateDaoImpl implements FavoriteDao {
 
@@ -28,7 +27,7 @@ public class FavoriteHibernateDaoImpl implements FavoriteDao {
     }
 
     @Override
-    public void removeFavorite(Favorite favorite) throws Exception{
+    public void removeFavorite(Favorite favorite) throws Exception {
         favorite.removeFavorite();
         em.persist(favorite);
     }
@@ -46,5 +45,9 @@ public class FavoriteHibernateDaoImpl implements FavoriteDao {
         favorite.setFavoriteCancelled(false);
         em.persist(favorite);
     }
+
+
+
+
 
 }

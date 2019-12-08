@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.api.v1;
 
 import ar.edu.itba.paw.interfaces.services.DoctorService;
 import ar.edu.itba.paw.interfaces.services.EmailService;
+import ar.edu.itba.paw.interfaces.services.FavoriteService;
 import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.*;
 
@@ -17,6 +18,7 @@ import ar.edu.itba.paw.webapp.dto.*;
 
 
 import ar.edu.itba.paw.webapp.forms.BasicProfessionalForm;
+import ar.edu.itba.paw.webapp.forms.FavoriteForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -31,6 +33,7 @@ import org.springframework.stereotype.Controller;
 import org.thymeleaf.TemplateEngine;
 
 import javax.imageio.ImageIO;
+import javax.persistence.NoResultException;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 
@@ -38,13 +41,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.FileNameMap;
 import java.net.URI;
 
-import java.net.URLConnection;
 import java.util.*;
 import java.util.List;
 
@@ -65,6 +65,9 @@ public class DoctorApiController extends BaseApiController {
     private EmailService emailService;
 
     @Autowired
+    private FavoriteService favoriteService;
+
+    @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
     @Context
@@ -83,7 +86,6 @@ public class DoctorApiController extends BaseApiController {
 
     @Autowired
     private String frontUrl;
-
 
     @GET
     @Path("/{id}")
@@ -282,8 +284,9 @@ public class DoctorApiController extends BaseApiController {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response createProfessionalUser(/* @FormDataParam("file") InputStream uploadedInputStream,
-                                           @FormDataParam("file") FormDataContentDisposition fileDetail*/
-            @Valid final BasicProfessionalForm professionalForm) throws IOException {
+                                            @FormDataParam("file") FormDataContentDisposition fileDetail*/
+                                            @Valid final BasicProfessionalForm professionalForm)
+                                            throws IOException {
 
         Patient patient = null;
         try {
@@ -393,5 +396,75 @@ public class DoctorApiController extends BaseApiController {
     }
 
 
+    @PUT
+    @Path("/{id}/favorite/add")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response addFavorite(@PathParam("id") final int id){
 
+        Patient patient = null;
+        try {
+            patient = userDetailsService.getLoggedUser();
+        } catch (NotFoundPacientException | NotValidEmailException e) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Patient not found")).build();
+        }
+
+        Optional<Doctor> doctor = null;
+        try{
+            doctor = doctorService.findDoctorById(id + "");
+        }catch (NotFoundDoctorException | NotValidIDException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Doctor not found")).build();
+        }
+
+        if(patient.getFavorites()!= null){
+            try{
+                favoriteService.addFavorite(doctor.get(), patient);
+            }catch(NotCreatedFavoriteException e){
+                return Response.status(Response.Status.CONFLICT)
+                        .entity(errorMessageToJSON("Could not add favorite")).build();
+            }
+        }
+
+        final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(doctor.get().getId())).build();
+
+        return Response.created(uri).entity(new DoctorDTO(doctor.get(), buildBaseURI(uriInfo))).build();
+    }
+
+    @PUT
+    @Path("/{id}/favorite/remove")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response removeFavorite(@PathParam("id") final int id){
+
+        Patient patient = null;
+        try {
+            patient = userDetailsService.getLoggedUser();
+        } catch (NotFoundPacientException | NotValidEmailException e) {
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Patient not found")).build();
+        }
+
+        Optional<Doctor> doctor = null;
+        try{
+            doctor = doctorService.findDoctorById(id + "");
+        }catch (NotFoundDoctorException | NotValidIDException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("Doctor not found")).build();
+        }
+
+        if(patient.getFavorites()!=null){
+            try{
+                favoriteService.removeFavorite(doctor.get(), patient);
+            }catch(NotRemoveFavoriteException | NoResultException e){
+                return Response.status(Response.Status.CONFLICT)
+                        .entity(errorMessageToJSON("Could not remove favorite")).build();
+            }
+        }
+
+        final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(doctor.get().getId())).build();
+
+        return Response.created(uri).entity(new DoctorDTO(doctor.get(), buildBaseURI(uriInfo))).build();
+    }
 }
