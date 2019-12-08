@@ -10,6 +10,8 @@ import Specialists from './pages/specialists'
 import Specialist from './pages/specialist'
 import Login from './pages/login'
 import Register from './pages/register'
+import Account from './pages/account'
+import Confirm from './pages/register/confirm'
 
 
 const App = props => {
@@ -30,6 +32,8 @@ const App = props => {
           <Route exact path="/specialist/:id" component={Specialist} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register/:role" component={Register} />
+          <Route exact path="/account" component={Account} />
+          <Route exact path="/confirm" component={Confirm} />
         </main>
         <FooterWithRouter />
       </div>
