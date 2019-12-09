@@ -1,38 +1,37 @@
 import React from 'react'
-import Fade from 'react-reveal/Fade';
 
 const Steps = () => {
   return(
-    <div class="container">
-        <div class="margin-big">
-            <p class="jumbotron-subtitle">Titulo</p>
-            <p class="jumbotron-text">Subtitulo</p>
+    <div className="container">
+        <div className="margin-big">
+            <p className="jumbotron-subtitle">Titulo</p>
+            <p className="jumbotron-text">Subtitulo</p>
         </div>
 
-        <div class="d-flex flex-row margin-bottom-medium">
-            <img src="https://i.imgur.com/StIDems.jpg" class="image-rectangle" />
+        <div className="d-flex flex-row margin-bottom-medium">
+            <img src="https://i.imgur.com/StIDems.jpg" className="image-rectangle" />
             <div>
-                <div class="list-home">
+                <div className="list-home">
                     <h3>Titulo</h3>
-                    <p class="doctor-text">Subtitulo</p>
+                    <p className="doctor-text">Subtitulo</p>
                 </div>
             </div>
         </div>
 
-        <div class="d-flex flex-row-reverse margin-bottom-medium">
-            <img src="https://i.imgur.com/N7X4FiE.jpg" class="image-rectangle-right" />
+        <div className="d-flex flex-row-reverse margin-bottom-medium">
+            <img src="https://i.imgur.com/N7X4FiE.jpg" className="image-rectangle-right" />
             <div>
-                <div class="list-home-right">
+                <div className="list-home-right">
                     <h3>Titulo</h3>
                     <p>Subtitulo</p>
                 </div>
             </div>
         </div>
 
-        <div class="d-flex flex-row pb-5">
-            <img src="https://i.imgur.com/yjHKj1P.jpg" class="image-rectangle" />
+        <div className="d-flex flex-row pb-5">
+            <img src="https://i.imgur.com/yjHKj1P.jpg" className="image-rectangle" />
             <div>
-                <div class="list-home">
+                <div className="list-home">
                     <h3>Titulo</h3>
                     <p>Subtitulo</p>
                 </div>

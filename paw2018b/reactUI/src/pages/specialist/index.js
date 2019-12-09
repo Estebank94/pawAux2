@@ -5,7 +5,9 @@ import React from 'react'
 import BounceLoader from 'react-spinners/BounceLoader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faMapMarker } from '@fortawesome/free-solid-svg-icons';
-import Review from '../../components/specialist/review'
+import Review from '../../components/specialist/review';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
 import fetchApi from '../../utils/api'
 
@@ -55,7 +57,7 @@ class Specialist extends React.Component {
             )
         }
 
-        const { address, averageRating, district, firstName, id, insurancesPlans, lastName, phoneNumber, profilePicture,
+        const { address, averageRating, district, firstName, id, insurances, lastName, phoneNumber, profilePicture,
         reviews, sex, specialties, workingHours } = specialist;
         console.log(specialist);
 
@@ -80,11 +82,28 @@ class Specialist extends React.Component {
                                         </div>
                                     </div>
                                     <hr />
+                                    <h3>Descripción</h3>
+                                    <h5>Prepagas Medicas</h5>
+                                    <Row>
+                                      {
+                                        insurances.map((insurance, index) => {
+                                            return(
+                                              <Col key={index}>
+                                                  <p className="font-weight-bold w-list-title mb-0">{insurance.name}</p>
+                                                    {
+                                                        insurance.plans.map((plan, index)=> <li key={index}>{plan}</li>)
+                                                    }
+                                              </Col>
+                                            )
+                                        })
+                                      }
+                                    </Row>
+                                    <hr />
                                     <h3>Reseñas</h3>
                                     <Review />
                                     <h4 className="mt-3">Dejá tu reseña</h4>
                                     <textarea name="review" value={review} type="text" rows="3" className={'form-control'}  placeholder="Ingresa tu reseña" onChange={(e) =>this.handleChange(e)}/>
-                                    <span className="btn btn-primary custom-btn mt-2">Dejar reseña</span>
+                                    <div className="btn btn-primary custom-btn mt-2">Dejar reseña</div>
                                 </div>
                             </div>
                         </div>

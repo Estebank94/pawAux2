@@ -9,7 +9,7 @@ class Review extends React.Component {
       <div className="pt-1">
         <div className="row m-0 p-0 pb-2">
           {
-            ar.map(() => <FontAwesomeIcon icon={faStar} />)
+            ar.map(() => <FontAwesomeIcon icon={faStar} className="w-star" />)
           }
         </div>
         <p className="mb-0">Nombre Apellido</p>
