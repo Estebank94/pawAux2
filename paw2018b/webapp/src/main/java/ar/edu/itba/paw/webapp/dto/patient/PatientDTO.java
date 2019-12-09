@@ -20,6 +20,8 @@ public class PatientDTO {
     private String email;
     private URI uri;
     private BasicDoctorDTO doctor;
+    private String password;
+    private List<PatientAppointmentDTO> appointments;
     private List<FavoriteDoctorDTO> favorites;
 
     public PatientDTO(){
@@ -31,15 +33,18 @@ public class PatientDTO {
         lastName = patient.getLastName();
         phoneNumber = patient.getPhoneNumber();
         email = patient.getEmail();
-        doctor = new BasicDoctorDTO(patient.getDoctor());
+        if(patient.getDoctor()!=null){
+            doctor = new BasicDoctorDTO(patient.getDoctor());
+        }
         this.uri = baseUri.resolve(String.valueOf(this.id));
-        this.favorites = new ArrayList<>();
-        for (Favorite favorite : patient.getFavorites()){
-            if (!favorite.getFavoriteCancelled()){
+        this.favorites = new LinkedList<>();
+        if(!favorites.isEmpty()) {
+            for (Favorite favorite : patient.getFavorites()) {
                 this.favorites.add(new FavoriteDoctorDTO(favorite));
             }
         }
     }
+
 
     public PatientDTO(Patient patient){
         id = patient.getId();
@@ -106,13 +111,13 @@ public class PatientDTO {
         this.uri = uri;
     }
 
-    public BasicDoctorDTO getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(BasicDoctorDTO doctor) {
-        this.doctor = doctor;
-    }
+//    public BasicDoctorDTO getDoctor() {
+//        return doctor;
+//    }
+//
+//    public void setDoctor(BasicDoctorDTO doctor) {
+//        this.doctor = doctor;
+//    }
 
     public List<FavoriteDoctorDTO> getFavorites() {
         return favorites;

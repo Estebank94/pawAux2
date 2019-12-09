@@ -89,7 +89,9 @@ public class PatientHibernateDaoImpl implements PatientDao {
         if(patient!=null){
             Hibernate.initialize(patient);
             Hibernate.initialize(patient.getDoctor());
-            Hibernate.initialize(patient.getDoctor().getWorkingHours());
+            if(patient.getDoctor()!=null){
+                Hibernate.initialize(patient.getDoctor().getWorkingHours());
+            }
         }
         return patient;
     }
