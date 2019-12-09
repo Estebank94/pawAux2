@@ -146,7 +146,7 @@ public class PatientApiController extends BaseApiController {
                     .entity(errorMessageToJSON("Patient not created")).build();
         }
 
-
+        LOGGER.debug("Creating Token");
         final Verification verification = patientService.createToken(patient);
 
         // Prepare the evaluation context
@@ -157,9 +157,11 @@ public class PatientApiController extends BaseApiController {
         final String htmlContent = this.htmlTemplateEngine.process(VERIFICATION_TOKEN_TEMPLATE_NAME, ctx);
         final String subject = applicationContext.getMessage("mail.subject", null, LocaleContextHolder.getLocale());
 
+        LOGGER.debug("Sending email in patient creation");
         // send welcome email
         emailService.sendEmail(patient.getEmail(), subject, htmlContent);
 
+        LOGGER.debug("Creating Uri - info");
         final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(patient.getId())).build();
 
         return Response.created(uri).entity(new PatientDTO(patient, buildBaseURI(uriInfo))).build();

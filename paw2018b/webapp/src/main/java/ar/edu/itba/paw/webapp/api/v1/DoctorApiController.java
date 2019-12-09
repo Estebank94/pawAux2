@@ -247,10 +247,13 @@ public class DoctorApiController extends BaseApiController {
         Patient patient = null;
 
         try {
+            LOGGER.debug("Creating Patient");
             patient = patientService.createPatient(userForm.getFirstName(), userForm.getLastName(),
                     userForm.getPhoneNumber(), userForm.getEmail(), userForm.getPassword());
+            LOGGER.debug("Creating Doctor");
             doctor = doctorService.createDoctor(userForm.getFirstName(), userForm.getLastName(), userForm.getPhoneNumber(),
                     userForm.getSex(), userForm.getLicence(), null, userForm.getAddress());
+            LOGGER.debug("Seting doctor to patient");
             patientService.setDoctorId(patient, doctor);
         } catch (RepeatedEmailException e) {
             return Response.status(Response.Status.CONFLICT)

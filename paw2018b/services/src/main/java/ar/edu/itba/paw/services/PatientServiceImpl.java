@@ -167,6 +167,7 @@ public class PatientServiceImpl implements PatientService {
         return ans;
     }
 
+    @Transactional
     @Override
     public Patient findPatientById(Integer id) throws NotValidPatientIdException, NotCreatePatientException, NotFoundPacientException {
         LOGGER.debug("PatientServiceImpl: findPatientById");
@@ -197,6 +198,7 @@ public class PatientServiceImpl implements PatientService {
         return patient;
     }
 
+    @Transactional
     @Override
     public Patient findPatientByEmail(String email) throws NotValidPatientIdException, NotCreatePatientException, NotFoundPacientException, NotValidEmailException {
         LOGGER.debug("PatientServiceImpl: findPatientByEmail(String email)");
@@ -221,9 +223,19 @@ public class PatientServiceImpl implements PatientService {
         return foundPatient;
     }
 
+    @Transactional
     @Override
     public Verification createToken(final Patient patient) {
-        return patientDao.createToken(patient);
+        LOGGER.debug("PatientService: create token");
+        LOGGER.debug("Generating Token for patient with id {}", patient.getId());
+        Verification verification = patientDao.createToken(patient);
+        if (verification == null){
+            LOGGER.debug("Verification token is null");
+        } else{
+            LOGGER.debug("Verification token {}", verification.getToken());
+            LOGGER.debug("verification id {}", verification.getPatient().getId());
+        }
+        return verification;
     }
 
     @Override
