@@ -39,7 +39,7 @@ public class ReviewServiceImplTest {
     private ReviewDao reviewDao;
 
     @Test
-    public void TestCreateReview() throws Exception{
+    public void testCreateReview() throws Exception{
         doctor = Mockito.mock(Doctor.class);
         patient = Mockito.mock(Patient.class);
         appointment = Mockito.mock(Appointment.class);
@@ -52,7 +52,7 @@ public class ReviewServiceImplTest {
     }
 
     @Test
-    public void TestListReviews() {
+    public void testListReviews() {
         doctor = Mockito.mock(Doctor.class);
         review = Mockito.mock(Review.class);
         review2 = Mockito.mock(Review.class);

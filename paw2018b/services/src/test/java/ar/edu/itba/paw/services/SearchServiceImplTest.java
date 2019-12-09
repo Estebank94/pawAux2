@@ -49,6 +49,7 @@ public class SearchServiceImplTest {
     private static int INSURANCES_QUANTITY = 5;
     private static int INSURANCE_PLANS_QUANTITY = 3;
     private static int SPECIALTIES_QUANTITY = 5;
+    private static int SPECIALTIES_QUANTITY_WITH_DOCTORS = 3;
 
     @Autowired
     private SearchServiceImpl searchServiceImpl;
@@ -96,12 +97,10 @@ public class SearchServiceImplTest {
         assertEquals(INSURANCE_NAME_3, insurances.get(2).getName());
         assertEquals(INSURANCE_NAME_4, insurances.get(3).getName());
         assertEquals(INSURANCE_NAME_5, insurances.get(4).getName());
-
     }
 
     @Test
     public void testListInsurancePlans() {
-
         List<InsurancePlan> mockInsurancePlans = new ArrayList<>();
         InsurancePlan insurancePlan1 = Mockito.mock(InsurancePlan.class);
         InsurancePlan insurancePlan2 = Mockito.mock(InsurancePlan.class);
@@ -116,12 +115,10 @@ public class SearchServiceImplTest {
         assertTrue(!insurancePlans.isEmpty());
         assertEquals(INSURANCE_PLANS_QUANTITY, insurancePlans.size());
         assertTrue(insurancePlans.containsAll(mockInsurancePlans));
-
     }
 
     @Test
     public void testListSpecialties() {
-
         List<Specialty> mockSpecialties = new ArrayList<>();
         Specialty specialty1 = Mockito.mock(Specialty.class);
         Specialty specialty2 = Mockito.mock(Specialty.class);
@@ -160,7 +157,43 @@ public class SearchServiceImplTest {
         assertEquals(SPECIALTY_ID_3, specialties.get(2).getId());
         assertEquals(SPECIALTY_ID_4, specialties.get(3).getId());
         assertEquals(SPECIALTY_ID_5, specialties.get(4).getId());
-
     }
 
+    @Test
+    public void testListInsuranceWithDoctors() {
+        InsurancePlan insurancePlan1 = Mockito.mock(InsurancePlan.class);
+        InsurancePlan insurancePlan2 = Mockito.mock(InsurancePlan.class);
+        InsurancePlan insurancePlan3 = Mockito.mock(InsurancePlan.class);
+        List<InsurancePlan> insurancePlans = new ArrayList<>();
+        insurancePlans.add(0, insurancePlan1);
+        insurancePlans.add(1, insurancePlan2);
+        insurancePlans.add(2, insurancePlan3);
+        when(searchDao.listInsuranceWithDoctors()).thenReturn(insurancePlans);
+
+        List<InsurancePlan> insurancePlansListed = searchServiceImpl.listInsuranceWithDoctors();
+
+        assertEquals(INSURANCE_PLANS_QUANTITY, insurancePlansListed.size());
+        assertEquals(insurancePlan1, insurancePlansListed.get(0));
+        assertEquals(insurancePlan2, insurancePlansListed.get(1));
+        assertEquals(insurancePlan3, insurancePlansListed.get(2));
+    }
+
+    @Test
+    public void testListSpecialtiesWithDoctors() {
+        Specialty specialty1 = Mockito.mock(Specialty.class);
+        Specialty specialty2 = Mockito.mock(Specialty.class);
+        Specialty specialty3 = Mockito.mock(Specialty.class);
+        List<Specialty> specialties = new ArrayList<>();
+        specialties.add(0, specialty1);
+        specialties.add(1, specialty2);
+        specialties.add(2, specialty3);
+        when(searchDao.listSpecialtiesWithDoctors()).thenReturn(specialties);
+
+        List<Specialty> specialtiesListed = searchServiceImpl.listSpecialtiesWithDoctors();
+
+        assertEquals(SPECIALTIES_QUANTITY_WITH_DOCTORS, specialtiesListed.size());
+        assertEquals(specialty1, specialtiesListed.get(0));
+        assertEquals(specialty2, specialtiesListed.get(1));
+        assertEquals(specialty3, specialtiesListed.get(2));
+    }
 }
