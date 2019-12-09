@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-dom'
 import { withRouter } from "react-router";
 import './App.css';
+import Fade from 'react-reveal/Fade';
 
 import Header from './components/navigation/header'
 import Footer from './components/navigation/footer'
@@ -26,7 +27,7 @@ const App = props => {
   return(
       <div>
         <HeaderWithRouter />
-        <main>
+        <Fade>
           <Route exact path="/" component={Home} />
           <Route exact path="/specialists" component={Specialists} />
           <Route exact path="/specialist/:id" component={Specialist} />
@@ -34,7 +35,7 @@ const App = props => {
           <Route exact path="/register/:role" component={Register} />
           <Route exact path="/account" component={Account} />
           <Route exact path="/confirm" component={Confirm} />
-        </main>
+        </Fade>
         <FooterWithRouter />
       </div>
   )
