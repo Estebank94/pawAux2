@@ -75,7 +75,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointment;
     }
 
-    @Transactional(rollbackFor = SQLException.class)
+
     @Override
     public Boolean cancelAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) throws NotFoundAppointmentException, NotValidCancelAppointment {
         LOGGER.debug("AppointmentServiceImpl: cancelAppointment");
@@ -84,25 +84,19 @@ public class AppointmentServiceImpl implements AppointmentService {
         Appointment appointment = null;
         Optional<Appointment> app = Optional.empty();
         try {
-            app = appointmentDao.findAppointment(appointmentDay, appointmentTime, patient, doctor);
+            app = appointmentDao.findActiveAppointment(appointmentDay, appointmentTime, doctor, patient);
         } catch (Exception e){
             LOGGER.debug("Appointment not found. An error occurs");
             throw new NotFoundAppointmentException();
         }
 
         if (app.isPresent()){
-            if (!app.get().getAppointmentCancelled()){
-                LOGGER.debug("Cancelling appointment. ");
-                try {
-                    appointmentDao.cancelAppointment(app.get());
-                    return true;
-                } catch (Exception e){
-                    LOGGER.debug("An error while cancelling appointment");
-                }
-
-            } else {
-                LOGGER.debug("Appointment already cancelled");
-                throw new NotValidCancelAppointment("Appointment already cancelled");
+            LOGGER.debug("Cancelling appointment. ");
+            try {
+                appointmentDao.cancelAppointment(app.get());
+                return true;
+            } catch (Exception e){
+                LOGGER.debug("An error while cancelling appointment");
             }
         }
         throw new  NotValidCancelAppointment("Appointment not found");

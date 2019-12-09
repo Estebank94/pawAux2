@@ -27,7 +27,7 @@ import java.util.UUID;
 @Repository
 public class PatientHibernateDaoImpl implements PatientDao {
 
-    @PersistenceContext (type = PersistenceContextType.EXTENDED)
+    @PersistenceContext
     private EntityManager em;
 
     @Override
@@ -73,7 +73,9 @@ public class PatientHibernateDaoImpl implements PatientDao {
             Hibernate.initialize(patient);
             if (patient.getDoctor() != null) {
                 Hibernate.initialize(patient.getDoctor());
-                Hibernate.initialize(patient.getDoctor().getReviews());
+                if (patient.getDoctor().getReviews() != null){
+                    Hibernate.initialize(patient.getDoctor().getReviews());
+                }
             }
         }
         //return Optional.ofNullable(em.find(Patient.class, id));
@@ -84,8 +86,12 @@ public class PatientHibernateDaoImpl implements PatientDao {
     public Patient findPatientByEmail(String email) {
         final TypedQuery<Patient> query = em.createQuery("FROM Patient as p where p.email = :email", Patient.class);
         query.setParameter("email", email);
-        final List<Patient> list = query.getResultList();
-        return list.isEmpty() ? null : list.get(0);
+        Patient patient = query.getSingleResult();
+        if (patient != null){
+            Hibernate.initialize(patient);
+            Hibernate.initialize(patient.getDoctor());
+        }
+        return patient;
     }
 
     private List<Appointment> findPacientAppointmentsById(Integer id){

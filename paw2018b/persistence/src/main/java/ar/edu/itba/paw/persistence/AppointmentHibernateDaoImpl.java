@@ -5,10 +5,12 @@ import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.sql.SQLException;
 import java.util.Optional;
 
 /**
@@ -27,6 +29,7 @@ public class AppointmentHibernateDaoImpl implements AppointmentDao {
         em.persist(appointment);
         return appointment;
     }
+
 
     @Override
     public void cancelAppointment(Appointment appointment){
@@ -49,6 +52,22 @@ public class AppointmentHibernateDaoImpl implements AppointmentDao {
         final TypedQuery<Appointment> query = em.createQuery("from Appointment as a WHERE a.appointmentDay = :appointmentDay AND a.appointmentTime = :appointmentTime AND a.doctor = :doctor AND a.appointmentCancelled = :cancelled",Appointment.class);
         query.setParameter("appointmentDay", appointmentDay);
         query.setParameter("appointmentTime", appointmentTime);
+        query.setParameter("doctor", doctor);
+        query.setParameter("cancelled", false);
+        return Optional.ofNullable(query.getSingleResult());
+    }
+
+    @Override
+    public Optional<Appointment> findActiveAppointment(String appointmentDay, String appointmentTime, Doctor doctor, Patient patient) throws Exception {
+        final TypedQuery<Appointment> query = em.createQuery("from Appointment as a WHERE " +
+                "a.appointmentDay = :appointmentDay AND " +
+                "a.appointmentTime = :appointmentTime AND " +
+                "a.patient = :patient AND " +
+                "a.doctor = :doctor AND " +
+                "a.appointmentCancelled = :cancelled",Appointment.class);
+        query.setParameter("appointmentDay", appointmentDay);
+        query.setParameter("appointmentTime", appointmentTime);
+        query.setParameter("patient", patient);
         query.setParameter("doctor", doctor);
         query.setParameter("cancelled", false);
         return Optional.ofNullable(query.getSingleResult());

@@ -20,6 +20,8 @@ public interface AppointmentDao {
 
     Optional<Appointment> findAppointmentByDoctor (String appointmentDay, String appointmentTime, Doctor doctor) throws Exception;
 
+    Optional<Appointment> findActiveAppointment(String appointmentDay, String appointmentTime, Doctor doctor, Patient patient) throws Exception;
+
     void undoCancelAppointment(Appointment appointment);
 
     Optional<Appointment> findAppointmentById(Integer id);

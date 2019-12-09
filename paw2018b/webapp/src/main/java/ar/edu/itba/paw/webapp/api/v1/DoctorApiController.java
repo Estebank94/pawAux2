@@ -15,7 +15,6 @@ import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
 import ar.edu.itba.paw.webapp.dto.appointment.PatientAppointmentDTO;
 import ar.edu.itba.paw.webapp.dto.doctor.DoctorDTO;
 import ar.edu.itba.paw.webapp.dto.doctor.DoctorListDTO;
-import ar.edu.itba.paw.webapp.dto.doctor.DoctorPersonalDTO;
 import ar.edu.itba.paw.webapp.dto.patient.PatientDTO;
 import ar.edu.itba.paw.webapp.dto.reviews.BasicReviewDTO;
 import ar.edu.itba.paw.webapp.dto.workingHours.WorkingHoursDTO;
@@ -31,6 +30,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.thymeleaf.TemplateEngine;
 
+import javax.json.Json;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 
@@ -772,18 +772,18 @@ public class DoctorApiController extends BaseApiController {
         } catch (Exception e) {
             return Response
                     .status(Response.Status.BAD_REQUEST)
-                    .entity(errorMessageToJSON("Invalid Appointmetn"))
+                    .entity(errorMessageToJSON("Invalid Appointment"))
                     .build();
         }
 
-        if (appointmentRemoved == false){
+        if (!appointmentRemoved){
             return Response
                     .status(Response.Status.BAD_REQUEST)
-                    .entity(errorMessageToJSON("Appointment not created"))
+                    .entity(errorMessageToJSON("Appointment not removed"))
                     .build();
         }
 
-        return Response.ok("Appointment was removed").build();
+        return Response.ok(jsonField("removed", Boolean.TRUE.toString())).build();
     }
 
     @PUT
