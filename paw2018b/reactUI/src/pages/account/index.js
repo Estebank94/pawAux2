@@ -2,20 +2,43 @@
  * Created by estebankramer on 14/10/2019.
  */
 import React from 'react'
-import BounceLoader from 'react-spinners/BounceLoader';
+import PulseLoader from 'react-spinners/PulseLoader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faMapMarker } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { ApiClient } from '../../utils/apiClient';
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab';
+import Favorite from '../../components/account/favorite';
 
 class Account extends React.Component {
-  state = {
-    loading: false,
-    error: false,
+  constructor(props){
+    super(props);
+    this.API = new ApiClient(props);
+    this.state = {
+      loading: true,
+      personal: null,
+      error: false,
+    }
+  }
+
+  componentDidMount(){
+    this.setState({ loading: true });
+    this.API.get('/patient/personal').then(response => {
+      if(response.status >= 200) {
+        this.setState({ personal: response.data, loading: false });
+      } else {
+        this.setState({ error: true, loading: false });
+      }
+    })
   }
 
   render() {
     const { user } = this.props.user;
+    const { loading, personal } = this.state;
+
+    console.log(personal);
 
     if(!this.props.user.auth) {
       return(<Redirect to="/login"/>)
@@ -29,7 +52,7 @@ class Account extends React.Component {
         <div className="main-container">
           <div className="container">
             <div className="pt-4 pb-3">
-              <div className="login-card w-shadow flex-row">
+              <div className="login-card p-3 w-shadow flex-row">
                 <div className="card-body">
                   <div className="card-text">
                     <div className="row">
@@ -43,6 +66,32 @@ class Account extends React.Component {
                       </div>
                     </div>
                   </div>
+                  {
+                    !loading ?
+                      <Tabs defaultActiveKey="1">
+                        <Tab eventKey="1" title="Turnos pendientes">
+                          fvdfsvsv
+                        </Tab>
+                        <Tab eventKey="2" title="Historial de turnos">
+                          sdvsdvdvs
+                        </Tab>
+                        <Tab eventKey="3" title="Especialistas favoritos">
+                          {
+                            personal.favorites.map((favorite, index) => <Favorite key={index} data={favorite.doctor} />)
+                          }
+                        </Tab>
+                      </Tabs>
+                      :
+                      <div className="center-horizontal">
+                        <PulseLoader
+                          sizeUnit={"px"}
+                          size={18}
+                          color={'#d1d1d1'}
+                          loading={true}
+                        />
+                      </div>
+                  }
+
                 </div>
               </div>
             </div>
