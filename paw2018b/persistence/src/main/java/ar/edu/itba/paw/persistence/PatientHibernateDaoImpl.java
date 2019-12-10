@@ -18,6 +18,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -33,13 +34,12 @@ public class PatientHibernateDaoImpl implements PatientDao {
     @Override
     public Patient createPatient(String firstName, String lastName, String phoneNumber, String email, String password) throws RepeatedEmailException {
         //try catch aca?
-        final Patient patient;
-        try{
-            patient = new Patient(firstName,lastName,phoneNumber, email, password);
-            em.persist(patient);
-        }catch (DataIntegrityViolationException | ConstraintViolationException e){
-            throw new RepeatedEmailException();
-        }
+        Patient patient;
+        patient = new Patient(firstName,lastName,phoneNumber, email, password);
+        em.persist(patient);
+        //}catch (DataIntegrityViolationException | ConstraintViolationException e){
+        //    throw new RepeatedEmailException();
+        //}
         return patient;
     }
 
@@ -126,9 +126,13 @@ public class PatientHibernateDaoImpl implements PatientDao {
     @Override
     public List<Appointment> getFutureAppointments(Patient patient) {
         String today = LocalDate.now().toString();
-        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay >= :day AND ap.patient = :patient AND ap.appointmentCancelled = :cancel", Appointment.class);
+        String now = LocalTime.now().toString();
+        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap " +
+                "where ((ap.appointmentDay = :day AND ap.appointmentTime >= :time) OR (ap.appoitmentDay > :day))  " +
+                "AND ap.patient = :patient AND ap.appointmentCancelled = :cancel", Appointment.class);
         query.setParameter("patient", patient);
         query.setParameter("day", today);
+        query.setParameter("now", now)
         query.setParameter("cancel", false);
         final List<Appointment> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
@@ -137,16 +141,20 @@ public class PatientHibernateDaoImpl implements PatientDao {
     @Override
     public List<Appointment> getHistoricalAppointments(Patient patient) {
         String today = LocalDate.now().toString();
+        String now = LocalTime.now().toString();
         Hibernate.initialize(patient.getDoctor());
         final TypedQuery<Appointment> query;
         if (patient.getDoctor() != null){
-            query = em.createQuery("FROM Appointment ap where ap.appointmentDay < :day AND ap.patient = :patient AND ap.appointmentCancelled = :cancel AND ap.doctor !=:doctor", Appointment.class);
+            query = em.createQuery("FROM Appointment ap " +
+                    "where ((ap.appointmentDay < :day)  OR (ap.appointmentDay = :day AND ap.appointmentTime < :now)) " +
+                    "AND ap.patient = :patient AND ap.appointmentCancelled = :cancel AND ap.doctor !=:doctor", Appointment.class);
             query.setParameter("doctor", patient.getDoctor());
         } else {
-            query = em.createQuery("FROM Appointment ap where ap.appointmentDay < :day AND ap.patient = :patient AND ap.appointmentCancelled = :cancel", Appointment.class);
+            query = em.createQuery("FROM Appointment ap where (ap.appointmentDay < :day  OR (ap.appointmentDay = :day AND ap.appointmentTime < :now)) AND ap.patient = :patient AND ap.appointmentCancelled = :cancel", Appointment.class);
         }
         query.setParameter("patient", patient);
         query.setParameter("day", today);
+        query.setParameter("now", now);
         query.setParameter("cancel", false);
         final List<Appointment> list = query.getResultList();
         for (Appointment ap: list){
