@@ -13,7 +13,7 @@ import SpecialistCard from '../../components/specialist/card';
 class Specialists extends React.Component {
   constructor(props) {
     super(props);
-    this.API = new ApiClient();
+    this.API = new ApiClient(props);
 
     this.INITIAL_STATE = {
       loading: true,
