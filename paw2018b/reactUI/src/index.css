@@ -594,3 +594,33 @@ a {
   font-size: 18px;
   color: #212529;
 }
+
+.active {
+  border-radius: 0;
+}
+
+.center-horizontal {
+  display: flex;
+  justify-content: center;
+  /*align-items: center;*/
+}
+
+.favorite-card {
+  cursor: pointer;
+}
+
+.favorite-card:hover .doctor-name {
+  color: #257CBF;
+}
+
+.react-time-picker__wrapper,
+.react-date-picker__wrapper {
+  border-radius: 5px;
+  border-color: #ced4da !important;
+  padding: 5px !important;
+  min-width: 218px;
+}
+
+.react-calendar {
+  margin-top: 4px;
+}
