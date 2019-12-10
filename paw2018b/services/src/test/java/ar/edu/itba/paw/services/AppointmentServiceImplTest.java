@@ -17,9 +17,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -74,15 +76,18 @@ public class AppointmentServiceImplTest {
         cancelDoctor = Mockito.mock(Doctor.class);
         cancelPatient = Mockito.mock(Patient.class);
         cancelAppointment = Mockito.mock(Appointment.class);
-        when(appointmentDao.findAppointment(CANCEL_DATE.toString(), CANCEL_TIME.toString(), cancelPatient, cancelDoctor))
-                .thenReturn(Optional.of(cancelAppointment));
+        List<Appointment> canceledAppointment = new LinkedList<>();
+        canceledAppointment.add(cancelAppointment);
+        when(cancelPatient.getId()).thenReturn(PATIENT_ID);
+        when(cancelPatient.getPatientId()).thenReturn(PATIENT_ID);
+        when(cancelAppointment.getPatient()).thenReturn(cancelPatient);
+        when(appointmentDao.findAppointmentByTime(CANCEL_DATE.toString(), CANCEL_TIME.toString(), cancelDoctor)).thenReturn(canceledAppointment);
+        when(cancelAppointment.getAppointmentCancelled()).thenReturn(false);
 
-        /*
-        Boolean cancelationStatus = appointmentServiceImpl.cancelAppointment(CANCEL_DATE.toString(),
+        Appointment appointmentCancelled = appointmentServiceImpl.cancelAppointment(CANCEL_DATE.toString(),
                 CANCEL_TIME.toString(), cancelPatient, cancelDoctor);
 
-         */
-//        assertTrue(cancelationStatus);
+        assertEquals(cancelAppointment, appointmentCancelled);
     }
 
     @Test
