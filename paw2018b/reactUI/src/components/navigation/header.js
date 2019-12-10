@@ -41,7 +41,7 @@ class Navigation extends React.Component {
                 </div>
               </div>
               :
-              <div>
+              <div style={{paddingRight: 10}}>
                 <div className="row">
                   <DropdownButton id="dropdown-basic-button btn-register" variant="light" title={user.firstName + ' ' + user.lastName}>
                     <Dropdown.Item onClick={() => this.props.history.push('/account')}>Mi Cuenta</Dropdown.Item>
