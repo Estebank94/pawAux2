@@ -301,13 +301,12 @@ public class DoctorApiController extends BaseApiController {
 
     @POST
     @Path("/registerProfessional")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response createProfessionalUser(@Valid final BasicProfessionalForm professionalForm)
-                                            throws IOException {
+    public Response createProfessionalUser(@Valid final BasicProfessionalForm professionalForm){
 
         LOGGER.debug("createProfessionalUser");
-        System.out.println("hola");
+
         Patient patient = null;
         try {
             patient = userDetailsService.getLoggedUser();
