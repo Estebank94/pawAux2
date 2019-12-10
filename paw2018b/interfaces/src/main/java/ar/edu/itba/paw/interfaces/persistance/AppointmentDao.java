@@ -25,6 +25,8 @@ public interface AppointmentDao {
 
     List<Appointment> findAppointmentByTime(String appointmentDay, String appointmentTime, Doctor doctor)throws Exception;
 
+    List<Appointment> findAppointmentByPatient(String appointmentDay, String appointmentTime, Patient patient);
+
     Appointment undoCancelAppointment(Appointment appointment);
 
     Optional<Appointment> findAppointmentById(Integer id);

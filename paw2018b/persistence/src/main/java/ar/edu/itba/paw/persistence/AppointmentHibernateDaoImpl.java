@@ -34,7 +34,6 @@ public class AppointmentHibernateDaoImpl implements AppointmentDao {
         return appointment;
     }
 
-
     @Override
     public Appointment cancelAppointment(Appointment appointment) {
         appointment.setAppointmentCancelled(Boolean.TRUE);
@@ -85,6 +84,18 @@ public class AppointmentHibernateDaoImpl implements AppointmentDao {
         query.setParameter("appointmentDay", appointmentDay);
         query.setParameter("appointmentTime", appointmentTime);
         query.setParameter("doctor", doctor);
+        List<Appointment> appointmentList = query.getResultList();
+        return appointmentList == null || appointmentList.isEmpty()? Collections.emptyList(): appointmentList;
+    }
+
+    public List<Appointment> findAppointmentByPatient(String appointmentDay, String appointmentTime, Patient patient) {
+        final TypedQuery<Appointment> query = em.createQuery("from Appointment as a WHERE " +
+                "a.appointmentDay = :appointmentDay AND " +
+                "a.appointmentTime = :appointmentTime AND " +
+                "a.patient = :patient" ,Appointment.class);
+        query.setParameter("appointmentDay", appointmentDay);
+        query.setParameter("appointmentTime", appointmentTime);
+        query.setParameter("patient", patient);
         List<Appointment> appointmentList = query.getResultList();
         return appointmentList == null || appointmentList.isEmpty()? Collections.emptyList(): appointmentList;
     }

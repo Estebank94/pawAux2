@@ -35,9 +35,19 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Appointment createAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) throws RepeatedAppointmentException, NotCreatedAppointmentException, NotValidDoctorIdException, NotValidAppointmentDayException, NotValidAppointmentTimeException, NotFoundDoctorException, NotValidPatientIdException, NotValidAppointment {
         LOGGER.debug("AppointmentServiceImpl: CreateAppointment");
 
-        Appointment appointment = null;
-        //Optional<Appointment> repeated = Optional.empty();
-        //Optional<Appointment> app = Optional.empty();
+        List<Appointment> patientAppointments = appointmentDao.findAppointmentByPatient(appointmentDay, appointmentTime, patient);
+        for (Appointment pap : patientAppointments){
+            if (!pap.getAppointmentCancelled()) {
+                if (pap.getDoctor().getId() != doctor.getId()){
+                    LOGGER.debug("Patient already has an appointment that day");
+                    throw new NotValidAppointment("Patient already has an appointment at that day at that time");
+                } else {
+                    LOGGER.debug("Appointment already Exists");
+                    throw new RepeatedAppointmentException("Appointment already exits");
+                }
+            }
+        }
+
         List<Appointment> appointmentList = Collections.EMPTY_LIST;
         try {
             appointmentList = appointmentDao.findAppointmentByTime(appointmentDay, appointmentTime, doctor);
@@ -65,6 +75,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             }
         }
 
+        Appointment appointment;
         LOGGER.debug("There is no active appointment at that dayTime");
         /* If reach this point is because no one has an active appointment at that time*/
         try{
@@ -77,48 +88,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         } catch (Exception e) {
             throw new NotCreatedAppointmentException();
         }
-
-        /*
-        try {
-            repeated = appointmentDao.findAppointmentByDoctor(appointmentDay, appointmentTime, doctor);
-        } catch (Exception e){
-            LOGGER.debug("No appointment");
-        }
-        if (repeated.isPresent()){
-            if (repeated.get().getPatient().getId() == patient.getId() ){
-                LOGGER.debug("Appointment already Exists by the patient");
-                throw new RepeatedAppointmentException("Appointment already exits by the patient");
-            }
-            LOGGER.debug("Appointment already Exists by the another patient");
-            throw new RepeatedAppointmentException("Appointment already Exists by the another patient");
-        }
-
-        try{
-            app = appointmentDao.findAppointment(appointmentDay, appointmentTime, patient, doctor);
-        }catch (Exception e){
-            LOGGER.debug("No appointment");
-        }
-        if (app.isPresent()){
-            if (app.get().getAppointmentCancelled()){
-                LOGGER.debug("Appointment exits but was cancelled. Undoing cancel");
-                appointmentDao.undoCancelAppointment(app.get());
-                return app.get();
-            }
-        }
-
-        try{
-            LOGGER.debug("Creating Appointment");
-           appointment =  appointmentDao.createAppointment(appointmentDay, appointmentTime, patient, doctor);
-        } catch (RepeatedAppointmentException e) {
-            LOGGER.debug("Appointment already Exists");
-            throw new RepeatedAppointmentException("Appointment already exits");
-        } catch (Exception e) {
-            throw new NotCreatedAppointmentException();
-        }
-        LOGGER.debug("Appointment create with id {}", appointment.getId());
-        return appointment;
-
-         */
     }
 
     @Transactional
