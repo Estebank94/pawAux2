@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.models.Description;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Specialty;
 import org.junit.After;
@@ -54,6 +55,10 @@ public class DoctorDaoImplTest {
     private static final Integer DOCTOR2_ID = 2;
     private static final Integer DOCTOR3_ID = 3;
 
+    private static String CERTIFICATE = "bachiller", CERTIFICATE2 = "Master";
+    private static String LANGUAGES = "chino", LANGUAGES2 = "Aleman";
+    private static String EDUCATION = "jarvar", EDUCATION2 = "UBA";
+
     private Specialty specialty1, specialty2;
     private Doctor doctor;
 
@@ -68,6 +73,9 @@ public class DoctorDaoImplTest {
 
     @Autowired
     private SpecialtyHibernateDaoImpl specialtyDao;
+
+    @Autowired
+    private DescriptionHibernateDaoImpl descriptionDao;
 
     private JdbcTemplate jdbcTemplate;
 
@@ -122,13 +130,34 @@ public class DoctorDaoImplTest {
         Set<Specialty> specialties = new HashSet<>();
         specialties.add(specialty1);
         specialties.add(specialty2);
-
         Doctor d = doctorDao.findDoctorById(DOCTOR_ID).get();
+
         doctorDao.setDoctorSpecialty(d, specialties);
 
         assertTrue(d.getSpecialties().contains(specialty1));
         assertTrue(d.getSpecialties().contains(specialty2));
         assertEquals(SPECIALTIES_QUANTITY, specialties.size());
+    }
+
+    @Test
+    public void testSetDoctorDescription() {
+        Description descriptionDummy = descriptionDao.createDescription(CERTIFICATE, LANGUAGES, EDUCATION);
+        Doctor doctor = doctorDao.findDoctorById(DOCTOR_ID).get();
+
+        doctorDao.setDoctorDescription(doctor, descriptionDummy);
+
+        assertEquals(descriptionDummy, doctor.getDescription());
+    }
+
+    @Test
+    public void testFindDescriptionByDoctor() {
+        Doctor doctor = doctorDao.findDoctorById(DOCTOR2_ID).get();
+
+        doctorDao.findDescriptionByDoctor(doctor);
+
+        assertEquals(CERTIFICATE2, doctor.getDescription().getCertificate());
+        assertEquals(LANGUAGES2, doctor.getDescription().getLanguages());
+        assertEquals(EDUCATION2, doctor.getDescription().getEducation());
     }
 
 

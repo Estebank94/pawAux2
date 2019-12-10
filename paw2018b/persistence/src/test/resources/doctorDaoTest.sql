@@ -155,7 +155,7 @@ INSERT INTO medicalCare(doctorID, insurancePlanID) VALUES (3, 126);
 INSERT INTO medicalCare(doctorID, insurancePlanID) VALUES (3, 127);
 
 INSERT INTO information (doctorId, languages, education, certificate) VALUES (1, 'Ingles', 'UBA', 'Master');
-INSERT INTO information (doctorId, languages, education, certificate) VALUES (2, 'Ingles', 'UBA', 'Master');
+INSERT INTO information (doctorId, languages, education, certificate) VALUES (2, 'Aleman', 'UBA', 'Master');
 INSERT INTO information (doctorId, languages, education, certificate) VALUES (3, 'Ingles', 'UBA', 'Master');
 
 INSERT INTO doctorSpecialty (specialtyID, doctorID) VALUES (552, 1);
