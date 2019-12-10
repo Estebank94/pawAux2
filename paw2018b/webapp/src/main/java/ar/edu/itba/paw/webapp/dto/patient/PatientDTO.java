@@ -34,9 +34,11 @@ public class PatientDTO {
         doctor = patient.getDoctor() == null ? null : new BasicDoctorDTO(patient.getDoctor());
         this.uri = baseUri.resolve(String.valueOf(this.id));
         this.favorites = new ArrayList<>();
-        for (Favorite favorite : patient.getFavorites()){
-            if (!favorite.getFavoriteCancelled()){
-                this.favorites.add(new FavoriteDoctorDTO(favorite));
+        if(patient.getFavorites()!=null){
+            for (Favorite favorite : patient.getFavorites()){
+                if (!favorite.getFavoriteCancelled()){
+                    this.favorites.add(new FavoriteDoctorDTO(favorite));
+                }
             }
         }
     }

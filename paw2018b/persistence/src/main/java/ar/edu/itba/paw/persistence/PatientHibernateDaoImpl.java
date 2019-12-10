@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,7 +28,7 @@ import java.util.UUID;
 @Repository
 public class PatientHibernateDaoImpl implements PatientDao {
 
-    @PersistenceContext /*(type = PersistenceContextType.EXTENDED)*/
+    @PersistenceContext (type = PersistenceContextType.EXTENDED)
     private EntityManager em;
 
     @Override
@@ -92,7 +93,7 @@ public class PatientHibernateDaoImpl implements PatientDao {
             Hibernate.initialize(patient);
             if (patient.getDoctor() != null){
                 Hibernate.initialize(patient.getDoctor());
-                // Hibernate.initialize(patient.getDoctor().getWorkingHours());
+                Hibernate.initialize(patient.getDoctor().getWorkingHours());
             }
         }
         return patient;
@@ -105,6 +106,7 @@ public class PatientHibernateDaoImpl implements PatientDao {
     }
 
     @Override
+    @Transactional
     public void deleteToken(final Verification token) {
         final Verification vt = em.merge(token);
         em.remove(vt);
