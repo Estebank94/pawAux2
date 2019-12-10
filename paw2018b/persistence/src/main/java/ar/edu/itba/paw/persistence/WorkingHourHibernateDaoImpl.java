@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.persistance.WorkingHoursDao;
+import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.WorkingHours;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
@@ -56,6 +57,14 @@ public class WorkingHourHibernateDaoImpl implements WorkingHoursDao {
             daysOfWeksToSearch.add(Integer.valueOf(day));
         }
         query.setParameter("dayweek", daysOfWeksToSearch);
+        List<WorkingHours> list = query.getResultList();
+        return list.isEmpty()? Collections.emptyList() : list;
+    }
+
+    @Override
+    public List<WorkingHours> getWorkingHoursByDoctor(Doctor doctor) {
+        final TypedQuery<WorkingHours> query = em.createQuery("FROM WorkingHours WHERE doctor = :doctor", WorkingHours.class);
+        query.setParameter("doctor", doctor);
         List<WorkingHours> list = query.getResultList();
         return list.isEmpty()? Collections.emptyList() : list;
     }

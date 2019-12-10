@@ -12,6 +12,7 @@ import ar.edu.itba.paw.models.exceptions.NotValidIDException;
 import ar.edu.itba.paw.models.exceptions.NotValidPageException;
 import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
+import ar.edu.itba.paw.webapp.dto.AvailableDaysDTO;
 import ar.edu.itba.paw.webapp.forms.BasicProfessionalForm;
 import ar.edu.itba.paw.webapp.forms.PersonalForm;
 
@@ -934,5 +935,44 @@ public class DoctorApiController extends BaseApiController {
         final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(doctor.getId())).build();
 
         return Response.created(uri).entity(new DoctorDTO(doctor, buildBaseURI(uriInfo))).build();
+    }
+
+    @GET
+    @Path("/{id}/available")
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response getAvailableAppointmentsTime(@PathParam("id") final int doctorId){
+        Doctor doctor;
+        try {
+            doctor = doctorService.findDoctorById(String.valueOf(doctorId));
+        } catch (NotFoundDoctorException e) {
+            LOGGER.debug("Doctor with id {} not found", doctorId);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
+                    .build();
+        } catch (NotValidIDException e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Doctor with bad id"))
+                    .build();
+        }
+        if (doctor == null){
+            LOGGER.debug("Doctor with id {} not found", doctorId);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
+                    .build();
+        }
+
+        LOGGER.debug("Looking for FutureAppoinments");
+        List<Appointment> futureAppointments = doctorService.getFutureAppointments(doctor);
+        futureAppointments = futureAppointments == null? Collections.EMPTY_LIST : futureAppointments;
+        LOGGER.debug("Found {} appointments", futureAppointments.size());
+
+        LOGGER.debug("Looking for workingHours");
+        List<WorkingHours> workingHours = doctorService.getWorkingHours(doctor);
+        workingHours = workingHours == null? Collections.EMPTY_LIST : workingHours;
+
+
+
+        return Response.ok().entity(new AvailableDaysDTO(workingHours, futureAppointments)).build();
     }
 }

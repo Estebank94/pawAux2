@@ -554,5 +554,9 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorDao.getReviews(doctor);
     }
 
+    @Override
+    public List<WorkingHours> getWorkingHours(Doctor doctor) {
+        return workingHoursDao.getWorkingHoursByDoctor(doctor);
+    }
 }
 

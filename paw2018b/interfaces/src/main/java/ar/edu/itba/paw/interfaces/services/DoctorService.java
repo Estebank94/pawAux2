@@ -49,4 +49,6 @@ public interface DoctorService {
    List<Appointment> getHistoricalAppointments(Doctor doctor);
 
    List<Review> getReviews(Doctor doctor);
+
+   List<WorkingHours> getWorkingHours(Doctor doctor);
 }
