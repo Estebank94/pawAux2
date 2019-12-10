@@ -77,6 +77,8 @@ class Specialists extends React.Component {
     let filters = this.INITIAL_STATE.filters;
     const p = queryString.parse(nextProps.location.search);
     filters.name = this.getFirstValue(p.name);
+    filters.insurance = this.getFirstValue(p.insurance);
+    filters.specialty = this.getFirstValue(p.specialty);
 
     this.setState({ filters })
     this.getSpecialists();
@@ -293,7 +295,7 @@ class Specialists extends React.Component {
                             <div className="input-group mb-3">
                               <input name="name" value={name} type="text" className="form-control w-shadow" placeholder="Nombre..." onChange={(e) => this.handleInputChange(e)}/>
                                 <div className="input-group-append">
-                                  <span className="input-group-text w-shadow" onClick={() => this.handleNameSearch()}>Buscar</span>
+                                  <span className="input-group-text w-shadow clickeable" onClick={() => this.handleNameSearch()}>Buscar</span>
                                 </div>
                             </div>
                         </div>
