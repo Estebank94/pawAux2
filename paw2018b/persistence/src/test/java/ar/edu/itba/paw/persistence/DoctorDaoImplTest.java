@@ -1,17 +1,11 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.CompressedSearch;
-import ar.edu.itba.paw.models.Description;
 import ar.edu.itba.paw.models.Doctor;
-import ar.edu.itba.paw.models.Search;
-
-import ar.edu.itba.paw.models.exceptions.NotCreateDoctorException;
-import ar.edu.itba.paw.models.exceptions.RepeatedLicenceException;
+import ar.edu.itba.paw.models.Specialty;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,12 +14,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @Sql("classpath:doctorDaoTest.sql")
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -50,14 +47,27 @@ public class DoctorDaoImplTest {
     private static final String DOC_SEX_FEMALE = "F";
 
     private static final Integer DOCTOR_QUANTITY_BEFORE = 3;
+    private static final int DOCTORS_QUANTITY = 3;
+    private static final int SPECIALTIES_QUANTITY = 2;
     private static final String DOC_SECOND_NAME = "Nicolas";
     private static final Integer DOCTOR_ID = 1;
+    private static final Integer DOCTOR2_ID = 2;
+    private static final Integer DOCTOR3_ID = 3;
+
+    private Specialty specialty1, specialty2;
+    private Doctor doctor;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Autowired
     private DataSource ds;
 
     @Autowired
     private DoctorHibernateDaoImpl doctorDao;
+
+    @Autowired
+    private SpecialtyHibernateDaoImpl specialtyDao;
 
     private JdbcTemplate jdbcTemplate;
 
@@ -95,65 +105,33 @@ public class DoctorDaoImplTest {
         assertEquals(DOCTOR_ID, doctor.get().getId());
     }
 
-//    @Test
-//    public void testFindByName() {
-//        final Search searchByName = new Search();
-//        searchByName.setName(DOC_SECOND_NAME);
-//        final Optional<CompressedSearch> filteredSearch = doctorDao.findDoctors(searchByName);
-//
-//        assertTrue(filteredSearch.isPresent());
-//        assertEquals(1, filteredSearch.get().getDoctors().size() );
-//        assertEquals( DOC_NAME, filteredSearch.get().getDoctors().get(0).getFirstName() );
-//        assertEquals( DOCTOR_ID, filteredSearch.get().getDoctors().get(0).getId() );
-//    }
-//
-//    @Test
-//    public void testFindBySpecialty() {
-//        final Search searchBySpecialty = new Search();
-//        searchBySpecialty.setSpecialty(DOC_SPECIALTY);
-//        final Optional<CompressedSearch> filteredSearch = doctorDao.findDoctors(searchBySpecialty);
-//
-//        assertTrue(filteredSearch.isPresent());
-//        assertEquals(1, filteredSearch.get().getDoctors().size() );
-//        assertTrue( filteredSearch.get().getDoctors().get(0).getSpecialty().contains(DOC_SPECIALTY) );
-//    }
-//
-//    @Test
-//    public void testFindByInsurance() {
-//        final Search searchByInsurance = new Search();
-//        searchByInsurance.setInsurance(DOC_INSURANCE);
-//        final Optional<CompressedSearch> filteredSearch = doctorDao.findDoctors(searchByInsurance);
-//
-//        assertTrue(filteredSearch.isPresent());
-//        assertEquals(2, filteredSearch.get().getDoctors().size() );
-//        assertTrue( filteredSearch.get().getDoctors().get(0).getInsurance().containsKey(DOC_INSURANCE) );
-//    }
-//
-//    @Test
-//    public void testFindByInsurancePlan() {
-//        final Search searchByInsurancePlan = new Search();
-//        searchByInsurancePlan.setInsurance(DOC_INSURANCE);
-//        List<String> insurancePlan = new ArrayList<>();
-//        insurancePlan.add(DOC_INSURANCE_PLAN);
-//        searchByInsurancePlan.setInsurancePlan(insurancePlan);
-//        final Optional<CompressedSearch> filteredSearch = doctorDao.findDoctors(searchByInsurancePlan);
-//
-//        assertTrue(filteredSearch.isPresent());
-//        assertEquals(1, filteredSearch.get().getDoctors().size() );
-//        assertTrue( filteredSearch.get().getDoctors().get(0).getInsurance().get(DOC_INSURANCE).contains(DOC_INSURANCE_PLAN) );
-//    }
-//
-//    @Test
-//    public void testFindBySex() {
-//        final Search searchBySex = new Search();
-//        searchBySex.setSex(DOC_SEX_FEMALE);
-//        final Optional<CompressedSearch> filteredSearch = doctorDao.findDoctors(searchBySex);
-//
-//        assertTrue(filteredSearch.isPresent());
-//        assertEquals(1, filteredSearch.get().getDoctors().size() );
-//        assertEquals( DOC_SEX_FEMALE, filteredSearch.get().getDoctors().get(0).getSex() );
-//    }
-//
+    @Test
+    public void testListDoctors() {
+        List<Doctor> doctorsListed = doctorDao.listDoctors();
+
+        assertEquals(DOCTORS_QUANTITY, doctorsListed.size());
+        assertEquals(DOCTOR_ID, doctorsListed.get(0).getId());
+        assertEquals(DOCTOR2_ID, doctorsListed.get(1).getId());
+        assertEquals(DOCTOR3_ID, doctorsListed.get(2).getId());
+    }
+
+    @Test
+    public void testSetDoctorSpecialty() {
+        specialty1 = specialtyDao.findSpecialtyByName("OBSTETRICIA");
+        specialty2 = specialtyDao.findSpecialtyByName("OFTALMOLOGÍA");
+        Set<Specialty> specialties = new HashSet<>();
+        specialties.add(specialty1);
+        specialties.add(specialty2);
+
+        Doctor d = doctorDao.findDoctorById(DOCTOR_ID).get();
+        doctorDao.setDoctorSpecialty(d, specialties);
+
+        assertTrue(d.getSpecialties().contains(specialty1));
+        assertTrue(d.getSpecialties().contains(specialty2));
+        assertEquals(SPECIALTIES_QUANTITY, specialties.size());
+    }
+
+
 //    @Test
 //    public void testFind() {
 //        final Search search = new Search();

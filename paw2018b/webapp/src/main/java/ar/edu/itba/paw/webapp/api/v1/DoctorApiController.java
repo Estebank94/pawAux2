@@ -80,7 +80,6 @@ public class DoctorApiController extends BaseApiController {
     private EmailService emailService;
 
     @Autowired
-
     private FavoriteService favoriteService;
 
     private AppointmentService appointmentService;
@@ -301,12 +300,11 @@ public class DoctorApiController extends BaseApiController {
 
     @POST
     @Path("/registerProfessional")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response createProfessionalUser(/* @FormDataParam("file") InputStream uploadedInputStream,
-                                            @FormDataParam("file") FormDataContentDisposition fileDetail*/
-                                            @Valid final BasicProfessionalForm professionalForm)
-                                            throws IOException {
+    public Response createProfessionalUser(@Valid final BasicProfessionalForm professionalForm){
+
+        LOGGER.debug("createProfessionalUser");
 
         Patient patient = null;
         try {
@@ -315,12 +313,14 @@ public class DoctorApiController extends BaseApiController {
             return Response.status(Response.Status.CONFLICT)
                     .entity(errorMessageToJSON("Doctor/Patient not found")).build();
         }
+        LOGGER.debug("Found Patient: " + patient);
 
         Doctor doctor = patient.getDoctor();
         if (doctor == null) {
             return Response.status(Response.Status.CONFLICT)
                     .entity(errorMessageToJSON("Doctor is NULL")).build();
         }
+        LOGGER.debug("Found Doctor: " + doctor);
 
         /* Avatar */
 //

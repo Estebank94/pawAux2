@@ -43,10 +43,4 @@ public class SpecialtyHibernateDaoImpl implements SpecialtyDao {
         query.setParameter("specialty", specialty);
         return query.getSingleResult();
     }
-
-    @Override
-    public void addDoctorSpecialty(Doctor doctor, Specialty specialty) {
-
-    }
-
 }
