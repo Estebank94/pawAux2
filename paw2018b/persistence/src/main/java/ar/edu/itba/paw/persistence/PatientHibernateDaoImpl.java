@@ -27,7 +27,6 @@ import java.util.UUID;
 @Repository
 public class PatientHibernateDaoImpl implements PatientDao {
 
-    @PersistenceContext
     @PersistenceContext /*(type = PersistenceContextType.EXTENDED)*/
     private EntityManager em;
 
