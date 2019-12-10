@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeInformationDTO {
-    List<String> specialties;
-    List<InsuranceDTO> insurances;
+    private List<String> specialties;
+    private List<InsuranceDTO> insurances;
 
     public HomeInformationDTO (){}
 

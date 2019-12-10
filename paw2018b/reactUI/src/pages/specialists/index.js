@@ -6,61 +6,75 @@ import Badge from 'react-bootstrap/Badge';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle, faFrownOpen } from '@fortawesome/free-solid-svg-icons';
 
-import fetchApi from '../../utils/api'
+import { ApiClient } from '../../utils/apiClient';
 
 import SpecialistCard from '../../components/specialist/card';
 
 class Specialists extends React.Component {
-  INITIAL_STATE = {
-    loading: true,
-    error: false,
-    specialists: null,
-    insurances: null,
-    specialties: null,
-    currentPage: 0,
-    filters: {
-      name: null,
-      insurance: null,
-      insurancePlan: null,
-      days: null,
-      sex: null,
-    },
-    filtering: false,
-    pages: null
-  };
+  constructor(props) {
+    super(props);
+    this.API = new ApiClient();
 
-  state = {
-    loading: true,
-    error: false,
-    specialists: null,
-    insurances: null,
-    specialties: null,
-    currentPage: 0,
-    filters: {
-      name: null,
-      insurance: null,
-      insurancePlan: null,
-      days: null,
-      sex: null,
-      specialty: null,
-    },
-    filtering: false,
-    pages: null
-  };
+    this.INITIAL_STATE = {
+      loading: true,
+      error: false,
+      loadingPage: false,
+      specialists: null,
+      insurances: null,
+      insurancePlans: null,
+      specialties: null,
+      auxName: null,
+      filters: {
+        name: null,
+        insurance: null,
+        insurancePlan: null,
+        days: null,
+        sex: null,
+        specialty: null,
+        page: 0
+      },
+      filtering: false,
+      pages: null
+    };
 
-  componentDidMount() {
+    this.state = {
+      loading: true,
+      error: false,
+      loadingPage: false,
+      specialists: null,
+      insurances: null,
+      insurancePlans: null,
+      specialties: null,
+      auxName: null,
+      filters: {
+        name: null,
+        insurance: null,
+        insurancePlan: null,
+        days: null,
+        sex: null,
+        specialty: null,
+        page: 0
+      },
+      filtering: false,
+      pages: null
+    };
+  }
+
+
+  async componentDidMount() {
     let filters = this.state.filters;
     const p = queryString.parse(this.props.location.search);
     filters.name = this.getFirstValue(p.name);
     filters.insurance = this.getFirstValue(p.insurance);
     filters.specialty = this.getFirstValue(p.specialty);
 
-    this.setState({ filters })
+    this.setState({ filters });
+    await this.getSpecialtiesAndInsurances();
     this.getSpecialists();
   }
 
   componentWillReceiveProps(nextProps) {
-    let filters = this.INITIAL_STATE;
+    let filters = this.INITIAL_STATE.filters;
     const p = queryString.parse(nextProps.location.search);
     filters.name = this.getFirstValue(p.name);
 
@@ -72,7 +86,6 @@ class Specialists extends React.Component {
     let filters = this.state.filters;
     let str = '?'
     str +=  queryString.stringify(filters, { skipNull: true })
-    console.log('BUILD QUERY', str);
 
     return str;
   }
@@ -85,36 +98,41 @@ class Specialists extends React.Component {
   }
 
   getSpecialists() {
-    const page = this.state.currentPage
-    this.setState({ loading: true, currentPage: page })
-    fetchApi('/doctor/list' +  this.buildQueryParams(),'GET')
-      .then(specialists => {
-        // console.log(specialists);
-        this.setState({ specialists: specialists, filtering: false, pages: specialists.totalPageCount, loading: false });
-      })
+    this.setState({ loading: true })
+    this.API.get('/doctor/list' + this.buildQueryParams())
+      .then(response => this.setState({ specialists: response.data, filtering: false, pages: response.data.totalPageCount, loading: false }))
       .catch(() => this.setState({ error: true, loading: false }));
   }
 
+  getSpecialtiesAndInsurances() {
+    this.API.get('/homeinfo').then(response => {
+      let specialties = [];
+      let insurances = [];
+      response.data.specialties.map(specialty => specialties.push({value: specialty, label: specialty}))
+      response.data.insurances.map(insurance => insurances.push({value: insurance.name, label: insurance.name}))
+      this.setState({ insurances, specialties, insurancePlans: response.data.insurances });
+    })
+  }
+
+  loadMore() {
+    this.setState({ loadingPage: true })
+    this.API.get('/doctor/list' + this.buildQueryParams())
+      .then(response => this.setState({ specialists: this.state.specialists.push(response.data), loadingPage: false}))
+      .catch(() => this.setState({ error: true, loadingPage: false }));
+  }
+
   renderPagePicker = () => {
-    const { pages, currentPage } = this.state;
-    let p = [];
-
-    for (let i = 0; i < pages; i++) {
-      p.push(<li className={ 'page-item' + currentPage === i ? ' active' : '' }>
-        {
-          currentPage === i ?
-            <span className="page-link">
-              {i + 1}
-              <span className="sr-only">(current)</span>
-            </span>
-            :
-            <a className="page-link" onClick={() => this.getSpecialists(i)}>{i + 1}</a>
-        }
-
-      </li>);
+    const { pages, filters } = this.state;
+    if(filters.page < pages - 1) {
+      return(
+        <div
+          className="btn btn-light btn-block w-shadow mt-3 w-text-color"
+          onClick={() => this.loadMore()}
+        >
+          Cargar más resultados
+        </div>
+      )
     }
-
-    return p;
   }
 
   async handleChange(type, value) {
@@ -124,11 +142,60 @@ class Specialists extends React.Component {
     this.getSpecialists();
   }
 
-  render() {
-    const { error, loading, filtering, specialists, filters } = this.state;
-    const { name, sex, insurance, specialty } = filters;
+  handleInputChange(e) {
+    this.setState({ auxName: e.target.value });
+  }
 
-      if(loading && !filtering) {
+  async handleNameSearch() {
+    const filters = this.state.filters;
+    filters.name = this.state.auxName;
+    await this.setState({ filters, auxName: null, filtering: true });
+    this.getSpecialists();
+  }
+
+
+
+  dayToString(day){
+    switch(day) {
+      case 1:
+        return 'Lunes'
+        break;
+      case 2:
+        return 'Martes'
+        break;
+      case 3:
+        return 'Miercoles'
+        break;
+      case 4:
+        return 'Jueves'
+        break;
+      case 5:
+        return 'Viernes'
+        break;
+      case 6:
+        return 'Sabado'
+        break;
+      case 7:
+        return 'Domingo'
+        break;
+    }
+  }
+
+  render() {
+    const { error, loading, filtering, specialists, filters, specialties, insurances, insurancePlans } = this.state;
+    const { name, sex, insurance, specialty, insurancePlan, days } = filters;
+
+    const DAYS = [
+      { name: 'Lunes', value: 1},
+      { name: 'Martes', value: 2},
+      { name: 'Miercoles', value: 3},
+      { name: 'Jueves', value: 4},
+      { name: 'Viernes', value: 5},
+      { name: 'Sabado', value: 6},
+      { name: 'Domingo', value: 7},
+    ]
+
+      if((loading || !specialists || !insurances) &&!filtering) {
           return (
               <div className="centered">
                   <BounceLoader
@@ -175,6 +242,9 @@ class Specialists extends React.Component {
                       />
                     </div>
                   }
+                  {
+                    this.renderPagePicker()
+                  }
                 </div>
                 <div className="col-md-3">
                     <div className="sidebar-nav-fixed pull-right affix">
@@ -205,24 +275,76 @@ class Specialists extends React.Component {
                         </Badge>
                       }
                       {
+                        insurancePlan &&
+                        <Badge className="badge-waldoc p-2" onClick={() => this.handleChange('insurancePlan', null)}>
+                          {insurancePlan} <FontAwesomeIcon className="ml-1" icon={faTimesCircle}/>
+                        </Badge>
+                      }
+                      {
+                        days &&
+                        <Badge className="badge-waldoc p-2" onClick={() => this.handleChange('days', null)}>
+                          {this.dayToString(days)} <FontAwesomeIcon className="ml-1" icon={faTimesCircle}/>
+                        </Badge>
+                      }
+                      {
+                        !name &&
+                        <div>
+                          <h5 className="mb-1 mt-3">Nombre</h5>
+                            <div className="input-group mb-3">
+                              <input name="name" value={name} type="text" className="form-control w-shadow" placeholder="Nombre..." onChange={(e) => this.handleInputChange(e)}/>
+                                <div className="input-group-append">
+                                  <span className="input-group-text w-shadow" onClick={() => this.handleNameSearch()}>Buscar</span>
+                                </div>
+                            </div>
+                        </div>
+                      }
+                      {
                         !sex &&
                         <div>
                           <h5 className="mb-1 mt-3">Sexo</h5>
                           <p className="mb-0 clickeable" onClick={() => this.handleChange('sex', 'F')}>Femenino</p>
                           <p className="mb-0 clickeable" onClick={() => this.handleChange('sex', 'M')}>Masculino</p>
                         </div>
-
+                      }
+                      {
+                        !specialty &&
+                        <div>
+                          <h5 className="mb-1 mt-3">Especialidad</h5>
+                          {
+                            specialties.map(s =>  <p className="mb-0 clickeable" onClick={() => this.handleChange('specialty', s.label)}>{s.label}</p>)
+                          }
+                        </div>
+                      }
+                      {
+                        !insurance &&
+                        <div>
+                          <h5 className="mb-1 mt-3">Obra Social</h5>
+                          {
+                            insurances.map(i =>  <p className="mb-0 clickeable" onClick={() => this.handleChange('insurance', i.label)}>{i.label}</p>)
+                          }
+                        </div>
+                      }
+                      {
+                        insurance && !insurancePlan &&
+                        <div>
+                          <h5 className="mb-1 mt-3">Plan</h5>
+                          {
+                            insurancePlans.filter(i => i.name === insurance)[0].plans.map(p =>  <p className="mb-0 clickeable" onClick={() => this.handleChange('insurancePlan', p)}>{p}</p>)
+                          }
+                        </div>
+                      }
+                      {
+                        !days &&
+                        <div>
+                          <h5 className="mb-1 mt-3">Día de atención</h5>
+                          {
+                            DAYS.map(d =>  <p className="mb-0 clickeable" onClick={() => this.handleChange('days', d.value)}>{d.name}</p>)
+                          }
+                        </div>
                       }
 
                     </div>
                 </div>
-            </div>
-            <div className="mt-3">
-                <ul className="pagination justify-content-start mb-0">
-                    {
-                      this.renderPagePicker()
-                    }
-                </ul>
             </div>
         </div>
       </div>

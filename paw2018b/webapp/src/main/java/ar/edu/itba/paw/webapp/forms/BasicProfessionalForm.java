@@ -1,36 +1,29 @@
 package ar.edu.itba.paw.webapp.forms;
 
+
 import ar.edu.itba.paw.models.InsurancePlan;
 import ar.edu.itba.paw.models.Specialty;
+
 import ar.edu.itba.paw.webapp.dto.workingHours.WorkingHoursDTO;
-import org.hibernate.validator.constraints.Length;
+
+
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
 public class BasicProfessionalForm {
 
-    @Length(max=250)
-    private String certificate;
 
-    @Length(max=250)
-    private String education;
-
-    private String languages;
-
-//    @NotNull
-//    private List<String> insurance;
+    private DescriptionForm description;
 
     @NotNull
     private List<String> insurancePlan;
-
-//    @NotNull
-//    private List<InsurancePlan> insurancePlansDTO;
 
     private List<WorkingHoursDTO> workingHours;
 
     @NotNull
     private List<String> specialty;
+
 
     public List<WorkingHoursDTO> getWorkingHours() {
         return workingHours;
@@ -39,38 +32,6 @@ public class BasicProfessionalForm {
     public void setWorkingHours(List<WorkingHoursDTO> workingHours) {
         this.workingHours = workingHours;
     }
-
-    public String getCertificate() {
-        return certificate;
-    }
-
-    public void setCertificate(String certificate) {
-        this.certificate = certificate;
-    }
-
-    public String getEducation() {
-        return education;
-    }
-
-    public void setEducation(String education) {
-        this.education = education;
-    }
-
-    public String getLanguages() {
-        return languages;
-    }
-
-    public void setLanguages(String languages) {
-        this.languages = languages;
-    }
-
-//    public List<String> getInsurance() {
-//        return insurance;
-//    }
-//
-//    public void setInsurance(List<String> insurance) {
-//        this.insurance = insurance;
-//    }
 
     public List<String> getInsurancePlan() {
         return insurancePlan;
@@ -96,6 +57,14 @@ public class BasicProfessionalForm {
         return (list.isEmpty() ? Collections.emptySet() : list);
     }
 
+    public DescriptionForm getDescription() {
+        return description;
+    }
+
+    public void setDescription(DescriptionForm description) {
+        this.description = description;
+    }
+
     public List<InsurancePlan> getInsurancePlans(){
         List<InsurancePlan> list = new ArrayList<>();
         for(String s : getInsurancePlan()){
@@ -106,8 +75,8 @@ public class BasicProfessionalForm {
         }
         return (list.isEmpty() ? Collections.EMPTY_LIST : list);
     }
-//
-//    /* Esto me deberia devolver un List de Strings de 2 */
+
+    /* Esto me deberia devolver un List de Strings de 2 */
     private List<String> insuranceParser(String insurancePlan){
         List<String> l = new ArrayList<>();
         StringBuilder s = new StringBuilder();

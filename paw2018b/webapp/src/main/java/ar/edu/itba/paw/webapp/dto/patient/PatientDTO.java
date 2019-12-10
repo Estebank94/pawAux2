@@ -31,7 +31,7 @@ public class PatientDTO {
         lastName = patient.getLastName();
         phoneNumber = patient.getPhoneNumber();
         email = patient.getEmail();
-        doctor = new BasicDoctorDTO(patient.getDoctor());
+        doctor = patient.getDoctor() == null ? null : new BasicDoctorDTO(patient.getDoctor());
         this.uri = baseUri.resolve(String.valueOf(this.id));
         this.favorites = new ArrayList<>();
         for (Favorite favorite : patient.getFavorites()){

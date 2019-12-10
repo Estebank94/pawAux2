@@ -13,14 +13,9 @@ const getClient = (token = '') => {
 
   if (token) {
     options.headers = {
-      'Authorization': `Bearer ${token}`,
+      'X-AUTH-TOKEN': {token},
     };
   }
-
-  options.headers = {
-    ...options.headers,
-    'Content-Type': 'application/x-www-form-urlencoded',
-  };
 
   const client = axios.create(options);
 
@@ -94,5 +89,12 @@ class ApiClient {
       .catch(error => Promise.reject(error));
   }
 }
+
+export function get(url, conf = {}) {
+  return this.client.get(url, conf)
+    .then(response => Promise.resolve(response))
+    .catch(error => Promise.reject(error));
+}
+
 
 export { ApiClient };

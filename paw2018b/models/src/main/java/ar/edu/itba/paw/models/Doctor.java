@@ -19,14 +19,14 @@ import java.util.*;
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
-    String firstName;
-    String lastName;
-    String sex;
-    String address;
-    byte[] profilePicture;
-    Integer licence;
-    String district;
+    private Integer id;
+    private String firstName;
+    private String lastName;
+    private String sex;
+    private String address;
+    private byte[] profilePicture;
+    private Integer licence;
+    private String district;
 
     @ManyToMany(cascade = {CascadeType.ALL},
                 fetch = FetchType.EAGER)
@@ -34,7 +34,7 @@ public class Doctor {
             name="doctorSpecialty",
             joinColumns = {@JoinColumn(name = "doctorid", referencedColumnName="id")},
             inverseJoinColumns = {@JoinColumn(name = "specialtyid", referencedColumnName="id")})
-    Set<Specialty> specialties;
+    private Set<Specialty> specialties;
 
     @ManyToMany(cascade = {CascadeType.PERSIST}
                 , fetch = FetchType.EAGER)
@@ -43,28 +43,29 @@ public class Doctor {
             joinColumns = {@JoinColumn(name="doctorid", referencedColumnName="id")},
             inverseJoinColumns = {@JoinColumn(name="insuranceplanid", referencedColumnName="id")}
     )
-    List<InsurancePlan> insurancePlans;
+    private List<InsurancePlan> insurancePlans;
 
-    String phoneNumber;
+    private String phoneNumber;
 
     @OneToMany(mappedBy = "doctor", cascade = {CascadeType.ALL})
-    List<WorkingHours> workingHours;
+    private List<WorkingHours> workingHours;
+
 
     @OneToMany(mappedBy = "doctor")
     @LazyCollection(LazyCollectionOption.TRUE)
-    Set<Appointment> appointments;
+    private Set<Appointment> appointments;
 
     @OneToMany(mappedBy = "doctor")
-    List<Review> reviews;
+    private List<Review> reviews;
 
     @OneToOne(mappedBy="doctor")
-    Patient patient;
+    private Patient patient;
 
     @OneToOne(mappedBy="doctor", cascade = {CascadeType.ALL})
-    Description description;
+    private Description description;
 
     @OneToMany(mappedBy="doctor", cascade = {CascadeType.PERSIST})
-    List<Favorite> favorites;
+    private List<Favorite> favorites;
 
     @Autowired
     public Doctor(){

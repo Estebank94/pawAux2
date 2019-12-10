@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.persistance.FavoriteDao;
 import ar.edu.itba.paw.interfaces.services.FavoriteService;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Favorite;
+import ar.edu.itba.paw.models.exceptions.FavoriteExistsException;
 import ar.edu.itba.paw.models.exceptions.NotCreatedFavoriteException;
 import ar.edu.itba.paw.models.exceptions.NotRemoveFavoriteException;
 import org.slf4j.Logger;
@@ -17,20 +18,20 @@ import javax.persistence.NoResultException;
 import java.sql.SQLException;
 import java.util.Optional;
 
-/**
- * Created by estebankramer on 04/11/2018.
- */
+
 @Service
 public class FavoriteServiceImpl implements FavoriteService {
 
     @Autowired
-    FavoriteDao favoriteDao;
+    private FavoriteDao favoriteDao;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FavoriteServiceImpl.class);
 
     @Transactional(rollbackFor = SQLException.class)
     @Override
-    public void addFavorite(Doctor doctor, Patient patient) throws NotCreatedFavoriteException {
+    public void addFavorite(Doctor doctor, Patient patient) throws NotCreatedFavoriteException,
+            FavoriteExistsException {
+
         LOGGER.debug("FavoriteServiceImpl: addFavorite");
 
         Favorite favorite = null;
@@ -43,9 +44,13 @@ public class FavoriteServiceImpl implements FavoriteService {
         }
 
         if (fav.isPresent()){
+            if(!fav.get().getFavoriteCancelled()){
+                throw new FavoriteExistsException();
+            }
             favoriteDao.undoRemoveFavorite(fav.get());
             return;
         }
+
         try{
             favoriteDao.addFavorite(doctor, patient);
         } catch (Exception e){
@@ -63,7 +68,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         try {
             favorite = favoriteDao.findFavorite(doctor, patient);
         } catch (NoResultException e){
-            return;
+            throw new NoResultException();
         } catch (Exception e){
             throw new NotRemoveFavoriteException();
         }
@@ -72,7 +77,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             try {
                favoriteDao.removeFavorite(favorite.get());
             } catch (Exception e){
-                return;
+                throw new NotRemoveFavoriteException();
             }
         }
         return;

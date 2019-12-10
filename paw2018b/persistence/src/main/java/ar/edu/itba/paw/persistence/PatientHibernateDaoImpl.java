@@ -28,6 +28,7 @@ import java.util.UUID;
 public class PatientHibernateDaoImpl implements PatientDao {
 
     @PersistenceContext
+    @PersistenceContext /*(type = PersistenceContextType.EXTENDED)*/
     private EntityManager em;
 
     @Override
@@ -86,10 +87,14 @@ public class PatientHibernateDaoImpl implements PatientDao {
     public Patient findPatientByEmail(String email) {
         final TypedQuery<Patient> query = em.createQuery("FROM Patient as p where p.email = :email", Patient.class);
         query.setParameter("email", email);
-        Patient patient = query.getSingleResult();
-        if (patient != null){
+        final List<Patient> list = query.getResultList();
+        Patient patient = list.isEmpty() ? null : list.get(0);
+        if(patient!=null){
             Hibernate.initialize(patient);
-            Hibernate.initialize(patient.getDoctor());
+            if (patient.getDoctor() != null){
+                Hibernate.initialize(patient.getDoctor());
+                // Hibernate.initialize(patient.getDoctor().getWorkingHours());
+            }
         }
         return patient;
     }

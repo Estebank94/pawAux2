@@ -7,31 +7,34 @@ import { Link } from 'react-router-dom';
 import Select from 'react-select';
 import queryString from 'query-string';
 
-import fetchApi from '../../utils/api'
+import fetchApi from '../../utils/api';
+import { ApiClient } from '../../utils/apiClient';
 
 class SearchBar extends React.Component {
-  state = {
-    insurances: [],
-    selectedInsurance: null,
-    specialties: [],
-    selectedSpecialty: null,
-    selectedName: '',
-    searchQuery: ''
-  };
+  constructor(props){
+    super(props);
+    this.API = new ApiClient();
+    this.state = {
+      insurances: [],
+      selectedInsurance: null,
+      specialties: [],
+      selectedSpecialty: null,
+      selectedName: '',
+      searchQuery: ''
+    };
+  }
+
+
 
   componentDidMount() {
-    fetchApi('/insurances', 'GET')
-      .then(response => {
-        let insurances = [];
-        response.insurances.map(insurance => insurances.push({value: insurance.id, label: insurance.name}))
-        this.setState({insurances});
-      })
-    fetchApi('/specialties', 'GET')
-      .then(response => {
-        let specialties = [];
-        response.specialties.map(specialty => specialties.push({value: specialty.id, label: specialty.speciality}))
-        this.setState({specialties});
-      })
+    this.API.get('/homeinfo').then(response => {
+      let specialties = [];
+      let insurances = [];
+      response.data.specialties.map(specialty => specialties.push({value: specialty, label: specialty}))
+      response.data.insurances.map(insurance => insurances.push({value: insurance.name, label: insurance.name}))
+
+      this.setState({ insurances, specialties });
+    })
   }
 
   async handleChange(e) {

@@ -10,26 +10,26 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
 
-    case authTypes.DO_AUTH:
+    case authTypes.DO_SIGN_IN:
       return {
         ...initialState,
         loading: true
       }
 
-    case authTypes.DO_SIGNOUT:
+    case authTypes.DO_SIGN_OUT:
       return initialState
 
-    case authTypes.SIGNIN_SUCCESS:
+    case authTypes.SIGN_IN_SUCCESS:
     case authTypes.REGISTER_COMPLETED:
       return {
         ...state,
-        auth: action.data.token,
+        auth: action.data.auth,
         user: action.data.user,
         loading: false,
         error: false
       }
 
-    case authTypes.SIGNIN_ERROR:
+    case authTypes.SIGN_IN_ERROR:
     case authTypes.REGISTER_ERROR:
       console.log('ERROR: '+action.error);
       return {

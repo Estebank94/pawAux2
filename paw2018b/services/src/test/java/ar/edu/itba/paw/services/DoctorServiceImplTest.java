@@ -15,7 +15,6 @@ import java.time.LocalTime;
 import java.util.*;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 //@Sql("classpath:ServiceTest.sql")
@@ -27,15 +26,19 @@ public class DoctorServiceImplTest {
     private DoctorServiceImpl doctorServiceImpl;
 
     private Doctor doctor, doctor2, doctor3, createDoctor;
+    private Review review, review2;
     private WorkingHours workingHours;
     private Description description;
     private Search search;
     private Specialty specialty;
     private Insurance insurance;
+    private Appointment appointment1, appointment2, appointmentHistorical1, appointmentHistorical2;
 
 //    private static final String DOC_NAME = "Roberto Nicolas Agustin";
 //    private static final String DOC_SECOND_NAME = "Nicolas";
     private static final Integer DOC_ID = 1;
+    private static final Integer DOC2_ID = 2;
+    private static final Integer DOC3_ID = 3;
     private static final String DOC_SPECIALTY = "NUTRICIÓN";
     private static final String DOC_INSURANCE = "Accord";
 //    private static final String DOC_INSURANCE_PLAN_AS_STRING = "('Accord Salud')";
@@ -58,6 +61,10 @@ public class DoctorServiceImplTest {
     private static final String EDUCATION = "ITBA";
     private static final String LANGUAGE = "English";
 
+    private static final int LISTED_QUANTITY = 3;
+    private static final int APPOINTMENT_QUANTITY = 2;
+    private static final int REVIEWS_QUANTITY = 2;
+
     @Autowired
     private DoctorDao doctorDao;
 
@@ -68,9 +75,9 @@ public class DoctorServiceImplTest {
         doctor2 = Mockito.mock(Doctor.class);
         doctor3 = Mockito.mock(Doctor.class);
         search = Mockito.mock(Search.class);
-        when(doctor.getId()).thenReturn(1);
-        when(doctor2.getId()).thenReturn(2);
-        when(doctor3.getId()).thenReturn(3);
+        when(doctor.getId()).thenReturn(DOC_ID);
+        when(doctor2.getId()).thenReturn(DOC2_ID);
+        when(doctor3.getId()).thenReturn(DOC3_ID);
 
     }
 
@@ -95,7 +102,6 @@ public class DoctorServiceImplTest {
 
     @Test
     public void testCreate() throws Exception {
-
         createDoctor = Mockito.mock(Doctor.class);
         when(doctorDao.createDoctor(NEW_DOC_NAME, NEW_DOC_LASTNAME, NEW_DOC_PHONE, NEW_DOC_SEX, Integer.parseInt(NEW_DOC_LICENSE), NEW_DOC_AVATAR, NEW_DOC_ADDRESS)).thenReturn(createDoctor);
         when(createDoctor.getFirstName()).thenReturn(NEW_DOC_NAME);
@@ -120,7 +126,6 @@ public class DoctorServiceImplTest {
 
     @Test
     public void testSetDoctorInfo() throws Exception{
-
         workingHours = Mockito.mock(WorkingHours.class);
         description = Mockito.mock(Description.class);
         specialty = Mockito.mock(Specialty.class);
@@ -154,7 +159,78 @@ public class DoctorServiceImplTest {
 
         assertTrue(setDoctor.isPresent());
         assertEquals(DOC_ID, setDoctor.get().getId());
-
     }
 
+    @Test
+    public void testListDoctors() {
+        List<Doctor> doctors = new LinkedList<>();
+        doctors.add(0, doctor);
+        doctors.add(1, doctor2);
+        doctors.add(2, doctor3);
+        when(doctorDao.listDoctors()).thenReturn(doctors);
+
+        List<Doctor> doctorsListed = doctorServiceImpl.listDoctors();
+
+        assertEquals(LISTED_QUANTITY, doctorsListed.size());
+        assertEquals(doctor, doctorsListed.get(0));
+        assertEquals(doctor2, doctorsListed.get(1));
+        assertEquals(doctor3, doctorsListed.get(2));
+    }
+
+    @Test
+    public void testFindDoctorById() throws Exception{
+        when(doctorDao.findDoctorById(DOC_ID)).thenReturn(Optional.of(doctor));
+
+        Doctor doctorFound = doctorServiceImpl.findDoctorById(DOC_ID.toString());
+
+        assertEquals(DOC_ID, doctorFound.getId());
+    }
+
+    @Test
+    public void testGetFutureAppointments() {
+        appointment1 = Mockito.mock(Appointment.class);
+        appointment2 = Mockito.mock(Appointment.class);
+        List<Appointment> appointments = new LinkedList<>();
+        appointments.add(0, appointment1);
+        appointments.add(1, appointment2);
+        when(doctorDao.getFutureAppointments(doctor)).thenReturn(appointments);
+
+        List<Appointment> appointmentsReturned = doctorServiceImpl.getFutureAppointments(doctor);
+
+        assertEquals(APPOINTMENT_QUANTITY, appointments.size());
+        assertEquals(appointment1, appointmentsReturned.get(0));
+        assertEquals(appointment2, appointmentsReturned.get(1));
+    }
+
+    @Test
+    public void testGetHistoricalAppointments() {
+        appointmentHistorical1 = Mockito.mock(Appointment.class);
+        appointmentHistorical1 = Mockito.mock(Appointment.class);
+        List<Appointment> appointments = new LinkedList<>();
+        appointments.add(0, appointmentHistorical1);
+        appointments.add(1, appointmentHistorical2);
+        when(doctorDao.getFutureAppointments(doctor)).thenReturn(appointments);
+
+        List<Appointment> appointmentsReturned = doctorServiceImpl.getFutureAppointments(doctor);
+
+        assertEquals(APPOINTMENT_QUANTITY, appointments.size());
+        assertEquals(appointmentHistorical1, appointmentsReturned.get(0));
+        assertEquals(appointmentHistorical2, appointmentsReturned.get(1));
+    }
+
+    @Test
+    public void testGetReviews(){
+        review = Mockito.mock(Review.class);
+        review2 = Mockito.mock(Review.class);
+        List<Review> reviews = new LinkedList<>();
+        reviews.add(0, review);
+        reviews.add(1, review2);
+        when(doctorDao.getReviews(doctor)).thenReturn(reviews);
+
+        List<Review> reviewsReturned = doctorServiceImpl.getReviews(doctor);
+
+        assertEquals(REVIEWS_QUANTITY, reviewsReturned.size());
+        assertEquals(review, reviewsReturned.get(0));
+        assertEquals(review2, reviewsReturned.get(1));
+    }
 }

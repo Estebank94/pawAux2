@@ -34,13 +34,13 @@ public class PatientPanelController {
     private static final Logger LOGGER = LoggerFactory.getLogger(PatientPanelController.class);
 
     @Autowired
-    PatientService patientService;
+    private PatientService patientService;
 
     @Autowired
-    AppointmentService appointmentService;
+    private AppointmentService appointmentService;
 
     @Autowired
-    DoctorService doctorService;
+    private DoctorService doctorService;
 
     @RequestMapping("/patientPanel")
     public ModelAndView patientPanel() throws NotCreatePatientException, NotValidPatientIdException, NotValidEmailException, NotFoundPacientException {

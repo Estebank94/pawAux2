@@ -67,7 +67,7 @@ h3
 p
 {
   font-size: 16px;
-  color: #56595E;
+  color: #212529;
   margin-bottom: 1rem;
 }
 
@@ -148,6 +148,7 @@ p
 .btn-primary.custom-btn {
   background-color: #257CBF;
   border-color: #257CBF;
+  cursor: pointer;
 }
 
 .btn-primary.custom-btn:hover {
@@ -569,6 +570,7 @@ a {
   color: #FFF;
   background-color: #257cbf;
   margin-right: 4px;
+  margin-bottom: 4px;
   cursor: pointer;
 }
 
@@ -576,3 +578,19 @@ a {
   cursor: pointer;
 }
 
+.w-text-color {
+  color: #257cbf !important;
+}
+
+.w-text-light {
+  color: #888889;
+}
+
+.w-star {
+  color: #FDD017;
+}
+
+.w-list-title {
+  font-size: 18px;
+  color: #212529;
+}

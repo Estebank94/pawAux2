@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
-/**
- * Created by estebankramer on 04/11/2018.
- */
+
 @Entity
 public class Favorite {
 

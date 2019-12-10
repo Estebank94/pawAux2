@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class InsuranceServiceImpl implements InsuranceService {
 
     @Autowired
-    InsuranceDao insuranceDao;
+    private InsuranceDao insuranceDao;
 
 
     @Override

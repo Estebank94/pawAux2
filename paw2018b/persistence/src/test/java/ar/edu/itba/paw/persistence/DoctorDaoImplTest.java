@@ -68,8 +68,9 @@ public class DoctorDaoImplTest {
 
     @After
     public void tearDown(){
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "workinghour", "medicalCare", "doctorSpecialty", "doctor", "insurancePlan", "insurance",
-                "Specialty", "review", "information");
+        JdbcTestUtils.deleteFromTables(jdbcTemplate, "favorite", "userinfo", "verification", "workinghour",
+                "review", "information", "appointment", "medicalCare", "doctorSpecialty", "doctor", "insurancePlan",
+                "insurance", "Specialty", "patient");
     }
 
     @Test
