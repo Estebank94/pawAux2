@@ -479,8 +479,8 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
     @Override
     public List<Review> getReviews(Doctor doctor) {
-        final TypedQuery<Review> query = em.createQuery("Select doctor.reviews FROM Doctor doctor where doctor = :doctor", Review.class);
-        query.setParameter("doctor", doctor);
+        final TypedQuery<Review> query = em.createQuery("Select r FROM Doctor d join d.reviews r where r.doctor.id = :id", Review.class);
+        query.setParameter("id", doctor.getId());
         final List<Review> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
     }
