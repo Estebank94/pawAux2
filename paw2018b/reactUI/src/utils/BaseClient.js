@@ -12,12 +12,14 @@ class BaseClient {
     }
 
     const headers = {
-      'X-AUTH-TOKEN': token
+      'X-AUTH-TOKEN': token,
+      'Content-Type': 'application/json'
     };
 
     // Create axios instance
     this.instance = axios.create({
       baseURL: 'http://localhost:8080/api/v1',
+      timeout: 60000,
       headers,
     });
 
@@ -37,7 +39,7 @@ class BaseClient {
         }
         if (errorResponse.status === 500) {
           // dispatch({type: LOGOUT});
-          props.history.push('500');
+          props.history.push('/error/500');
         }
         return Promise.reject(error);
       });

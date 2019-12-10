@@ -28,7 +28,7 @@ class ApiClient extends BaseClient {
   }
 
   post(url, data = {}, conf = {}) {
-    return this.instance.post(url, queryString.stringify(data), conf)
+    return this.instance.post(url, data, conf)
       .then(response => Promise.resolve(response))
       .catch(error => Promise.reject(error));
   }
