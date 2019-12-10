@@ -868,14 +868,14 @@ public class DoctorApiController extends BaseApiController {
 
         Patient patient = null;
         try {
-        } catch (NotFoundPacientException | NotValidEmailException e) {
             patient = userDetailsService.getLoggedUser();
+        } catch (NotFoundPacientException | NotValidEmailException e) {
             return Response.status(Response.Status.CONFLICT)
                     .entity(errorMessageToJSON("Patient not found")).build();
         }
 
-        try{
         Doctor doctor = null;
+        try{
             doctor = doctorService.findDoctorById(id + "");
         }catch (NotFoundDoctorException | NotValidIDException e){
             return Response.status(Response.Status.CONFLICT)
@@ -890,10 +890,10 @@ public class DoctorApiController extends BaseApiController {
                         .entity(errorMessageToJSON("Could not add favorite")).build();
             }catch (FavoriteExistsException e){
                 return Response.status(Response.Status.CONFLICT)
-        }
                         .entity(errorMessageToJSON("Could not add favorite. It is already on your favorites"))
                         .build();
             }
+        }
 
         final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(doctor.getId())).build();
 
