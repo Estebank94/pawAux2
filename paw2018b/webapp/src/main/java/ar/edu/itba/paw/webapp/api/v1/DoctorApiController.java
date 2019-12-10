@@ -623,10 +623,14 @@ public class DoctorApiController extends BaseApiController {
             appointmentCreated = appointmentService.createAppointment(appointmentForm.getDay(), appointmentForm.getTime(), patient, doctor);
         } catch (RepeatedAppointmentException | NotValidDoctorIdException |
                 NotValidAppointmentDayException | NotValidAppointmentTimeException |
-                NotValidPatientIdException | NotCreatedAppointmentException | NotFoundDoctorException e) {
+                NotValidPatientIdException | NotCreatedAppointmentException | NotValidAppointment e) {
             return Response
                     .status(Response.Status.BAD_REQUEST)
                     .entity(errorMessageToJSON(e.getMessage()))
+                    .build();
+        } catch (NotFoundDoctorException e){
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
                     .build();
         }
         if (appointmentCreated == null){
@@ -761,9 +765,9 @@ public class DoctorApiController extends BaseApiController {
         }
         LOGGER.debug("Appointment doctor {}", doctor.getId());
 
-        Boolean appointmentRemoved;
+        Appointment appointmentRemoved;
         try {
-            appointmentRemoved = appointmentService.cancelAppointment(appointmentForm.getDay(), appointmentForm.getTime(), patient, doctor);
+            appointmentRemoved = appointmentService.cancelAppointment(appointmentDate.toString(), appointmentTime.toString(), patient, doctor);
         } catch ( NotFoundAppointmentException e) {
             return Response
                     .status(Response.Status.NOT_FOUND)
@@ -772,18 +776,17 @@ public class DoctorApiController extends BaseApiController {
         } catch (Exception e) {
             return Response
                     .status(Response.Status.BAD_REQUEST)
-                    .entity(errorMessageToJSON("Invalid Appointment"))
+                    .entity(errorMessageToJSON(e.getMessage()))
                     .build();
         }
-
-        if (!appointmentRemoved){
+        if (appointmentRemoved == null){
             return Response
-                    .status(Response.Status.BAD_REQUEST)
-                    .entity(errorMessageToJSON("Appointment not removed"))
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Appointment not found"))
                     .build();
         }
 
-        return Response.ok(jsonField("removed", Boolean.TRUE.toString())).build();
+        return Response.ok(new PatientAppointmentDTO(appointmentRemoved)).build();
     }
 
     @PUT

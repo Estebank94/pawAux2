@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.models;
 
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.util.*;
 
 @Entity
 @Table(name="appointment")
+@DynamicUpdate
 public class Appointment implements Comparable<Appointment>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +38,7 @@ public class Appointment implements Comparable<Appointment>{
         this.appointmentTime = appointmentTime;
         this.patient = patient;
         this.doctor = doctor;
-        this.appointmentCancelled = false;
+        this.appointmentCancelled = Boolean.FALSE;
     }
 
     public Appointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor, Boolean appointmentCancelled) {
@@ -50,14 +52,14 @@ public class Appointment implements Comparable<Appointment>{
     public Appointment(String appointmentDay, String appointmentTime) {
         this.appointmentDay = appointmentDay;
         this.appointmentTime = appointmentTime;
-        this.appointmentCancelled = false;
+        this.appointmentCancelled = Boolean.FALSE;
     }
 
     public Appointment(String appointmentDay, String appointmentTime, Patient patient) {
         this.appointmentDay = appointmentDay;
         this.appointmentTime = appointmentTime;
         this.patient = patient;
-        this.appointmentCancelled = false;
+        this.appointmentCancelled = Boolean.FALSE;
     }
 
     @Autowired

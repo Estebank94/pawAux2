@@ -4,6 +4,8 @@ import ar.edu.itba.paw.interfaces.persistance.AppointmentDao;
 import ar.edu.itba.paw.models.Appointment;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Patient;
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +13,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -32,9 +36,9 @@ public class AppointmentHibernateDaoImpl implements AppointmentDao {
 
 
     @Override
-    public void cancelAppointment(Appointment appointment){
-        appointment.setAppointmentCancelled(true);
-        em.merge(appointment);
+    public Appointment cancelAppointment(Appointment appointment) {
+        appointment.setAppointmentCancelled(Boolean.TRUE);
+        return em.merge(appointment);
     }
 
     @Override
@@ -53,7 +57,7 @@ public class AppointmentHibernateDaoImpl implements AppointmentDao {
         query.setParameter("appointmentDay", appointmentDay);
         query.setParameter("appointmentTime", appointmentTime);
         query.setParameter("doctor", doctor);
-        query.setParameter("cancelled", false);
+        query.setParameter("cancelled", Boolean.TRUE);
         return Optional.ofNullable(query.getSingleResult());
     }
 
@@ -69,14 +73,27 @@ public class AppointmentHibernateDaoImpl implements AppointmentDao {
         query.setParameter("appointmentTime", appointmentTime);
         query.setParameter("patient", patient);
         query.setParameter("doctor", doctor);
-        query.setParameter("cancelled", false);
+        query.setParameter("cancelled", Boolean.FALSE);
         return Optional.ofNullable(query.getSingleResult());
     }
 
+    public List<Appointment> findAppointmentByTime(String appointmentDay, String appointmentTime, Doctor doctor){
+        final TypedQuery<Appointment> query = em.createQuery("from Appointment as a WHERE " +
+                "a.appointmentDay = :appointmentDay AND " +
+                "a.appointmentTime = :appointmentTime AND " +
+                "a.doctor = :doctor" ,Appointment.class);
+        query.setParameter("appointmentDay", appointmentDay);
+        query.setParameter("appointmentTime", appointmentTime);
+        query.setParameter("doctor", doctor);
+        List<Appointment> appointmentList = query.getResultList();
+        return appointmentList == null || appointmentList.isEmpty()? Collections.emptyList(): appointmentList;
+    }
+
     @Override
-    public void undoCancelAppointment(Appointment appointment) {
-        appointment.setAppointmentCancelled(false);
-        em.merge(appointment);
+    public Appointment undoCancelAppointment(Appointment appointment) {
+        appointment.setAppointmentCancelled(Boolean.FALSE);
+        Appointment  updatedAppointmnet = em.merge(appointment);
+        return updatedAppointmnet;
     }
 
     @Override
