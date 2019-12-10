@@ -1,100 +1,49 @@
-import axios from 'axios';
+import BaseClient from './BaseClient';
 import queryString from 'query-string';
 
-/**
- * Create a new Axios client instance
- * @see https://github.com/mzabriskie/axios#creating-an-instance
- */
-const getClient = (token = '') => {
 
-  const options = {
-    baseURL: 'http://localhost:8080/api/v1'
-  };
-
-  if (token) {
-    options.headers = {
-      'X-AUTH-TOKEN': {token},
-    };
-  }
-
-  const client = axios.create(options);
-
-  // Add a request interceptor
-  client.interceptors.request.use(
-    requestConfig => requestConfig,
-    (requestError) => {
-
-      return Promise.reject(requestError);
-    },
-  );
-
-  // Add a response interceptor
-  client.interceptors.response.use(
-    response => response,
-    (error) => {
-      // if (error.response.status >= 500) {
-      // }
-
-      return Promise.reject(error);
-    },
-  );
-
-  return client;
-};
-
-class ApiClient {
-  constructor(token = '') {
-    this.client = getClient(token);
-  }
-
+class ApiClient extends BaseClient {
   get(url, conf = {}) {
-    return this.client.get(url, conf)
+    return this.instance.get(url, conf)
       .then(response => Promise.resolve(response))
       .catch(error => Promise.reject(error));
   }
 
   delete(url, conf = {}) {
-    return this.client.delete(url, conf)
+    return this.instance.delete(url, conf)
       .then(response => Promise.resolve(response))
       .catch(error => Promise.reject(error));
   }
 
   head(url, conf = {}) {
-    return this.client.head(url, conf)
+    return this.instance.head(url, conf)
       .then(response => Promise.resolve(response))
       .catch(error => Promise.reject(error));
   }
 
   options(url, conf = {}) {
-    return this.client.options(url, conf)
+    return this.instance.options(url, conf)
       .then(response => Promise.resolve(response))
       .catch(error => Promise.reject(error));
   }
 
   post(url, data = {}, conf = {}) {
-    return this.client.post(url, queryString.stringify(data), conf)
+    return this.instance.post(url, queryString.stringify(data), conf)
       .then(response => Promise.resolve(response))
       .catch(error => Promise.reject(error));
   }
 
   put(url, data = {}, conf = {}) {
-    return this.client.put(url, data, conf)
+    return this.instance.put(url, data, conf)
       .then(response => Promise.resolve(response))
       .catch(error => Promise.reject(error));
   }
 
   patch(url, data = {}, conf = {}) {
-    return this.client.patch(url, data, conf)
+    return this.instance.patch(url, data, conf)
       .then(response => Promise.resolve(response))
       .catch(error => Promise.reject(error));
   }
 }
 
-export function get(url, conf = {}) {
-  return this.client.get(url, conf)
-    .then(response => Promise.resolve(response))
-    .catch(error => Promise.reject(error));
-}
-
-
-export { ApiClient };
+export { ApiClient }

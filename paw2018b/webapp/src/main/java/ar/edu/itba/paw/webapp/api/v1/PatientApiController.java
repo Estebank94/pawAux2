@@ -4,13 +4,8 @@ import ar.edu.itba.paw.interfaces.services.DoctorService;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.models.exceptions.NotCreatePatientException;
-import ar.edu.itba.paw.models.exceptions.NotFoundPacientException;
-import ar.edu.itba.paw.models.exceptions.NotValidEmailException;
-import ar.edu.itba.paw.models.exceptions.NotValidPatientIdException;
 import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
-import ar.edu.itba.paw.webapp.dto.doctor.DoctorPersonalDTO;
 import ar.edu.itba.paw.webapp.dto.patient.BasicPatientDTO;
 import ar.edu.itba.paw.webapp.dto.patient.PatientDTO;
 import ar.edu.itba.paw.webapp.dto.patient.PatientPersonalInformationDTO;
@@ -26,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.thymeleaf.TemplateEngine;
+
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -244,7 +240,7 @@ public class PatientApiController extends BaseApiController {
             futureAppointmentsDoctor = doctorService.getFutureAppointments(doctor);
             historicalAppointmentsDoctor = doctorService.getHistoricalAppointments(doctor);
             reviews = Collections.EMPTY_LIST;
-            // reviews = doctorService.getReviews(doctor);
+            reviews = doctorService.getReviews(doctor);
             return Response.ok(new PatientPersonalInformationDTO(historicalAppointments, futureAppointments, favorites,
                     futureAppointmentsDoctor, historicalAppointmentsDoctor, reviews)).build();
         }

@@ -1,67 +1,50 @@
 package ar.edu.itba.paw.webapp.api.v1;
 
 
-import ar.edu.itba.paw.interfaces.services.DoctorService;
-import ar.edu.itba.paw.interfaces.services.EmailService;
-import ar.edu.itba.paw.interfaces.services.FavoriteService;
-import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.models.exceptions.NotFoundDoctorException;
-import ar.edu.itba.paw.models.exceptions.NotValidIDException;
-import ar.edu.itba.paw.models.exceptions.NotValidPageException;
 import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
-import ar.edu.itba.paw.webapp.forms.BasicProfessionalForm;
-import ar.edu.itba.paw.webapp.forms.PersonalForm;
-
-import org.apache.commons.io.FilenameUtils;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
-
-import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
-
 import ar.edu.itba.paw.webapp.dto.appointment.PatientAppointmentDTO;
 import ar.edu.itba.paw.webapp.dto.doctor.DoctorDTO;
 import ar.edu.itba.paw.webapp.dto.doctor.DoctorListDTO;
 import ar.edu.itba.paw.webapp.dto.patient.PatientDTO;
 import ar.edu.itba.paw.webapp.dto.reviews.BasicReviewDTO;
 import ar.edu.itba.paw.webapp.dto.workingHours.WorkingHoursDTO;
-import ar.edu.itba.paw.webapp.forms.*;
-
-import org.slf4j.LoggerFactory;
+import ar.edu.itba.paw.webapp.forms.AppointmentForm;
+import ar.edu.itba.paw.webapp.forms.BasicProfessionalForm;
+import ar.edu.itba.paw.webapp.forms.PersonalForm;
+import ar.edu.itba.paw.webapp.forms.ReviewForm;
+import org.apache.commons.io.FilenameUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.thymeleaf.TemplateEngine;
 
-
 import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
-import javax.json.Json;
 import javax.validation.Valid;
 import javax.ws.rs.*;
-
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
-import java.util.List;
 
 
 @Path("v1/doctor")
@@ -125,7 +108,26 @@ public class DoctorApiController extends BaseApiController {
         }
         return Response.status(Response.Status.NOT_FOUND).build();
     }
-
+/*
+    @GET
+    @Path("/{id}/reviews-history")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public Response getReviews(@PathParam("id") final int id){
+        Doctor doctor = null;
+        try {
+            doctor = doctorService.findDoctorById(id + "");
+        } catch (NotFoundDoctorException | NotValidIDException e) {
+            Response.status(Response.Status.NOT_FOUND).build();
+            // e.printStackTrace();
+        }
+        if (doctor != null){
+            List<Review> reviewList = doctorService.getReviews(doctor);
+            LOGGER.info("Review List");
+            return Response.ok(new ReviewListDTO(reviewList)).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+*/
     @GET
     @Path("/list")
     @Produces(value = {MediaType.APPLICATION_JSON})
