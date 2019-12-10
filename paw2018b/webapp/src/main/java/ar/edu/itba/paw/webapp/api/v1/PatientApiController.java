@@ -170,7 +170,13 @@ public class PatientApiController extends BaseApiController {
     @Produces(value = { MediaType.APPLICATION_JSON, })
     public Response confirmUser(@QueryParam("token") @DefaultValue("") String token) throws VerificationNotFoundException {
 
-        final Verification verification = patientService.findToken(token).orElseThrow(VerificationNotFoundException::new);
+        Verification verification = null;
+        try{
+            verification = patientService.findToken(token).orElseThrow(VerificationNotFoundException::new);
+        } catch (VerificationNotFoundException e){
+            return Response.status(Response.Status.CONFLICT)
+                    .entity(errorMessageToJSON("You have already verified your email")).build();
+        }
         final Patient patient = verification.getPatient();
         patientService.enableUser(patient);
 

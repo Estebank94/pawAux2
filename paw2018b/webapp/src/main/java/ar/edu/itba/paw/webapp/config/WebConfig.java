@@ -78,7 +78,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		return "http://localhost:8081/api/v1/patient/";
 
 		//Deploy
-//		return "http://pawserver.it.itba.edu.ar/paw-2018b-08/#/";
+//		return "http://pawserver.it.itba.edu.ar/paw-2018b-08/confirm/";
 	}
 
 	@Bean
