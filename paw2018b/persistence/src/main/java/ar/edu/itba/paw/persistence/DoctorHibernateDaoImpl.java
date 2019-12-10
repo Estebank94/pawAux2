@@ -14,6 +14,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -449,10 +450,12 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
 
     @Override
     public List<Appointment> getFutureAppointments(Doctor doctor) {
+        String now = LocalTime.now().toString();
         String today = LocalDate.now().toString();
-        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay >= :day AND ap.doctor = :doctor AND ap.appointmentCancelled = :cancel", Appointment.class);
+        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ((ap.appointmentDay = :day AND ap.appointmentTime >= :time) OR (ap.appointmentDay > :day)) AND ap.doctor = :doctor AND ap.appointmentCancelled = :cancel", Appointment.class);
         query.setParameter("doctor", doctor);
         query.setParameter("day", today);
+        query.setParameter("time", now);
         query.setParameter("cancel", false);
         final List<Appointment> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
@@ -461,9 +464,11 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     @Override
     public List<Appointment> getHistoricalAppointments(Doctor doctor) {
         String today = LocalDate.now().toString();
-        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ap.appointmentDay < :day AND ap.doctor = :doctor AND ap.appointmentCancelled = :cancel", Appointment.class);
+        String now = LocalTime.now().toString();
+        final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap where ((ap.appointmentDay < :day)  OR (ap.appointmentDay = :day AND ap.appointmentTime < :time)) AND ap.doctor = :doctor AND ap.appointmentCancelled = :cancel", Appointment.class);
         query.setParameter("doctor", doctor);
         query.setParameter("day", today);
+        query.setParameter("time", now);
         query.setParameter("cancel", false);
         final List<Appointment> list = query.getResultList();
         for (Appointment ap: list){
