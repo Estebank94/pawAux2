@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.webapp.dto.doctor;
 import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Specialty;
+import ar.edu.itba.paw.models.WorkingHours;
 import ar.edu.itba.paw.webapp.dto.insurance.InsuranceDTO;
+import ar.edu.itba.paw.webapp.dto.workingHours.WorkingHoursDTO;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -21,7 +23,8 @@ public class DoctorDTO {
     private List<String> specialties;
     // private List<InsurancePlanDTO> inssurancePlans;
     private List<InsuranceDTO> insurances;
-     private URI uri;
+    private List<WorkingHoursDTO> workingHours;
+    private URI uri;
 
     public DoctorDTO(Doctor doctor, URI baseURI){
         this.id = doctor.getId();
@@ -31,6 +34,7 @@ public class DoctorDTO {
         this.address = doctor.getAddress();
         this.phoneNumber = doctor.getPhoneNumber();
         this.uri = baseURI.resolve(String.valueOf(this.id));
+
     }
 
     public DoctorDTO(){
@@ -57,6 +61,12 @@ public class DoctorDTO {
             this.description = new DescriptionDTO(doctor.getDescription());
         }
 
+        this.workingHours = new ArrayList<>();
+        if(doctor.getWorkingHours()!=null){
+            for(WorkingHours wh : doctor.getWorkingHours()){
+                this.workingHours.add(new WorkingHoursDTO(wh));
+            }
+        }
     }
 
     public Integer getId() {
@@ -154,6 +164,14 @@ public class DoctorDTO {
 
     public void setInsurances(List<InsuranceDTO> insurances) {
         this.insurances = insurances;
+    }
+
+    public List<WorkingHoursDTO> getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(List<WorkingHoursDTO> workingHours) {
+        this.workingHours = workingHours;
     }
 
     @Override

@@ -80,7 +80,6 @@ public class DoctorApiController extends BaseApiController {
     private EmailService emailService;
 
     @Autowired
-
     private FavoriteService favoriteService;
 
     private AppointmentService appointmentService;
