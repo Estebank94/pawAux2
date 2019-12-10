@@ -198,6 +198,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional
     public Patient findPatientByEmail(String email) throws NotValidPatientIdException, NotCreatePatientException, NotFoundPacientException, NotValidEmailException {
         LOGGER.debug("PatientServiceImpl: findPatientByEmail(String email)");
         if (email == null){
@@ -229,6 +230,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional
     public Verification createToken(final Patient patient) {
         return patientDao.createToken(patient);
     }

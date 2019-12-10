@@ -303,11 +303,11 @@ public class DoctorApiController extends BaseApiController {
     @Path("/registerProfessional")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response createProfessionalUser(/* @FormDataParam("file") InputStream uploadedInputStream,
-                                            @FormDataParam("file") FormDataContentDisposition fileDetail*/
-                                            @Valid final BasicProfessionalForm professionalForm)
+    public Response createProfessionalUser(@Valid final BasicProfessionalForm professionalForm)
                                             throws IOException {
 
+        LOGGER.debug("createProfessionalUser");
+        System.out.println("hola");
         Patient patient = null;
         try {
             patient = userDetailsService.getLoggedUser();
@@ -315,12 +315,14 @@ public class DoctorApiController extends BaseApiController {
             return Response.status(Response.Status.CONFLICT)
                     .entity(errorMessageToJSON("Doctor/Patient not found")).build();
         }
+        LOGGER.debug("Found Patient: " + patient);
 
         Doctor doctor = patient.getDoctor();
         if (doctor == null) {
             return Response.status(Response.Status.CONFLICT)
                     .entity(errorMessageToJSON("Doctor is NULL")).build();
         }
+        LOGGER.debug("Found Doctor: " + doctor);
 
         /* Avatar */
 //
