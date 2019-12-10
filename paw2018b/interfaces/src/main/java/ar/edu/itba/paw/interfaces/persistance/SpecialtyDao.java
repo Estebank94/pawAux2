@@ -1,10 +1,8 @@
 package ar.edu.itba.paw.interfaces.persistance;
 
-import ar.edu.itba.paw.models.Doctor;
 import ar.edu.itba.paw.models.Specialty;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 public interface SpecialtyDao {
@@ -17,8 +15,4 @@ public interface SpecialtyDao {
     Specialty findSpecialty(Specialty specialty);
 
     Specialty findSpecialtyByName(String specialty);
-
-    void addDoctorSpecialty(Doctor doctor, Specialty specialty);
-
-
 }
