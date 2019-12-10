@@ -42,29 +42,18 @@ export const onSigninError = error => {
   }
 }
 
-export const doLogin = (credentials) => {
-  console.log('DO LOGIN')
+export const doLogin = (credentials, props = {}) => {
   return async (dispatch) => {
     dispatch(doSignIn());
     let onLogin = fetchApi('/patient/login', 'XPOST', credentials).then((auth) => {
-      console.log('AUTH', auth);
       if (auth !== undefined && auth !== null) {
-        // const API = new ApiClient(auth);
-        // API.get('/patient/me').then((data => {
-        //   console.log('login', data)
-          // dispatch(onSigninSuccess({auth}))
-        // }))
         const user = {
-          "appointments": [],
-          "email": "prueba0001@gmail.com",
-          "favorites": [],
-          "firstName": "Esteban",
-          "id": 1,
-          "lastName": "Kramer",
-          "password": "$2a$10$QX42GFlLX7P8UNz23LnSle3469xrjRBIPvemcq1qZmGIFyauEOWuK",
-          "phoneNumber": "1140283690"
+          token: auth
         }
-        dispatch(onSigninSuccess({auth, user}))
+        const API = new ApiClient({...props, user });
+        API.get('/patient/me').then((response => {
+          dispatch(onSigninSuccess({auth, user: response.data}))
+        }))
         return { status: 'authenticated', message: auth};
       } else {
         dispatch(onSigninError())
