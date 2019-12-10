@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import java.sql.SQLException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,53 +32,117 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Transactional/*(rollbackFor= SQLException.class)*/
     @Override
-    public Appointment createAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) throws RepeatedAppointmentException, NotCreatedAppointmentException, NotValidDoctorIdException, NotValidAppointmentDayException, NotValidAppointmentTimeException, NotFoundDoctorException, NotValidPatientIdException {
+    public Appointment createAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) throws RepeatedAppointmentException, NotCreatedAppointmentException, NotValidDoctorIdException, NotValidAppointmentDayException, NotValidAppointmentTimeException, NotFoundDoctorException, NotValidPatientIdException, NotValidAppointment {
         LOGGER.debug("AppointmentServiceImpl: CreateAppointment");
 
-        Appointment appointment = null;
-        Optional<Appointment> app = Optional.empty();
-        try{
-            app = appointmentDao.findAppointment(appointmentDay, appointmentTime, patient, doctor);
-        }catch (Exception e){
-            LOGGER.debug("No appointment");
-        }
-        if (app.isPresent()){
-            appointmentDao.undoCancelAppointment(app.get());
-            return app.get();
+        List<Appointment> patientAppointments = appointmentDao.findAppointmentByPatient(appointmentDay, appointmentTime, patient);
+        for (Appointment pap : patientAppointments){
+            if (!pap.getAppointmentCancelled()) {
+                if (pap.getDoctor().getId() != doctor.getId()){
+                    LOGGER.debug("Patient already has an appointment that day");
+                    throw new NotValidAppointment("Patient already has an appointment at that day at that time");
+                } else {
+                    LOGGER.debug("Appointment already Exists");
+                    throw new RepeatedAppointmentException("Appointment already exits");
+                }
+            }
         }
 
+        List<Appointment> appointmentList = Collections.EMPTY_LIST;
+        try {
+            appointmentList = appointmentDao.findAppointmentByTime(appointmentDay, appointmentTime, doctor);
+            LOGGER.debug("AppointmentList count {}", appointmentList.size());
+        } catch (Exception e) {
+            LOGGER.debug("No appointment");
+            throw new NotValidAppointment("An error occurs while finding appointments");
+        }
+
+
+        for (Appointment ap: appointmentList){
+            if (!ap.getAppointmentCancelled()){
+                if (ap.getPatient().getId() == patient.getId()){
+                    throw new NotValidAppointment("Appointment already exits");
+                    //ap.setAppointmentCancelled(Boolean.FALSE);
+                    //return ap;
+                } else {
+                    LOGGER.debug("The doctor has an appointment with another patient at that time");
+                    throw new NotValidAppointment("The doctor has an appointment with another patient at that time");
+                }
+            } else if (ap.getPatient().getId() == patient.getId()){
+                LOGGER.debug("Appointment found. Updating cancelled");
+                ap.setAppointmentCancelled(Boolean.FALSE);
+                return ap;
+            }
+        }
+
+        Appointment appointment;
+        LOGGER.debug("There is no active appointment at that dayTime");
+        /* If reach this point is because no one has an active appointment at that time*/
         try{
-           appointment =  appointmentDao.createAppointment(appointmentDay, appointmentTime, patient, doctor);
+            LOGGER.debug("Creating Appointment");
+            appointment =  appointmentDao.createAppointment(appointmentDay, appointmentTime, patient, doctor);
+            return appointment;
         } catch (RepeatedAppointmentException e) {
-            throw new RepeatedAppointmentException();
+            LOGGER.debug("Appointment already Exists");
+            throw new RepeatedAppointmentException("Appointment already exits");
         } catch (Exception e) {
             throw new NotCreatedAppointmentException();
         }
-        return appointment;
     }
 
-    @Transactional(rollbackFor = SQLException.class)
+    @Transactional
     @Override
-    public Boolean cancelAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor){
+    public Appointment cancelAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) throws NotFoundAppointmentException, NotValidCancelAppointment {
         LOGGER.debug("AppointmentServiceImpl: cancelAppointment");
         Boolean ans = true;
 
         Appointment appointment = null;
         Optional<Appointment> app = Optional.empty();
+        LOGGER.debug("Looking for doctor appointment at {} - {}", appointmentDay, appointmentTime);
+        List<Appointment> appointmentList = Collections.EMPTY_LIST;
         try {
-            app = appointmentDao.findAppointment(appointmentDay, appointmentTime, patient, doctor);
+             appointmentList = appointmentDao.findAppointmentByTime(appointmentDay, appointmentTime, doctor);
+            LOGGER.debug("Found {} appointments", appointmentList.size());
         } catch (Exception e){
-            ans = false;
+            LOGGER.debug("Appointment not found. An error occurs");
+            throw new NotFoundAppointmentException();
         }
-        try {
-            if (ans){
-                appointmentDao.cancelAppointment(app.get());
+
+        LOGGER.debug("Appointment patient {}", appointmentList.get(0).getPatient().getId());
+        LOGGER.debug("Appointment id {}", appointmentList.get(0).getId());
+        LOGGER.debug("Appointmnet cancelled {}", appointmentList.get(0).getAppointmentCancelled());
+
+
+        for (Appointment ap: appointmentList){
+            if (ap.getPatient().getPatientId() == patient.getId() && !ap.getAppointmentCancelled()){
+                LOGGER.debug("Cancelling appointment. ");
+                ap.setAppointmentCancelled(Boolean.TRUE);
+                return ap;
+                //return appointmentDao.cancelAppointment(app.get());
             }
-        }catch (Exception e) {
-            ans = false;
         }
-        return ans;
+        throw new NotFoundAppointmentException("Appointment not found");
+        /*
+        try {
+            app = appointmentDao.findActiveAppointment(appointmentDay, appointmentTime, doctor, patient);
+        } catch (Exception e){
+            LOGGER.debug("Appointment not found. An error occurs");
+            throw new NotFoundAppointmentException();
+        }
+
+        if (app.isPresent()){
+            LOGGER.debug("Cancelling appointment. ");
+            try {
+                appointmentDao.cancelAppointment(app.get());
+                return true;
+            } catch (Exception e){
+                LOGGER.debug("An error while cancelling appointment");
+            }
+        }
+        throw new  NotValidCancelAppointment("Appointment not found");
+         */
     }
+
 
     @Override
     public Appointment findAppointmentById(Integer id) throws NotFoundAppointmentException {

@@ -27,6 +27,7 @@ import java.util.UUID;
 @Repository
 public class PatientHibernateDaoImpl implements PatientDao {
 
+    @PersistenceContext
     @PersistenceContext /*(type = PersistenceContextType.EXTENDED)*/
     private EntityManager em;
 
@@ -73,7 +74,9 @@ public class PatientHibernateDaoImpl implements PatientDao {
             Hibernate.initialize(patient);
             if (patient.getDoctor() != null) {
                 Hibernate.initialize(patient.getDoctor());
-                Hibernate.initialize(patient.getDoctor().getReviews());
+                if (patient.getDoctor().getReviews() != null){
+                    Hibernate.initialize(patient.getDoctor().getReviews());
+                }
             }
         }
         //return Optional.ofNullable(em.find(Patient.class, id));
