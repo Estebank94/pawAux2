@@ -130,11 +130,11 @@ public class PatientHibernateDaoImpl implements PatientDao {
         String today = LocalDate.now().toString();
         String now = LocalTime.now().toString();
         final TypedQuery<Appointment> query = em.createQuery("FROM Appointment ap " +
-                "where ((ap.appointmentDay = :day AND ap.appointmentTime >= :time) OR (ap.appoitmentDay > :day))  " +
+                "where ((ap.appointmentDay = :day AND ap.appointmentTime >= :time) OR (ap.appointmentDay > :day))  " +
                 "AND ap.patient = :patient AND ap.appointmentCancelled = :cancel", Appointment.class);
         query.setParameter("patient", patient);
         query.setParameter("day", today);
-        query.setParameter("now", now)
+        query.setParameter("time", now);
         query.setParameter("cancel", false);
         final List<Appointment> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
@@ -148,15 +148,15 @@ public class PatientHibernateDaoImpl implements PatientDao {
         final TypedQuery<Appointment> query;
         if (patient.getDoctor() != null){
             query = em.createQuery("FROM Appointment ap " +
-                    "where ((ap.appointmentDay < :day)  OR (ap.appointmentDay = :day AND ap.appointmentTime < :now)) " +
+                    "where ((ap.appointmentDay < :day)  OR (ap.appointmentDay = :day AND ap.appointmentTime < :time)) " +
                     "AND ap.patient = :patient AND ap.appointmentCancelled = :cancel AND ap.doctor !=:doctor", Appointment.class);
             query.setParameter("doctor", patient.getDoctor());
         } else {
-            query = em.createQuery("FROM Appointment ap where (ap.appointmentDay < :day  OR (ap.appointmentDay = :day AND ap.appointmentTime < :now)) AND ap.patient = :patient AND ap.appointmentCancelled = :cancel", Appointment.class);
+            query = em.createQuery("FROM Appointment ap where (ap.appointmentDay < :day  OR (ap.appointmentDay = :day AND ap.appointmentTime < :time)) AND ap.patient = :patient AND ap.appointmentCancelled = :cancel", Appointment.class);
         }
         query.setParameter("patient", patient);
         query.setParameter("day", today);
-        query.setParameter("now", now);
+        query.setParameter("time", now);
         query.setParameter("cancel", false);
         final List<Appointment> list = query.getResultList();
         for (Appointment ap: list){
