@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Specialty;
 import ar.edu.itba.paw.models.WorkingHours;
 import ar.edu.itba.paw.webapp.dto.insurance.InsuranceDTO;
 import ar.edu.itba.paw.webapp.dto.workingHours.WorkingHoursDTO;
+import org.hibernate.Hibernate;
 
 import java.net.URI;
 import java.util.ArrayList;
