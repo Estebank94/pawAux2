@@ -19,6 +19,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.thymeleaf.TemplateEngine;
 
@@ -180,6 +181,8 @@ public class PatientApiController extends BaseApiController {
         Authentication authentication = new UsernamePasswordAuthenticationToken(patient.getEmail(), patient.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(patient.getId())).build();
 
         return Response.created(uri).entity(new PatientDTO(patient, buildBaseURI(uriInfo))).build();
@@ -198,7 +201,7 @@ public class PatientApiController extends BaseApiController {
                     .build();
         }
 
-        return Response.ok(new BasicPatientDTO(patient)).build();
+        return Response.ok(new PatientDTO(patient)).build();
     }
 
     @GET

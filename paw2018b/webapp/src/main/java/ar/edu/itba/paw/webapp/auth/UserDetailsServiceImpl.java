@@ -59,8 +59,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 
     public Patient getLoggedUser() throws NotFoundPacientException, NotValidEmailException {
-        String hola = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        LOGGER.debug("HOLA!! : " + hola);
 
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
