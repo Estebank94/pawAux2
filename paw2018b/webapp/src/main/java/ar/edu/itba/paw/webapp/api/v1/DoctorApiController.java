@@ -12,6 +12,7 @@ import ar.edu.itba.paw.webapp.dto.doctor.DoctorDTO;
 import ar.edu.itba.paw.webapp.dto.doctor.DoctorListDTO;
 import ar.edu.itba.paw.webapp.dto.patient.PatientDTO;
 import ar.edu.itba.paw.webapp.dto.reviews.BasicReviewDTO;
+import ar.edu.itba.paw.webapp.dto.reviews.ReviewListDTO;
 import ar.edu.itba.paw.webapp.dto.workingHours.WorkingHoursDTO;
 import ar.edu.itba.paw.webapp.forms.AppointmentForm;
 import ar.edu.itba.paw.webapp.forms.BasicProfessionalForm;
@@ -110,9 +111,9 @@ public class DoctorApiController extends BaseApiController {
         }
         return Response.status(Response.Status.NOT_FOUND).build();
     }
-/*
+
     @GET
-    @Path("/{id}/reviews-history")
+    @Path("/{id}/reviews")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getReviews(@PathParam("id") final int id){
         Doctor doctor = null;
@@ -129,7 +130,7 @@ public class DoctorApiController extends BaseApiController {
         }
         return Response.status(Response.Status.NOT_FOUND).build();
     }
-*/
+    
     @GET
     @Path("/list")
     @Produces(value = {MediaType.APPLICATION_JSON})

@@ -612,15 +612,3 @@ a {
 .favorite-card:hover .doctor-name {
   color: #257CBF;
 }
-
-.react-time-picker__wrapper,
-.react-date-picker__wrapper {
-  border-radius: 5px;
-  border-color: #ced4da !important;
-  padding: 5px !important;
-  min-width: 218px;
-}
-
-.react-calendar {
-  margin-top: 4px;
-}
