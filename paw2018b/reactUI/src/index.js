@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react'
 import './index.css';
 import App from './App';
-import './i18n';
 // import configureStore from './store/configureStore.js';
 import { store, persistor } from './store/configureStore.js';
 

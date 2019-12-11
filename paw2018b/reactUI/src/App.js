@@ -13,6 +13,7 @@ import Login from './pages/login'
 import Register from './pages/register'
 import Account from './pages/account'
 import Confirm from './pages/register/confirm'
+import Error from './pages/error'
 
 
 const App = props => {
@@ -34,7 +35,8 @@ const App = props => {
           <Route exact path="/login" component={Login} />
           <Route exact path="/register/:role" component={Register} />
           <Route exact path="/account" component={Account} />
-          <Route exact path="/confirm" component={Confirm} />
+          <Route exact path="/confirm/:token" component={Confirm} />
+          <Route exact path="/error/:error" component={Error} />
         </Fade>
         <FooterWithRouter />
       </div>

@@ -14,20 +14,6 @@ export const doSignOut = () => {
   }
 }
 
-export const onRegisterCompleted = data => {
-  return {
-    type: authTypes.REGISTER_COMPLETED,
-    data
-  }
-}
-
-export const onRegisterError = error => {
-  return {
-    type: authTypes.REGISTER_ERROR,
-    error
-  }
-}
-
 export const onSigninSuccess = data => {
   return {
     type: authTypes.SIGN_IN_SUCCESS,
@@ -48,9 +34,9 @@ export const doLogin = (credentials, props = {}) => {
     let onLogin = fetchApi('/patient/login', 'XPOST', credentials).then((auth) => {
       if (auth !== undefined && auth !== null) {
         const user = {
-          token: auth
+          auth
         }
-        const API = new ApiClient({...props, user });
+        const API = new ApiClient({ props, user });
         API.get('/patient/me').then((response => {
           dispatch(onSigninSuccess({auth, user: response.data}))
         }))
@@ -67,19 +53,6 @@ export const doLogin = (credentials, props = {}) => {
   }
 }
 
-export const doSignUp = (newUser) => {
-  return async (dispatch) => {
-    dispatch(doSignIn());
-    let onRegister = fetchApi("/users/signup", "POST", newUser).then((auth) => {
-      dispatch(onRegisterCompleted(auth))
-      return { status: 'authenticated', message: auth};
-    }).catch(err => {
-      dispatch(onRegisterError(err))
-      return { status: 'failed', message: err };
-    })
-    return onRegister;
-  }
-}
 
 
 export const doSingout = () => {

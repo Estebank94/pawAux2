@@ -40,14 +40,7 @@ class Login extends React.Component {
 
   manageAccess = async (auth) => {
     if (auth.status === 'failed') {
-      let messageError;
-      if (auth.message.response !== undefined) {
-        messageError = auth.message.response.data.message;
-      } else {
-        messageError = auth.message;
-      }
-      // this.setState({ authenticated: false });
-      alert(messageError.toString())
+      this.setState({ error: true });
     } else if (auth.status === 'authenticated') {
       this.props.history.push('/');
     }
@@ -57,7 +50,7 @@ class Login extends React.Component {
     const { email, password, rememberMe, emailError, passwordError, error} = this.state;
     return (
       <div className="centered body-background">
-        <Shake when={emailError || passwordError }>
+        <Shake when={emailError || passwordError || error }>
           <div className="login-card w-shadow" style={{ flex: 0.3}}>
             <h3 style={{marginBottom: 16 }}>Bienvenido</h3>
             <form>
