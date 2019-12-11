@@ -1,5 +1,5 @@
 import React from 'react'
-import { doSignOut } from '../../store/auth/actions'
+import { doSignout } from '../../store/auth/actions'
 import { connect } from 'react-redux';
 import { DropdownButton, Dropdown } from 'react-bootstrap';
 import SearchBar from '../home/searchBar';
@@ -10,7 +10,7 @@ class Navigation extends React.Component {
   }
 
   signOut() {
-    this.props.doSignOut();
+    this.props.doSignout();
     this.props.history.push(`/`);
   }
 
@@ -70,7 +70,7 @@ const mapStateToProps = state => ({
 
 function bindActions(dispatch) {
   return {
-    doSignOut: () => dispatch(doSignOut()),
+    doSignout: () => dispatch(doSignout()),
   };
 }
 
