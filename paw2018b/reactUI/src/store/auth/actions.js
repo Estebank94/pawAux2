@@ -38,6 +38,7 @@ export const doLogin = (credentials, props = {}) => {
         }
         const API = new ApiClient({ props, user });
         API.get('/patient/me').then((response => {
+          console.log('response', response);
           dispatch(onSigninSuccess({auth, user: response.data}))
         }))
         return { status: 'authenticated', message: auth};
@@ -55,7 +56,7 @@ export const doLogin = (credentials, props = {}) => {
 
 
 
-export const doSingout = () => {
+export const doSignout = () => {
   return async (dispatch) => {
     dispatch(doSignOut());
     return { status: 'un-authenticated'};
