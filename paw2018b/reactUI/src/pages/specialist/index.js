@@ -11,8 +11,12 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { connect } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
-import DatePicker from 'react-date-picker';
 import { ApiClient } from '../../utils/apiClient';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+
+import "react-datepicker/dist/react-datepicker.css";
+
 
 class Specialist extends React.Component {
     constructor(props){
@@ -25,9 +29,13 @@ class Specialist extends React.Component {
         favorite: null,
         review: '',
         modalVisible: false,
-        date: new Date(),
-        time: '',
-
+        date: null,
+        time: null,
+        excludedDates: null,
+        firstDate: null,
+        futures: null,
+        excludedTimes: null,
+        selectedWorkingHour: null
       }
     }
 
@@ -36,21 +44,42 @@ class Specialist extends React.Component {
       const { id } = this.props.match.params;
       this.API.get('/doctor/' + id)
         .then(response => {
-          this.setState({loading: false, specialist: response.data });
+          this.setState({ specialist: response.data });
+
+          const workingHours = response.data.workingHours;
+
+          const excludedDates = this.calculateExcludedDates(workingHours);
+          const firstDate = this.calculateFirstAvailableDate(workingHours);
+
+
+          this.API.get('/doctor/' + id +'/futures').then(async response => {
+            const time = this.calculateFirstTimeAvailable(response.data.futures, firstDate, workingHours);
+            const excludedTimes = this.calculateExcludedTimes(response.data.futures, firstDate);
+            const selectedWorkingHour = this.getWorkingHours(firstDate, workingHours)[0];
+            await this.setState({
+              futures: response.data.futures,
+              excludedDates,
+              date: firstDate,
+              firstDate,
+              time,
+              excludedTimes,
+              selectedWorkingHour
+            });
+
+            if(this.props.user) {
+              this.API.get('/patient/personal').then(response => {
+                const filtered = response.data.favorites.filter(favorite => favorite.doctor.id === parseInt(id));
+                if(filtered.length > 0){
+                  this.setState({ favorite: true })
+                } else {
+                  this.setState({ favorite: false })
+                }
+              })
+            }
+            this.setState({ loading: false })
+          })
         })
         .catch(() => this.setState({ loading: false, error: true }));
-
-      if(this.props.user) {
-        this.API.get('/patient/personal').then(response => {
-          const filtered = response.data.favorites.filter(favorite => favorite.doctor.id === parseInt(id));
-          if(filtered.length > 0){
-                this.setState({ favorite: true })
-          } else {
-              this.setState({ favorite: false })
-          }
-        })
-      }
-
     }
 
   handleChange(e) {
@@ -108,17 +137,102 @@ class Specialist extends React.Component {
     }));
   }
 
-  onChange = date => this.setState({ date })
+  onChange = async (date, name) => {
+    this.setState({ [name]: date })
+    if(name === 'date') {
+      await this.setState({
+        time: this.calculateFirstTimeAvailable(this.state.futures, date, this.state.specialist.workingHours),
+        excludedTimes: this.calculateExcludedTimes(this.state.futures, date),
+        selectedWorkingHour: this.getWorkingHours(date, this.state.specialist.workingHours)[0]
+      })
+    }
+  }
 
-  handleChange(e) {
-    e.preventDefault();
-    const { name, value } = e.target;
-    this.setState({[name]: value })
+  calculateExcludedDates = (workingHours) => {
+    let excludedDates = [];
+    for(let i = 0; i < 45; i++) {
+      const day = moment().add(i, 'days');
+      workingHours.map(wh => {
+        if(wh.dayOfWeek !== day.isoWeekday()){
+          excludedDates.push(day.toDate())
+        }})
+    }
+    return excludedDates;
+  }
+
+  calculateFirstAvailableDate = (workingHours) => {
+    let min = workingHours[0].dayOfWeek;
+    workingHours.map(wh => {
+      if(wh.dayOfWeek < min) {
+        min = wh.dayOfWeek;
+      }
+    })
+
+    min -= 1;
+
+
+    return moment().isoWeekday(min).toDate();
+  }
+
+  calculateExcludedTimes = (futures, selectedDate) => {
+    let excludedTimes = [];
+    futures.map(future => {
+      if(moment(selectedDate).isSame(future)) {
+        future.times.map(time => excludedTimes.push(moment(time).toDate()))
+      }
+    })
+    return excludedTimes;
+  }
+
+  getWorkingHours = (selectedDate, workingHours) => {
+    return workingHours.map(wh => {
+      if(wh.dayOfWeek === moment(selectedDate).isoWeekday()) {
+        return wh;
+      }})
+  }
+
+
+
+  calculateFirstTimeAvailable = (futures, selectedDate, workingHours) => {
+      console.log('params', selectedDate, workingHours)
+      const wh = this.getWorkingHours(selectedDate, workingHours);
+    console.log('work', wh)
+    let start = moment(this.getWorkingHours(selectedDate, workingHours)[0].startTime, 'HH:mm:ss');
+    if(start.isBefore(moment())) {
+      start = moment()
+    }
+
+    const remainder = 30 - (start.minute() % 30);
+    start = moment(start).add(remainder, "minutes");
+
+    if(futures) {
+      futures.map(future => {
+        if(moment(selectedDate).isSame(future)) {
+          future.times.map(time => {
+            if(!moment(time, 'HH:mm').isSame(start)) {
+              return start.toDate()
+            }
+          })
+        }
+        start.add(30, 'minutes');
+      })
+    }
+
+    return start.toDate()
+  }
+
+  addAppointment() {
+    const { id } = this.props.match.params;
+    const { date, time } = this.state;
+    const formattedDate = moment(date).format('YYYY-MM-DD')
+    const formattedTime = moment(time).format('HH:mm')
+    console.log('formated', formattedDate, formattedTime)
+    this.API.put(`doctor/${id}/appointment/add`, { day: formattedDate, time: formattedTime }).then(response => console.log(response));
   }
 
 
   render() {
-    const { error, loading, specialist, review, favorite, modalVisible } = this.state;
+    const { error, loading, specialist, review, favorite, modalVisible, time, excludedDates, firstDate, excludedTimes, date, selectedWorkingHour } = this.state;
 
     if(loading) {
       return (
@@ -140,16 +254,25 @@ class Specialist extends React.Component {
     }
 
     const { address, averageRating, district, firstName, id, insurances, lastName, phoneNumber, profilePicture,
-      reviews, sex, specialties, workingHours, time } = specialist;
-    console.log(specialist);
+      reviews, sex, specialties, workingHours } = specialist;
+
+
+    let min;
+    if(moment(selectedWorkingHour.startTime, 'HH:mm:ss').isBefore(moment())) {
+      min = moment().toDate();
+    } else {
+      min = moment(selectedWorkingHour.startTime, 'HH:mm:ss').toDate()
+    }
+    
+    const max = moment(selectedWorkingHour.finishTime, 'HH:mm:ss').toDate()
 
     return (
       <div className="body-background">
         <Modal
           show={modalVisible}
           onHide={() => this.toggleModal()}
-          dialogClassName="modal-90w"
-          aria-labelledby="example-custom-modal-styling-title"
+          size="lg"
+          centered
         >
           <Modal.Header closeButton>
             <Modal.Title id="example-custom-modal-styling-title">
@@ -160,29 +283,34 @@ class Specialist extends React.Component {
             <strong>Seleccionar una fecha y horario disponible</strong>
             <div className="row mt-2">
               <div className="col-sm-6">
-                <label>Fecha</label>
-                <div>
-                  <DatePicker
-                    onChange={this.onChange}
-                    value={this.state.date}
-                    minDate={new Date()}
-                    className="no-borders mb-3"
-                    calendarIcon={null}
-                    clearIcon={null}
-                  />
-                </div>
+                <label className="mr-2">Fecha</label>
+                <DatePicker
+                  selected={date}
+                  onChange={date => this.onChange(date, 'date')}
+                  excludeDates={excludedDates}
+                  minDate={firstDate}
+                  maxDate={moment(firstDate).add(45, 'days').toDate()}
+                />
               </div>
               <div className="col-sm-6 pl-0">
-                <label>Horario</label>
-                <select name="time" value={time} className={'form-control'} onChange={(e) =>this.handleChange(e)}>
-                  <option value="">Seleccionar un horario</option>
-                  <option value="10:00">10:00</option>
-                </select>
+                <label className="mr-2">Horario</label>
+                <DatePicker
+                  selected={time}
+                  onChange={date => this.onChange(date, 'time')}
+                  minTime={min}
+                  maxTime={max}
+                  excludeTimes={excludedTimes}
+                  showTimeSelect
+                  showTimeSelectOnly
+                  timeIntervals={30}
+                  timeCaption="Horario"
+                  dateFormat="h:mm aa"
+                />
               </div>
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <button className="btn btn-success" onClick={this.toggleModal}>
+            <button className="btn btn-success" onClick={() => this.addAppointment()}>
               Reservar Turno
             </button>
           </Modal.Footer>
