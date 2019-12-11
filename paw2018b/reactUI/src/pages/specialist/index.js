@@ -5,7 +5,7 @@ import React from 'react'
 import BounceLoader from 'react-spinners/BounceLoader';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPhone, faMapMarker, faHeart, faCalendarPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPhone, faMapMarker, faHeart, faCalendarPlus, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import Review from '../../components/specialist/review';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -37,6 +37,9 @@ class Specialist extends React.Component {
         excludedTimes: null,
         selectedWorkingHour: null,
         minAndMaxTimes: null,
+        submitted: false,
+        appointmentError: false,
+        appointmentLoading: false,
       }
     }
 
@@ -91,6 +94,38 @@ class Specialist extends React.Component {
         .catch(() => this.setState({ loading: false, error: true }));
     }
 
+    calculateAppointments() {
+      const { id } = this.props.match.params;
+      this.API.get('/doctor/' + id +'/futures').then(async response => {
+
+        const futures = response.data.futures;
+        const excludedDates = this.calculateExcludedDates()
+        const firstDate = this.calculateFirstDate();
+
+        await this.setState({
+          futures,
+          excludedDates,
+          firstDate,
+          date: firstDate
+        })
+
+        const excludedTimes = this.calculateExcludedTimes();
+        const selectedWorkingHour = this.calculateSelectedWorkingHour();
+
+        await this.setState({
+          excludedTimes,
+          selectedWorkingHour,
+        })
+
+        const minAndMaxTimes = this.calculateMinAndMaxTimes();
+
+        await this.setState({
+          minAndMaxTimes,
+          time: this.roundTime(minAndMaxTimes.min)
+        })
+      })
+    }
+
   handleChange(e) {
     e.preventDefault();
     const { name, value } = e.target;
@@ -141,9 +176,14 @@ class Specialist extends React.Component {
   }
 
   toggleModal = () => {
-    this.setState(prevState => ({
-      modalVisible: !prevState.modalVisible
-    }));
+      if(this.state.submitted) {
+        this.calculateAppointments();
+      }
+
+      this.setState(prevState => ({
+        modalVisible: !prevState.modalVisible,
+        submitted: false
+      }));
   }
 
   onChange = async (date, name) => {
@@ -195,11 +235,13 @@ class Specialist extends React.Component {
 
   calculateExcludedTimes = () => {
     const { date, futures } = this.state;
-    const excluded = [];
+    let excluded = [];
     if(futures) {
       futures.map(f => {
-        if(moment(date).isSame(f.day)) {
-          f.times.map(time => excluded.push(moment(time, 'HH:mm').toDate()))
+        if(moment(date).isSame(f.day, 'day')) {
+          f.times.map(time => {
+            excluded.push(moment(time, 'HH:mm').toDate())
+          })
         }
       })
     }
@@ -215,16 +257,26 @@ class Specialist extends React.Component {
   }
 
   calculateMinAndMaxTimes = () => {
-      const { selectedWorkingHour } = this.state;
-      console.log(selectedWorkingHour, 'sel');
+      const { selectedWorkingHour, date, excludedTimes } = this.state;
+
       let min, max;
 
-      if(moment(selectedWorkingHour.startTime, 'HH:mm:ss').isBefore(moment())) {
+      if(moment(date).isSame(moment(), 'day') && moment(selectedWorkingHour.startTime, 'HH:mm:ss').isBefore(moment())) {
         min = moment().toDate();
       } else {
         min = moment(selectedWorkingHour.startTime, 'HH:mm:ss').toDate();
       }
+
       max = moment(selectedWorkingHour.finishTime, 'HH:mm:ss').toDate();
+
+      excludedTimes.map(time => {
+        if(moment(time).isSame(min)) {
+          min = moment(min).add(30, 'minutes').toDate()
+        }
+        if(moment(time).isSame(max)) {
+          max = moment(max).subtract(30, 'minutes').toDate()
+        }
+      })
 
     return { min, max }
   }
@@ -240,14 +292,20 @@ class Specialist extends React.Component {
     const { date, time } = this.state;
     const formattedDate = moment(date).format('YYYY-MM-DD')
     const formattedTime = moment(time).format('HH:mm')
-    console.log('formated', formattedDate, formattedTime)
-    this.API.put(`doctor/${id}/appointment/add`, { day: formattedDate, time: formattedTime }).then(response => console.log(response));
+    this.setState({ appointmentLoading: true, submitted: true })
+    this.API.put(`doctor/${id}/appointment/add`, { day: formattedDate, time: formattedTime })
+      .then(response => {
+        if(response.status >= 200) {
+          this.setState({ appointmentLoading: false, appointmentError: false })
+        }
+      })
+      .catch(() => this.setState({ appointmentLoading: false, appointmentError: true }));
   }
 
 
   render() {
     const { error, loading, specialist, review, favorite, modalVisible, time, excludedDates, firstDate,
-      excludedTimes, date, minAndMaxTimes } = this.state;
+      excludedTimes, date, minAndMaxTimes, submitted, appointmentError, appointmentLoading } = this.state;
 
     if(loading) {
       return (
@@ -285,40 +343,83 @@ class Specialist extends React.Component {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <strong>Seleccionar una fecha y horario disponible</strong>
-            <div className="row mt-2">
-              <div className="col-sm-6">
-                <label className="mr-2">Fecha</label>
-                <DatePicker
-                  selected={date}
-                  onChange={date => this.onChange(date, 'date')}
-                  excludeDates={excludedDates}
-                  minDate={firstDate}
-                  maxDate={moment(firstDate).add(40, 'days').toDate()}
+            {
+              !submitted &&
+                <div>
+                  <strong>Seleccionar una fecha y horario disponible</strong>
+                  <div className="row mt-2">
+                    <div className="col-sm-6">
+                      <label className="mr-2">Fecha</label>
+                      <DatePicker
+                        selected={date}
+                        onChange={date => this.onChange(date, 'date')}
+                        excludeDates={excludedDates}
+                        minDate={firstDate}
+                        maxDate={moment(firstDate).add(40, 'days').toDate()}
+                      />
+                    </div>
+                    <div className="col-sm-6 pl-0">
+                      <label className="mr-2">Horario</label>
+                      <DatePicker
+                        selected={time}
+                        onChange={date => this.onChange(date, 'time')}
+                        minTime={minAndMaxTimes.min}
+                        maxTime={minAndMaxTimes.max}
+                        excludeTimes={excludedTimes}
+                        showTimeSelect
+                        showTimeSelectOnly
+                        timeIntervals={30}
+                        timeCaption="Horario"
+                        dateFormat="h:mm aa"
+                      />
+                    </div>
+                  </div>
+                </div>
+            }
+            {
+              submitted && appointmentLoading &&
+              <div className="center-horizontal p-5">
+                <BounceLoader
+                  sizeUnit={"px"}
+                  size={75}
+                  color={'rgb(37, 124, 191)'}
+                  loading={true}
                 />
               </div>
-              <div className="col-sm-6 pl-0">
-                <label className="mr-2">Horario</label>
-                <DatePicker
-                  selected={time}
-                  onChange={date => this.onChange(date, 'time')}
-                  minTime={minAndMaxTimes.min}
-                  maxTime={minAndMaxTimes.max}
-                  excludeTimes={excludedTimes}
-                  showTimeSelect
-                  showTimeSelectOnly
-                  timeIntervals={30}
-                  timeCaption="Horario"
-                  dateFormat="h:mm aa"
-                />
+            }
+            {
+              submitted && appointmentError && !appointmentLoading &&
+              <div>
+                <FontAwesomeIcon icon={faTimesCircle} color="#bb0000" size="4x"/>
+                <h3 className="mt-4">Hubo un problema</h3>
+                <p className="mb-0">No pudimos reservar el turno.</p>
               </div>
-            </div>
+            }
+            {
+              submitted && !appointmentError && !appointmentLoading &&
+              <div>
+                <FontAwesomeIcon icon={faCheckCircle} color="#46ce23" size="4x"/>
+                <h3 className="mt-4">Turno reservado</h3>
+                <p className="mb-0">{firstName} te espera el {moment(date).format('DD/MM')} a las {moment(time).format('HH:mm')}hs.</p>
+              </div>
+            }
           </Modal.Body>
-          <Modal.Footer>
-            <button className="btn btn-success" onClick={() => this.addAppointment()}>
-              Reservar Turno
-            </button>
-          </Modal.Footer>
+          {
+            !submitted &&
+            <Modal.Footer>
+              <button className="btn btn-success" onClick={() => this.addAppointment()}>
+                Reservar Turno
+              </button>
+            </Modal.Footer>
+          }
+          {
+            submitted && !loading &&
+            <Modal.Footer>
+              <button className="btn btn-secondary" onClick={() => this.toggleModal()}>
+                Cerrar
+              </button>
+            </Modal.Footer>
+          }
         </Modal>
         <div className="main-container">
           <div className="container pt-4">
