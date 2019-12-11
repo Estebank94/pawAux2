@@ -5,6 +5,8 @@ import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
+import ar.edu.itba.paw.webapp.dto.appointment.BasicAppointmentDTO;
+import ar.edu.itba.paw.webapp.dto.appointment.BasicAppointmentListDTO;
 import ar.edu.itba.paw.webapp.dto.appointment.PatientAppointmentDTO;
 import ar.edu.itba.paw.webapp.dto.doctor.DoctorDTO;
 import ar.edu.itba.paw.webapp.dto.doctor.DoctorListDTO;
@@ -936,5 +938,48 @@ public class DoctorApiController extends BaseApiController {
         final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(doctor.getId())).build();
 
         return Response.created(uri).entity(new DoctorDTO(doctor, buildBaseURI(uriInfo))).build();
+    }
+
+    @GET
+    @Path("/{id}/futures")
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response getFutureAppointments(@PathParam("id") final int doctorId){
+        LOGGER.debug("Doctor Future Appointments");
+        Doctor doctor;
+        try {
+            doctor = doctorService.findDoctorById(String.valueOf(doctorId));
+        } catch (NotFoundDoctorException e) {
+            LOGGER.debug("Doctor with id {} not found", doctorId);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
+                    .build();
+        } catch (NotValidIDException e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Doctor with bad id"))
+                    .build();
+        }
+        if (doctor == null){
+            LOGGER.debug("Doctor with id {} not found", doctorId);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
+                    .build();
+        }
+
+        LOGGER.debug("Looking for FutureAppoinments");
+        List<Appointment> futureAppointments = doctorService.getFutureAppointments(doctor);
+        futureAppointments = futureAppointments == null? Collections.EMPTY_LIST : futureAppointments;
+        LOGGER.debug("Found {} appointments", futureAppointments.size());
+
+        LOGGER.debug("Creating future Appointments Map");
+        Map<String, List<String>> appMap = BasicAppointmentDTO.toMap(futureAppointments);
+
+        LOGGER.debug("Creating JSON");
+        List<BasicAppointmentDTO> retList = new ArrayList<>();
+        for (String day: appMap.keySet()){
+            retList.add(new BasicAppointmentDTO(day, appMap.get(day)));
+        }
+
+        return Response.ok().entity(new BasicAppointmentListDTO(retList)).build();
     }
 }
