@@ -32,10 +32,11 @@ class Specialist extends React.Component {
         date: null,
         time: null,
         excludedDates: null,
-        firstDate: null,
+        firstDate: new Date(),
         futures: null,
         excludedTimes: null,
-        selectedWorkingHour: null
+        selectedWorkingHour: null,
+        minAndMaxTimes: null,
       }
     }
 
@@ -43,28 +44,36 @@ class Specialist extends React.Component {
     componentDidMount() {
       const { id } = this.props.match.params;
       this.API.get('/doctor/' + id)
-        .then(response => {
-          this.setState({ specialist: response.data });
-
-          const workingHours = response.data.workingHours;
-
-          const excludedDates = this.calculateExcludedDates(workingHours);
-          const firstDate = this.calculateFirstAvailableDate(workingHours);
-
+        .then(async response => {
+          await this.setState({ specialist: response.data });
 
           this.API.get('/doctor/' + id +'/futures').then(async response => {
-            const time = this.calculateFirstTimeAvailable(response.data.futures, firstDate, workingHours);
-            const excludedTimes = this.calculateExcludedTimes(response.data.futures, firstDate);
-            const selectedWorkingHour = this.getWorkingHours(firstDate, workingHours)[0];
+
+            const futures = response.data.futures;
+            const excludedDates = this.calculateExcludedDates()
+            const firstDate = this.calculateFirstDate();
+
             await this.setState({
-              futures: response.data.futures,
+              futures,
               excludedDates,
-              date: firstDate,
               firstDate,
-              time,
+              date: firstDate
+            })
+
+            const excludedTimes = this.calculateExcludedTimes();
+            const selectedWorkingHour = this.calculateSelectedWorkingHour();
+
+            await this.setState({
               excludedTimes,
-              selectedWorkingHour
-            });
+              selectedWorkingHour,
+            })
+
+            const minAndMaxTimes = this.calculateMinAndMaxTimes();
+
+            await this.setState({
+              minAndMaxTimes,
+              time: this.roundTime(minAndMaxTimes.min)
+            })
 
             if(this.props.user) {
               this.API.get('/patient/personal').then(response => {
@@ -132,35 +141,48 @@ class Specialist extends React.Component {
   }
 
   toggleModal = () => {
-    this.setState(prevState => ({    // prevState?
+    this.setState(prevState => ({
       modalVisible: !prevState.modalVisible
     }));
   }
 
   onChange = async (date, name) => {
-    this.setState({ [name]: date })
+    await this.setState({ [name]: date })
     if(name === 'date') {
+      const excludedTimes = this.calculateExcludedTimes();
+      const selectedWorkingHour = this.calculateSelectedWorkingHour();
+
       await this.setState({
-        time: this.calculateFirstTimeAvailable(this.state.futures, date, this.state.specialist.workingHours),
-        excludedTimes: this.calculateExcludedTimes(this.state.futures, date),
-        selectedWorkingHour: this.getWorkingHours(date, this.state.specialist.workingHours)[0]
+        excludedTimes,
+        selectedWorkingHour,
+      })
+
+      const minAndMaxTimes = this.calculateMinAndMaxTimes();
+
+      await this.setState({
+        minAndMaxTimes,
+        time: this.roundTime(minAndMaxTimes.min)
       })
     }
   }
 
-  calculateExcludedDates = (workingHours) => {
-    let excludedDates = [];
-    for(let i = 0; i < 45; i++) {
-      const day = moment().add(i, 'days');
-      workingHours.map(wh => {
-        if(wh.dayOfWeek !== day.isoWeekday()){
-          excludedDates.push(day.toDate())
-        }})
-    }
-    return excludedDates;
+  calculateExcludedDates = () => {
+      const workingHours = this.state.specialist.workingHours;
+      let excludedDates = [];
+
+      for(let i = 0; i < 45; i++) {
+        const day = moment().add(i, 'days');
+        workingHours.map(wh => {
+          if(wh.dayOfWeek !== day.isoWeekday()){
+            excludedDates.push(day.toDate())
+          }})
+      }
+      return excludedDates;
   }
 
-  calculateFirstAvailableDate = (workingHours) => {
+  calculateFirstDate = () => {
+    const workingHours = this.state.specialist.workingHours;
+
     let min = workingHours[0].dayOfWeek;
     workingHours.map(wh => {
       if(wh.dayOfWeek < min) {
@@ -168,57 +190,49 @@ class Specialist extends React.Component {
       }
     })
 
-    min -= 1;
-
-
     return moment().isoWeekday(min).toDate();
   }
 
-  calculateExcludedTimes = (futures, selectedDate) => {
-    let excludedTimes = [];
-    futures.map(future => {
-      if(moment(selectedDate).isSame(future)) {
-        future.times.map(time => excludedTimes.push(moment(time).toDate()))
-      }
-    })
-    return excludedTimes;
-  }
-
-  getWorkingHours = (selectedDate, workingHours) => {
-    return workingHours.map(wh => {
-      if(wh.dayOfWeek === moment(selectedDate).isoWeekday()) {
-        return wh;
-      }})
-  }
-
-
-
-  calculateFirstTimeAvailable = (futures, selectedDate, workingHours) => {
-      console.log('params', selectedDate, workingHours)
-      const wh = this.getWorkingHours(selectedDate, workingHours);
-    console.log('work', wh)
-    let start = moment(this.getWorkingHours(selectedDate, workingHours)[0].startTime, 'HH:mm:ss');
-    if(start.isBefore(moment())) {
-      start = moment()
-    }
-
-    const remainder = 30 - (start.minute() % 30);
-    start = moment(start).add(remainder, "minutes");
-
+  calculateExcludedTimes = () => {
+    const { date, futures } = this.state;
+    const excluded = [];
     if(futures) {
-      futures.map(future => {
-        if(moment(selectedDate).isSame(future)) {
-          future.times.map(time => {
-            if(!moment(time, 'HH:mm').isSame(start)) {
-              return start.toDate()
-            }
-          })
+      futures.map(f => {
+        if(moment(date).isSame(f.day)) {
+          f.times.map(time => excluded.push(moment(time, 'HH:mm').toDate()))
         }
-        start.add(30, 'minutes');
       })
     }
+    return excluded
+  }
 
-    return start.toDate()
+  calculateSelectedWorkingHour = () => {
+      const { date, specialist } = this.state;
+      const workingHours = specialist.workingHours;
+      return workingHours.reduce(wh => {
+        return (wh.dayOfWeek === moment(date).isoWeekday());
+      })
+  }
+
+  calculateMinAndMaxTimes = () => {
+      const { selectedWorkingHour } = this.state;
+      console.log(selectedWorkingHour, 'sel');
+      let min, max;
+
+      if(moment(selectedWorkingHour.startTime, 'HH:mm:ss').isBefore(moment())) {
+        min = moment().toDate();
+      } else {
+        min = moment(selectedWorkingHour.startTime, 'HH:mm:ss').toDate();
+      }
+      max = moment(selectedWorkingHour.finishTime, 'HH:mm:ss').toDate();
+
+    return { min, max }
+  }
+
+  roundTime = (time) => {
+    const start = moment(time);
+    const remainder = 30 - (start.minute() % 30);
+    return moment(start).add(remainder, "minutes").toDate();
   }
 
   addAppointment() {
@@ -232,7 +246,8 @@ class Specialist extends React.Component {
 
 
   render() {
-    const { error, loading, specialist, review, favorite, modalVisible, time, excludedDates, firstDate, excludedTimes, date, selectedWorkingHour } = this.state;
+    const { error, loading, specialist, review, favorite, modalVisible, time, excludedDates, firstDate,
+      excludedTimes, date, minAndMaxTimes } = this.state;
 
     if(loading) {
       return (
@@ -255,16 +270,6 @@ class Specialist extends React.Component {
 
     const { address, averageRating, district, firstName, id, insurances, lastName, phoneNumber, profilePicture,
       reviews, sex, specialties, workingHours } = specialist;
-
-
-    let min;
-    if(moment(selectedWorkingHour.startTime, 'HH:mm:ss').isBefore(moment())) {
-      min = moment().toDate();
-    } else {
-      min = moment(selectedWorkingHour.startTime, 'HH:mm:ss').toDate()
-    }
-    
-    const max = moment(selectedWorkingHour.finishTime, 'HH:mm:ss').toDate()
 
     return (
       <div className="body-background">
@@ -289,7 +294,7 @@ class Specialist extends React.Component {
                   onChange={date => this.onChange(date, 'date')}
                   excludeDates={excludedDates}
                   minDate={firstDate}
-                  maxDate={moment(firstDate).add(45, 'days').toDate()}
+                  maxDate={moment(firstDate).add(40, 'days').toDate()}
                 />
               </div>
               <div className="col-sm-6 pl-0">
@@ -297,8 +302,8 @@ class Specialist extends React.Component {
                 <DatePicker
                   selected={time}
                   onChange={date => this.onChange(date, 'time')}
-                  minTime={min}
-                  maxTime={max}
+                  minTime={minAndMaxTimes.min}
+                  maxTime={minAndMaxTimes.max}
                   excludeTimes={excludedTimes}
                   showTimeSelect
                   showTimeSelectOnly
