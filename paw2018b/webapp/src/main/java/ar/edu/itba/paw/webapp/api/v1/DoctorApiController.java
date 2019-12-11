@@ -65,12 +65,12 @@ public class DoctorApiController extends BaseApiController {
     @Autowired
     private FavoriteService favoriteService;
 
+    @Autowired
     private AppointmentService appointmentService;
 
     @Autowired
     private ReviewService reviewService;
-
-
+    
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
