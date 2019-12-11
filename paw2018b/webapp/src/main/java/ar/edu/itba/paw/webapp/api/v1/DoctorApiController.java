@@ -5,6 +5,8 @@ import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
+import ar.edu.itba.paw.webapp.dto.appointment.BasicAppointmentDTO;
+import ar.edu.itba.paw.webapp.dto.appointment.BasicAppointmentListDTO;
 import ar.edu.itba.paw.webapp.dto.appointment.PatientAppointmentDTO;
 import ar.edu.itba.paw.webapp.dto.doctor.DoctorDTO;
 import ar.edu.itba.paw.webapp.dto.doctor.DoctorListDTO;
