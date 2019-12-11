@@ -12,21 +12,16 @@ class Login extends React.Component {
     emailError: false,
     passwordError: false,
     error: false,
-    rememberMe: false,
   };
 
 
   handleChange(e) {
     const { name, value } = e.target;
-    if(name !== 'rememberMe') {
-      this.setState({ [name]: value, [`${name}Error`]: false });
-    } else {
-      this.setState({ rememberMe: !this.state.rememberMe });
-    }
+    this.setState({ [name]: value, [`${name}Error`]: false });
   }
 
   async handleSubmit() {
-    const { email, password, rememberMe } = this.state;
+    const { email, password } = this.state;
     if(email && password) {
       await this.props.doLogin({ Jusername: email, Jpassword: password }).then(auth => this.manageAccess(auth));
     }
@@ -47,7 +42,7 @@ class Login extends React.Component {
   }
 
   render() {
-    const { email, password, rememberMe, emailError, passwordError, error} = this.state;
+    const { email, password, emailError, passwordError, error} = this.state;
     return (
       <div className="centered body-background">
         <Shake when={emailError || passwordError || error }>
@@ -61,10 +56,6 @@ class Login extends React.Component {
               <div className="form-group">
                 <label className={passwordError ? 'text-danger' : ''}>Contraseña</label>
                 <input name="password" value={password} type="password" className={'form-control ' + (passwordError ? 'is-invalid' : '')} placeholder="Ingresa tu contraseña" onChange={(e) => this.handleChange(e)}/>
-              </div>
-              <div className="form-group form-check">
-                <input name="rememberMe" value={rememberMe} type="checkbox" className="form-check-input" onChange={(e) => this.handleChange(e)}/>
-                  <label className="form-check-label">Mantenerme conectado</label>
               </div>
               { error &&
                 <Fade>
