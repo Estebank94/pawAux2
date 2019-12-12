@@ -81,7 +81,61 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public Review createReview(String stars, String description, Doctor doctor, Patient patient) throws NotValidReviewException {
+
+        if (stars == null && description == null){
+            LOGGER.debug("No stars or description");
+            throw new NotValidReviewException("No stars or description ");
+        }
+
+        if (stars != null && !stars.matches("[1-5]")){
+            LOGGER.debug("stars must be an Integer between 1 and 5");
+            throw new NotValidReviewException("stars must be an Integer between 1 and 5");
+        }
+        if (String.valueOf(Integer.MAX_VALUE).length() < stars.length()){
+            LOGGER.debug("stars must be an Integer between 1 and 5");
+            throw new NotValidReviewException("stars must be an Integer between 1 and 5");
+        }
+        Integer starsToInt = null;
+        if (stars != null){
+            starsToInt = Integer.parseInt(stars);
+            if (starsToInt < 1 || starsToInt > 5){
+                LOGGER.debug("stars must be an Integer between 1 and 5");
+                throw new NotValidReviewException("stars must be an Integer between 1 and 5");
+            }
+        }
+
+        if (doctor == null) {
+            LOGGER.debug("doctor can't be null");
+            throw new NotValidReviewException("doctor can't be null");
+        }
+
+        if (patient == null){
+            LOGGER.debug("patient can't be null");
+            throw new NotValidReviewException("doctor can't be null");
+        }
+
+        if (patient.getDoctor() == doctor){
+            LOGGER.debug("patient can't review his own doctor");
+            throw new NotValidReviewException("Patient can't review his own doctor");
+        }
+
+
+        LOGGER.debug("Time to create review");
+        //try {
+        return reviewDao.createReview(starsToInt, description, doctor, patient);
+        //} catch (Exception e){
+        //    throw new NotValidReviewException();
+        //}
+    }
+
+    @Override
     public List<Review> listReviews(Doctor doctor) {
         return reviewDao.listReviews(doctor);
+    }
+
+    @Override
+    public List<Review> getSharedReviews (Doctor doctor, Patient patient){
+        return reviewDao.getSharedReviews(doctor, patient);
     }
 }

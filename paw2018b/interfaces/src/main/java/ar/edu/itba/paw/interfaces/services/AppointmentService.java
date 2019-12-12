@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.exceptions.*;
 import javax.print.Doc;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface AppointmentService {
@@ -16,4 +17,6 @@ public interface AppointmentService {
     Appointment cancelAppointment(String appointmentDay, String appointmentTime, Patient patient, Doctor doctor) throws NotFoundAppointmentException, NotValidCancelAppointment;
 
     Appointment findAppointmentById(Integer id) throws NotFoundAppointmentException;
+
+    List<Appointment> findPastSharedAppointments(Doctor doctor, Patient patient);
 }

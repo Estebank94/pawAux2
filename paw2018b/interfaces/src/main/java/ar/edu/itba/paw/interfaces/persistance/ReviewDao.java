@@ -13,4 +13,8 @@ public interface ReviewDao {
     Review createReview(Integer stars, String description, Doctor doctor, Patient patient, Appointment appointment);
 
     List<Review> listReviews(Doctor doctor);
+
+    List<Review> getSharedReviews (Doctor doctor, Patient patient);
+
+    Review createReview(Integer stars, String description, Doctor doctor, Patient patient);
 }

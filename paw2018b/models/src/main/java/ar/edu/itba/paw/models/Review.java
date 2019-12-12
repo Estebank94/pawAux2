@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Table
-@Entity(name = "review")
+@Entity
+@Table(name = "review")
 public class Review {
     private Integer stars;
     private String dayTime;
@@ -42,6 +42,16 @@ public class Review {
         this.reviewerLastName = patient.getFirstName();
         this.patient = patient;
         this.appointment = appointment;
+    }
+
+    public Review(Integer stars, String description, Doctor doctor, Patient patient){
+        this.stars = stars;
+        this.dayTime = LocalDate.now().toString();
+        this.description = description;
+        this.doctor = doctor;
+        this.reviewerFirstName = patient.getLastName();
+        this.reviewerLastName = patient.getFirstName();
+        this.patient = patient;
     }
 
     public Doctor getDoctor() {

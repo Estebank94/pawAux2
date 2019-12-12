@@ -15,4 +15,8 @@ public interface ReviewService {
         Review createReview(String stars, String description, Doctor doctor, Patient patient, Appointment appointment) throws NotValidReviewException;
 
         List<Review> listReviews(Doctor doctor);
+
+        public List<Review> getSharedReviews (Doctor doctor, Patient patient);
+
+        Review createReview(String stars, String description, Doctor doctor, Patient patient) throws NotValidReviewException;
 }

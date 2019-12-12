@@ -13,6 +13,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -98,6 +100,36 @@ public class AppointmentHibernateDaoImpl implements AppointmentDao {
         query.setParameter("patient", patient);
         List<Appointment> appointmentList = query.getResultList();
         return appointmentList == null || appointmentList.isEmpty()? Collections.emptyList(): appointmentList;
+    }
+
+    public List<Appointment> findSharedAppointment(Patient patient, Doctor doctor){
+        final TypedQuery<Appointment> query = em.createQuery("from Appointment as a WHERE " +
+                "a.doctorid = :doctorid AND " +
+                "a.clientid = :clientid AND " +
+                "a.apponitmentcancelled=false",Appointment.class);
+        query.setParameter("doctorid", doctor.getId());
+        query.setParameter("clientid", patient.getId());
+        List<Appointment> appointmentList = query.getResultList();
+        return appointmentList == null || appointmentList.isEmpty()? Collections.emptyList(): appointmentList;
+    }
+
+    @Override
+    public List<Appointment> getHistoricalAppointmentsWithDoctor(Patient patient, Doctor doctor) {
+        String today = LocalDate.now().toString();
+        String now = LocalTime.now().toString();
+        final TypedQuery<Appointment> query;
+        query = em.createQuery("FROM Appointment ap " +
+                "where ((ap.appointmentDay < :day)  OR (ap.appointmentDay = :day AND ap.appointmentTime < :time)) " +
+                "AND ap.patient = :patient AND ap.appointmentCancelled = :cancel AND ap.doctor = :doctor"/* AND ap.review = :review*/,
+                Appointment.class);
+        query.setParameter("doctor", doctor);
+        query.setParameter("patient", patient);
+        query.setParameter("day", today);
+        query.setParameter("time", now);
+        query.setParameter("cancel", false);
+//        query.setParameter("review", null);
+        final List<Appointment> list = query.getResultList();
+        return list.isEmpty() ? Collections.emptyList() : list;
     }
 
     @Override

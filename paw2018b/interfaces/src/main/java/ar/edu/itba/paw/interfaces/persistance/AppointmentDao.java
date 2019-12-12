@@ -30,4 +30,6 @@ public interface AppointmentDao {
     Appointment undoCancelAppointment(Appointment appointment);
 
     Optional<Appointment> findAppointmentById(Integer id);
+
+    List<Appointment> getHistoricalAppointmentsWithDoctor(Patient patient, Doctor doctor);
 }

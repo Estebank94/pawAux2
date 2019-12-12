@@ -154,4 +154,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
         return appointmentOptional.get();
     }
+
+    @Override
+    public List<Appointment> findPastSharedAppointments(Doctor doctor, Patient patient){
+        return appointmentDao.getHistoricalAppointmentsWithDoctor(patient, doctor);
+    }
+
+
 }

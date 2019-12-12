@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.webapp.forms;
 
-public class ReviewForm {
+public class BasicReviewForm {
+
     private String stars;
     private String description;
-    private Integer apponintmentId;
 
     public String getStars() {
         return stars;
@@ -21,11 +21,4 @@ public class ReviewForm {
         this.description = description;
     }
 
-    public Integer getApponintmentId() {
-        return apponintmentId;
-    }
-
-    public void setApponintmentId(Integer apponintmentId) {
-        this.apponintmentId = apponintmentId;
-    }
 }

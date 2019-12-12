@@ -14,10 +14,7 @@ import ar.edu.itba.paw.webapp.dto.patient.PatientDTO;
 import ar.edu.itba.paw.webapp.dto.reviews.BasicReviewDTO;
 import ar.edu.itba.paw.webapp.dto.reviews.ReviewListDTO;
 import ar.edu.itba.paw.webapp.dto.workingHours.WorkingHoursDTO;
-import ar.edu.itba.paw.webapp.forms.AppointmentForm;
-import ar.edu.itba.paw.webapp.forms.BasicProfessionalForm;
-import ar.edu.itba.paw.webapp.forms.PersonalForm;
-import ar.edu.itba.paw.webapp.forms.ReviewForm;
+import ar.edu.itba.paw.webapp.forms.*;
 import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -422,6 +419,111 @@ public class DoctorApiController extends BaseApiController {
 
 
     @POST
+    @Path("/{id}/reviewOnly")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response createReviewOnly(@PathParam("id") final int doctorId , @Valid final BasicReviewForm reviewForm){
+
+        LOGGER.debug("Create Review");
+
+        /* Form revision */
+        if (reviewForm == null){
+            LOGGER.debug("Review Form is null");
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("Review can't be null")).build();
+        }
+
+        if (reviewForm.getStars() == null && reviewForm.getDescription() == null){
+            LOGGER.debug("No stars or description in review");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("No stars or description in review"))
+                    .build();
+        }
+
+        LOGGER.debug("Stars {}", reviewForm.getStars());
+        LOGGER.debug("Description {}", reviewForm.getDescription());
+
+        /* Patient Revision */
+        Patient patient;
+        try {
+            patient = userDetailsService.getLoggedUser();
+        } catch (NotFoundPacientException e) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("patient logged not found"))
+                    .build();
+        } catch ( NotValidEmailException e){
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Invalid email of patient"))
+                    .build();
+        }
+        if (patient == null){
+            Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("patient logged not found")) //messageSource.getMessage("patient not found", null, LocaleContextHolder.getLocale())))
+                    .build();
+        }
+        LOGGER.debug("Review patient {}", patient.getId());
+
+        if (patient.getDoctor() != null && patient.getDoctor().getId() == doctorId){
+            LOGGER.debug("Patient is the same as doctor");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Cannot set review a doctor to his own"))
+                    .build();
+        }
+
+        /* Doctor Revision */
+        Doctor doctor;
+        try {
+            doctor = doctorService.findDoctorById(String.valueOf(doctorId));
+        } catch (NotFoundDoctorException e) {
+            LOGGER.debug("Doctor with id {} not found", doctorId);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
+                    .build();
+        } catch (NotValidIDException e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Doctor with bad id"))
+                    .build();
+        }
+        if (doctor == null){
+            LOGGER.debug("Doctor with id {} not found", doctorId);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
+                    .build();
+        }
+        LOGGER.debug("Review doctor {}", doctor.getId());
+
+
+        List<Appointment> sharedAppointments = appointmentService.findPastSharedAppointments(doctor, patient);
+
+        List<Review> sharedReviews = reviewService.getSharedReviews(doctor, patient);
+
+        Review review = null;
+
+        if(sharedAppointments.size() - sharedReviews.size() > 0){
+
+            LOGGER.debug("A comment can be made");
+
+            try {
+            review = reviewService.createReview(reviewForm.getStars(), reviewForm.getDescription(), doctor, patient);
+            } catch (NotValidReviewException e) {
+                LOGGER.debug("Not valid review");
+                return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("Not valid Review")).build();
+            }
+        }
+
+        if (review == null){
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("Not created Review")).build();
+        }
+
+        return Response.ok(new BasicReviewDTO(review)).build();
+    }
+
+    @POST
     @Path("/{id}/review")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = MediaType.APPLICATION_JSON)
@@ -542,7 +644,7 @@ public class DoctorApiController extends BaseApiController {
             LOGGER.debug("Appointment already has review", reviewForm.getApponintmentId());
             return Response.status(Response.Status.BAD_REQUEST).entity(errorMessageToJSON("Appointment already has review")).build();
         }
-            Review review = null;
+        Review review = null;
         try {
             review = reviewService.createReview(reviewForm.getStars(), reviewForm.getDescription(), doctor, patient, appointment);
         } catch (NotValidReviewException e) {
@@ -556,6 +658,7 @@ public class DoctorApiController extends BaseApiController {
         return Response.ok(new BasicReviewDTO(review)).build();
     }
 
+    
     @PUT
     @Path("/{id}/appointment/add")
     @Consumes(MediaType.APPLICATION_JSON)
