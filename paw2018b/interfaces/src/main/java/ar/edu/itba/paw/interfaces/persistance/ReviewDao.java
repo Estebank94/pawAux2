@@ -6,7 +6,6 @@ import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.models.Review;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ReviewDao {
 
@@ -15,6 +14,8 @@ public interface ReviewDao {
     List<Review> listReviews(Doctor doctor);
 
     List<Review> getSharedReviews (Doctor doctor, Patient patient);
+
+    Boolean reviewAvailables(Doctor doctor, Patient patient);
 
     Review createReview(Integer stars, String description, Doctor doctor, Patient patient);
 }
