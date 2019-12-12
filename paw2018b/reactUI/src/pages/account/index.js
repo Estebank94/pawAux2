@@ -11,6 +11,7 @@ import { ApiClient } from '../../utils/apiClient';
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab';
 import Favorite from '../../components/account/favorite';
+import Appointment from '../../components/account/appointment';
 
 class Account extends React.Component {
   constructor(props){
@@ -34,15 +35,17 @@ class Account extends React.Component {
     })
   }
 
+  cancelAppointment = (appointment) => {
+    const id = appointment.doctor.id
+    this.API.put(`doctor/${id}/appointment/cancel`, { day: appointment.appointmentDay, time: appointment.appointmentTime })
+  }
+
   render() {
     const { user } = this.props.user;
     const { loading, personal } = this.state;
 
-    console.log(personal);
-
     if(!this.props.user.auth) {
       return(<Redirect to="/login"/>)
-
     }
 
     const { firstName, lastName } = user;
@@ -70,10 +73,26 @@ class Account extends React.Component {
                     !loading ?
                       <Tabs defaultActiveKey="1">
                         <Tab eventKey="1" title="Turnos pendientes">
-                          fvdfsvsv
+                          {
+                            personal.futureAppointments
+                              .map((appointment, index) =>
+                                <Appointment
+                                  key={index}
+                                  data={appointment}
+                                  cancel={this.cancelAppointment}
+                                  cancelable
+                                />)
+                          }
                         </Tab>
                         <Tab eventKey="2" title="Historial de turnos">
-                          sdvsdvdvs
+                          {
+                            personal.historicalAppointments
+                              .map((appointment, index) =>
+                                <Appointment
+                                  key={index}
+                                  data={appointment}
+                                />)
+                          }
                         </Tab>
                         <Tab eventKey="3" title="Especialistas favoritos">
                           {
@@ -91,7 +110,6 @@ class Account extends React.Component {
                         />
                       </div>
                   }
-
                 </div>
               </div>
             </div>

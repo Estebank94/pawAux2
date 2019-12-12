@@ -477,14 +477,15 @@ public class DoctorApiController extends BaseApiController {
         }
         LOGGER.debug("Review doctor {}", doctor.getId());
 
-
+/*
         List<Appointment> sharedAppointments = appointmentService.findPastSharedAppointments(doctor, patient);
 
         List<Review> sharedReviews = reviewService.getSharedReviews(doctor, patient);
-
+*/
         Review review = null;
 
-        if(sharedAppointments.size() - sharedReviews.size() > 0){
+        if(reviewService.reviewAvailables(doctor, patient)){
+ //           if(sharedAppointments.size() - sharedReviews.size() > 0){
 
             LOGGER.debug("A comment can be made");
 
@@ -562,13 +563,14 @@ public class DoctorApiController extends BaseApiController {
                     .build();
         }
         LOGGER.debug("Review doctor {}", doctor.getId());
-
-
+/*
         List<Appointment> sharedAppointments = appointmentService.findPastSharedAppointments(doctor, patient);
 
         List<Review> sharedReviews = reviewService.getSharedReviews(doctor, patient);
+*/
 
-        if(sharedAppointments.size() - sharedReviews.size() > 0){
+            //           if(sharedAppointments.size() - sharedReviews.size() > 0){
+        if(reviewService.reviewAvailables(doctor, patient)){
             return Response
                     .status(Response.Status.ACCEPTED)
                     .entity(MessageToJSON(true))
