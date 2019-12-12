@@ -54,9 +54,12 @@ public class DoctorDTO {
         this.insurances = InsuranceDTO.insurancePlanMapping(doctor.getInsurancePlans());
 
         this.specialties = new ArrayList<>();
-        for (Specialty sp: doctor.getSpecialties()){
-            this.specialties.add(sp.getSpeciality());
+        if(doctor.getSpecialties() != null){
+            for (Specialty sp: doctor.getSpecialties()){
+                this.specialties.add(sp.getSpeciality());
+            }
         }
+
         this.description = null;
         if (doctor.getDescription() != null){
             this.description = new DescriptionDTO(doctor.getDescription());

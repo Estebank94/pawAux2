@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.Patient;
 import ar.edu.itba.paw.webapp.dto.FavoriteDoctorDTO;
 import ar.edu.itba.paw.webapp.dto.appointment.PatientAppointmentDTO;
 import ar.edu.itba.paw.webapp.dto.doctor.BasicDoctorDTO;
+import ar.edu.itba.paw.webapp.dto.doctor.DoctorDTO;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class PatientDTO {
     private URI uri;
     private BasicDoctorDTO doctor;
     private List<FavoriteDoctorDTO> favorites;
+    private Boolean complete;
 
     public PatientDTO(){
     }
@@ -33,6 +35,31 @@ public class PatientDTO {
         email = patient.getEmail();
         doctor = patient.getDoctor() == null ? null : new BasicDoctorDTO(patient.getDoctor());
         this.uri = baseUri.resolve(String.valueOf(this.id));
+        this.favorites = new ArrayList<>();
+        if(patient.getFavorites()!=null){
+            for (Favorite favorite : patient.getFavorites()){
+                if (!favorite.getFavoriteCancelled()){
+                    this.favorites.add(new FavoriteDoctorDTO(favorite));
+                }
+            }
+        }
+    }
+
+    public PatientDTO(Patient patient, Boolean toComplete) {
+        this.complete = toComplete;
+        id = patient.getId();
+        firstName = patient.getFirstName();
+        lastName = patient.getLastName();
+        phoneNumber = patient.getPhoneNumber();
+        email = patient.getEmail();
+        if(patient.getDoctor()!=null){
+            doctor = new BasicDoctorDTO(patient.getDoctor());
+            DoctorDTO infoDoctor = new DoctorDTO(patient.getDoctor());
+            if(infoDoctor.getInsurances().size() == 0 || infoDoctor.getSpecialties().size() == 0 ||
+                    infoDoctor.getWorkingHours().size() == 0){
+                this.complete = true;
+            }
+        }
         this.favorites = new ArrayList<>();
         if(patient.getFavorites()!=null){
             for (Favorite favorite : patient.getFavorites()){
@@ -58,6 +85,14 @@ public class PatientDTO {
                 this.favorites.add(new FavoriteDoctorDTO(favorite));
             }
         }
+    }
+
+    public Boolean getComplete() {
+        return complete;
+    }
+
+    public void setComplete(Boolean complete) {
+        this.complete = complete;
     }
 
     public Integer getId() {
