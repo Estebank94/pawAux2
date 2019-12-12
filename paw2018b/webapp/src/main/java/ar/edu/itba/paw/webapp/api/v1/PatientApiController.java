@@ -201,7 +201,7 @@ public class PatientApiController extends BaseApiController {
                     .build();
         }
 
-        return Response.ok(new PatientDTO(patient)).build();
+        return Response.ok(new PatientDTO(patient, false)).build();
     }
 
     @GET
