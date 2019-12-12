@@ -47,10 +47,12 @@ class Appointment extends React.Component {
 
     return(
       <div className="favorite-card appointment-card pt-3 pl-2 pr-2">
-        <h5 className="doctor-name mb-2 clickeable" onClick={() => this.handleClick(id)}>{firstName} {lastName}</h5>
-        <p className="mb-0"><FontAwesomeIcon className="mr-2" icon={faCalendar} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{moment(appointmentDay, 'YYYY-MM-DD').format('dddd DD MMMM')} a las {appointmentTime}hs.</p>
-        <p className="mb-0"><FontAwesomeIcon className="mr-2" icon={faMapMarker} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{address}</p>
-        <p className="mb-2"><FontAwesomeIcon className="mr-2" icon={faPhone} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{phoneNumber}</p>
+        <div>
+          <h5 className="doctor-name mb-2 clickeable" onClick={() => this.handleClick(id)}>{firstName} {lastName}</h5>
+          <p className="mb-0"><FontAwesomeIcon className="mr-2" icon={faCalendar} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{moment(appointmentDay, 'YYYY-MM-DD').format('dddd DD MMMM')} a las {appointmentTime}hs.</p>
+          <p className="mb-0"><FontAwesomeIcon className="mr-2" icon={faMapMarker} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{address}</p>
+          <p className="mb-2"><FontAwesomeIcon className="mr-2" icon={faPhone} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{phoneNumber}</p>
+        </div>
         {
           this.props.cancelable &&
           <div className="btn btn-primary custom-btn" onClick={() => this.cancelAppointment()}>Cancelar Turno</div>
