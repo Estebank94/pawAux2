@@ -12,7 +12,7 @@ class Favorite extends React.Component {
     const { profilePicture, firstName, lastName } = this.props.data;
     return(
       <div className="d-flex flex-row favorite-card" onClick={() => this.handleClick()}>
-        <img className="avatar" src={`data:image/jpeg;base64,${profilePicture}`} />
+        <img className="avatar mb-3" src={`data:image/jpeg;base64,${profilePicture}`} />
         <div className="d-flex align-items-center">
           <div className="card-text">
             <h3 className="doctor-name mb-0 pl-3">{firstName} {lastName}</h3>
