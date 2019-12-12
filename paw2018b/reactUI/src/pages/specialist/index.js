@@ -7,6 +7,7 @@ import PulseLoader from 'react-spinners/PulseLoader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faMapMarker, faHeart, faCalendarPlus, faCheckCircle, faTimesCircle, faLock } from '@fortawesome/free-solid-svg-icons';
 import ReviewCard from '../../components/specialist/reviewCard';
+import ReviewForm from '../../components/specialist/reviewForm';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { connect } from 'react-redux';
@@ -45,6 +46,7 @@ class Specialist extends React.Component {
         description : '',
         appointmentId: '',
         reviewSubmitted: false,
+        canReview: false,
       }
     }
 
@@ -83,14 +85,11 @@ class Specialist extends React.Component {
               time: this.roundTime(minAndMaxTimes.min)
             })
 
-            // this.API.get(`/${id}/canReview`).then(response => console.log('response', response))
-
             this.API.get('/doctor/' + id +'/reviews').then(response => {
               this.setState({ reviews: response.data.reviews });
 
               if(this.props.user.auth) {
                 this.API.get('/patient/personal').then(response => {
-                  console.log('personal', response);
                   this.setState({ pastAppointments: response.data.historicalAppointments })
                   const filtered = response.data.favorites.filter(favorite => favorite.doctor.id === parseInt(id));
                   if(filtered.length > 0){
@@ -98,6 +97,11 @@ class Specialist extends React.Component {
                   } else {
                     this.setState({ favorite: false })
                   }
+
+                  this.API.get(`doctor/${id}/canReview`).then(response => {
+                    this.setState({ canReview: response.data.canReview })
+
+                  })
                 })
               }
             })
@@ -139,12 +143,6 @@ class Specialist extends React.Component {
         })
       })
     }
-
-  handleChange(e) {
-    e.preventDefault();
-    const { name, value } = e.target;
-    this.setState({[name]: value });
-  }
 
   addToFavorites() {
     this.setState({ favorite: null })
@@ -319,17 +317,16 @@ class Specialist extends React.Component {
       .catch(() => this.setState({ appointmentLoading: false, appointmentError: true }));
   }
 
-  submitReview = () => {
+  submitReview = (review) => {
     const { id } = this.props.match.params;
-    const { pastAppointments } = this.state;
-    // if()
+    this.API.post(`/doctor/${id}/makeReview`, { stars: review.stars, description: review.description }).then(response => console.log(response))
   }
 
 
   render() {
     const { error, loading, specialist, reviews, favorite, modalVisible, time, excludedDates, firstDate,
       excludedTimes, date, minAndMaxTimes, submitted, appointmentError, appointmentLoading, pastAppointments,
-      description, stars } = this.state;
+      description, stars, canReview } = this.state;
 
     if(loading) {
       return (
@@ -352,6 +349,7 @@ class Specialist extends React.Component {
       )
     }
 
+    console.log('canrev', canReview)
     const { address, firstName, insurances, lastName, phoneNumber, profilePicture, specialties } = specialist;
 
 
@@ -506,31 +504,7 @@ class Specialist extends React.Component {
                     reviews.map((review, index) => <ReviewCard key={index} data={review} /> )
                   }
                   <h4 className="mt-3">Dejá tu reseña</h4>
-                  {
-                    pastAppointments.length > 0 ?
-                      <div>
-                        <div className="form-group">
-                          <label>Estrellas</label>
-                          <select className="form-control" name="stars" value={stars} onChange={(e) =>this.handleChange(e)}>
-                            <option value="">Elegir una opcion</option>
-                            <option value="1">⭐️</option>
-                            <option value="2">⭐️⭐️</option>
-                            <option value="3">⭐️⭐️⭐️</option>
-                            <option value="4">⭐️⭐️⭐️⭐️</option>
-                            <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
-                          </select>
-                        </div>
-                        <label>Comentarios</label>
-                        <textarea name="description" value={description} type="text" rows="3" className={'form-control'}  placeholder="Ingresa tu comentario" onChange={(e) =>this.handleChange(e)}/>
-                        <div className="btn btn-primary custom-btn mt-2" onClick={() => this.submitReview()}>Dejar reseña</div>
-                      </div>
-                      :
-                      <div className="mt-3">
-                        <div className="alert alert-secondary" role="alert">
-                          <FontAwesomeIcon className="mr-2" icon={faLock} style={{ color: 'rgba(0,0,0, 0.5)' }} /> Solo podes dejar una reseña despues de un turno
-                        </div>
-                      </div>
-                  }
+                  <ReviewForm canReview={canReview} isAuthenticated={this.props.user.auth} submit={this.submitReview} />
                 </div>
               </div>
             </div>
