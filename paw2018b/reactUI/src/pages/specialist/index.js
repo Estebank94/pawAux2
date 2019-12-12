@@ -5,7 +5,7 @@ import React from 'react'
 import BounceLoader from 'react-spinners/BounceLoader';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPhone, faMapMarker, faHeart, faCalendarPlus, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faPhone, faMapMarker, faHeart, faCalendarPlus, faCheckCircle, faTimesCircle, faLock } from '@fortawesome/free-solid-svg-icons';
 import Review from '../../components/specialist/review';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -27,7 +27,7 @@ class Specialist extends React.Component {
         error: false,
         specialist: null,
         favorite: null,
-        review: '',
+        reviews: null,
         modalVisible: false,
         date: null,
         time: null,
@@ -40,6 +40,11 @@ class Specialist extends React.Component {
         submitted: false,
         appointmentError: false,
         appointmentLoading: false,
+        pastAppointments: [],
+        stars: '',
+        description : '',
+        appointmentId: '',
+        reviewSubmitted: false,
       }
     }
 
@@ -78,16 +83,23 @@ class Specialist extends React.Component {
               time: this.roundTime(minAndMaxTimes.min)
             })
 
-            if(this.props.user) {
-              this.API.get('/patient/personal').then(response => {
-                const filtered = response.data.favorites.filter(favorite => favorite.doctor.id === parseInt(id));
-                if(filtered.length > 0){
-                  this.setState({ favorite: true })
-                } else {
-                  this.setState({ favorite: false })
-                }
-              })
-            }
+            this.API.get('/doctor/' + id +'/reviews').then(response => {
+              this.setState({ reviews: response.data.reviews });
+
+              if(this.props.user.auth) {
+                this.API.get('/patient/personal').then(response => {
+                  console.log('personal', response);
+                  this.setState({ pastAppointments: response.data.historicalAppointments })
+                  const filtered = response.data.favorites.filter(favorite => favorite.doctor.id === parseInt(id));
+                  if(filtered.length > 0){
+                    this.setState({ favorite: true })
+                  } else {
+                    this.setState({ favorite: false })
+                  }
+                })
+              }
+            })
+
             this.setState({ loading: false })
           })
         })
@@ -302,20 +314,29 @@ class Specialist extends React.Component {
       .catch(() => this.setState({ appointmentLoading: false, appointmentError: true }));
   }
 
+  submitReview = () => {
+    const { id } = this.props.match.params;
+    const { pastAppointments } = this.state;
+    // if()
+  }
+
 
   render() {
-    const { error, loading, specialist, review, favorite, modalVisible, time, excludedDates, firstDate,
-      excludedTimes, date, minAndMaxTimes, submitted, appointmentError, appointmentLoading } = this.state;
+    const { error, loading, specialist, reviews, favorite, modalVisible, time, excludedDates, firstDate,
+      excludedTimes, date, minAndMaxTimes, submitted, appointmentError, appointmentLoading, pastAppointments,
+      description, stars } = this.state;
 
     if(loading) {
       return (
-        <div className="centered">
-          <BounceLoader
-            sizeUnit={"px"}
-            size={75}
-            color={'rgb(37, 124, 191)'}
-            loading={true}
-          />
+        <div className="body-background">
+          <div className="centered">
+            <BounceLoader
+              sizeUnit={"px"}
+              size={75}
+              color={'rgb(37, 124, 191)'}
+              loading={true}
+            />
+          </div>
         </div>
       )
     }
@@ -326,8 +347,8 @@ class Specialist extends React.Component {
       )
     }
 
-    const { address, averageRating, district, firstName, id, insurances, lastName, phoneNumber, profilePicture,
-      reviews, sex, specialties, workingHours } = specialist;
+    const { address, firstName, insurances, lastName, phoneNumber, profilePicture, specialties } = specialist;
+
 
     return (
       <div className="body-background">
@@ -436,13 +457,23 @@ class Specialist extends React.Component {
                         <p className="doctor-specialty" style={{ paddingRight: 20 }}>{specialties.map(s => s+ ' ')}</p>
                         <p className="doctor-text"><FontAwesomeIcon className="mr-2" icon={faPhone} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{phoneNumber}</p>
                         <p className="doctor-text"><FontAwesomeIcon className="mr-2" icon={faMapMarker} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{address}, CABA</p>
-                        <div>
-                          <div className="btn btn-success mt-2 mr-2" onClick={() => this.toggleModal()}>
-                            <FontAwesomeIcon className="mr-2" icon={faCalendarPlus} style={{ color: '#FFF' }} /> Reservar Turno
+                        {
+                          this.props.user.auth &&
+                          <div>
+                            <div className="btn btn-success mt-2 mr-2" onClick={() => this.toggleModal()}>
+                              <FontAwesomeIcon className="mr-2" icon={faCalendarPlus} style={{ color: '#FFF' }} /> Reservar Turno
+                            </div>
+                            {this.renderFavoriteButton(favorite)}
                           </div>
-                          {this.renderFavoriteButton(favorite)}
-                        </div>
-
+                        }
+                        {
+                          !this.props.user.auth &&
+                          <div className="mt-3">
+                            <div className="alert alert-secondary" role="alert">
+                              <FontAwesomeIcon className="mr-2" icon={faLock} style={{ color: 'rgba(0,0,0, 0.5)' }} /> Registrate o inicia sesion para poder reservar un turno
+                            </div>
+                          </div>
+                        }
                       </div>
                     </div>
                   </div>
@@ -465,10 +496,36 @@ class Specialist extends React.Component {
                   </Row>
                   <hr />
                   <h3>Reseñas</h3>
-                  <Review />
+                  {
+                    reviews &&
+                    reviews.map((review, index) => <Review key={index} data={review} /> )
+                  }
                   <h4 className="mt-3">Dejá tu reseña</h4>
-                  <textarea name="review" value={review} type="text" rows="3" className={'form-control'}  placeholder="Ingresa tu reseña" onChange={(e) =>this.handleChange(e)}/>
-                  <div className="btn btn-primary custom-btn mt-2">Dejar reseña</div>
+                  {
+                    pastAppointments.length > 0 ?
+                      <div>
+                        <div className="form-group">
+                          <label>Estrellas</label>
+                          <select className="form-control" name="stars" value={stars} onChange={(e) =>this.handleChange(e)}>
+                            <option value="">Elegir una opcion</option>
+                            <option value="1">⭐️</option>
+                            <option value="2">⭐️⭐️</option>
+                            <option value="3">⭐️⭐️⭐️</option>
+                            <option value="4">⭐️⭐️⭐️⭐️</option>
+                            <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
+                          </select>
+                        </div>
+                        <label>Comentarios</label>
+                        <textarea name="description" value={description} type="text" rows="3" className={'form-control'}  placeholder="Ingresa tu comentario" onChange={(e) =>this.handleChange(e)}/>
+                        <div className="btn btn-primary custom-btn mt-2" onClick={() => this.submitReview()}>Dejar reseña</div>
+                      </div>
+                      :
+                      <div className="mt-3">
+                        <div className="alert alert-secondary" role="alert">
+                          <FontAwesomeIcon className="mr-2" icon={faLock} style={{ color: 'rgba(0,0,0, 0.5)' }} /> Solo podes dejar una reseña despues de un turno
+                        </div>
+                      </div>
+                  }
                 </div>
               </div>
             </div>
