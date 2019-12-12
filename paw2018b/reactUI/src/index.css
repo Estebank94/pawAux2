@@ -612,8 +612,17 @@ a {
 
 .favorite-card {
   cursor: pointer;
+  border-bottom: #ececf1 1px solid;
+}
+
+.appointment-card {
+  cursor: auto !important;
 }
 
 .favorite-card:hover .doctor-name {
   color: #257CBF;
+}
+
+.fav-button {
+  min-width: 192px;
 }
