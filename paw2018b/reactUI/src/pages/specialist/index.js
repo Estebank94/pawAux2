@@ -6,7 +6,7 @@ import BounceLoader from 'react-spinners/BounceLoader';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faMapMarker, faHeart, faCalendarPlus, faCheckCircle, faTimesCircle, faLock } from '@fortawesome/free-solid-svg-icons';
-import Review from '../../components/specialist/review';
+import ReviewCard from '../../components/specialist/reviewCard';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { connect } from 'react-redux';
@@ -83,6 +83,8 @@ class Specialist extends React.Component {
               time: this.roundTime(minAndMaxTimes.min)
             })
 
+            // this.API.get(`/${id}/canReview`).then(response => console.log('response', response))
+
             this.API.get('/doctor/' + id +'/reviews').then(response => {
               this.setState({ reviews: response.data.reviews });
 
@@ -145,6 +147,7 @@ class Specialist extends React.Component {
   }
 
   addToFavorites() {
+    this.setState({ favorite: null })
     this.API.put(`doctor/${this.state.specialist.id}/favorite/add`).then(response => {
       if(response.status >= 200) {
         this.setState({ favorite: true })
@@ -153,6 +156,7 @@ class Specialist extends React.Component {
   }
 
   removeFromFavorites() {
+    this.setState({ favorite: null })
     this.API.put(`doctor/${this.state.specialist.id}/favorite/remove`).then(response => {
       if(response.status >= 200) {
         this.setState({ favorite: false });
@@ -163,9 +167,10 @@ class Specialist extends React.Component {
   renderFavoriteButton(favorite) {
     if(favorite === null) {
       return(
-        <div className="btn btn-primary custom-btn mt-2">
+        <div className="btn btn-primary custom-btn mt-2 fav-button">
             <PulseLoader
-              size={'30px'}
+              sizeUnit={"px"}
+              size={10}
               color={'#FFF'}
               loading={true}
             />
@@ -174,14 +179,14 @@ class Specialist extends React.Component {
 
     if(favorite) {
       return(
-        <div className="btn btn-primary custom-btn mt-2" onClick={() => this.removeFromFavorites()}>
+        <div className="btn btn-primary custom-btn mt-2 fav-button" onClick={() => this.removeFromFavorites()}>
           <FontAwesomeIcon className="mr-2" icon={faHeart} style={{ color: '#b52e2e' }} /> Eliminar de favoritos
         </div>
       )
     }
 
     return(
-      <div className="btn btn-primary custom-btn mt-2" onClick={() => this.addToFavorites()}>
+      <div className="btn btn-primary custom-btn mt-2 fav-button" onClick={() => this.addToFavorites()}>
         <FontAwesomeIcon className="mr-2" icon={faHeart} style={{ color: '#FFF' }} /> Agregar a favoritos
       </div>
     )
@@ -498,7 +503,7 @@ class Specialist extends React.Component {
                   <h3>Reseñas</h3>
                   {
                     reviews &&
-                    reviews.map((review, index) => <Review key={index} data={review} /> )
+                    reviews.map((review, index) => <ReviewCard key={index} data={review} /> )
                   }
                   <h4 className="mt-3">Dejá tu reseña</h4>
                   {
