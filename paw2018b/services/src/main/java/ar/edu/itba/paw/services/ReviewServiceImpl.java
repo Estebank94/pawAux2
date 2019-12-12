@@ -138,4 +138,9 @@ public class ReviewServiceImpl implements ReviewService {
     public List<Review> getSharedReviews (Doctor doctor, Patient patient){
         return reviewDao.getSharedReviews(doctor, patient);
     }
+
+    @Override
+    public Boolean reviewAvailables(Doctor doctor, Patient patient) {
+        return reviewDao.reviewAvailables(doctor, patient);
+    }
 }

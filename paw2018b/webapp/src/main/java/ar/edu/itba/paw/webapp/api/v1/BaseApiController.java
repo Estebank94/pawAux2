@@ -26,4 +26,11 @@ public class BaseApiController {
                 .build()
                 .toString();
     }
+
+    public String MessageToJSON(Boolean valid){
+        return Json.createObjectBuilder()
+                .add("canReview", valid)
+                .build()
+                .toString();
+    }
 }

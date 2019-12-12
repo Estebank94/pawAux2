@@ -324,26 +324,6 @@ public class DoctorApiController extends BaseApiController {
         }
         LOGGER.debug("Found Doctor: " + doctor);
 
-        /* Avatar */
-//
-//        String extension = FilenameUtils.getExtension(fileDetail.getFileName());
-//
-//        BufferedImage bImage = ImageIO.read(uploadedInputStream);
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//
-//        if(!extension.equals("jpg") && !extension.equals("png") && !extension.equals("jpeg")){
-//            return Response.status(Response.Status.CONFLICT)
-//                    .entity(errorMessageToJSON("File not supported")).build();
-//        }
-//
-//
-//        ImageIO.write(bImage, extension, baos);
-//        baos.flush();
-//        byte[] imageInByte = baos.toByteArray();
-//
-//        doctorService.setDoctorAvatar(doctor, imageInByte);
-//        baos.close();
-
         if (professionalForm.getSpecialty() != null) {
             Set<Specialty> specialties = new HashSet<>();
             for (String sp : professionalForm.getSpecialty()) {
@@ -419,7 +399,7 @@ public class DoctorApiController extends BaseApiController {
 
 
     @POST
-    @Path("/{id}/reviewOnly")
+    @Path("/{id}/makeReview")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = MediaType.APPLICATION_JSON)
     public Response createReviewOnly(@PathParam("id") final int doctorId , @Valid final BasicReviewForm reviewForm){
@@ -497,14 +477,15 @@ public class DoctorApiController extends BaseApiController {
         }
         LOGGER.debug("Review doctor {}", doctor.getId());
 
-
+/*
         List<Appointment> sharedAppointments = appointmentService.findPastSharedAppointments(doctor, patient);
 
         List<Review> sharedReviews = reviewService.getSharedReviews(doctor, patient);
-
+*/
         Review review = null;
 
-        if(sharedAppointments.size() - sharedReviews.size() > 0){
+        if(reviewService.reviewAvailables(doctor, patient)){
+ //           if(sharedAppointments.size() - sharedReviews.size() > 0){
 
             LOGGER.debug("A comment can be made");
 
@@ -522,6 +503,86 @@ public class DoctorApiController extends BaseApiController {
 
         return Response.ok(new BasicReviewDTO(review)).build();
     }
+
+    @GET
+    @Path("/{id}/canReview")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response canReview(@PathParam("id") final int doctorId){
+
+        /* Patient Revision */
+        Patient patient;
+        try {
+            patient = userDetailsService.getLoggedUser();
+        } catch (NotFoundPacientException e) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("patient logged not found"))
+                    .build();
+        } catch ( NotValidEmailException e){
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Invalid email of patient"))
+                    .build();
+        }
+        if (patient == null){
+            Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("patient logged not found")) //messageSource.getMessage("patient not found", null, LocaleContextHolder.getLocale())))
+                    .build();
+        }
+        LOGGER.debug("Review patient {}", patient.getId());
+
+        if (patient.getDoctor() != null && patient.getDoctor().getId() == doctorId){
+            LOGGER.debug("Patient is the same as doctor");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Cannot set review a doctor to his own"))
+                    .build();
+        }
+
+        /* Doctor Revision */
+        Doctor doctor;
+        try {
+            doctor = doctorService.findDoctorById(String.valueOf(doctorId));
+        } catch (NotFoundDoctorException e) {
+            LOGGER.debug("Doctor with id {} not found", doctorId);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
+                    .build();
+        } catch (NotValidIDException e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Doctor with bad id"))
+                    .build();
+        }
+        if (doctor == null){
+            LOGGER.debug("Doctor with id {} not found", doctorId);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
+                    .build();
+        }
+        LOGGER.debug("Review doctor {}", doctor.getId());
+/*
+        List<Appointment> sharedAppointments = appointmentService.findPastSharedAppointments(doctor, patient);
+
+        List<Review> sharedReviews = reviewService.getSharedReviews(doctor, patient);
+*/
+
+            //           if(sharedAppointments.size() - sharedReviews.size() > 0){
+        if(reviewService.reviewAvailables(doctor, patient)){
+            return Response
+                    .status(Response.Status.ACCEPTED)
+                    .entity(MessageToJSON(true))
+                    .build();
+        }else{
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(MessageToJSON(false))
+                    .build();
+        }
+    }
+
 
     @POST
     @Path("/{id}/review")
@@ -658,7 +719,7 @@ public class DoctorApiController extends BaseApiController {
         return Response.ok(new BasicReviewDTO(review)).build();
     }
 
-    
+
     @PUT
     @Path("/{id}/appointment/add")
     @Consumes(MediaType.APPLICATION_JSON)
