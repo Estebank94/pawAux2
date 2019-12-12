@@ -566,7 +566,7 @@ a {
 }
 
 .nav-item a {
-  color: #257cbf;
+  color: #257cbf !important;
   text-decoration: none;
 
 }
@@ -617,6 +617,9 @@ a {
 
 .appointment-card {
   cursor: auto !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .favorite-card:hover .doctor-name {
