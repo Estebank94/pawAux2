@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import 'rc-steps/assets/index.css';
 import 'rc-steps/assets/iconfont.css';
 import BounceLoader from 'react-spinners/BounceLoader';
@@ -15,7 +16,6 @@ import Select from 'react-select';
 import { ApiClient } from '../../../utils/apiClient';
 import i18n from "../../../i18n";
 import Dropzone from "react-dropzone";
-import moment from 'moment';
 
 class CompleteProfile extends React.Component {
   constructor(props) {
@@ -52,14 +52,12 @@ class CompleteProfile extends React.Component {
   async componentWillMount() {
     await this.API.get('/specialties')
       .then(response => {
-        console.log('specialties', response.data)
         let allSpecialties = [];
         response.data.specialties.map(specialty => allSpecialties.push({value: specialty.id, label: specialty.speciality}))
         this.setState({allSpecialties});
       })
     await this.API.get('/insurances')
       .then(response => {
-        console.log('insurances', response.data);
         let allInsurances = [];
         response.data.insurances.map(insurance => allInsurances.push({name: insurance.name, plans: insurance.plans}))
         this.setState({allInsurances});
@@ -108,7 +106,7 @@ class CompleteProfile extends React.Component {
   }
 
   handleSubmit() {
-    const {  photo, studies, languages, specialties, insurances, insurancePlans, workingHours } = this.state;
+    const {  photo, studies, languages, specialties, insurancePlans, workingHours } = this.state;
 
     this.setState({ submitted: true });
 
@@ -130,7 +128,13 @@ class CompleteProfile extends React.Component {
       }
     }
 
-    this.API.put('/doctor/uploadPicture', { file: this.state.files[0] }).then((response) => {
+    const conf = {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+
+    this.API.put('/doctor/uploadPicture', { file: this.state.photo }, conf ).then((response) => {
       console.log('succes', response)
     })
   }
@@ -570,4 +574,8 @@ class CompleteProfile extends React.Component {
   }
 }
 
-export default CompleteProfile;
+const mapStateToProps = state => ({
+  user: state.auth,
+});
+
+export default connect(mapStateToProps, null)(CompleteProfile);
