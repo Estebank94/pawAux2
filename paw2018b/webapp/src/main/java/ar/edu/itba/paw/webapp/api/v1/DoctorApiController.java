@@ -15,6 +15,8 @@ import ar.edu.itba.paw.webapp.dto.reviews.BasicReviewDTO;
 import ar.edu.itba.paw.webapp.dto.reviews.ReviewListDTO;
 import ar.edu.itba.paw.webapp.dto.workingHours.WorkingHoursDTO;
 import ar.edu.itba.paw.webapp.forms.*;
+import ar.edu.itba.paw.webapp.utils.PaginationHelper;
+import ar.edu.itba.paw.webapp.utils.PaginationService;
 import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -86,6 +88,10 @@ public class DoctorApiController extends BaseApiController {
     @Autowired
     private ApplicationContext applicationContext;
 
+    @Autowired
+    private PaginationService paginationHelper;
+
+
     private static final String VERIFICATION_TOKEN_TEMPLATE_NAME = "welcomeMail.html";
 
     @Autowired
@@ -127,7 +133,10 @@ public class DoctorApiController extends BaseApiController {
         }
         return Response.status(Response.Status.NOT_FOUND).build();
     }
-    
+
+    private static final int DEFAULT_PAGE_SIZE = 10;
+    private static final int MAX_PAGE_SIZE = 30;
+
     @GET
     @Path("/list")
     @Produces(value = {MediaType.APPLICATION_JSON})
@@ -137,7 +146,8 @@ public class DoctorApiController extends BaseApiController {
                                 @QueryParam("insurance") String insurance,
                                 @QueryParam("sex") String sex,
                                 @QueryParam("insurancePlan") List<String> insurancePlan,
-                                @QueryParam("days") List<String> days) {
+                                @QueryParam("days") List<String> days,
+                                @QueryParam("" + DEFAULT_PAGE_SIZE) int pageSize) {
 
         Search search = new Search();
         if (specialty != null) {
@@ -197,16 +207,21 @@ public class DoctorApiController extends BaseApiController {
             search.setDays(days);
         }
 
+        page = paginationHelper.getPageAsOneIfNegative(page);
+        pageSize = paginationHelper.getPageSizeAsDefaultSizeIfOutOfRange(pageSize, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE);
+
         List<Doctor> doctors;
         try {
-            doctors = doctorService.listDoctors(search, String.valueOf(page));
+            doctors = doctorService.listDoctors(search, String.valueOf(page), pageSize);
         } catch (NotValidPageException e) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(errorMessageToJSON("DayWeek is not an Digit between 1-7")).build();
         }
 
-        Long totalPageCount = doctorService.getLastPage(search);
-        return Response.ok(new DoctorListDTO(doctors, totalPageCount)).build();
+        Long totalPageCount = doctorService.getLastPage(search, pageSize);
+
+
+        return Response.ok(new DoctorListDTO(doctors, totalPageCount, paginationHelper.getPaginationDTO(pageSize, totalPageCount.intValue()))).build();
     }
 
     @GET

@@ -57,7 +57,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     }
 
     @Override
-    public List<Doctor> listDoctors(Search search, int page) {
+    public List<Doctor> listDoctors(Search search, int page, int pageSize) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Doctor> query = cb.createQuery(Doctor.class);
@@ -214,8 +214,8 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         }
 
         TypedQuery<Doctor> typedQuery = em.createQuery(query);
-        typedQuery.setFirstResult(PAGESIZE * (page));
-        typedQuery.setMaxResults(PAGESIZE);
+        typedQuery.setFirstResult(pageSize * (page));
+        typedQuery.setMaxResults(pageSize);
         List<Doctor> list = typedQuery.getResultList();
         for(Doctor doctor : list){
             Hibernate.initialize(doctor.getWorkingHours());
@@ -234,7 +234,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     }
 
     @Override
-    public Long getLastPage(Search search) {
+    public Long getLastPage(Search search, int pageSize) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Doctor> query = cb.createQuery(Doctor.class);
@@ -389,7 +389,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         TypedQuery<Doctor> typedQuery = em.createQuery(query);
 
         final List<Doctor> list = typedQuery.getResultList();
-        int pageCount = (int) (Math.ceil(list.size() * 1.0 / PAGESIZE));
+        int pageCount = (int) (Math.ceil(list.size() * 1.0 / pageSize));
         return (long) pageCount;
 
     }
