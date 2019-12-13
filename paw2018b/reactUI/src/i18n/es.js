@@ -17,8 +17,7 @@ export default {
       noResults: 'No hay resultados',
       changeFilters: 'Intenta cambiar los filtros de búsqueda',
       filters:'Filtros',
-
-
+      register: 'Registrarse'
   },
   specialist:{
       city: ', CABA',
@@ -76,6 +75,7 @@ export default {
       studies: 'Estudios',
       placeHolderStudies: 'Ingresá tus estudios',
       descriptionStudies: 'Ingresá información sobre tus estudios',
+      descriptionCertificate: 'Ingresá información sobre tus títulos',
       languages: 'Idiomas',
       selectLanguages: 'Seleccioná uno o más idiomas',
       speciality: 'Especialidades',
@@ -128,7 +128,12 @@ export default {
       basicInfo: 'Datos Básicos',
       personalInfo: 'Datos Personales',
       welcome: 'Bienvenido a Waldoc',
-      emailMessage: 'En breve, vas recibir un correo electrónico para confirmar tu cuenta'
+      emailMessage: 'En breve, vas recibir un correo electrónico para confirmar tu cuenta',
+      photo: 'Foto de perfil',
+      photoUpload: 'Arrastrá tu foto acá o hace click en la caja',
+      photoUploadError: 'El archivo debe ser de tipo imagen',
+      certificate: 'Titulos',
+      placeHolderCertificate: 'Ingresá tus titulos académicos',
   },
   favorite:{
       remove: 'Eliminar de favoritos',

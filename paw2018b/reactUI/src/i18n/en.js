@@ -9,14 +9,15 @@ export default {
     },
     navigation:{
         title:'Waldoc',
-        patientRegistrationTitle: 'Register as a patient',
-        doctorRegistrationTitle:'Register as a doctor',
+        patientRegistrationTitle: 'Sign up as a patient',
+        doctorRegistrationTitle:'Sign up as a doctor',
         logInButton: 'Log In',
         myAccountTitle: 'My Account',
         logOutButton: 'Log Out',
         noResults: 'There are no results',
         changeFilters: 'Change search filters',
-        filters:'Search Filter'
+        filters:'Search Filter',
+        register: 'Sign Up'
     },
     specialist:{
         city: ', CABA',
@@ -29,7 +30,7 @@ export default {
     },
     review:{
         reviewThanks: 'Thank you for sharing your review with us!',
-        register:'Registrate o iniciá sesión para dejar una reseña',
+        register:'Sign up or log in to submit a review',
         appointment: 'You can only leave a review after attending an appointment',
         stars: 'Stars',
         starsOption: 'Choose an option',
@@ -51,7 +52,7 @@ export default {
         error: 'We couldn\'t reserve your appointment',
         reserved: 'Reserved Appointment',
         close: 'Close',
-        register:'Register or Log in to reserve an appointment'
+        register:'Sign up or log in to reserve an appointment'
     },
     error:{
         problem:'There was a problem',
@@ -60,13 +61,13 @@ export default {
     },
     login: {
         welcome: 'Welcome',
-        email: 'email',
+        email: 'Email',
         placeHolderEmail: 'Enter your email',
         password: 'Password',
         placeHolderasPsword: 'Enter your password',
         error: 'not valid email or password',
-        accountQuestion:'You don\'t have an account?',
-        register: 'Register',
+        accountQuestion:'Don\'t have an account?',
+        register: 'Sign up',
         cancel: 'Cancel'
     },
     register:{
@@ -74,6 +75,7 @@ export default {
         studies: 'Academic Studies',
         placeHolderStudies: 'Enter your academic studies',
         descriptionStudies: 'Enter information about your academic studies',
+        descriptionCertificate: 'Enter information about your academic certificates',
         languages: 'Languages',
         selectLanguages: 'Choose one or more languages',
         speciality: 'Specialities',
@@ -88,8 +90,8 @@ export default {
         errorDay: 'Complete at least one day',
         continueButton: 'Continue',
         backButton: 'Back',
-        me: 'Register me',
-        completeProfTitle: 'Complete your professional',
+        me: 'Send',
+        completeProfTitle: 'Complete your professional information',
         problem: 'There was a problem',
         notRegister: 'We coulnd\'t activate your account',
         toHome: 'Go to Home Page',
@@ -121,12 +123,17 @@ export default {
         female: 'Female',
         license: 'Professional License',
         placeHolderLicense: 'Enter your professional license',
-        asPatient: 'Register as a patient',
-        asDoctor: 'Register as a doctor',
+        asPatient: 'Sign up as a patient',
+        asDoctor: 'Sign up as a doctor',
         basicInfo: 'Basic Data',
         personalInfo: 'Personal Data',
         welcome: 'Welcome to Waldoc',
-        emailMessage: 'Soon, you will receive an email to confirm your account'
+        emailMessage: 'Soon, you will receive an email to confirm your account',
+        photo: 'Profile picture',
+        photoUpload: 'Upload your photo by dragging it here or clicking on the box',
+        photoUploadError: 'The file must be an image',
+        certificate: 'Certificates',
+        placeHolderCertificate: 'Enter your academic certificates',
     },
     favorite:{
         remove: 'Remove from favorites',
