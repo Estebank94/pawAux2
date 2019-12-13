@@ -1,50 +1,36 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import i18n from "../../i18n";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPhone, faMapMarker } from '@fortawesome/free-solid-svg-icons';
+import PropTypes from 'prop-types';
 
 class SpecialistCard extends React.Component {
+  static propTypes = {
+    data: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired
+  };
 
-    renderRating = () => {
-        const { averageRating } = this.props.data;
-        let stars = [];
+  handleClick() {
+    const { id } = this.props.data;
+    this.props.history.push(`/specialist/${id}`);
+  }
 
-        // Outer loop to create parent
-        for (let i = 0; i < averageRating; i++) {
-            stars.push(<i className="fas fa-star star-yellow"></i>);
-        }
-        for(let j = averageRating + 1; j < 5; j++){
-            stars.push(<i className="fas fa-star star-grey"></i>)
-        }
-        return stars;
-    }
-
-    handleClick() {
-      const { id } = this.props.data;
-      this.props.history.push(`/specialist/${id}`);
-    }
-
-    render() {
-      const { profilePicture, firstName, lastName, specialties, averageRating, address } = this.props.data;
+  render() {
+    const { profilePicture, firstName, lastName, specialties, address, phoneNumber } = this.props.data;
     return(
-      <div className="card-doctor d-flex flex-row box" onClick={() => this.handleClick()}>
-          <img className="avatar big" src={`data:image/jpeg;base64,${profilePicture}`} />
-          <div className="card-body">
-              <div className="card-text">
-                  <h3 className="doctor-name">{firstName} {lastName}</h3>
-                  <div className="row container">
-                      <p className="doctor-specialty" style={{ paddingRight: 20 }}>{specialties.map(s => s + ' ')}</p>
-                  </div>
-                  <p className="doctor-text">Certificado</p>
-                  { averageRating !== 0 &&
-                      <div className="row container">
-                          {this.renderRating()}
-                      </div>
-                  }
-                  <p className="doctor-text">"Muy buena atención, muy puntual"</p>
-                  <p className="doctor-text"><i className="far fa-clock"></i>8 - 20pm</p>
-                  <p className="doctor-text"><i className="fas fa-map-marker-alt"></i>{address}{i18n.t('specialist.city')}</p>
-              </div>
+      <div className="card-doctor d-flex flex-row box appointment-card" onClick={() => this.handleClick()}>
+        <img className="avatar big" src={`data:image/jpeg;base64,${profilePicture}`} />
+        <div className="card-body">
+          <div className="card-text">
+            <h3 className="doctor-name">{firstName} {lastName}</h3>
+            <div className="row container">
+              <p className="doctor-specialty" style={{ paddingRight: 20 }}>{specialties.map(s => s + ' ')}</p>
+            </div>
+            <p className="doctor-text"><FontAwesomeIcon className="mr-2" icon={faPhone} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{phoneNumber}</p>
+            <p className="doctor-text"><FontAwesomeIcon className="mr-2" icon={faMapMarker} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{address}{i18n.t('specialist.city')}</p>
           </div>
+        </div>
       </div>
     );
   }
