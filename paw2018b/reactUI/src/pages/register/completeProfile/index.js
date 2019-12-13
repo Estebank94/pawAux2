@@ -16,6 +16,7 @@ import Select from 'react-select';
 import { ApiClient } from '../../../utils/apiClient';
 import i18n from "../../../i18n";
 import Dropzone from "react-dropzone";
+import moment from 'moment';
 
 class CompleteProfile extends React.Component {
   constructor(props) {
@@ -45,6 +46,7 @@ class CompleteProfile extends React.Component {
       },
       uploadError: false,
       submitted: false,
+      success: false
     };
   }
 
@@ -53,7 +55,7 @@ class CompleteProfile extends React.Component {
     await this.API.get('/specialties')
       .then(response => {
         let allSpecialties = [];
-        response.data.specialties.map(specialty => allSpecialties.push({value: specialty.id, label: specialty.speciality}))
+        response.data.specialties.map(specialty => allSpecialties.push({value: specialty, label: specialty}))
         this.setState({allSpecialties});
       })
     await this.API.get('/insurances')
@@ -106,37 +108,44 @@ class CompleteProfile extends React.Component {
   }
 
   handleSubmit() {
-    const {  photo, studies, languages, specialties, insurancePlans, workingHours } = this.state;
+    const { photo, studies, languages, specialties, insurancePlans, workingHours } = this.state;
 
     this.setState({ submitted: true });
-
-    console.log('state', this.state);
 
     this.getMapKeys(languages);
 
     this.getWorkingHours(workingHours);
 
-    if(photo && studies && !this.mapIsEmpty(languages) && specialties.length > 0  && !this.mapIsEmpty(insurancePlans) && !this.mapIsEmpty(workingHours)) {
+    if(photo && studies && !this.mapIsEmpty(languages) && specialties.length > 0  && !this.mapIsEmpty(insurancePlans) && !this.mapIsEmpty(workingHours) && !this.handleAddWorkingHours(workingHours)) {
       const body = {
         description: {
           certificate: 'cer',
           languages: this.arrayToString(this.getMapKeys(languages)),
-          studies
+          education: studies,
         },
+        specialty: specialties,
         insurancePlan: this.getMapKeys(insurancePlans),
         workingHours: this.getWorkingHours(workingHours)
       }
-    }
 
-    const conf = {
-      headers: {
-        'Content-Type': 'multipart/form-data'
+      const conf = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       }
-    }
 
-    this.API.put('/doctor/uploadPicture', { file: this.state.photo }, conf ).then((response) => {
-      console.log('succes', response)
-    })
+      let bodyFormData = new FormData();
+      bodyFormData.append('file', this.state.files[0])
+
+
+      this.setState({ loading: true })
+      this.API.put('/doctor/uploadPicture', bodyFormData, conf ).then(() => {
+        this.API.post('/doctor/registerProfessional', body).then(() => {
+          this.setState({ loading: false, success: true })
+        })
+      })
+
+    }
   }
 
   getDay(name) {
@@ -158,6 +167,21 @@ class CompleteProfile extends React.Component {
       default:
         return 1
     }
+  }
+
+  hasWorkingHoursError(wh) {
+    if(!wh) {
+      return false;
+    }
+
+    for (let [key, value] of wh.entries()) {
+      if(moment(value.start, 'HH:mm').isAfter(value.end, 'HH:mm')){
+        return true
+      }
+    }
+
+    return false;
+
   }
 
   getWorkingHours(wh) {
@@ -502,7 +526,7 @@ class CompleteProfile extends React.Component {
 
 
   render() {
-    const { files, uploadError, submitted, photo, loading } = this.state;
+    const { files, uploadError, submitted, photo, loading, success } = this.state;
 
     if(loading) {
       return(
@@ -516,6 +540,24 @@ class CompleteProfile extends React.Component {
             />
           </div>
         </div>
+      )
+    }
+
+    if(success) {
+      return(
+        <div className="body-background">
+          <div className="container col-12-sm w-p-20">
+            <div className="login-card w-shadow">
+              <div>
+                <FontAwesomeIcon icon={faCheckCircle} color="#46ce23" size="4x"/>
+                <h3 className="mt-4">Informacion Completada</h3>
+                <p>Ahora vas a aparecer en el listado de medicos de Waldoc</p>
+                <Link className="btn btn-primary custom-btn" to="/">{i18n.t('register.toHome')}</Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
       )
     }
 
