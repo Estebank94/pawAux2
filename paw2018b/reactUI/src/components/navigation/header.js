@@ -27,7 +27,7 @@ class Navigation extends React.Component {
           {
             !user ?
               <div className="row">
-                <DropdownButton id="dropdown-basic-button btn-register" variant="light" title="Registrarse">
+                <DropdownButton id="dropdown-basic-button btn-register" variant="light" title={i18n.t('navigation.register')}>
                   <Dropdown.Item href="/register/patient">{i18n.t('navigation.patientRegistrationTitle')}</Dropdown.Item>
                   <Dropdown.Item href="/register/specialist">{i18n.t('navigation.doctorRegistrationTitle')}</Dropdown.Item>
                 </DropdownButton>
