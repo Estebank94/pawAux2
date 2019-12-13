@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faCheck } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
+import i18n from "../../i18n";
 
 
 class ReviewForm extends React.Component {
@@ -45,7 +46,7 @@ class ReviewForm extends React.Component {
       return(
         <div className="mt-3">
           <div className="alert alert-success">
-            <FontAwesomeIcon className="mr-2" icon={faCheck} style={{ color: 'rgba(0,0,0, 0.5)' }} /> Gracias por compartir tu reseña con nosotros!
+            <FontAwesomeIcon className="mr-2" icon={faCheck} style={{ color: 'rgba(0,0,0, 0.5)' }} />{i18n.t('review.thanks')}
           </div>
         </div>
       )
@@ -55,7 +56,7 @@ class ReviewForm extends React.Component {
       return(
         <div className="mt-3">
           <div className="alert alert-secondary" role="alert">
-            <FontAwesomeIcon className="mr-2" icon={faLock} style={{ color: 'rgba(0,0,0, 0.5)' }} /> Registrate o inicia sesion para dejar una reseña
+            <FontAwesomeIcon className="mr-2" icon={faLock} style={{ color: 'rgba(0,0,0, 0.5)' }} />{i18n.t('review.register')}
           </div>
         </div>
       )
@@ -65,7 +66,7 @@ class ReviewForm extends React.Component {
       return(
         <div className="mt-3">
           <div className="alert alert-secondary" role="alert">
-            <FontAwesomeIcon className="mr-2" icon={faLock} style={{ color: 'rgba(0,0,0, 0.5)' }} /> Solo podes dejar una reseña despues de un turno
+            <FontAwesomeIcon className="mr-2" icon={faLock} style={{ color: 'rgba(0,0,0, 0.5)' }} />{i18n.t('review.appointment')}
           </div>
         </div>
       )
@@ -75,9 +76,9 @@ class ReviewForm extends React.Component {
     return(
       <div>
         <div className="form-group">
-          <label>Estrellas</label>
+          <label>{i18n.t('review.stars')}</label>
           <select className="form-control" name="stars" value={stars} onChange={(e) =>this.handleChange(e)}>
-            <option value="">Elegir una opcion</option>
+            <option value="">{i18n.t('review.starsOption')}</option>
             <option value="1">⭐️</option>
             <option value="2">⭐️⭐️</option>
             <option value="3">⭐️⭐️⭐️</option>
@@ -85,9 +86,9 @@ class ReviewForm extends React.Component {
             <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
           </select>
         </div>
-        <label>Comentarios</label>
-        <textarea name="description" value={description} type="text" rows="3" className={'form-control'}  placeholder="Ingresa tu comentario" onChange={(e) =>this.handleChange(e)}/>
-        <div className="btn btn-primary custom-btn mt-3" onClick={() => this.submitReview()}>Dejar reseña</div>
+        <label>{i18n.t('review.comments')}</label>
+        <textarea name="description" value={description} type="text" rows="3" className={'form-control'}  placeholder={i18n.t('review.placeHolderComments')} onChange={(e) =>this.handleChange(e)}/>
+        <div className="btn btn-primary custom-btn mt-3" onClick={() => this.submitReview()}>{i18n.t('review.button')}</div>
       </div>
     );
   }

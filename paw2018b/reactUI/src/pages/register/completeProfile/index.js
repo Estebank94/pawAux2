@@ -13,6 +13,7 @@ import Row from 'react-bootstrap/Row';
 import Badge from 'react-bootstrap/Badge';
 import Select from 'react-select';
 import { ApiClient } from '../../utils/apiClient';
+import i18n from "../../../i18n";
 
 class CompleteProfile extends React.Component {
   constructor(props) {
@@ -149,7 +150,7 @@ class CompleteProfile extends React.Component {
     if(value === '' && this.state.submitted) {
       return (
         <div className="text-danger">
-          El campo no puede quedar vacio
+            {i18n.t('register.emptyField')}
         </div>
       )
     }
@@ -185,12 +186,12 @@ class CompleteProfile extends React.Component {
     return(
       <div className="mb-3">
         <div className="form-group">
-          <label className={errors.studies || this.isEmpty(studies) ? 'text-danger' : ''}>Estudios</label>
-          <textarea name="studies" value={studies} type="text" rows="3" className={'form-control ' + (errors.studies || this.isEmpty(studies) ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder="Ingresa tus estudios" onChange={(e) =>this.handleChange(e)}/>
+          <label className={errors.studies || this.isEmpty(studies) ? 'text-danger' : ''}>{i18n.t('register.studies')}</label>
+          <textarea name="studies" value={studies} type="text" rows="3" className={'form-control ' + (errors.studies || this.isEmpty(studies) ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder={i18n.t('register.placeHolderStudies')} onChange={(e) =>this.handleChange(e)}/>
           {
             errors.studies &&
             <div className="text-danger">
-              Ingresa informacion sobre tus estudios
+                {i18n.t('register.descriptionStudies')}
             </div>
           }
           {
@@ -201,7 +202,7 @@ class CompleteProfile extends React.Component {
           <Form>
             <Form.Group>
               <Form.Label className={this.isValidMap(languages) ? '' : 'text-danger'} style={{ marginRight: 32 }}>
-                Idiomas
+                {i18n.t('register.languages')}
               </Form.Label>
               {
                 LANGUAGES.map((lang, index) => {
@@ -222,29 +223,29 @@ class CompleteProfile extends React.Component {
               }
               {
                 !this.isValidMap(languages) &&
-                <label className="text-danger">Selecciona uno o mas lenguajes</label>
+                <label className="text-danger">{i18n.t('register.selectLanguages')}</label>
               }
             </Form.Group>
           </Form>
         </div>
         <div>
-          <label className={specialties.length === 0 && submitted ? 'text-danger' : ''}>Especialidades</label>
+          <label className={specialties.length === 0 && submitted ? 'text-danger' : ''}>{i18n.t('register.speciality')}</label>
           <Select
             onChange={(e) => this.handleSelect(e)}
             options={allSpecialties}
-            placeholder="Busca tus especialidades"
+            placeholder={i18n.t('register.placeHolderSpeciality')}
             className={specialties.length === 0 && submitted ? 'text-danger is-invalid' : ''}
             isLoading={allSpecialties.length === 0}
           />
           {
             specialties.length === 0 && submitted &&
-            <label className="text-danger">Selecciona una o mas especialidades</label>
+            <label className="text-danger">{i18n.t('register.selectSpeciality')}</label>
           }
         </div>
         <div className="col-sm-12 p-0 mt-3 mb-3">
           {
             specialties.length > 0 &&
-            <small className="mr-2">Estas son las especialidades que agregaste:</small>
+            <small className="mr-2">{i18n.t('register.selectedSpeciality')}</small>
           }
           {
             specialties.map((s, index) => {
@@ -259,7 +260,7 @@ class CompleteProfile extends React.Component {
         <div className="mb-3">
           <Tab.Container id="left-tabs-example" defaultActiveKey={INSURANCES[0].name}>
             <Form.Label className={!this.isValidMap(insurancePlans) ? 'text-danger' : '' } style={{ marginRight: 32 }}>
-              Selecciona los planes de las prepagas con las que trabajas
+                {i18n.t('register.selectInsurance')}
             </Form.Label>
             <Row>
               <Col sm={3}>
@@ -306,12 +307,12 @@ class CompleteProfile extends React.Component {
             {
               !this.isValidMap(insurancePlans) &&
               <Form.Label className={'text-danger'} style={{ marginRight: 32 }}>
-                Selecciona al menos un plan
+                  {i18n.t('register.selectInsuranceLabel')}
               </Form.Label>
             }
           </Tab.Container>
         </div>
-        <label className={(!this.isValidMap(workingHours) ? 'text-danger ' : '') + 'mt-1'}>Ingresa tus horarios de trabajo</label>
+        <label className={(!this.isValidMap(workingHours) ? 'text-danger ' : '') + 'mt-1'}>{i18n.t('register.workingHours')}</label>
         {
           DAYS.map(day => {
             let start = this.getMapValue(workingHours, day, true);
@@ -323,10 +324,10 @@ class CompleteProfile extends React.Component {
                     <label className={!this.isValidDay(day) ? 'text-danger' : ''}>{day}</label>
                   </div>
                   <div className="form-group col-md-5">
-                    <input name="start" value={start} type="number" min="0" max="24" className={'form-control ' + (this.isValidDay(day) ? '' : 'is-invalid')} placeholder="Inicio (Ej: 9Hs)" onChange={(e) => this.handleAddWorkingHours(e, day, true)}/>
+                    <input name="start" value={start} type="number" min="0" max="24" className={'form-control ' + (this.isValidDay(day) ? '' : 'is-invalid')} placeholder={i18n.t('register.placeHolderWorkingHoursStart')} onChange={(e) => this.handleAddWorkingHours(e, day, true)}/>
                   </div>
                   <div className="form-group col-md-5">
-                    <input name="end" value={end} type="number" min="0" max="24" className={'form-control ' + (this.isValidDay(day) ? '' : 'is-invalid')} placeholder="Fin (Ej: 18Hs)" onChange={(e) => this.handleAddWorkingHours(e, day, false)}/>
+                    <input name="end" value={end} type="number" min="0" max="24" className={'form-control ' + (this.isValidDay(day) ? '' : 'is-invalid')} placeholder={i18n.t('register.placeHolderWorkingHoursFinish')} onChange={(e) => this.handleAddWorkingHours(e, day, false)}/>
                   </div>
                 </div>
               </div>
@@ -335,7 +336,7 @@ class CompleteProfile extends React.Component {
         }
         {
           !this.isValidMap(workingHours) &&
-          <label className={'text-danger '}>Completá al menos un dia</label>
+          <label className={'text-danger '}>{i18n.t('register.errorDay')}</label>
         }
       </div>
     )
@@ -399,14 +400,14 @@ class CompleteProfile extends React.Component {
     const { current } = this.state;
     if(current === 0) {
       return(
-        <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn pull-right">Continuar</div>
+        <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn pull-right">{i18n.t('register.continueButton')}</div>
       )
     }
     if(current === 1) {
       return(
         <div className="row container">
-          <div onClick={() => this.setState({ current: this.state.current - 1 })} className="btn btn-secondary mr-2">Atras</div>
-          <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn pull-right">Registrarme</div>
+          <div onClick={() => this.setState({ current: this.state.current - 1 })} className="btn btn-secondary mr-2">{i18n.t('register.backButton')}</div>
+          <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn pull-right">{i18n.t('register.me')}</div>
         </div>
       )
     }
@@ -419,7 +420,7 @@ class CompleteProfile extends React.Component {
       <div className="body-background">
         <div className="container col-12-sm w-p-20">
           <div className="login-card w-shadow">
-            <h3>Completa tu información profesional</h3>
+            <h3>{i18n.t('register.completeProfTitle')}</h3>
 
             <form className="mb-4">
               {

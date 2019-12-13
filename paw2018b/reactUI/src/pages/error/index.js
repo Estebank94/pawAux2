@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFrownOpen } from '@fortawesome/free-solid-svg-icons';
+import i18n from "../../i18n";
 
 class Error extends React.Component {
   state = {
@@ -22,8 +23,8 @@ class Error extends React.Component {
             <div>
               <FontAwesomeIcon icon={faFrownOpen} color="#257CBF" size="4x"/>
               <h3 className="mt-4">{error}</h3>
-              <p>Hubo un problema</p>
-              <Link className="btn btn-primary custom-btn" to="/">Ir a la pagina principal</Link>
+              <p>{i18n.t('error.problem')}</p>
+              <Link className="btn btn-primary custom-btn" to="/">{i18n.t('error.toHome')}</Link>
             </div>
           </div>
         </div>

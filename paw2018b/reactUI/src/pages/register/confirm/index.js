@@ -5,6 +5,7 @@ import BounceLoader from 'react-spinners/BounceLoader';
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { ApiClient } from '../../../utils/apiClient';
+import i18n from "../../../i18n";
 
 
 class Confirm extends React.Component {
@@ -51,17 +52,17 @@ class Confirm extends React.Component {
             { !loading && !success &&
               <div>
                 <FontAwesomeIcon icon={faTimesCircle} color="#bb0000" size="4x"/>
-                <h3 className="mt-4">Hubo un problema</h3>
-                <p>No pudimos activar tu cuenta.</p>
-                <Link className="btn btn-primary custom-btn" to="/">Ir a la pagina principal</Link>
+                <h3 className="mt-4">{i18n.t('register.problem')}</h3>
+                <p>{i18n.t('register.notRegister')}</p>
+                <Link className="btn btn-primary custom-btn" to="/">{i18n.t('register.toHome')}</Link>
               </div>
             }
             { !loading && success &&
             <div>
               <FontAwesomeIcon icon={faCheckCircle} color="#46ce23" size="4x"/>
-              <h3 className="mt-4">Cuenta activada</h3>
-              <p>Ya podes acceder a tu cuenta.</p>
-              <Link className="btn btn-primary custom-btn" to="/">Ir a la pagina principal</Link>
+              <h3 className="mt-4">{i18n.t('register.activatedAccount')}</h3>
+              <p>{i18n.t('register.activatedAccessAccount')}</p>
+              <Link className="btn btn-primary custom-btn" to="/">{i18n.t('register.toHome')}</Link>
             </div>
             }
 

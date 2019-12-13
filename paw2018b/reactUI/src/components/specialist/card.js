@@ -1,5 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
+import i18n from "../../i18n";
 
 class SpecialistCard extends React.Component {
 
@@ -41,7 +42,7 @@ class SpecialistCard extends React.Component {
                   }
                   <p className="doctor-text">"Muy buena atención, muy puntual"</p>
                   <p className="doctor-text"><i className="far fa-clock"></i>8 - 20pm</p>
-                  <p className="doctor-text"><i className="fas fa-map-marker-alt"></i>{address}, CABA</p>
+                  <p className="doctor-text"><i className="fas fa-map-marker-alt"></i>{address}{i18n.t('specialist.city')}</p>
               </div>
           </div>
       </div>

@@ -17,6 +17,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 
 import "react-datepicker/dist/react-datepicker.css";
+import i18n from "../../i18n";
 
 
 class Specialist extends React.Component {
@@ -178,14 +179,14 @@ class Specialist extends React.Component {
     if(favorite) {
       return(
         <div className="btn btn-primary custom-btn mt-2 fav-button" onClick={() => this.removeFromFavorites()}>
-          <FontAwesomeIcon className="mr-2" icon={faHeart} style={{ color: '#b52e2e' }} /> Eliminar de favoritos
+          <FontAwesomeIcon className="mr-2" icon={faHeart} style={{ color: '#b52e2e' }} /> {i18n.t('favorite.remove')}
         </div>
       )
     }
 
     return(
       <div className="btn btn-primary custom-btn mt-2 fav-button" onClick={() => this.addToFavorites()}>
-        <FontAwesomeIcon className="mr-2" icon={faHeart} style={{ color: '#FFF' }} /> Agregar a favoritos
+        <FontAwesomeIcon className="mr-2" icon={faHeart} style={{ color: '#FFF' }} /> {i18n.t('favorite.add')}
       </div>
     )
   }
@@ -345,7 +346,7 @@ class Specialist extends React.Component {
 
     if(error) {
       return (
-        <p>Hubo un error!</p>
+        <p>{i18n.t('error.error')}</p>
       )
     }
 
@@ -363,17 +364,17 @@ class Specialist extends React.Component {
         >
           <Modal.Header closeButton>
             <Modal.Title id="example-custom-modal-styling-title">
-              Reservar Turno
+                {i18n.t('appointment.reserve')}
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             {
               !submitted &&
                 <div>
-                  <strong>Seleccionar una fecha y horario disponible</strong>
+                  <strong>{i18n.t('appointment.selectDateTime')}</strong>
                   <div className="row mt-2">
                     <div className="col-sm-6">
-                      <label className="mr-2">Fecha</label>
+                      <label className="mr-2">{i18n.t('appointment.date')}</label>
                       <DatePicker
                         selected={date}
                         onChange={date => this.onChange(date, 'date')}
@@ -383,7 +384,7 @@ class Specialist extends React.Component {
                       />
                     </div>
                     <div className="col-sm-6 pl-0">
-                      <label className="mr-2">Horario</label>
+                      <label className="mr-2">{i18n.t('appointment.time')}</label>
                       <DatePicker
                         selected={time}
                         onChange={date => this.onChange(date, 'time')}
@@ -393,7 +394,7 @@ class Specialist extends React.Component {
                         showTimeSelect
                         showTimeSelectOnly
                         timeIntervals={30}
-                        timeCaption="Horario"
+                        timeCaption={i18n.t('appointment.time')}
                         dateFormat="h:mm aa"
                       />
                     </div>
@@ -415,15 +416,15 @@ class Specialist extends React.Component {
               submitted && appointmentError && !appointmentLoading &&
               <div>
                 <FontAwesomeIcon icon={faTimesCircle} color="#bb0000" size="4x"/>
-                <h3 className="mt-4">Hubo un problema</h3>
-                <p className="mb-0">No pudimos reservar el turno.</p>
+                <h3 className="mt-4">{i18n.t('error.problem')}</h3>
+                <p className="mb-0">{i18n.t('appointment.error')}</p>
               </div>
             }
             {
               submitted && !appointmentError && !appointmentLoading &&
               <div>
                 <FontAwesomeIcon icon={faCheckCircle} color="#46ce23" size="4x"/>
-                <h3 className="mt-4">Turno reservado</h3>
+                <h3 className="mt-4">{i18n.t('appointment.reserved')}</h3>
                 <p className="mb-0">{firstName} te espera el {moment(date).format('DD/MM')} a las {moment(time).format('HH:mm')}hs.</p>
               </div>
             }
@@ -432,7 +433,7 @@ class Specialist extends React.Component {
             !submitted &&
             <Modal.Footer>
               <button className="btn btn-success" onClick={() => this.addAppointment()}>
-                Reservar Turno
+                  {i18n.t('appointment.reserve')}
               </button>
             </Modal.Footer>
           }
@@ -440,7 +441,7 @@ class Specialist extends React.Component {
             submitted && !loading &&
             <Modal.Footer>
               <button className="btn btn-secondary" onClick={() => this.toggleModal()}>
-                Cerrar
+                  {i18n.t('appointment.close')}
               </button>
             </Modal.Footer>
           }
@@ -459,12 +460,12 @@ class Specialist extends React.Component {
                         </div>
                         <p className="doctor-specialty" style={{ paddingRight: 20 }}>{specialties.map(s => s+ ' ')}</p>
                         <p className="doctor-text"><FontAwesomeIcon className="mr-2" icon={faPhone} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{phoneNumber}</p>
-                        <p className="doctor-text"><FontAwesomeIcon className="mr-2" icon={faMapMarker} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{address}, CABA</p>
+                        <p className="doctor-text"><FontAwesomeIcon className="mr-2" icon={faMapMarker} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{address}{i18n.t('specialist.city')}</p>
                         {
                           this.props.user.auth &&
                           <div>
                             <div className="btn btn-success mt-2 mr-2" onClick={() => this.toggleModal()}>
-                              <FontAwesomeIcon className="mr-2" icon={faCalendarPlus} style={{ color: '#FFF' }} /> Reservar Turno
+                              <FontAwesomeIcon className="mr-2" icon={faCalendarPlus} style={{ color: '#FFF' }} /> {i18n.t('appointment.reserve')}
                             </div>
                             {this.renderFavoriteButton(favorite)}
                           </div>
@@ -473,7 +474,7 @@ class Specialist extends React.Component {
                           !this.props.user.auth &&
                           <div className="mt-3">
                             <div className="alert alert-secondary" role="alert">
-                              <FontAwesomeIcon className="mr-2" icon={faLock} style={{ color: 'rgba(0,0,0, 0.5)' }} /> Registrate o inicia sesion para poder reservar un turno
+                              <FontAwesomeIcon className="mr-2" icon={faLock} style={{ color: 'rgba(0,0,0, 0.5)' }} /> {i18n.t('appointment.register')}
                             </div>
                           </div>
                         }
@@ -481,8 +482,8 @@ class Specialist extends React.Component {
                     </div>
                   </div>
                   <hr />
-                  <h3>Descripción</h3>
-                  <h5>Prepagas Medicas</h5>
+                  <h3>{i18n.t('specialist.description')}</h3>
+                  <h5>{i18n.t('specialist.insurancesPlans')}</h5>
                   <Row>
                     {
                       insurances.map((insurance, index) => {
@@ -498,12 +499,12 @@ class Specialist extends React.Component {
                     }
                   </Row>
                   <hr />
-                  <h3>Reseñas</h3>
+                  <h3>{i18n.t('review.reviewTitle')}</h3>
                   {
                     reviews &&
                     reviews.map((review, index) => <ReviewCard key={index} data={review} /> )
                   }
-                  <h4 className="mt-3">Dejá tu reseña</h4>
+                  <h4 className="mt-3">{i18n.t('review.leaveReview')}</h4>
                   <ReviewForm canReview={canReview} isAuthenticated={this.props.user.auth} submit={this.submitReview} />
                 </div>
               </div>

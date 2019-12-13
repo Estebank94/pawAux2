@@ -12,6 +12,7 @@ import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab';
 import Favorite from '../../components/account/favorite';
 import Appointment from '../../components/account/appointment';
+import i18n from "../../i18n";
 
 class Account extends React.Component {
   constructor(props){
@@ -72,7 +73,7 @@ class Account extends React.Component {
                   {
                     !loading ?
                       <Tabs defaultActiveKey="1">
-                        <Tab eventKey="1" title="Turnos pendientes">
+                        <Tab eventKey="1" title={i18n.t('appointment.futureTitle')}>
                           {
                             personal.futureAppointments
                               .map((appointment, index) =>
@@ -84,7 +85,7 @@ class Account extends React.Component {
                                 />)
                           }
                         </Tab>
-                        <Tab eventKey="2" title="Historial de turnos">
+                        <Tab eventKey="2" title={i18n.t('appointment.historicalTitle')}>
                           {
                             personal.historicalAppointments
                               .map((appointment, index) =>
@@ -94,7 +95,7 @@ class Account extends React.Component {
                                 />)
                           }
                         </Tab>
-                        <Tab eventKey="3" title="Especialistas favoritos">
+                        <Tab eventKey="3" title={i18n.t('specialist.favoriteTitle')}>
                           {
                             personal.favorites.map((favorite, index) => <Favorite key={index} data={favorite.doctor} />)
                           }
