@@ -38,7 +38,11 @@ class Login extends React.Component {
     if (auth.status === 'failed') {
       this.setState({ error: true });
     } else if (auth.status === 'authenticated') {
-      this.props.history.push('/');
+      if(auth.user.complete) {
+        this.props.history.push('/complete');
+      } else {
+        this.props.history.push('/');
+      }
     }
   }
 
