@@ -5,7 +5,7 @@ import React from 'react'
 import BounceLoader from 'react-spinners/BounceLoader';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPhone, faMapMarker, faHeart, faCalendarPlus, faCheckCircle, faTimesCircle, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faPhone, faMapMarker, faHeart, faCalendarPlus, faCheckCircle, faTimesCircle, faLock, faGraduationCap, faLanguage, faUniversity } from '@fortawesome/free-solid-svg-icons';
 import ReviewCard from '../../components/specialist/reviewCard';
 import ReviewForm from '../../components/specialist/reviewForm';
 import Col from 'react-bootstrap/Col';
@@ -350,9 +350,7 @@ class Specialist extends React.Component {
       )
     }
 
-    console.log('canrev', canReview)
     const { address, firstName, insurances, lastName, phoneNumber, profilePicture, specialties } = specialist;
-
 
     return (
       <div className="body-background">
@@ -483,7 +481,10 @@ class Specialist extends React.Component {
                   </div>
                   <hr />
                   <h3>{i18n.t('specialist.description')}</h3>
-                  <h5>{i18n.t('specialist.insurancesPlans')}</h5>
+                  <div><FontAwesomeIcon className="mr-2 description-icon" icon={faUniversity} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{specialist.description.education}</div>
+                  <div><FontAwesomeIcon className="mr-2 description-icon" icon={faGraduationCap} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{specialist.description.education}</div>
+                  <div><FontAwesomeIcon className="mr-2 description-icon" icon={faLanguage} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{specialist.description.education}</div>
+                  <h5 className="mt-3">{i18n.t('specialist.insurancesPlans')}</h5>
                   <Row>
                     {
                       insurances.map((insurance, index) => {
@@ -505,7 +506,7 @@ class Specialist extends React.Component {
                     reviews.map((review, index) => <ReviewCard key={index} data={review} /> )
                   }
                   <h4 className="mt-3">{i18n.t('review.leaveReview')}</h4>
-                  <ReviewForm canReview={canReview} isAuthenticated={this.props.user.auth} submit={this.submitReview} />
+                  <ReviewForm canReview={canReview} isAuthenticated={!!this.props.user.auth} submit={this.submitReview} />
                 </div>
               </div>
             </div>
