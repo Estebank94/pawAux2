@@ -647,3 +647,7 @@ a {
   border-color: #257CBF;
   -webkit-transition: border-color 1s
 }
+
+.description-icon {
+  min-width: 24px;
+}
