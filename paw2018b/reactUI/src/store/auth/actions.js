@@ -31,17 +31,18 @@ export const onSigninError = error => {
 export const doLogin = (credentials, props = {}) => {
   return async (dispatch) => {
     dispatch(doSignIn());
-    let onLogin = fetchApi('/patient/login', 'XPOST', credentials).then((auth) => {
+    let onLogin = fetchApi('/patient/login', 'XPOST', credentials).then(async (auth) => {
       if (auth !== undefined && auth !== null) {
         const user = {
           auth
         }
         const API = new ApiClient({ props, user });
-        API.get('/patient/me').then((response => {
-          console.log('response', response);
+        let userData;
+        await API.get('/patient/me').then((response => {
+          userData = response.data;
           dispatch(onSigninSuccess({auth, user: response.data}))
         }))
-        return { status: 'authenticated', message: auth};
+        return { status: 'authenticated', message: auth, user: userData };
       } else {
         dispatch(onSigninError())
         return { status: 'failed', message: 'Contraseña o Usuario Incorrecto!'};
