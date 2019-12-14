@@ -100,7 +100,7 @@ export default {
         licenseValidation: 'The license must be between 0 and 10 digits',
         emailValidation: 'Enter a valid email',
         validEmail: 'Valid Email',
-        validPassword: 'Password must be at least 8 characters',
+        validPassword: 'Password must be at least 6 characters',
         notMatchingPassword: 'Passwords do not match',
         matchingPassword: 'Passwords match',
         confirmPassword:'Confirm Password',
