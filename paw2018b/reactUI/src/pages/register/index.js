@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { isValidEmail, isValidPhone } from '../../utils/validations';
+import { isValidEmail } from '../../utils/validations';
+import BounceLoader from 'react-spinners/BounceLoader';
 import 'rc-steps/assets/index.css';
 import 'rc-steps/assets/iconfont.css';
 import Steps, { Step } from 'rc-steps';
@@ -8,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoffee, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { ApiClient } from '../../utils/apiClient';
 import i18n from "../../i18n";
+import phone from 'phone';
 
 class Register extends React.Component {
   constructor(props) {
@@ -36,6 +38,7 @@ class Register extends React.Component {
       },
       current: 0,
       submitted: false,
+      loading: false,
       role: 'patient',
     };
   }
@@ -59,7 +62,7 @@ class Register extends React.Component {
         errors.lastName = value.length <= 0
         break;
       case 'phoneNumber':
-        errors.phoneNumber = !isValidPhone(value)
+        errors.phoneNumber = phone(value, 'ARG', true).length === 0
         break;
       case 'email':
         errors.email = !isValidEmail(value)
@@ -112,9 +115,9 @@ class Register extends React.Component {
             passwordConfirmation: confirmPassword,
             phoneNumber,
           }
+          this.setState({ loading: true })
           this.API.post('/patient/register', body).then((response) => {
-            console.log('succes', response)
-            this.setState({ current: 2 });
+            this.setState({ current: 2, loading: false });
           }).catch(err => {
             console.log({err});
           })
@@ -134,10 +137,9 @@ class Register extends React.Component {
             sex: gender,
             licence: license
           }
-          console.log('body', body)
+          this.setState({ loading: true })
           this.API.post('/doctor/register', body).then((response) => {
-            console.log('succes', response)
-            this.setState({ current: 2 });
+            this.setState({ current: 2, loading: false });
           }).catch(err => {
             console.log({err});
           })
@@ -159,7 +161,7 @@ class Register extends React.Component {
         case 'lastName':
           return value.length <= 0
         case 'phoneNumber':
-          return !isValidPhone(value)
+          return phone(value, 'ARG', true).length === 0
         case 'email':
           return !isValidEmail(value)
         case 'password':
@@ -382,8 +384,28 @@ class Register extends React.Component {
     }
   }
 
+
+
   render() {
-    const { current, role } = this.state;
+    const { current, role, loading } = this.state;
+    if(loading) {
+      return (
+        <div className="body-background">
+          <div className="container col-12-sm w-p-20">
+            <div className="login-card w-shadow">
+              <div className="center-horizontal">
+                <BounceLoader
+                  sizeUnit={"px"}
+                  size={75}
+                  color={'rgb(37, 124, 191)'}
+                  loading={true}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
     return (
       <div className="body-background">
         <div className="container col-12-sm w-p-20">
@@ -415,7 +437,7 @@ class Register extends React.Component {
               </div>
             }
 
-            <form className="mb-4">
+            <div className="mb-4">
               {
                 current === 0 &&
                 this.renderBasicForm() //TODO Pasar a componentes para evitar re-render
@@ -424,7 +446,7 @@ class Register extends React.Component {
                 current === 1 &&
                 this.renderPersonalForm()
               }
-            </form>
+            </div>
             {this.renderButton()}
             {
               current <= 1 &&
