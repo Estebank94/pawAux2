@@ -169,11 +169,11 @@ class Specialists extends React.Component {
     await this.setState({ filters, filtering: true }, this.getSpecialists());
   }
 
-  handleInputChange(e) {
+  handleInputChange = (e) => {
     this.setState({ auxName: e.target.value });
   }
 
-  async handleNameSearch() {
+  handleNameSearch = async () => {
     const filters = this.state.filters;
     filters.name = this.state.auxName;
     await this.setState({ filters, auxName: null, filtering: true });
