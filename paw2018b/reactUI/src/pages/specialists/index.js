@@ -209,11 +209,38 @@ class Specialists extends React.Component {
     }
   }
 
+  renderSpecialists(filtering, specialists) {
+    if(!filtering && specialists.doctors.length === 0){
+      return(
+        <div className="login-card w-shadow mt-4">
+          <FontAwesomeIcon icon={faFrownOpen} color="#257cbf" size="4x"/>
+          <h3 className="mt-4">{i18n.t('navigation.noResults')}</h3>
+          <p>{i18n.t('navigation.changeFilters')}</p>
+        </div>
+      )
+    }
+
+     if(!filtering) {
+       return(specialists.doctors.map((specialist, index) => <SpecialistCard key={index} data={specialist} />))
+    }
+
+    if(filtering) {
+      return(
+        <div className="centered">
+          <BounceLoader
+            sizeUnit={"px"}
+            size={75}
+            color={'rgb(37, 124, 191)'}
+            loading={true}
+          />
+        </div>
+      )
+    }
+  }
+
   render() {
     const { error, loading, filtering, specialists, filters, specialties, insurances, insurancePlans } = this.state;
     const { name, sex, insurance, specialty, insurancePlan, days } = filters;
-
-    console.log('state', this.state);
 
     const DAYS = [
       { name: 'monday', value: 1},
@@ -249,32 +276,8 @@ class Specialists extends React.Component {
         <div className="container">
             <div className="row">
                 <div className="col-md-9">
-                  {
-                    !filtering &&
-                    specialists.doctors.map((specialist, index) => <SpecialistCard key={index} data={specialist} />)
-                  }
-                  {
-                    !filtering && specialists.doctors.length === 0 &&
-                    <div className="login-card w-shadow mt-4">
-                      <FontAwesomeIcon icon={faFrownOpen} color="#257cbf" size="4x"/>
-                      <h3 className="mt-4">{i18n.t('navigation.noResults')}</h3>
-                      <p>{i18n.t('navigation.changeFilters')}</p>
-                    </div>
-                  }
-                  {
-                    filtering &&
-                    <div className="centered">
-                      <BounceLoader
-                        sizeUnit={"px"}
-                        size={75}
-                        color={'rgb(37, 124, 191)'}
-                        loading={true}
-                      />
-                    </div>
-                  }
-                  {
-                    this.renderPagePicker()
-                  }
+                  { this.renderSpecialists(filtering, specialists)}
+                  { this.renderPagePicker() }
                 </div>
                 <div className="col-md-3">
                     <div className="sidebar-nav-fixed pull-right affix">
