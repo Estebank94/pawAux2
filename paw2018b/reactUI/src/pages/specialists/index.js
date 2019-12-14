@@ -88,7 +88,6 @@ class Specialists extends React.Component {
 
   buildQueryParams() {
     let filters = this.state.filters;
-    console.log('filters', filters)
     let str = '?'
     str +=  queryString.stringify(filters, { skipNull: true })
 
@@ -265,7 +264,7 @@ class Specialists extends React.Component {
       <div className="body-background">
         <div className="container">
             <div className="row">
-                <div className="col-md-9">
+               <div className="col-md-9">
                   { this.renderSpecialists(filtering, specialists)}
                   { this.renderPagePicker() }
                 </div>
