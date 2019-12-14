@@ -5,9 +5,19 @@ import i18n from "../../i18n";
 
 class Filters extends React.Component {
   static propTypes = {
-    cancel: PropTypes.func.isRequired,
-    data: PropTypes.object,
-    cancelable: PropTypes.bool,
+    name: PropTypes.string,
+    sex: PropTypes.string,
+    insurance: PropTypes.string,
+    insurances: PropTypes.array,
+    specialty: PropTypes.string,
+    specialties: PropTypes.array,
+    insurancePlan: PropTypes.string,
+    insurancePlans: PropTypes.array,
+    days: PropTypes.number,
+    handleChange: PropTypes.func,
+    dayToString: PropTypes.func,
+    handleInputChange: PropTypes.func,
+    handleNameSearch: PropTypes.func
   };
 
   render() {
@@ -51,7 +61,7 @@ class Filters extends React.Component {
           <div>
             <h5 className="mb-1 mt-3">{i18n.t('home.placeHolderSpeciality')}</h5>
             {
-              specialties.map(s =>  <p className="mb-0 clickeable" onClick={() => handleChange('specialty', s.label)}>{s.label}</p>)
+              specialties.map((s, i) =>  <p key={i}  className="mb-0 clickeable" onClick={() => handleChange('specialty', s.label)}>{s.label}</p>)
             }
           </div>
         }
@@ -60,7 +70,7 @@ class Filters extends React.Component {
           <div>
             <h5 className="mb-1 mt-3">{i18n.t('specialist.insurancesPlans')}</h5>
             {
-              insurances.map(i =>  <p className="mb-0 clickeable" onClick={() => handleChange('insurance', i.label)}>{i.label}</p>)
+              insurances.map((i, index) =>  <p key={index}  className="mb-0 clickeable" onClick={() => handleChange('insurance', i.label)}>{i.label}</p>)
             }
           </div>
         }
@@ -69,7 +79,7 @@ class Filters extends React.Component {
           <div>
             <h5 className="mb-1 mt-3">Plan</h5>
             {
-              insurancePlans.filter(i => i.name === insurance)[0].plans.map(p =>  <p className="mb-0 clickeable" onClick={() => handleChange('insurancePlan', p)}>{p}</p>)
+              insurancePlans.filter((i) => i.name === insurance)[0].plans.map((p, index) =>  <p key={index}  className="mb-0 clickeable" onClick={() => handleChange('insurancePlan', p)}>{p}</p>)
             }
           </div>
         }
@@ -78,7 +88,7 @@ class Filters extends React.Component {
           <div>
             <h5 className="mb-1 mt-3">{i18n.t('specialist.workingDay')}</h5>
             {
-              DAYS.map(d =>  <p className="mb-0 clickeable" onClick={() => handleChange('days', d.value)}>{i18n.t(`week.${d.name}`)}</p>)
+              DAYS.map((d, i) =>  <p key={i} className="mb-0 clickeable" onClick={() => handleChange('days', d.value)}>{i18n.t(`week.${d.name}`)}</p>)
             }
           </div>
         }

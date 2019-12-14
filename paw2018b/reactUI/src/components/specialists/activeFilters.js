@@ -8,9 +8,14 @@ import i18n from "../../i18n";
 
 class ActiveFilters extends React.Component {
   static propTypes = {
-    cancel: PropTypes.func.isRequired,
-    data: PropTypes.object,
-    cancelable: PropTypes.bool,
+    name: PropTypes.string,
+    sex: PropTypes.string,
+    insurance: PropTypes.string,
+    specialty: PropTypes.string,
+    insurancePlan: PropTypes.string,
+    days: PropTypes.number,
+    handleChange: PropTypes.func,
+    dayToString: PropTypes.func,
   };
 
   render() {
