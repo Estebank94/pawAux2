@@ -408,8 +408,12 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
     }
 
     @Override
-    public Boolean isAnExistingLicence(Integer licence) {
-        return null;
+    public Boolean isAnExistingLicence(Integer licence){
+        final TypedQuery<Doctor> query = em.createQuery("FROM Doctor as d " +
+                "WHERE d.licence = :licence", Doctor.class);
+        query.setParameter("licence", licence);
+        List<Doctor> list = query.getResultList();
+        return list.isEmpty() ? false : true;
     }
 
     @Override

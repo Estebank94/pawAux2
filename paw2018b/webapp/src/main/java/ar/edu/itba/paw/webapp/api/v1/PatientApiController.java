@@ -8,8 +8,6 @@ import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
 import ar.edu.itba.paw.webapp.dto.appointment.DoctorAppointmentDTO;
-import ar.edu.itba.paw.webapp.dto.appointment.PatientAppointmentDTO;
-import ar.edu.itba.paw.webapp.dto.patient.BasicPatientDTO;
 import ar.edu.itba.paw.webapp.dto.patient.PatientDTO;
 import ar.edu.itba.paw.webapp.dto.patient.PatientPersonalInformationDTO;
 import ar.edu.itba.paw.webapp.forms.AppointmentForm;
@@ -23,7 +21,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.thymeleaf.TemplateEngine;
 
@@ -421,4 +418,20 @@ public class PatientApiController extends BaseApiController {
         return Response.ok(new DoctorAppointmentDTO(appointmentRemoved)).build();
     }
 
+    @GET
+    @Path("/email-exists")
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response emailExists(@QueryParam("email")final String email){
+        if(patientService.emailTaken(email)){
+            return Response
+                    .status(Response.Status.ACCEPTED)
+                    .entity(MessageToJSON(true))
+                    .build();
+        }else{
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(MessageToJSON(false))
+                    .build();
+        }
+    }
 }

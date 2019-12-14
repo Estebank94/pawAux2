@@ -29,4 +29,6 @@ public interface PatientService {
     List<Appointment> getFutureAppointments (Patient patient);
 
     List<Favorite> getFavoriteDoctors(Patient patient);
+
+    public boolean emailTaken(String email);
 }

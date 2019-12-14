@@ -175,4 +175,14 @@ public class PatientHibernateDaoImpl implements PatientDao {
         final List<Favorite> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
     }
+
+    @Override
+    public Boolean emailTaken(String email) {
+        final TypedQuery<Patient> query = em.createQuery("FROM Patient as p " +
+                "WHERE p.email = :email", Patient.class);
+        query.setParameter("email", email);
+        List<Patient> list = query.getResultList();
+        return list.isEmpty() ? false : true;
+    }
+
 }

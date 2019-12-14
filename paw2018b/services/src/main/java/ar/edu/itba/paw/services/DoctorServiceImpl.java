@@ -554,5 +554,9 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorDao.getReviews(doctor);
     }
 
+    @Override
+    public Boolean isAnExistingLicence(Integer licence) {
+        return doctorDao.isAnExistingLicence(licence);
+    }
 }
 
