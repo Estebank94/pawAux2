@@ -1,5 +1,6 @@
 import React from 'react';
 import BounceLoader from 'react-spinners/BounceLoader';
+import PulseLoader from 'react-spinners/PulseLoader';
 import queryString from 'query-string';
 import _ from 'lodash';
 import Badge from 'react-bootstrap/Badge';
@@ -32,7 +33,6 @@ class Specialists extends React.Component {
         days: null,
         sex: null,
         specialty: null,
-        page: 0
       },
       filtering: false,
       pages: null
@@ -54,7 +54,7 @@ class Specialists extends React.Component {
         days: null,
         sex: null,
         specialty: null,
-        page: 0
+        page: 1
       },
       filtering: false,
       pages: null
@@ -87,6 +87,7 @@ class Specialists extends React.Component {
 
   buildQueryParams() {
     let filters = this.state.filters;
+    console.log('filters', filters)
     let str = '?'
     str +=  queryString.stringify(filters, { skipNull: true })
 
@@ -107,6 +108,7 @@ class Specialists extends React.Component {
       .catch(() => this.setState({ error: true, loading: false }));
   }
 
+
   getSpecialtiesAndInsurances() {
     this.API.get('/homeinfo').then(response => {
       let specialties = [];
@@ -118,15 +120,37 @@ class Specialists extends React.Component {
   }
 
   loadMore() {
-    this.setState({ loadingPage: true })
-    this.API.get('/doctor/list' + this.buildQueryParams())
-      .then(response => this.setState({ specialists: this.state.specialists.push(response.data), loadingPage: false}))
-      .catch(() => this.setState({ error: true, loadingPage: false }));
+    let state = this.state;
+    state.loadingPage = true;
+    state.filters.page += 1;
+    this.setState({ state }, () => {
+      this.API.get('/doctor/list' + this.buildQueryParams())
+        .then(response => {
+          const doctors = state.specialists.doctors.concat(response.data.doctors)
+          state.specialists.doctors = doctors
+          this.setState({ specialists: state.specialists, loadingPage: false })
+        })
+        .catch(() => this.setState({ error: true, loadingPage: false }));
+      });
   }
 
   renderPagePicker = () => {
-    const { pages, filters } = this.state;
-    if(filters.page < pages - 1) {
+    const { pages, filters, loadingPage } = this.state;
+    if(loadingPage) {
+      return(
+        <div className="btn btn-light btn-block w-shadow mt-3 w-text-color">
+          <div className="center-horizontal">
+            <PulseLoader
+              sizeUnit={"px"}
+              size={10}
+              color={'#257cbf'}
+              loading={true}
+            />
+          </div>
+        </div>
+      )
+    }
+    if(filters.page < pages) {
       return(
         <div
           className="btn btn-light btn-block w-shadow mt-3 w-text-color"
@@ -141,6 +165,7 @@ class Specialists extends React.Component {
   async handleChange(type, value) {
     let filters = this.state.filters;
     filters[type] = value;
+    filters.page = 1;
     await this.setState({ filters, filtering: true });
     this.getSpecialists();
   }
@@ -161,25 +186,25 @@ class Specialists extends React.Component {
   dayToString(day){
     switch(day) {
       case 1:
-        return 'Lunes'
+        return 'monday'
         break;
       case 2:
-        return 'Martes'
+        return 'tuesday'
         break;
       case 3:
-        return 'Miércoles'
+        return 'wednesday'
         break;
       case 4:
-        return 'Jueves'
+        return 'thursday'
         break;
       case 5:
-        return 'Viernes'
+        return 'friday'
         break;
       case 6:
-        return 'Sábado'
+        return 'saturday'
         break;
       case 7:
-        return 'Domingo'
+        return 'sunday'
         break;
     }
   }
@@ -188,19 +213,21 @@ class Specialists extends React.Component {
     const { error, loading, filtering, specialists, filters, specialties, insurances, insurancePlans } = this.state;
     const { name, sex, insurance, specialty, insurancePlan, days } = filters;
 
+    console.log('state', this.state);
+
     const DAYS = [
-      { name: 'Lunes', value: 1},
-      { name: 'Martes', value: 2},
-      { name: 'Miércoles', value: 3},
-      { name: 'Jueves', value: 4},
-      { name: 'Viernes', value: 5},
-      { name: 'Sábado', value: 6},
-      { name: 'Domingo', value: 7},
+      { name: 'monday', value: 1},
+      { name: 'tuesday', value: 2},
+      { name: 'wednesday', value: 3},
+      { name: 'thursday', value: 4},
+      { name: 'friday', value: 5},
+      { name: 'saturday', value: 6},
+      { name: 'sunday', value: 7},
     ]
 
       if((loading || !specialists || !insurances) &&!filtering) {
           return (
-              <div className="centered">
+              <div className="body-background centered">
                   <BounceLoader
                       sizeUnit={"px"}
                       size={75}
@@ -286,7 +313,7 @@ class Specialists extends React.Component {
                       {
                         days &&
                         <Badge className="badge-waldoc p-2" onClick={() => this.handleChange('days', null)}>
-                          {this.dayToString(days)} <FontAwesomeIcon className="ml-1" icon={faTimesCircle}/>
+                          {i18n.t(`week.${this.dayToString(days)}`)} <FontAwesomeIcon className="ml-1" icon={faTimesCircle}/>
                         </Badge>
                       }
                       {
@@ -341,7 +368,7 @@ class Specialists extends React.Component {
                         <div>
                           <h5 className="mb-1 mt-3">{i18n.t('specialist.workingDay')}</h5>
                           {
-                            DAYS.map(d =>  <p className="mb-0 clickeable" onClick={() => this.handleChange('days', d.value)}>{d.name}</p>)
+                            DAYS.map(d =>  <p className="mb-0 clickeable" onClick={() => this.handleChange('days', d.value)}>{i18n.t(`week.${d.name}`)}</p>)
                           }
                         </div>
                       }
