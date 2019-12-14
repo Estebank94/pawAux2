@@ -1,46 +1,60 @@
-import React, { Component } from 'react';
+import React, { Component, lazy, Suspense } from 'react';
 import { Route, Redirect } from 'react-router-dom'
 import { withRouter } from "react-router";
+import BounceLoader from 'react-spinners/BounceLoader';
 import './App.css';
 import Fade from 'react-reveal/Fade';
 
-import Header from './components/navigation/header'
-import Footer from './components/navigation/footer'
-import Home from './pages/home'
-import Specialists from './pages/specialists'
-import Specialist from './pages/specialist'
-import Login from './pages/login'
-import Register from './pages/register'
-import Account from './pages/account'
-import Confirm from './pages/register/confirm'
-import Error from './pages/error'
-import Complete from './pages/register/completeProfile'
+const Header = lazy(() => import('./components/navigation/header'));
+const Footer = lazy(() => import('./components/navigation/footer'));
+const Home = lazy(() => import('./pages/home'));
+const Specialists = lazy(() => import('./pages/specialists'));
+const Specialist = lazy(() => import('./pages/specialist'));
+const Login = lazy(() => import('./pages/login'));
+const Register = lazy(() => import('./pages/register'));
+const Account = lazy(() => import('./pages/account'));
+const Confirm = lazy(() => import('./pages/register/confirm'));
+const Error = lazy(() => import('./pages/error'));
+const Complete = lazy(() => import('./pages/register/completeProfile'));
 
 
-const App = props => {
-  let everyoneRoutes = [
-    { path: "/", component: Home },
-  ];
-  let doctorRoutes = [
-    ...everyoneRoutes
-  ];
+
+const LoadingMessage = () => (
+  <div className="centered">
+    <BounceLoader
+      sizeUnit={"px"}
+      size={75}
+      color={'rgb(37, 124, 191)'}
+      loading={true}
+    />
+  </div>
+)
+
+const App = () => {
+
   const HeaderWithRouter = withRouter(Header);
   const FooterWithRouter = withRouter(Footer);
   return(
       <div>
-        <HeaderWithRouter />
-        <Fade>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/specialists" component={Specialists} />
-          <Route exact path="/specialist/:id" component={Specialist} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/register/:role" component={Register} />
-          <Route exact path="/account" component={Account} />
-          <Route exact path="/confirm/:token" component={Confirm} />
-          <Route exact path="/error/:error" component={Error} />
-          <Route exact path="/complete" component={Complete} />
-        </Fade>
-        <FooterWithRouter />
+        <Suspense fallback={<LoadingMessage />}>
+          <HeaderWithRouter />
+        </Suspense>
+        <Suspense fallback={<LoadingMessage />}>
+          <Fade>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/specialists" component={Specialists} />
+            <Route exact path="/specialist/:id" component={Specialist} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/register/:role" component={Register} />
+            <Route exact path="/account" component={Account} />
+            <Route exact path="/confirm/:token" component={Confirm} />
+            <Route exact path="/error/:error" component={Error} />
+            <Route exact path="/complete" component={Complete} />
+          </Fade>
+        </Suspense>
+        <Suspense fallback={<LoadingMessage />}>
+          <FooterWithRouter />
+        </Suspense>
       </div>
   )
 }
