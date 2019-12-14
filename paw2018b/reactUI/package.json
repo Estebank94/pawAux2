@@ -18,6 +18,7 @@
     "i18next-browser-languagedetector": "^4.0.0",
     "i18next-xhr-backend": "^3.2.0",
     "moment": "^2.24.0",
+    "phone": "^2.4.3",
     "query-string": "^6.9.0",
     "rc-steps": "^3.5.0",
     "react": "^16.9.0",
