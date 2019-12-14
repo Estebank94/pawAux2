@@ -1,14 +1,18 @@
 package ar.edu.itba.paw.webapp.api.v1;
 
+import ar.edu.itba.paw.interfaces.services.AppointmentService;
 import ar.edu.itba.paw.interfaces.services.DoctorService;
 import ar.edu.itba.paw.interfaces.services.EmailService;
 import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
+import ar.edu.itba.paw.webapp.dto.appointment.DoctorAppointmentDTO;
+import ar.edu.itba.paw.webapp.dto.appointment.PatientAppointmentDTO;
 import ar.edu.itba.paw.webapp.dto.patient.BasicPatientDTO;
 import ar.edu.itba.paw.webapp.dto.patient.PatientDTO;
 import ar.edu.itba.paw.webapp.dto.patient.PatientPersonalInformationDTO;
+import ar.edu.itba.paw.webapp.forms.AppointmentForm;
 import ar.edu.itba.paw.webapp.forms.PatientForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +34,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.List;
 
@@ -61,6 +69,9 @@ public class PatientApiController extends BaseApiController {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private AppointmentService appointmentService;
 
     @Autowired
     private DoctorService doctorService;
@@ -249,6 +260,165 @@ public class PatientApiController extends BaseApiController {
         }
 
         return Response.ok(new PatientPersonalInformationDTO(historicalAppointments, futureAppointments, favorites)).build();
+    }
+
+    @PUT
+    @Path("/{id}/appointment/cancel")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response cancelAppointment(@Valid final AppointmentForm appointmentForm, @PathParam("id") final int patientId){
+
+        if (appointmentForm == null){
+            LOGGER.debug("Appointment form is null");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Appointment Form is null"))
+                    .build();
+        }
+
+        if (appointmentForm.getDay() == null){
+            LOGGER.debug("Appointment day is null");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Appointment Day is null"))
+                    .build();
+        }
+
+        LocalDate appointmentDate = null;
+
+        try {
+            appointmentDate = LocalDate.parse(appointmentForm.getDay());
+        } catch (DateTimeParseException e){
+            LOGGER.debug("Appointment day is not ISO FORMAT 'YYYY-MM-DD'");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Appointment day is not ISO FORMAT 'YYYY-MM-DD'"))
+                    .build();
+        } catch (Exception e){
+            LOGGER.debug("Appointment day is not ISO FORMAT 'YYYY-MM-DD'");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Appointment day is not ISO FORMAT 'YYYY-MM-DD'"))
+                    .build();
+        }
+
+        if (appointmentForm.getTime() == null){
+            LOGGER.debug("No appointment time");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("No appointment time"))
+                    .build();
+        }
+        LocalTime appointmentTime = null;
+        try{
+            appointmentTime = LocalTime.parse(appointmentForm.getTime());
+        } catch (DateTimeParseException e){
+            LOGGER.debug("Appointment time is not FORMAT 'HH:mm'");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Appointment time is not FORMAT 'HH:mm'"))
+                    .build();
+        } catch (Exception e) {
+            LOGGER.debug("Appointment time is not FORMAT 'HH:mm'");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Appointment time is not FORMAT 'HH:mm'"))
+                    .build();
+        }
+
+        LocalDateTime appointmentDayTime = LocalDateTime.of(appointmentDate, appointmentTime);
+        LocalDateTime now = LocalDateTime.now();
+
+        if (now.isAfter(appointmentDayTime)){
+            LOGGER.debug("Appointment is not in future");
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Appointment is not in future"))
+                    .build();
+        }
+
+        /* Patient Revision */
+        Patient patient;
+        try {
+            patient = patientService.findPatientById(patientId);
+        } catch (NotFoundPacientException e) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Patient not found"))
+                    .build();
+        } catch (NotValidPatientIdException e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Invalid id of patient"))
+                    .build();
+        } catch (NotCreatePatientException e) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Patient not found"))
+                    .build();
+        }
+        if (patient == null){
+            Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("patient logged not found")) //messageSource.getMessage("patient not found", null, LocaleContextHolder.getLocale())))
+                    .build();
+        }
+        LOGGER.debug("Appointment patient {}", patient.getId());
+
+        /* Doctor Revision */
+        Patient doctorLogged;
+        try {
+            doctorLogged = userDetailsService.getLoggedUser();
+        } catch (NotFoundPacientException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
+                    .build();
+        } catch (NotValidEmailException e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Doctor with bad id"))
+                    .build();
+        }
+        if (doctorLogged == null){
+            LOGGER.debug("Doctor not found");
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Doctor not found"))
+                    .build();
+        }
+        doctorLogged.getDoctor();
+        if (doctorLogged.getDoctor() == null){
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON("Patient Logged is not a Doctor"))
+                    .build();
+        }
+
+        Doctor doctor = doctorLogged.getDoctor();
+
+        LOGGER.debug("Appointment doctor {}", doctor.getId());
+
+        Appointment appointmentRemoved;
+        try {
+            appointmentRemoved = appointmentService.cancelAppointment(appointmentDate.toString(), appointmentTime.toString(), patient, doctor);
+        } catch ( NotFoundAppointmentException e) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Appointment not found"))
+                    .build();
+        } catch (Exception e) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(errorMessageToJSON(e.getMessage()))
+                    .build();
+        }
+        if (appointmentRemoved == null){
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Appointment not found"))
+                    .build();
+        }
+
+        return Response.ok(new DoctorAppointmentDTO(appointmentRemoved)).build();
     }
 
 }
