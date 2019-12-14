@@ -12,7 +12,7 @@ import java.util.Set;
 
 public interface DoctorService {
 
-   Long getLastPage(Search search);
+   Long getLastPage(Search search, int pageSize);
 
    Long getLastPage();
 
@@ -22,7 +22,7 @@ public interface DoctorService {
 
    List<Doctor> listDoctors();
 
-   List<Doctor> listDoctors(Search search, String pageAsString) throws NotValidPageException;
+   List<Doctor> listDoctors(Search search, String pageAsString, int pageSize) throws NotValidPageException;
 
    Doctor findDoctorById(String id) throws NotFoundDoctorException, NotValidIDException;
 
@@ -42,7 +42,6 @@ public interface DoctorService {
    Optional<Doctor> setWorkingHours(Doctor doctor, List<WorkingHours> workingHours);
 
    Optional<Doctor> setDescription(Doctor doctor, Description description);
-
 
    List<Appointment> getFutureAppointments(Doctor doctor);
 

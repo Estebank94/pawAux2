@@ -11,7 +11,7 @@ import java.util.Set;
 
 public interface DoctorDao {
 
-    Long getLastPage(Search search);
+    Long getLastPage(Search search, int pageSize);
 
     Long getLastPage();
 
@@ -21,7 +21,7 @@ public interface DoctorDao {
 
     List<Doctor> listDoctors();
 
-    List<Doctor> listDoctors(Search search, int page);
+    List<Doctor> listDoctors(Search search, int page, int pageSize);
 
     Optional<Doctor> findDoctorById(Integer id);
 

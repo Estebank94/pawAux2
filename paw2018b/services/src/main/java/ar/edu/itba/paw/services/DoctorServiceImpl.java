@@ -58,14 +58,14 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Long getLastPage(Search search){
+    public Long getLastPage(Search search, int pageSize){
         LOGGER.debug("DoctorServiceImpl: getLastPage");
-        return doctorDao.getLastPage(search);
+        return doctorDao.getLastPage(search, pageSize);
     }
 
     @Override
     @Transactional
-    public List<Doctor> listDoctors(Search search, String pageAsString) throws NotValidPageException {
+    public List<Doctor> listDoctors(Search search, String pageAsString, int pageSize) throws NotValidPageException {
         LOGGER.debug("DoctorServiceImpl: listDoctors");
 
         if (pageAsString == null){
@@ -93,7 +93,7 @@ public class DoctorServiceImpl implements DoctorService {
             LOGGER.debug("Page can't be greater than the biggest number");
             throw new NotValidPageException("Page can't be greater than the biggest number");
         }
-        List<Doctor> list = doctorDao.listDoctors(search, pageAsInt);
+        List<Doctor> list = doctorDao.listDoctors(search, pageAsInt, pageSize);
         return list;
     }
 

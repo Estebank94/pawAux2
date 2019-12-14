@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.services.*;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.webapp.auth.UserDetailsServiceImpl;
+import ar.edu.itba.paw.webapp.dto.PaginationDTO;
 import ar.edu.itba.paw.webapp.dto.appointment.BasicAppointmentDTO;
 import ar.edu.itba.paw.webapp.dto.appointment.BasicAppointmentListDTO;
 import ar.edu.itba.paw.webapp.dto.appointment.PatientAppointmentDTO;
@@ -15,6 +16,7 @@ import ar.edu.itba.paw.webapp.dto.reviews.BasicReviewDTO;
 import ar.edu.itba.paw.webapp.dto.reviews.ReviewListDTO;
 import ar.edu.itba.paw.webapp.dto.workingHours.WorkingHoursDTO;
 import ar.edu.itba.paw.webapp.forms.*;
+import ar.edu.itba.paw.webapp.utils.LinkPagination;
 import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -31,10 +33,7 @@ import javax.imageio.ImageIO;
 import javax.persistence.NoResultException;
 import javax.validation.Valid;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -86,6 +85,11 @@ public class DoctorApiController extends BaseApiController {
     @Autowired
     private ApplicationContext applicationContext;
 
+    // @Autowired
+    // private PaginationService paginationHelper;
+
+    public static String X_TOTAL_COUNT = "X-Total-Count";
+
     private static final String VERIFICATION_TOKEN_TEMPLATE_NAME = "welcomeMail.html";
 
     @Autowired
@@ -127,11 +131,15 @@ public class DoctorApiController extends BaseApiController {
         }
         return Response.status(Response.Status.NOT_FOUND).build();
     }
-    
+
+    private static final int DEFAULT_PAGE_SIZE = 10;
+    private static final int MAX_PAGE_SIZE = 30;
+
     @GET
     @Path("/list")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response listDoctors(@QueryParam("page") @DefaultValue("0") int page,
+    public Response listDoctors(@QueryParam("page") @DefaultValue("1") int page,
+                                @QueryParam("pageSize") @DefaultValue("" + DEFAULT_PAGE_SIZE) int pageSize,
                                 @QueryParam("specialty") String specialty,
                                 @QueryParam("name") String name,
                                 @QueryParam("insurance") String insurance,
@@ -196,17 +204,29 @@ public class DoctorApiController extends BaseApiController {
             }
             search.setDays(days);
         }
+        
+        page = page < 1 ? 1 : page;
+        pageSize = pageSize < 5 ? 5 : (pageSize > MAX_PAGE_SIZE? MAX_PAGE_SIZE : pageSize);
+
+        //int pageSize = 10;
 
         List<Doctor> doctors;
         try {
-            doctors = doctorService.listDoctors(search, String.valueOf(page));
+            doctors = doctorService.listDoctors(search, String.valueOf(page), pageSize);
         } catch (NotValidPageException e) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(errorMessageToJSON("DayWeek is not an Digit between 1-7")).build();
         }
 
-        Long totalPageCount = doctorService.getLastPage(search);
-        return Response.ok(new DoctorListDTO(doctors, totalPageCount)).build();
+        Long totalPageCount = doctorService.getLastPage(search, pageSize);
+
+        LinkPagination linkPagination = new LinkPagination(page, totalPageCount.intValue());
+
+        return Response.ok(new DoctorListDTO(doctors, totalPageCount, new PaginationDTO(page, totalPageCount.intValue())))
+                        .links(linkPagination.toLinks(uriInfo)
+                                            .toArray(Link[]::new))
+                .header(X_TOTAL_COUNT, totalPageCount.intValue())
+                        .build();
     }
 
     @GET
@@ -217,21 +237,6 @@ public class DoctorApiController extends BaseApiController {
         return Response.ok(new DoctorListDTO(doctorList, totalPageCount)).build();
     }
 
-
-    @GET
-    @Path("/search")
-    public Response searchDoctors(@Context UriInfo uriInfo) {
-        String result = "";
-        for (Map.Entry entry : uriInfo.getQueryParameters().entrySet()) {
-            result += entry.getKey() + "=" + entry.getValue() + ", ";
-        }
-        /*
-        Search search = new Search();
-        List<Doctor> doctorList = doctorService.listDoctors(search , pageNumber)
-        Long totalPageCount = doctorService.getLastPage(search);
-        */
-        return Response.ok(result).build();
-    }
 
     @POST
     @Path("/register")
