@@ -587,7 +587,7 @@ a {
 }
 
 .w-text-light {
-  color: #888889;
+  color: #828283;
 }
 
 .w-star {
@@ -650,4 +650,16 @@ a {
 
 .description-icon {
   min-width: 24px;
+}
+
+blue-icon {
+  color: rgba(37, 124, 191, 0.5);
+}
+
+.nav-tabs a {
+  color: #277dbf !important;
+}
+
+.nav-tabs a active {
+  color: red !important;
 }
