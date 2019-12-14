@@ -22,4 +22,5 @@ public interface PatientDao {
     List<Appointment> getFutureAppointments(Patient patient);
     List<Appointment> getHistoricalAppointments(Patient patient);
     List<Favorite> getFavoriteDoctors(Patient patient);
+    Boolean emailTaken(String email);
 }

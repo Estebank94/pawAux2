@@ -1152,4 +1152,21 @@ public class DoctorApiController extends BaseApiController {
 
         return Response.ok().entity(new BasicAppointmentListDTO(retList)).build();
     }
+
+    @GET
+    @Path("/licence-exists")
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response licenceExists(@QueryParam("licence")final int licence){
+        if(doctorService.isAnExistingLicence(licence)){
+            return Response
+                    .status(Response.Status.ACCEPTED)
+                    .entity(MessageToJSON(true))
+                    .build();
+        }else{
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(MessageToJSON(false))
+                    .build();
+        }
+    }
 }
