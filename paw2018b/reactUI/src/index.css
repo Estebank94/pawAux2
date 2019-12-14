@@ -510,6 +510,14 @@ a {
   align-items: center;
 }
 
+.centered-login {
+    height: 100vh; /* Magic here */
+    display: flex;
+    padding-top: 2rem;
+    justify-content: center;
+    align-items: flex-start;
+}
+
 .login-card {
   padding: 50px 60px;
   border-radius: 15px;

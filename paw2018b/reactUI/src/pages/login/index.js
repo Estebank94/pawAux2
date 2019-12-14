@@ -49,7 +49,7 @@ class Login extends React.Component {
   render() {
     const { email, password, emailError, passwordError, error} = this.state;
     return (
-      <div className="centered body-background">
+      <div className="centered-login body-background">
         <Shake when={emailError || passwordError || error }>
           <div className="login-card w-shadow" style={{ flex: 0.3}}>
             <h3 style={{marginBottom: 16 }}>{i18n.t('login.welcome')}</h3>
