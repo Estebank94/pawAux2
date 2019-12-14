@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPhone, faMapMarker, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { faPhone, faMapMarker, faCalendar, faTrash } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 import 'moment/locale/es'
 import 'moment/locale/en-gb'
@@ -56,7 +56,7 @@ class Appointment extends React.Component {
         </div>
         {
           this.props.cancelable &&
-          <div className="btn btn-primary custom-btn" onClick={() => this.cancelAppointment()}>{i18n.t('appointment.cancel')}</div>
+          <div className="btn btn-primary custom-btn" onClick={() => this.cancelAppointment()}><FontAwesomeIcon className="mr-2" icon={faTrash} style={{ color: '#FFF' }} /> {i18n.t('appointment.cancel')}</div>
         }
       </div>
     );
