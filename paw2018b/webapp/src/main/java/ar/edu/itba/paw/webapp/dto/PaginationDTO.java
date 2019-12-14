@@ -18,6 +18,22 @@ public class PaginationDTO {
         this.page = page;
     }
 
+    public PaginationDTO(Integer page, Integer count){
+        this.first = 1;
+        this.last = count;
+        this.page = page;
+        if (page > this.first){
+            this.prev = page - 1;
+        } else {
+            this.prev = null;
+        }
+        if (page < this.last){
+            this.next = page + 1;
+        } else {
+            this.next = null;
+        }
+    }
+
     public Integer getPrev() {
         return prev;
     }

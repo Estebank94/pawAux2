@@ -214,7 +214,7 @@ public class DoctorHibernateDaoImpl implements DoctorDao {
         }
 
         TypedQuery<Doctor> typedQuery = em.createQuery(query);
-        typedQuery.setFirstResult(pageSize * (page));
+        typedQuery.setFirstResult(pageSize * (page - 1));
         typedQuery.setMaxResults(pageSize);
         List<Doctor> list = typedQuery.getResultList();
         for(Doctor doctor : list){
