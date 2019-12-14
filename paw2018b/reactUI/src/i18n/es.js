@@ -148,5 +148,10 @@ export default {
       friday:'Viernes',
       saturday:'Sábado',
       sunday: 'Domingo'
+  },
+  account: {
+    accountInfo: 'Mi Cuenta',
+    patientAppointments: 'Turnos Como Médico',
+    noResults: 'No tenés'
   }
 }

@@ -147,5 +147,10 @@ export default {
         friday:'Friday',
         saturday:'Saturday',
         sunday: 'Sunday'
+    },
+    account: {
+      accountInfo: 'Account Information',
+      patientAppointments: 'Appointments As Doctor',
+      noResults: 'No'
     }
 }
