@@ -331,7 +331,7 @@ class Specialists extends React.Component {
                       {
                         !sex &&
                         <div>
-                          <h5 className="mb-1 mt-3">Sexo</h5>
+                          <h5 className="mb-1 mt-3">{i18n.t('register.gender')}</h5>
                           <p className="mb-0 clickeable" onClick={() => this.handleChange('sex', 'F')}>{i18n.t('register.female')}</p>
                           <p className="mb-0 clickeable" onClick={() => this.handleChange('sex', 'M')}>{i18n.t('register.male')}</p>
                         </div>

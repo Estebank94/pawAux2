@@ -16,7 +16,7 @@ export default {
         logOutButton: 'Log Out',
         noResults: 'There are no results',
         changeFilters: 'Change search filters',
-        filters:'Search Filter',
+        filters:'Filters',
         register: 'Sign Up'
     },
     specialist:{
