@@ -4,8 +4,17 @@ import { connect } from 'react-redux';
 import { DropdownButton, Dropdown } from 'react-bootstrap';
 import SearchBar from '../home/searchBar';
 import i18n from "../../i18n";
+import PropTypes from 'prop-types';
 
 class Navigation extends React.Component {
+  static propTypes = {
+    history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    user: PropTypes.object,
+    doSignout: PropTypes.func
+
+  };
+
   handleClick() {
     this.props.history.push(`/login`);
   }
