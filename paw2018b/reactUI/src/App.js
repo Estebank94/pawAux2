@@ -20,7 +20,7 @@ const Complete = lazy(() => import('./pages/register/completeProfile'));
 
 
 const LoadingMessage = () => (
-  <div className="centered">
+  <div className="body-background centered">
     <BounceLoader
       sizeUnit={"px"}
       size={75}
