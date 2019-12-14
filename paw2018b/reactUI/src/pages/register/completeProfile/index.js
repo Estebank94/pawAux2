@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import 'rc-steps/assets/index.css';
 import 'rc-steps/assets/iconfont.css';
-import Steps, { Step } from 'rc-steps';
+import BounceLoader from 'react-spinners/BounceLoader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoffee, faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import Form from 'react-bootstrap/Form';
@@ -12,13 +13,17 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Badge from 'react-bootstrap/Badge';
 import Select from 'react-select';
-import { ApiClient } from '../../utils/apiClient';
+import { ApiClient } from '../../../utils/apiClient';
+import i18n from "../../../i18n";
+import Dropzone from "react-dropzone";
+import moment from 'moment';
 
 class CompleteProfile extends React.Component {
   constructor(props) {
     super(props);
     this.API = new ApiClient(props);
     this.state = {
+      loading: true,
       photo: '',
       studies: '',
       languages: new Map(),
@@ -28,6 +33,8 @@ class CompleteProfile extends React.Component {
       workingHours: new Map(),
       allSpecialties: [],
       allInsurances: [],
+      files: [],
+      certificate: '',
       errors: {
         photo: false,
         studies: false,
@@ -35,28 +42,44 @@ class CompleteProfile extends React.Component {
         specialties: false,
         insurances: false,
         workingHours: false,
+        certificate: false,
       },
+      uploadError: false,
       submitted: false,
+      success: false
     };
   }
 
 
-  componentWillMount() {
-    this.setState({ role });
-    this.API.get('/specialties')
+  async componentWillMount() {
+    await this.API.get('/specialties')
       .then(response => {
         let allSpecialties = [];
-        response.data.specialties.map(specialty => allSpecialties.push({value: specialty.id, label: specialty.speciality}))
+        response.data.specialties.map(specialty => allSpecialties.push({value: specialty, label: specialty}))
         this.setState({allSpecialties});
       })
-    this.API.get('/insurances')
+    await this.API.get('/insurances')
       .then(response => {
-        console.log('insurances', response);
-        // let allInsurances = [];
-        // response.data.insurances.map(specialty => allInsurances.push({value: specialty.id, label: specialty.speciality}))
-        // this.setState({allSpecialties});
+        let allInsurances = [];
+        response.data.insurances.map(insurance => allInsurances.push({name: insurance.name, plans: insurance.plans}))
+        this.setState({allInsurances});
       })
+    this.setState({ loading: false })
   }
+
+  componentWillUnmount() {
+    this.state.files.forEach(file => URL.revokeObjectURL(file.preview));
+  }
+
+  addFile = file => {
+    this.setState({
+      files: file.map(file =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file)
+        })
+      )
+    });
+  };
 
   handleChange(e) {
     e.preventDefault();
@@ -74,68 +97,130 @@ class CompleteProfile extends React.Component {
     this.setState({errors, [name]: value })
   }
 
-  handleCheckboxChange(e) {
+  handleCheckboxChange(e, name) {
     const item = e.target.name;
     const isChecked = e.target.checked;
-    this.setState(prevState => ({ languages: prevState.languages.set(item, isChecked), submitted: false }));
-  }
-
-  handleSubmit() {
-    const { email, password, confirmPassword, name, lastName, address, phoneNumber, gender, current,
-      license, photo, studies, languages, specialties, insurances, insurancePlans, workingHours, role
-    } = this.state;
-
-    this.setState({ submitted: true });
-
-    if(current === 0) {
-      if(email && password && confirmPassword && this.passwordsMatch()) {
-        this.setState({ current: current + 1, submitted: false })
-      }
-    } else if(current === 1) {
-      if(role === 'patient') {
-        if(name && lastName && phoneNumber && email && password) {
-          const body = {
-            firstName: name,
-            lastName,
-            email,
-            password,
-            passwordConfirmation: confirmPassword,
-            phoneNumber,
-          }
-          this.API.post('/patient/register', body).then((response) => {
-            console.log('succes', response)
-            this.setState({ current: 2 });
-          }).catch(err => {
-            console.log({err});
-          })
-        }
-      } else if(role === 'specialist') {
-        if(name && lastName && phoneNumber && email && password && address && gender && license) {
-          const body = {
-            firstName: name,
-            lastName,
-            email,
-            password,
-            passwordConfirmation: confirmPassword,
-            phoneNumber,
-            address,
-            sex: gender,
-            license
-          }
-          this.API.post('/doctor/register', body).then((response) => {
-            console.log('succes', response)
-            this.setState({ current: 2 });
-          }).catch(err => {
-            console.log({err});
-          })
-        }
-      }
+    if(name === 'languages') {
+      this.setState(prevState => ({ languages: prevState.languages.set(item, isChecked), submitted: false }));
+    } else {
+      this.setState(prevState => ({ insurancePlans: prevState.insurancePlans.set(item, isChecked), submitted: false }));
     }
   }
 
-  passwordsMatch() {
-    const { password, confirmPassword, errors } = this.state;
-    return password !== '' && confirmPassword !== '' && password === confirmPassword && !errors.password && !errors.confirmPassword ;
+  handleSubmit() {
+    const { photo, studies, languages, specialties, insurancePlans, workingHours } = this.state;
+
+    this.setState({ submitted: true });
+
+    this.getMapKeys(languages);
+
+    this.getWorkingHours(workingHours);
+
+    if(photo && studies && !this.mapIsEmpty(languages) && specialties.length > 0  && !this.mapIsEmpty(insurancePlans) && !this.mapIsEmpty(workingHours) && !this.handleAddWorkingHours(workingHours)) {
+      const body = {
+        description: {
+          certificate: 'cer',
+          languages: this.arrayToString(this.getMapKeys(languages)),
+          education: studies,
+        },
+        specialty: specialties,
+        insurancePlan: this.getMapKeys(insurancePlans),
+        workingHours: this.getWorkingHours(workingHours)
+      }
+
+      const conf = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+
+      let bodyFormData = new FormData();
+      bodyFormData.append('file', this.state.files[0])
+
+
+      this.setState({ loading: true })
+      this.API.put('/doctor/uploadPicture', bodyFormData, conf ).then(() => {
+        this.API.post('/doctor/registerProfessional', body).then(() => {
+          this.setState({ loading: false, success: true })
+        })
+      })
+
+    }
+  }
+
+  getDay(name) {
+    switch(name) {
+      case 'monday':
+        return 1
+      case 'tuesday':
+        return 2
+      case 'wednesday':
+        return 3
+      case 'thursday':
+        return 4
+      case 'friday':
+        return 5
+      case 'saturday':
+        return 6
+      case 'sunday':
+        return 7
+      default:
+        return 1
+    }
+  }
+
+  hasWorkingHoursError(wh) {
+    if(!wh) {
+      return false;
+    }
+
+    for (let [key, value] of wh.entries()) {
+      if(moment(value.start, 'HH:mm').isAfter(value.end, 'HH:mm')){
+        return true
+      }
+    }
+
+    return false;
+
+  }
+
+  getWorkingHours(wh) {
+    let res = [];
+
+    if(!wh) {
+      return res;
+    }
+
+    for (let [key, value] of wh.entries()) {
+      if(value.start && value.end){
+        res.push({ dayOfWeek: this.getDay(value.day), startTime: value.start, finishTime: value.end })
+      }
+    }
+
+    return res;
+
+  }
+
+  getMapKeys(map) {
+    let keys = []
+
+    if(!map) {
+      return keys
+    }
+
+    for (let [key, value] of map.entries()) {
+      if(value){
+        keys.push(key)
+      }
+    }
+
+    return keys;
+  }
+
+  arrayToString(ar) {
+    let str = ''
+    ar.map(v => str += (v + ' '));
+    return str;
   }
 
   isEmpty(value) {
@@ -149,7 +234,7 @@ class CompleteProfile extends React.Component {
     if(value === '' && this.state.submitted) {
       return (
         <div className="text-danger">
-          El campo no puede quedar vacio
+            {i18n.t('register.emptyField')}
         </div>
       )
     }
@@ -167,30 +252,46 @@ class CompleteProfile extends React.Component {
     this.setState({ specialties })
   }
 
+  mapIsEmpty(map) {
+    if(!map) {
+      return true
+    }
+
+    let res = true
+    map.forEach(e => { if(e === true) {
+      res = false
+    }})
+
+    return res
+  }
+
 
   renderProfessionalForm() {
-    const { license, errors, languages, insurances, insurancePlans, studies, specialties, submitted, current, allSpecialties, workingHours } = this.state;
+    const { errors, languages, certificate, insurancePlans, studies, specialties, submitted, allSpecialties, workingHours, allInsurances } = this.state;
     const LANGUAGES = ['Español', 'Ingles', 'Aleman'];
-    const INSURANCES = [
-      {
-        name: 'OSDE',
-        plans: ['210', '310', '410']
-      },
-      {
-        name: 'Swiss Medical',
-        plans: ['210', '310', '410']
-      }
-    ]
-    const DAYS = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'];
+    const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     return(
       <div className="mb-3">
         <div className="form-group">
-          <label className={errors.studies || this.isEmpty(studies) ? 'text-danger' : ''}>Estudios</label>
-          <textarea name="studies" value={studies} type="text" rows="3" className={'form-control ' + (errors.studies || this.isEmpty(studies) ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder="Ingresa tus estudios" onChange={(e) =>this.handleChange(e)}/>
+          <label className={errors.studies || this.isEmpty(studies) ? 'text-danger' : ''}>{i18n.t('register.studies')}</label>
+          <textarea name="studies" value={studies} type="text" rows="3" className={'form-control ' + (errors.studies || this.isEmpty(studies) ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder={i18n.t('register.placeHolderStudies')} onChange={(e) =>this.handleChange(e)}/>
           {
             errors.studies &&
             <div className="text-danger">
-              Ingresa informacion sobre tus estudios
+                {i18n.t('register.descriptionStudies')}
+            </div>
+          }
+          {
+            this.renderEmptyError(studies)
+          }
+        </div>
+        <div className="form-group">
+          <label className={errors.certificate || this.isEmpty(certificate) ? 'text-danger' : ''}>{i18n.t('register.certificate')}</label>
+          <textarea name="certificate" value={certificate} type="text" rows="1" className={'form-control ' + (errors.certificate || this.isEmpty(certificate) ? 'is-invalid' : '')} placeholder={i18n.t('register.placeHolderCertificate')} onChange={(e) =>this.handleChange(e)}/>
+          {
+            errors.certificate &&
+            <div className="text-danger">
+              {i18n.t('register.descriptionCertificate')}
             </div>
           }
           {
@@ -201,14 +302,14 @@ class CompleteProfile extends React.Component {
           <Form>
             <Form.Group>
               <Form.Label className={this.isValidMap(languages) ? '' : 'text-danger'} style={{ marginRight: 32 }}>
-                Idiomas
+                {i18n.t('register.languages')}
               </Form.Label>
               {
                 LANGUAGES.map((lang, index) => {
                   return (
                     <Form.Check
                       checked={languages.get(lang)}
-                      onChange={(e) => this.handleCheckboxChange(e)}
+                      onChange={(e) => this.handleCheckboxChange(e, 'languages')}
                       custom
                       inline
                       name={lang}
@@ -222,29 +323,29 @@ class CompleteProfile extends React.Component {
               }
               {
                 !this.isValidMap(languages) &&
-                <label className="text-danger">Selecciona uno o mas lenguajes</label>
+                <label className="text-danger">{i18n.t('register.selectLanguages')}</label>
               }
             </Form.Group>
           </Form>
         </div>
         <div>
-          <label className={specialties.length === 0 && submitted ? 'text-danger' : ''}>Especialidades</label>
+          <label className={specialties.length === 0 && submitted ? 'text-danger' : ''}>{i18n.t('register.speciality')}</label>
           <Select
             onChange={(e) => this.handleSelect(e)}
             options={allSpecialties}
-            placeholder="Busca tus especialidades"
+            placeholder={i18n.t('register.placeHolderSpeciality')}
             className={specialties.length === 0 && submitted ? 'text-danger is-invalid' : ''}
             isLoading={allSpecialties.length === 0}
           />
           {
             specialties.length === 0 && submitted &&
-            <label className="text-danger">Selecciona una o mas especialidades</label>
+            <label className="text-danger">{i18n.t('register.selectSpeciality')}</label>
           }
         </div>
         <div className="col-sm-12 p-0 mt-3 mb-3">
           {
             specialties.length > 0 &&
-            <small className="mr-2">Estas son las especialidades que agregaste:</small>
+            <small className="mr-2">{i18n.t('register.selectedSpeciality')}</small>
           }
           {
             specialties.map((s, index) => {
@@ -257,15 +358,15 @@ class CompleteProfile extends React.Component {
           }
         </div>
         <div className="mb-3">
-          <Tab.Container id="left-tabs-example" defaultActiveKey={INSURANCES[0].name}>
+          <Tab.Container id="left-tabs-example" defaultActiveKey={allInsurances[0].name}>
             <Form.Label className={!this.isValidMap(insurancePlans) ? 'text-danger' : '' } style={{ marginRight: 32 }}>
-              Selecciona los planes de las prepagas con las que trabajas
+                {i18n.t('register.selectInsurance')}
             </Form.Label>
             <Row>
               <Col sm={3}>
                 <Nav variant="pills" className="flex-column">
                   {
-                    INSURANCES.map((ins) => {
+                    allInsurances.map((ins) => {
                       return (
                         <Nav.Item key={ins.name}>
                           <Nav.Link eventKey={ins.name}>{ins.name}</Nav.Link>
@@ -278,7 +379,7 @@ class CompleteProfile extends React.Component {
               <Col sm={9}>
                 <Tab.Content>
                   {
-                    INSURANCES.map((ins) => {
+                    allInsurances.map((ins) => {
                       return (
                         <Tab.Pane eventKey={ins.name} key={ins.name}>
                           {
@@ -306,12 +407,12 @@ class CompleteProfile extends React.Component {
             {
               !this.isValidMap(insurancePlans) &&
               <Form.Label className={'text-danger'} style={{ marginRight: 32 }}>
-                Selecciona al menos un plan
+                  {i18n.t('register.selectInsuranceLabel')}
               </Form.Label>
             }
           </Tab.Container>
         </div>
-        <label className={(!this.isValidMap(workingHours) ? 'text-danger ' : '') + 'mt-1'}>Ingresa tus horarios de trabajo</label>
+        <label className={(!this.isValidMap(workingHours) ? 'text-danger ' : '') + 'mt-1'}>{i18n.t('register.workingHours')}</label>
         {
           DAYS.map(day => {
             let start = this.getMapValue(workingHours, day, true);
@@ -320,13 +421,13 @@ class CompleteProfile extends React.Component {
               <div key={day}>
                 <div className="form-row">
                   <div className="form-group col-md-2 pt-2">
-                    <label className={!this.isValidDay(day) ? 'text-danger' : ''}>{day}</label>
+                    <label className={!this.isValidDay(day) ? 'text-danger' : ''}>{i18n.t(`week.${day}`)}</label>
                   </div>
                   <div className="form-group col-md-5">
-                    <input name="start" value={start} type="number" min="0" max="24" className={'form-control ' + (this.isValidDay(day) ? '' : 'is-invalid')} placeholder="Inicio (Ej: 9Hs)" onChange={(e) => this.handleAddWorkingHours(e, day, true)}/>
+                    <input name="start" value={start} type="time" min="00:00" max="24:00" className={'form-control ' + (this.isValidDay(day) ? '' : 'is-invalid')} placeholder={i18n.t('register.placeHolderWorkingHoursStart')} onChange={(e) => this.handleAddWorkingHours(e, day, true)}/>
                   </div>
                   <div className="form-group col-md-5">
-                    <input name="end" value={end} type="number" min="0" max="24" className={'form-control ' + (this.isValidDay(day) ? '' : 'is-invalid')} placeholder="Fin (Ej: 18Hs)" onChange={(e) => this.handleAddWorkingHours(e, day, false)}/>
+                    <input name="end" value={end} type="time" min="00:00" max="24:00" className={'form-control ' + (this.isValidDay(day) ? '' : 'is-invalid')} placeholder={i18n.t('register.placeHolderWorkingHoursFinish')} onChange={(e) => this.handleAddWorkingHours(e, day, false)}/>
                   </div>
                 </div>
               </div>
@@ -335,7 +436,7 @@ class CompleteProfile extends React.Component {
         }
         {
           !this.isValidMap(workingHours) &&
-          <label className={'text-danger '}>Completá al menos un dia</label>
+          <label className={'text-danger '}>{i18n.t('register.errorDay')}</label>
         }
       </div>
     )
@@ -369,7 +470,6 @@ class CompleteProfile extends React.Component {
       }
     }
     this.setState({ workingHours, submitted: false });
-    console.log(this.state.workingHours);
   }
 
   isValidMap(map) {
@@ -393,45 +493,131 @@ class CompleteProfile extends React.Component {
     return start <= 24 && start >= 0 && end <= 24 && start >= 0 && start < end;
   }
 
-
-
-  renderButton() {
-    const { current } = this.state;
-    if(current === 0) {
-      return(
-        <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn pull-right">Continuar</div>
+  addFile = file => {
+    this.setState({
+      files: file.map(file =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file)
+        })
       )
-    }
-    if(current === 1) {
-      return(
-        <div className="row container">
-          <div onClick={() => this.setState({ current: this.state.current - 1 })} className="btn btn-secondary mr-2">Atras</div>
-          <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn pull-right">Registrarme</div>
-        </div>
-      )
-    }
-  }
+    });
+  };
 
+  onDrop = (accepted, rejected) => {
+    if (Object.keys(rejected).length !== 0) {
+      this.setState({ uploadError: true });
+    } else {
+      this.addFile(accepted);
+      this.setState({ uploadError: false });
+
+      var blobPromise = new Promise((resolve, reject) => {
+        const reader = new window.FileReader();
+        reader.readAsDataURL(accepted[0]);
+        reader.onloadend = () => {
+          const base64data = reader.result;
+          resolve(base64data);
+        };
+      });
+      blobPromise.then(value => {
+        this.setState({ photo: value })
+      });
+    }
+  };
 
 
   render() {
+    const { files, uploadError, submitted, photo, loading, success } = this.state;
+
+    if(loading) {
+      return(
+        <div className="body-background">
+          <div className="centered">
+            <BounceLoader
+              sizeUnit={"px"}
+              size={75}
+              color={'rgb(37, 124, 191)'}
+              loading={true}
+            />
+          </div>
+        </div>
+      )
+    }
+
+    if(success) {
+      return(
+        <div className="body-background">
+          <div className="container col-12-sm w-p-20">
+            <div className="login-card w-shadow">
+              <div>
+                <FontAwesomeIcon icon={faCheckCircle} color="#46ce23" size="4x"/>
+                <h3 className="mt-4">Informacion Completada</h3>
+                <p>Ahora vas a aparecer en el listado de medicos de Waldoc</p>
+                <Link className="btn btn-primary custom-btn" to="/">{i18n.t('register.toHome')}</Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      )
+    }
+
+    const thumbsContainer = {
+      width: "64px",
+      height: "64px",
+      borderRadius: "50%",
+      objectFit: "cover",
+      objectPosition: "center"
+    };
+
     return (
       <div className="body-background">
         <div className="container col-12-sm w-p-20">
           <div className="login-card w-shadow">
-            <h3>Completa tu información profesional</h3>
-
-            <form className="mb-4">
+            <h3>{i18n.t('register.completeProfTitle')}</h3>
+            <div>
+            </div>
+            <form className="mb-4 mt-3">
+              <label className={(submitted && !photo) ? 'text-danger' : ''}>{i18n.t(`register.photo`)}</label>
+              <Dropzone
+                accept="image/*"
+                onDrop={(accepted, rejected) => this.onDrop(accepted, rejected)}
+              >
+                {({getRootProps, getInputProps}) => (
+                  <section className="dropzone">
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      {
+                        !uploadError ?
+                          <p className="mb-0">{i18n.t('register.photoUpload')}</p>
+                          :
+                          <p className="mb-0 text-danger">{i18n.t('register.photoUploadError')}</p>
+                      }
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
+              {
+                files.length !== 0 &&
+                  <div className="mb-3">
+                    <img style={thumbsContainer} src={files[0].preview} alt="profile" />
+                  </div>
+              }
               {
                 this.renderProfessionalForm()
               }
             </form>
+            <div className="row container">
+              <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn pull-right">{i18n.t('register.me')}</div>
+            </div>
           </div>
         </div>
-
       </div>
     )
   }
 }
 
-export default CompleteProfile;
+const mapStateToProps = state => ({
+  user: state.auth,
+});
+
+export default connect(mapStateToProps, null)(CompleteProfile);

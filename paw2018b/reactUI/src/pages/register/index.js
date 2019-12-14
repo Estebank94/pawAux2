@@ -7,6 +7,7 @@ import Steps, { Step } from 'rc-steps';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCoffee, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { ApiClient } from '../../utils/apiClient';
+import i18n from "../../i18n";
 
 class Register extends React.Component {
   constructor(props) {
@@ -184,7 +185,7 @@ class Register extends React.Component {
     if(value === '' && this.state.submitted) {
       return (
         <div className="text-danger">
-          El campo no puede quedar vacio
+            {i18n.t('register.emptyField')}
         </div>
       )
     }
@@ -195,7 +196,7 @@ class Register extends React.Component {
       if(name === 'license') {
         return (
           <div className="text-danger">
-            La licensia debe tener entre 0 y 10 digitos
+              {i18n.t('register.licenseValidation')}
           </div>
         )
       }
@@ -209,17 +210,17 @@ class Register extends React.Component {
       <div>
         <div className="form-group">
           <label className={(errors.email || this.hasErrors(email, 'email') ? 'text-danger' : '') + (!errors.email && email !== '' ? 'text-success' : '' )}>Email</label>
-          <input name="email" value={email} type="email" className={'form-control ' + (errors.email ||  this.hasErrors(email, 'email')  ? 'is-invalid' : '') + (!errors.email && email !== '' ? 'is-valid' : '' )} aria-describedby="emailHelp" placeholder="Ingresa tu email" onChange={(e) =>this.handleChange(e)}/>
+          <input name="email" value={email} type="email" className={'form-control ' + (errors.email ||  this.hasErrors(email, 'email')  ? 'is-invalid' : '') + (!errors.email && email !== '' ? 'is-valid' : '' )} aria-describedby="emailHelp" placeholder={i18n.t('login.placeHolderEmail')} onChange={(e) =>this.handleChange(e)}/>
           {
             errors.email &&
             <div className="text-danger">
-              Ingrese una direccion de mail valida
+              {i18n.t('register.emailValidation')}
             </div>
           }
           {
             !errors.email && email !== '' &&
             <div className="text-success">
-              Direccion de email valida
+              {i18n.t('register.validEmail')}
             </div>
           }
           {
@@ -228,24 +229,24 @@ class Register extends React.Component {
         </div>
         <div className="form-row">
           <div className="form-group col-md-6">
-            <label className={(errors.password ||  this.hasErrors(password, 'password')) || (submitted && !this.passwordsMatch()) || (!this.passwordsMatch() && password !== '' && confirmPassword !== '') ? 'text-danger' : ''}>Contraseña</label>
-            <input name="password" value={password} type="password" className={'form-control ' + (errors.password ||  this.hasErrors(password, 'password') || submitted && !this.passwordsMatch() || (!this.passwordsMatch() && password !== '' && confirmPassword !== '') ? 'is-invalid' : '') + (this.passwordsMatch() ? 'is-valid' : '')} placeholder="Ingresa tu contraseña" onChange={(e) => this.handleChange(e)}/>
+            <label className={(errors.password ||  this.hasErrors(password, 'password')) || (submitted && !this.passwordsMatch()) || (!this.passwordsMatch() && password !== '' && confirmPassword !== '') ? 'text-danger' : ''}>{i18n.t('login.password')}</label>
+            <input name="password" value={password} type="password" className={'form-control ' + (errors.password ||  this.hasErrors(password, 'password') || submitted && !this.passwordsMatch() || (!this.passwordsMatch() && password !== '' && confirmPassword !== '') ? 'is-invalid' : '') + (this.passwordsMatch() ? 'is-valid' : '')} placeholder={i18n.t('login.placeHolderasPsword')} onChange={(e) => this.handleChange(e)}/>
             {
               errors.password &&
               <div className="text-danger">
-                La contraseña debe tener al menos 8 caracteres
+                {i18n.t('register.validPassword')}
               </div>
             }
             {
               (submitted && !this.passwordsMatch() && password !== '' || (!this.passwordsMatch() && password !== '' && confirmPassword !== '')) &&
               <div className="text-danger">
-                Las contraseñas no coinciden
+                  {i18n.t('register.notMatchingPassword')}
               </div>
             }
             {
               this.passwordsMatch() &&
               <div className="text-success">
-                Las contraseñas coinciden
+                  {i18n.t('register.matchingPassword')}
               </div>
             }
             {
@@ -253,18 +254,18 @@ class Register extends React.Component {
             }
           </div>
           <div className="form-group col-md-6">
-            <label className={errors.confirmPassword ||  this.hasErrors(confirmPassword, 'confirmPassword') || (!this.passwordsMatch() && password !== '' && confirmPassword !== '') ? 'text-danger' : ''}>Confirmar Contraseña</label>
-            <input name="confirmPassword" value={confirmPassword} type="password" className={'form-control ' + (errors.confirmPassword || this.hasErrors(confirmPassword, 'confirmPassword') || (!this.passwordsMatch() && password !== '' && confirmPassword !== '')? 'is-invalid' : '') + (this.passwordsMatch() ? 'is-valid' : '')} placeholder="Ingresa tu contraseña" onChange={(e) => this.handleChange(e)}/>
+            <label className={errors.confirmPassword ||  this.hasErrors(confirmPassword, 'confirmPassword') || (!this.passwordsMatch() && password !== '' && confirmPassword !== '') ? 'text-danger' : ''}>{i18n.t('register.confirmPassword')}</label>
+            <input name="confirmPassword" value={confirmPassword} type="password" className={'form-control ' + (errors.confirmPassword || this.hasErrors(confirmPassword, 'confirmPassword') || (!this.passwordsMatch() && password !== '' && confirmPassword !== '')? 'is-invalid' : '') + (this.passwordsMatch() ? 'is-valid' : '')} placeholder={i18n.t('register.placeHolderPassword')} onChange={(e) => this.handleChange(e)}/>
             {
               errors.confirmPassword &&
               <div className="text-danger">
-                La contraseña debe tener al menos 8 caracteremmmms
+                  {i18n.t('register.validPassword')}
               </div>
             }
             {
               this.passwordsMatch() &&
               <div className="text-success">
-                Las contraseñas coinciden
+                  {i18n.t('register.matchingPassword')}
               </div>
             }
             {
@@ -282,12 +283,12 @@ class Register extends React.Component {
       <div>
         <div className="form-row">
           <div className="form-group col-md-6">
-            <label className={errors.name || this.hasErrors(name, 'name') ? 'text-danger' : ''}>Nombre</label>
-            <input name="name" value={name} type="text" className={'form-control ' + (errors.name || this.hasErrors(name, 'name') ? 'is-invalid' : '')} placeholder="Ingresa tu nombre" onChange={(e) => this.handleChange(e)}/>
+            <label className={errors.name || this.hasErrors(name, 'name') ? 'text-danger' : ''}>{i18n.t('register.name')}</label>
+            <input name="name" value={name} type="text" className={'form-control ' + (errors.name || this.hasErrors(name, 'name') ? 'is-invalid' : '')} placeholder={i18n.t('register.placeHolderName')} onChange={(e) => this.handleChange(e)}/>
             {
               errors.name &&
               <div className="text-danger">
-                Ingresa un nombre valido
+                  {i18n.t('register.validName')}
               </div>
             }
             {
@@ -295,12 +296,12 @@ class Register extends React.Component {
             }
           </div>
           <div className="form-group col-md-6">
-            <label className={errors.lastName || this.hasErrors(lastName, 'lastName')? 'text-danger' : ''}>Apellido</label>
-            <input name="lastName" value={lastName} type="text" className={'form-control ' + (errors.lastName || this.hasErrors(lastName, 'lastName') ? 'is-invalid' : '')} placeholder="Ingresa tu apellido" onChange={(e) => this.handleChange(e)}/>
+            <label className={errors.lastName || this.hasErrors(lastName, 'lastName')? 'text-danger' : ''}>{i18n.t('register.lastName')}</label>
+            <input name="lastName" value={lastName} type="text" className={'form-control ' + (errors.lastName || this.hasErrors(lastName, 'lastName') ? 'is-invalid' : '')} placeholder={i18n.t('register.placeHolderLastName')} onChange={(e) => this.handleChange(e)}/>
             {
               errors.lastName &&
               <div className="text-danger">
-                Ingresa un apellido
+                  {i18n.t('register.validLastName')}
               </div>
             }
             {
@@ -311,12 +312,12 @@ class Register extends React.Component {
         {
           role !== 'patient' &&
           <div className="form-group">
-            <label className={errors.address || this.hasErrors(address, 'address') ? 'text-danger' : ''}>Direccion</label>
-            <input name="address" value={address} type="text" className={'form-control ' + (errors.address || this.hasErrors(address, 'address') ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder="Ingresa tu dirección" onChange={(e) =>this.handleChange(e)}/>
+            <label className={errors.address || this.hasErrors(address, 'address') ? 'text-danger' : ''}>{i18n.t('register.address')}</label>
+            <input name="address" value={address} type="text" className={'form-control ' + (errors.address || this.hasErrors(address, 'address') ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder={i18n.t('register.placeHolderAddress')} onChange={(e) =>this.handleChange(e)}/>
             {
               errors.address &&
               <div className="text-danger">
-                Ingresa una direccion valida
+                  {i18n.t('register.validAddress')}
               </div>
             }
             {
@@ -325,12 +326,12 @@ class Register extends React.Component {
           </div>
         }
         <div className="form-group">
-          <label className={errors.phoneNumber || this.hasErrors(phoneNumber, 'phoneNumber') ? 'text-danger' : ''}>Telefono</label>
-          <input name="phoneNumber" value={phoneNumber} type="tel" className={'form-control ' + (errors.phoneNumber || this.hasErrors(phoneNumber, 'phoneNumber') ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder="Ingresa tu telefono" onChange={(e) =>this.handleChange(e)}/>
+          <label className={errors.phoneNumber || this.hasErrors(phoneNumber, 'phoneNumber') ? 'text-danger' : ''}>{i18n.t('register.phoneNumber')}</label>
+          <input name="phoneNumber" value={phoneNumber} type="tel" className={'form-control ' + (errors.phoneNumber || this.hasErrors(phoneNumber, 'phoneNumber') ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder={i18n.t('register.placeHolderPhoneNumber')} onChange={(e) =>this.handleChange(e)}/>
           {
             errors.phoneNumber &&
             <div className="text-danger">
-              Ingresa un numero de telefono valido
+                {i18n.t('register.validPhoneNumber')}
             </div>
           }
           {
@@ -341,19 +342,19 @@ class Register extends React.Component {
           role !== 'patient' &&
             <div>
               <div className="form-group">
-                <label className={errors.gender || this.hasErrors(gender, 'gender') ? 'text-danger' : ''}>Sexo</label>
+                <label className={errors.gender || this.hasErrors(gender, 'gender') ? 'text-danger' : ''}>{i18n.t('register.gender')}</label>
                 <select name="gender" value={gender} className={'form-control ' + (errors.gender || this.hasErrors(gender, 'gender') ? 'is-invalid' : '')} onChange={(e) =>this.handleChange(e)}>
-                  <option value="">Elegir una opcion</option>
-                  <option value="M">Masculino</option>
-                  <option value="F">Femenino</option>
+                  <option value="">{i18n.t('register.optionGender')}</option>
+                  <option value="M">{i18n.t('register.male')}</option>
+                  <option value="F">{i18n.t('register.female')}</option>
                 </select>
                 {
                   this.renderEmptyError(gender)
                 }
               </div>
               <div className="form-group">
-                <label className={this.hasErrors(license, 'license') ? 'text-danger' : ''}>Licencia Profesional</label>
-                <input name="license" value={license} type="text" className={'form-control ' + (this.hasErrors(license, 'license') ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder="Ingresa tu licencia" onChange={(e) =>this.handleChange(e)}/>
+                <label className={this.hasErrors(license, 'license') ? 'text-danger' : ''}>{i18n.t('register.license')}</label>
+                <input name="license" value={license} type="text" className={'form-control ' + (this.hasErrors(license, 'license') ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder={i18n.t('register.placeHolderLicense')} onChange={(e) =>this.handleChange(e)}/>
                 {
                   this.renderSpecificError('license', license)
                 }
@@ -368,14 +369,14 @@ class Register extends React.Component {
     const { current } = this.state;
     if(current === 0) {
       return(
-        <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn pull-right">Continuar</div>
+        <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn pull-right">{i18n.t('register.continueButton')}</div>
         )
     }
     if(current === 1) {
       return(
         <div className="row container">
-          <div onClick={() => this.setState({ current: this.state.current - 1 })} className="btn btn-secondary mr-2">Atras</div>
-          <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn pull-right">Registrarme</div>
+          <div onClick={() => this.setState({ current: this.state.current - 1 })} className="btn btn-secondary mr-2">{i18n.t('register.backButton')}</div>
+          <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn pull-right">{i18n.t('register.me')}</div>
         </div>
       )
     }
@@ -389,18 +390,18 @@ class Register extends React.Component {
           <div className="login-card w-shadow">
             {
               role === 'patient' && current <= 1 &&
-              <h3>Registrate como paciente</h3>
+              <h3>{i18n.t('register.asPatient')}</h3>
             }
             {
               role === 'specialist' && current <= 1 &&
-              <h3>Registrate como especialista</h3>
+              <h3>{i18n.t('register.asDoctor')}</h3>
             }
             {
               current <= 1 &&
               <div style={{ marginTop: 32, marginBottom: 16 }}>
                 <Steps labelPlacement="vertical" current={current} icons={ <FontAwesomeIcon icon={faCoffee}/>}>
-                  <Step title="Datos Basicos"/>
-                  <Step title="Datos Personales"/>
+                  <Step title={i18n.t('register.basicInfo')}/>
+                  <Step title={i18n.t('register.personalInfo')}/>
                 </Steps>
               </div>
             }
@@ -408,9 +409,9 @@ class Register extends React.Component {
               current === 2 &&
               <div>
                 <FontAwesomeIcon icon={faCheckCircle} color="#46ce23" size="4x"/>
-                <h3 className="mt-4">Bienvenido a Waldoc</h3>
-                <p>En breve, vas recibir un email para confirmar tu cuenta.</p>
-                <Link className="btn btn-primary custom-btn" to="/">Ir a la pagina principal</Link>
+                <h3 className="mt-4">{i18n.t('register.welcome')}</h3>
+                <p>{i18n.t('register.emailMessage')}</p>
+                <Link className="btn btn-primary custom-btn" to="/">{i18n.t('register.toHome')}</Link>
               </div>
             }
 
@@ -428,7 +429,7 @@ class Register extends React.Component {
             {
               current <= 1 &&
               <div style={{ marginTop: 8 }}>
-                <small><Link to="/">Cancelar</Link></small>
+                <small><Link to="/">{i18n.t('login.cancel')}</Link></small>
               </div>
             }
           </div>

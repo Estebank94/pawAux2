@@ -9,6 +9,7 @@ import { faTimesCircle, faFrownOpen } from '@fortawesome/free-solid-svg-icons';
 import { ApiClient } from '../../utils/apiClient';
 
 import SpecialistCard from '../../components/specialist/card';
+import i18n from "../../i18n";
 
 class Specialists extends React.Component {
   constructor(props) {
@@ -131,7 +132,7 @@ class Specialists extends React.Component {
           className="btn btn-light btn-block w-shadow mt-3 w-text-color"
           onClick={() => this.loadMore()}
         >
-          Cargar más resultados
+            {i18n.t('specialist.list')}
         </div>
       )
     }
@@ -166,7 +167,7 @@ class Specialists extends React.Component {
         return 'Martes'
         break;
       case 3:
-        return 'Miercoles'
+        return 'Miércoles'
         break;
       case 4:
         return 'Jueves'
@@ -175,7 +176,7 @@ class Specialists extends React.Component {
         return 'Viernes'
         break;
       case 6:
-        return 'Sabado'
+        return 'Sábado'
         break;
       case 7:
         return 'Domingo'
@@ -190,10 +191,10 @@ class Specialists extends React.Component {
     const DAYS = [
       { name: 'Lunes', value: 1},
       { name: 'Martes', value: 2},
-      { name: 'Miercoles', value: 3},
+      { name: 'Miércoles', value: 3},
       { name: 'Jueves', value: 4},
       { name: 'Viernes', value: 5},
-      { name: 'Sabado', value: 6},
+      { name: 'Sábado', value: 6},
       { name: 'Domingo', value: 7},
     ]
 
@@ -212,7 +213,7 @@ class Specialists extends React.Component {
 
       if(error) {
           return (
-              <p>Hubo un error!</p>
+              <p>{i18n.t('error.error')}</p>
           )
       }
 
@@ -229,8 +230,8 @@ class Specialists extends React.Component {
                     !filtering && specialists.doctors.length === 0 &&
                     <div className="login-card w-shadow mt-4">
                       <FontAwesomeIcon icon={faFrownOpen} color="#257cbf" size="4x"/>
-                      <h3 className="mt-4">No hay resultados</h3>
-                      <p>Intenta cambiar los filtros de busqueda</p>
+                      <h3 className="mt-4">{i18n.t('navigation.noResults')}</h3>
+                      <p>{i18n.t('navigation.changeFilters')}</p>
                     </div>
                   }
                   {
@@ -250,7 +251,7 @@ class Specialists extends React.Component {
                 </div>
                 <div className="col-md-3">
                     <div className="sidebar-nav-fixed pull-right affix">
-                      <h3>Filtros</h3>
+                      <h3>{i18n.t('navigation.filters')}</h3>
                       {
                         name &&
                         <Badge className="badge-waldoc p-2" onClick={() => this.handleChange('name', null)}>
@@ -291,11 +292,11 @@ class Specialists extends React.Component {
                       {
                         !name &&
                         <div>
-                          <h5 className="mb-1 mt-3">Nombre</h5>
+                          <h5 className="mb-1 mt-3">{i18n.t('register.name')}</h5>
                             <div className="input-group mb-3">
-                              <input name="name" value={name} type="text" className="form-control w-shadow" placeholder="Nombre..." onChange={(e) => this.handleInputChange(e)}/>
+                              <input name="name" value={name} type="text" className="form-control w-shadow" placeholder={i18n.t('specialist.placeHolderName')} onChange={(e) => this.handleInputChange(e)}/>
                                 <div className="input-group-append">
-                                  <span className="input-group-text w-shadow clickeable" onClick={() => this.handleNameSearch()}>Buscar</span>
+                                  <span className="input-group-text w-shadow clickeable" onClick={() => this.handleNameSearch()}>{i18n.t('home.searchButton')}</span>
                                 </div>
                             </div>
                         </div>
@@ -304,14 +305,14 @@ class Specialists extends React.Component {
                         !sex &&
                         <div>
                           <h5 className="mb-1 mt-3">Sexo</h5>
-                          <p className="mb-0 clickeable" onClick={() => this.handleChange('sex', 'F')}>Femenino</p>
-                          <p className="mb-0 clickeable" onClick={() => this.handleChange('sex', 'M')}>Masculino</p>
+                          <p className="mb-0 clickeable" onClick={() => this.handleChange('sex', 'F')}>{i18n.t('register.female')}</p>
+                          <p className="mb-0 clickeable" onClick={() => this.handleChange('sex', 'M')}>{i18n.t('register.male')}</p>
                         </div>
                       }
                       {
                         !specialty &&
                         <div>
-                          <h5 className="mb-1 mt-3">Especialidad</h5>
+                          <h5 className="mb-1 mt-3">{i18n.t('home.placeHolderSpeciality')}</h5>
                           {
                             specialties.map(s =>  <p className="mb-0 clickeable" onClick={() => this.handleChange('specialty', s.label)}>{s.label}</p>)
                           }
@@ -320,7 +321,7 @@ class Specialists extends React.Component {
                       {
                         !insurance &&
                         <div>
-                          <h5 className="mb-1 mt-3">Obra Social</h5>
+                          <h5 className="mb-1 mt-3">{i18n.t('specialist.insurancesPlans')}</h5>
                           {
                             insurances.map(i =>  <p className="mb-0 clickeable" onClick={() => this.handleChange('insurance', i.label)}>{i.label}</p>)
                           }
@@ -338,7 +339,7 @@ class Specialists extends React.Component {
                       {
                         !days &&
                         <div>
-                          <h5 className="mb-1 mt-3">Día de atención</h5>
+                          <h5 className="mb-1 mt-3">{i18n.t('specialist.workingDay')}</h5>
                           {
                             DAYS.map(d =>  <p className="mb-0 clickeable" onClick={() => this.handleChange('days', d.value)}>{d.name}</p>)
                           }

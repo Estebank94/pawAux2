@@ -9,6 +9,7 @@ import queryString from 'query-string';
 
 import fetchApi from '../../utils/api';
 import { ApiClient } from '../../utils/apiClient';
+import i18n from "../../i18n";
 
 class SearchBar extends React.Component {
   constructor(props){
@@ -82,8 +83,8 @@ class SearchBar extends React.Component {
           <div className="form-group mb-0 col-md-5 mr-0">
             <input
               type="text"
-              aria-label="Buscar por nombre del médico"
-              placeholder="Nombre del medico"
+              aria-label={i18n.t('home.labelDoctor')}
+              placeholder={i18n.t('home.placeHolderDoctor')}
               className="form-control"
               name="selectedName"
               value={selectedName}
@@ -96,7 +97,7 @@ class SearchBar extends React.Component {
               value={selectedSpecialty}
               onChange={(e) => this.handleSelect(e, 'specialty')}
               options={specialties}
-              placeholder="Especialidad"
+              placeholder={i18n.t('home.placeHolderSpeciality')}
               styles={customStyles}
               isLoading={specialties === []}
             />
@@ -106,14 +107,14 @@ class SearchBar extends React.Component {
               value={selectedInsurance}
               onChange={(e) => this.handleSelect(e, 'insurance')}
               options={insurances}
-              placeholder="Prepaga"
+              placeholder={i18n.t('home.placeHolderInsurance')}
               styles={customStyles}
               isLoading={insurances === []}
             />
           </div>
           <div className="col-md-1 pl-1 pr-0 mr-0">
             <Link className={'btn btn-block ' + (dark? 'btn-light' : 'btn-primary custom-btn') } to={'/specialists?' + this.state.searchQuery } style={{ textDecoration: 'none', color: dark? '#000' : '#FFF' }}>
-              Buscar
+                {i18n.t('home.searchButton')}
             </Link>
           </div>
         </div>

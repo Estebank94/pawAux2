@@ -12,7 +12,7 @@ public class DescriptionDTO {
     public DescriptionDTO(Description description){
         this.certificate = description.getCertificate();
         this.education = description.getEducation();
-        this.certificate = description.getCertificate();
+        this.languages = description.getLanguages();
     }
 
     public String getCertificate() {

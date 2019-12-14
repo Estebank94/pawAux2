@@ -562,13 +562,12 @@ a {
 
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
   color: #fff;
-  background-color: #257cbf !important;
+  background-color: rgba(37, 124,191, 0.15) !important;
 }
 
 .nav-item a {
-  color: #257cbf;
+  color: #257cbf !important;
   text-decoration: none;
-
 }
 
 .badge-waldoc {
@@ -617,6 +616,9 @@ a {
 
 .appointment-card {
   cursor: auto !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .favorite-card:hover .doctor-name {
@@ -625,4 +627,27 @@ a {
 
 .fav-button {
   min-width: 192px;
+}
+
+.hello {
+  align-items: center;
+}
+
+.dropzone {
+  width : 100%;
+  height : 20%;
+  border : 2px dashed #ced4da;
+  border-radius: 5px;
+  padding: 8px;
+  margin-bottom: 12px;
+  -webkit-transition: border-color 1s
+}
+
+.dropzone:hover {
+  border-color: #257CBF;
+  -webkit-transition: border-color 1s
+}
+
+.description-icon {
+  min-width: 24px;
 }
