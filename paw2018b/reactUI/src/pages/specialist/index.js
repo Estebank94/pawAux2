@@ -149,6 +149,8 @@ class Specialist extends React.Component {
     this.API.put(`doctor/${this.state.specialist.id}/favorite/add`).then(response => {
       if(response.status >= 200) {
         this.setState({ favorite: true })
+      } else {
+        this.setState({ favorite: false })
       }
     })
   }
