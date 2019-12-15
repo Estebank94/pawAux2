@@ -1,7 +1,12 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 class Favorite extends React.Component {
+  static propTypes = {
+    data: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+  };
 
   handleClick() {
     const { id } = this.props.data;
@@ -9,14 +14,12 @@ class Favorite extends React.Component {
   }
 
   render() {
-    const { profilePicture, firstName, lastName } = this.props.data;
+    const { firstName, lastName } = this.props.data;
+
     return(
       <div className="d-flex flex-row favorite-card" onClick={() => this.handleClick()}>
-        <img className="avatar mb-3" src={`data:image/jpeg;base64,${profilePicture}`} />
-        <div className="d-flex align-items-center">
-          <div className="card-text">
-            <h3 className="doctor-name mb-0 pl-3">{firstName} {lastName}</h3>
-          </div>
+        <div className="card-text pt-3 pb-3">
+          <h5 className="doctor-name mb-0 pl-3">{firstName} {lastName}</h5>
         </div>
       </div>
     );
