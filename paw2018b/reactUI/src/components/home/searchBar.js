@@ -99,7 +99,7 @@ class SearchBar extends React.Component {
               options={specialties}
               placeholder={i18n.t('home.placeHolderSpeciality')}
               styles={customStyles}
-              isLoading={specialties === []}
+              isLoading={specialties.length === 0 }
             />
           </div>
           <div className="form-group mb-0 col-md-3">
@@ -109,7 +109,7 @@ class SearchBar extends React.Component {
               options={insurances}
               placeholder={i18n.t('home.placeHolderInsurance')}
               styles={customStyles}
-              isLoading={insurances === []}
+              isLoading={insurances.length === 0 }
             />
           </div>
           <div className="col-md-1 pl-1 pr-0 mr-0">
