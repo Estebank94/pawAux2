@@ -175,15 +175,20 @@ public class PatientApiController extends BaseApiController {
     @Produces(value = { MediaType.APPLICATION_JSON, })
     public Response confirmUser(@QueryParam("token") @DefaultValue("") String token) throws VerificationNotFoundException {
 
-        Verification verification = null;
+        Patient patient = null;
         try{
-            verification = patientService.findToken(token).orElseThrow(VerificationNotFoundException::new);
+            patient = patientService.confirmUser(token);
         } catch (VerificationNotFoundException e){
             return Response.status(Response.Status.CONFLICT)
                     .entity(errorMessageToJSON("You have already verified your email")).build();
         }
-        final Patient patient = verification.getPatient();
-        patientService.enableUser(patient);
+
+        if (patient == null){
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(errorMessageToJSON("Patient not found")).build();
+        }
+        //final Patient patient = verification.getPatient();
+        //patientService.enableUser(patient);
 
         /* Auto Login - todo: se esta rompiendo ? */
         Authentication authentication = new UsernamePasswordAuthenticationToken(patient.getEmail(), patient.getPassword());

@@ -246,9 +246,41 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional
+    public Patient confirmUser(String token) throws VerificationNotFoundException {
+        Verification verification = null;
+        LOGGER.debug("Patient Service: Confirm user Service");
+        LOGGER.debug("Finding token");
+        Optional<Verification> vt = patientDao.findToken(token);
+
+        if (vt.isPresent()) {
+            LOGGER.debug("Token Found");
+            verification = vt.get();
+            patientDao.deleteToken(verification);
+        } else {
+            throw new VerificationNotFoundException();
+        }
+
+        Patient patient = verification.getPatient();
+        // Optional<Patient> ans = patientDao.findPatientById(patient.getId());
+        // Patient newPatient = ans.get();
+
+        LOGGER.debug("Found patient with id {}", patient.getId());
+        LOGGER.debug("Getting Favorites");
+        patient.getFavorites().size();
+        LOGGER.debug("Patient favorite size: {}", patient.getFavorites().size());
+        LOGGER.debug("Enabling patient");
+        patientDao.enableUser(patient);
+
+        return patient;
+    }
+
+    @Override
+    @Transactional
     public void enableUser(final Patient patient) {
         patientDao.enableUser(patient);
     }
+
+
 
     @Override
     @Transactional

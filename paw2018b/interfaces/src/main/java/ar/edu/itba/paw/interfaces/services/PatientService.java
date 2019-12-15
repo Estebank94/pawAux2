@@ -22,6 +22,8 @@ public interface PatientService {
 
     void enableUser(final Patient patient);
 
+    Patient confirmUser(final String token) throws VerificationNotFoundException;
+
     void deleteUser(final Patient patient);
 
     List<Appointment> getHistoricalAppointments(Patient patient);
