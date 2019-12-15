@@ -15,7 +15,7 @@ public interface SearchService {
 
     List<Specialty> listSpecialtiesWithDoctors();
 
-    List<InsurancePlan> listInsuranceWithDoctors();
+    List<Insurance> listInsuranceWithDoctors();
 
 //    Optional<List<ListItem>> listInsurancesWithDoctors();
 

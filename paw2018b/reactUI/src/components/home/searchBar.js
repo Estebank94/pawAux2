@@ -6,12 +6,13 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
 import queryString from 'query-string';
+import moment from 'moment';
 
-import fetchApi from '../../utils/api';
 import { ApiClient } from '../../utils/apiClient';
 import i18n from "../../i18n";
 
 class SearchBar extends React.Component {
+  _isMounted = false;
   constructor(props){
     super(props);
     this.API = new ApiClient();
@@ -27,15 +28,33 @@ class SearchBar extends React.Component {
 
 
 
-  componentDidMount() {
-    this.API.get('/homeinfo').then(response => {
-      let specialties = [];
-      let insurances = [];
-      response.data.specialties.map(specialty => specialties.push({value: specialty, label: specialty}))
-      response.data.insurances.map(insurance => insurances.push({value: insurance.name, label: insurance.name}))
+  async componentDidMount() {
+    this._isMounted = true;
+    const lastUpdate = await localStorage.getItem('lastUpdate');
+    if(moment.duration(moment().diff(lastUpdate)).asMinutes() < 3) {
+      const insurances = await localStorage.getItem('insurances');
+      const specialties = await localStorage.getItem('specialties');
+      if(this._isMounted) {
+        this.setState({ insurances: JSON.parse(insurances), specialties: JSON.parse(specialties) })
+      }
+    } else {
+      this.API.get('/homeinfo').then(response => {
+        let specialties = [];
+        let insurances = [];
+        response.data.specialties.map(specialty => specialties.push({value: specialty, label: specialty}))
+        response.data.insurances.map(insurance => insurances.push({value: insurance.name, label: insurance.name}))
+        if(this._isMounted) {
+          this.setState({ insurances, specialties });
+          localStorage.setItem('insurances', JSON.stringify(insurances));
+          localStorage.setItem('specialties', JSON.stringify(specialties));
+          localStorage.setItem('lastUpdate', moment())
+        }
+      })
+    }
+  }
 
-      this.setState({ insurances, specialties });
-    })
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   async handleChange(e) {
@@ -99,7 +118,7 @@ class SearchBar extends React.Component {
               options={specialties}
               placeholder={i18n.t('home.placeHolderSpeciality')}
               styles={customStyles}
-              isLoading={specialties === []}
+              isLoading={specialties.length === 0 }
             />
           </div>
           <div className="form-group mb-0 col-md-3">
@@ -109,7 +128,7 @@ class SearchBar extends React.Component {
               options={insurances}
               placeholder={i18n.t('home.placeHolderInsurance')}
               styles={customStyles}
-              isLoading={insurances === []}
+              isLoading={insurances.length === 0 }
             />
           </div>
           <div className="col-md-1 pl-1 pr-0 mr-0">

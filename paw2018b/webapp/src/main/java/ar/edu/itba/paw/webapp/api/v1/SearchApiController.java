@@ -55,9 +55,10 @@ public class SearchApiController extends BaseApiController {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response getHomeInformation () {
         LOGGER.info("Home Information");
-        List<InsurancePlan> insurancePlanList = searchService.listInsuranceWithDoctors();
+        //List<InsurancePlan> insurancePlanList = searchService.listInsuranceWithDoctors();
+        List<Insurance> insuranceList = searchService.listInsuranceWithDoctors();
         List<Specialty> specialtyList = searchService.listSpecialtiesWithDoctors();
-        return Response.ok(new HomeInformationDTO(specialtyList, insurancePlanList)).build();
+        return Response.ok(new HomeInformationDTO(specialtyList, insuranceList)).build();
     }
 
     @GET
