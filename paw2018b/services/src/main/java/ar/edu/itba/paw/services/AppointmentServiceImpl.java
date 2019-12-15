@@ -114,7 +114,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
         for (Appointment ap: appointmentList){
-            if (ap.getPatient().getPatientId() == patient.getId() && !ap.getAppointmentCancelled()){
+            if (ap.getPatient().getPatientId().equals(patient.getId()) && !ap.getAppointmentCancelled()){
                 LOGGER.debug("Cancelling appointment. ");
                 ap.setAppointmentCancelled(Boolean.TRUE);
                 return ap;
