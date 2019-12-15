@@ -165,6 +165,10 @@ class Specialist extends React.Component {
   }
 
   renderFavoriteButton(favorite) {
+    if(this.props.user.user.doctor.id === this.state.specialist.id) {
+      return null;
+    }
+
     if(favorite === null) {
       return(
         <div className="btn btn-primary custom-btn mt-2 fav-button">
