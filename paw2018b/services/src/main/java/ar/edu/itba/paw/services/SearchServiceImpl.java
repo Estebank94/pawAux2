@@ -35,7 +35,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<InsurancePlan> listInsuranceWithDoctors() {
+    public List<Insurance> listInsuranceWithDoctors() {
         return searchDao.listInsuranceWithDoctors();
     }
 
