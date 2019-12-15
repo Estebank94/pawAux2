@@ -307,8 +307,8 @@ public class DoctorApiController extends BaseApiController {
 
     @POST
     @Path("/registerProfessional")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Consumes(MediaType.APPLICATION_JSON + "; charset=UTF-8")
+    @Produces(value = {MediaType.APPLICATION_JSON + "; charset=UTF-8"})
     public Response createProfessionalUser(@Valid final BasicProfessionalForm professionalForm){
 
         LOGGER.debug("createProfessionalUser");
