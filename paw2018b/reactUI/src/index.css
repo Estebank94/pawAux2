@@ -671,3 +671,7 @@ blue-icon {
 .nav-tabs a active {
   color: red !important;
 }
+
+.continue-btn {
+    min-width: 88px;
+}
