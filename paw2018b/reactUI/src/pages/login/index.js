@@ -5,6 +5,7 @@ import Fade from 'react-reveal/Fade';
 import { connect } from 'react-redux';
 import { doLogin } from '../../store/auth/actions';
 import i18n from "../../i18n";
+import PulseLoader from 'react-spinners/PulseLoader';
 
 class Login extends React.Component {
   state = {
@@ -13,6 +14,7 @@ class Login extends React.Component {
     emailError: false,
     passwordError: false,
     error: false,
+    loading: false
   };
 
 
@@ -24,7 +26,9 @@ class Login extends React.Component {
   async handleSubmit() {
     const { email, password } = this.state;
     if(email && password) {
+      this.setState({ loading: true })
       await this.props.doLogin({ Jusername: email, Jpassword: password }).then(auth => this.manageAccess(auth));
+      this.setState({ loading: false })
     }
     if(!email) {
       this.setState({ emailError: true })
@@ -47,7 +51,7 @@ class Login extends React.Component {
   }
 
   render() {
-    const { email, password, emailError, passwordError, error} = this.state;
+    const { email, password, emailError, passwordError, error, loading } = this.state;
     return (
       <div className="centered-login body-background">
         <Shake when={emailError || passwordError || error }>
@@ -71,8 +75,19 @@ class Login extends React.Component {
                   </div>
                 </Fade>
               }
-              
-              <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn">{i18n.t('navigation.logInButton')}</div>
+              {
+                loading ?
+                  <div className="btn btn-primary custom-btn btn-block">
+                    <PulseLoader
+                      sizeUnit={"px"}
+                      size={10}
+                      color={'#FFF'}
+                      loading={true}
+                    />
+                  </div>
+                  :
+                  <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn btn-block">{i18n.t('navigation.logInButton')}</div>
+              }
             </form>
             <div style={{ marginTop: 8 }}>
               <small>{i18n.t('login.accountQuestion')} <Link to="/register">{i18n.t('login.register')}</Link></small>
