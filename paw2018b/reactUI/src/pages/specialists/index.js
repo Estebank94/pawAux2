@@ -135,7 +135,10 @@ class Specialists extends React.Component {
   }
 
   renderPagePicker = () => {
-    const { pages, filters, loadingPage } = this.state;
+    const { pages, filters, loadingPage, loading, filtering } = this.state;
+    if(loading || filtering ) {
+      return null;
+    }
     if(loadingPage) {
       return(
         <div className="btn btn-light btn-block w-shadow mt-3 w-text-color">
