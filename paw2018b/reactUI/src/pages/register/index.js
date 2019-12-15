@@ -60,10 +60,10 @@ class Register extends React.Component {
 
     switch (name) {
       case 'name':
-        errors.name = value.length <= 0
+        errors.name = value.length <= 2
         break;
       case 'lastName':
-        errors.lastName = value.length <= 0
+        errors.lastName = value.length <= 1
         break;
       case 'phoneNumber':
         errors.phoneNumber = phone(value, 'ARG', true).length === 0
@@ -73,7 +73,7 @@ class Register extends React.Component {
         errors.email = !isValidEmail(value)
         break;
       case 'password':
-        errors.password =  value.length < 6
+        errors.password =  value.length < 6 || value.length > 56
         break;
       case 'confirmPassword':
         errors.confirmPassword = value.length < 6
@@ -82,7 +82,7 @@ class Register extends React.Component {
         errors.address = value.length <= 5
         break;
       case 'license':
-        errors.license = value.length <= 0 || value.length >= 10
+        errors.license = value.length <= 0 || value.length > 10
         break;
       case 'studies':
         errors.studies = value.length <= 0
@@ -195,21 +195,21 @@ class Register extends React.Component {
     if(this.state.submitted) {
       switch (name) {
         case 'name':
-          return value.length <= 0
+          return value.length <= 2
         case 'lastName':
-          return value.length <= 0
+          return value.length <= 1
         case 'phoneNumber':
           return phone(value, 'ARG', true).length === 0
         case 'email':
           return !isValidEmail(value)
         case 'password':
-          return  value.length < 6
+          return  value.length < 6 || value.length > 56
         case 'confirmPassword':
           return value.length < 6
         case 'address':
           return value.length <= 5
         case 'license':
-          return value.length <= 0 || value.length >= 10
+          return value.length <= 0 || value.length > 10
         case 'studies':
           return  value.length <= 0
         case 'gender':
@@ -399,8 +399,8 @@ class Register extends React.Component {
                 }
               </div>
               <div className="form-group">
-                <label className={this.hasErrors(license, 'license') || repeatedLicense ? 'text-danger' : ''}>{i18n.t('register.license')}</label>
-                <input name="license" value={license} type="text" className={'form-control ' + (this.hasErrors(license, 'license') || repeatedLicense ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder={i18n.t('register.placeHolderLicense')} onChange={(e) =>this.handleChange(e)}/>
+                <label className={errors.license || this.hasErrors(license, 'license') || repeatedLicense ? 'text-danger' : ''}>{i18n.t('register.license')}</label>
+                <input name="license" value={license} type="text" className={'form-control ' + (errors.license || this.hasErrors(license, 'license') || repeatedLicense ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder={i18n.t('register.placeHolderLicense')} onChange={(e) =>this.handleChange(e)}/>
                 {
                   repeatedLicense &&
                   <div className="text-danger">
