@@ -37,7 +37,11 @@ export default {
         insurancesPlans: 'Medical Care',
         list: 'Load more results',
         placeHolderName: 'Name...',
-        workingDay: 'Day'
+        workingDay: 'Day',
+        notAvailable: 'not available',
+        studies: 'Studies',
+        certificate: 'Certificate',
+        languages: 'Languages',
     },
     review:{
         reviewThanks: 'Thank you for sharing your review with us!',

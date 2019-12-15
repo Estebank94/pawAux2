@@ -425,9 +425,21 @@ class Specialist extends React.Component {
                   </div>
                   <hr />
                   <h3>{i18n.t('specialist.description')}</h3>
-                  <div><FontAwesomeIcon className="mr-2 description-icon" icon={faUniversity} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{specialist.description.certificate}</div>
-                  <div><FontAwesomeIcon className="mr-2 description-icon" icon={faGraduationCap} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{specialist.description.education}</div>
-                  <div><FontAwesomeIcon className="mr-2 description-icon" icon={faLanguage} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />{specialist.description.languages}</div>
+                  <div>
+                    <FontAwesomeIcon className="mr-2 description-icon" icon={faUniversity} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />
+                    <strong>{i18n.t('specialist.certificate')}: </strong>
+                    {!specialist.description.certificate? i18n.t('specialist.notAvailable') : specialist.description.certificate}
+                  </div>
+                  <div>
+                    <FontAwesomeIcon className="mr-2 description-icon" icon={faGraduationCap} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />
+                    <strong>{i18n.t('specialist.studies')}: </strong>
+                    {!specialist.description.education? i18n.t('specialist.notAvailable') : specialist.description.education }
+                  </div>
+                  <div>
+                    <FontAwesomeIcon className="mr-2 description-icon" icon={faLanguage} style={{ color: 'rgba(37, 124, 191, 0.5)' }} />
+                    <strong>{i18n.t('specialist.languages')}: </strong>
+                    {!specialist.description.languages? i18n.t('specialist.notAvailable') : specialist.description.languages }
+                  </div>
                   <h5 className="mt-3">{i18n.t('specialist.insurancesPlans')}</h5>
                   <Row>
                     {

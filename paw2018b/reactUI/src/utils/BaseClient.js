@@ -17,7 +17,7 @@ class BaseClient {
 
     this.instance = axios.create({
       baseURL: API_URL,
-      timeout: 60000,
+      timeout: 60000 * 2,
       headers,
     });
 
