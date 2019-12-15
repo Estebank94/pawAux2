@@ -156,7 +156,7 @@ class Specialists extends React.Component {
     if(filters.page < pages) {
       return(
         <div
-          className="btn btn-light btn-block w-shadow mt-3 w-text-color"
+          className="btn btn-light btn-block w-shadow mt-3 w-text-color clickeable"
           onClick={() => this.loadMore()}
         >
             {i18n.t('specialist.list')}
