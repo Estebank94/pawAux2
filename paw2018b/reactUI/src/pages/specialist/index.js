@@ -245,7 +245,12 @@ class Specialist extends React.Component {
       }
     })
 
-    return moment().isoWeekday(min).toDate();
+    let date = moment().isoWeekday(min);
+
+    if(moment().isoWeekday(min).isBefore(moment())) {
+      date.add(1, 'week')
+    }
+    return date.toDate();
   }
 
   calculateExcludedTimes = () => {
