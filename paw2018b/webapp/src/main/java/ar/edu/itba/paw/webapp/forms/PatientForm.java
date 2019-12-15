@@ -25,12 +25,10 @@ public class PatientForm {
 
     @Length(min=6, max=55)
     @NotEmpty
-    @Pattern(regexp = "[a-zA-Z0-9]+")
     private String password;
 
     @Length(min=6, max=55)
     @NotEmpty
-    @Pattern(regexp = "[a-zA-Z0-9]+" )
     private String passwordConfirmation;
 
         // TODO
