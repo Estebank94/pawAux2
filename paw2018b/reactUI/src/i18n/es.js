@@ -36,7 +36,11 @@ export default {
       insurancesPlans: 'Prepagas Médicas',
       list: 'Cargar más resultados',
       placeHolderName: 'Nombre...',
-      workingDay: 'Día de Atención'
+      workingDay: 'Día de Atención',
+      notAvailable: 'no disponible',
+      studies: 'Estudios',
+      certificate: 'Certificados',
+      languages: 'Idiomas',
   },
   review:{
       reviewThanks: '¡Gracias por compartir tu reseña con nosotros!',
