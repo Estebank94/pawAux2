@@ -1058,6 +1058,9 @@ public class DoctorApiController extends BaseApiController {
 
         if(patient.getFavorites()!= null){
             try{
+                if(patient.getDoctor().getId().equals(doctor.getId())){
+                    throw new NotCreatedFavoriteException();
+                }
                 favoriteService.addFavorite(doctor, patient);
             }catch(NotCreatedFavoriteException e){
                 return Response.status(Response.Status.CONFLICT)
