@@ -425,12 +425,12 @@ public class PatientApiController extends BaseApiController {
         if(patientService.emailTaken(email)){
             return Response
                     .status(Response.Status.ACCEPTED)
-                    .entity(MessageToJSON(true))
+                    .entity(MessageToJSONEmail(true))
                     .build();
         }else{
             return Response
                     .status(Response.Status.BAD_REQUEST)
-                    .entity(MessageToJSON(false))
+                    .entity(MessageToJSONEmail(false))
                     .build();
         }
     }

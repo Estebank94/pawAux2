@@ -1160,12 +1160,12 @@ public class DoctorApiController extends BaseApiController {
         if(doctorService.isAnExistingLicence(licence)){
             return Response
                     .status(Response.Status.ACCEPTED)
-                    .entity(MessageToJSON(true))
+                    .entity(MessageToJSONLicence(true))
                     .build();
         }else{
             return Response
                     .status(Response.Status.BAD_REQUEST)
-                    .entity(MessageToJSON(false))
+                    .entity(MessageToJSONLicence(false))
                     .build();
         }
     }
