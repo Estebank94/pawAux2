@@ -5,15 +5,14 @@ import React from 'react'
 import BounceLoader from 'react-spinners/BounceLoader';
 import PulseLoader from 'react-spinners/PulseLoader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPhone, faMapMarker, faHeart, faCalendarPlus, faCheckCircle, faTimesCircle, faLock, faGraduationCap, faLanguage, faUniversity } from '@fortawesome/free-solid-svg-icons';
+import { faPhone, faMapMarker, faHeart, faCalendarPlus, faLock, faGraduationCap, faLanguage, faUniversity } from '@fortawesome/free-solid-svg-icons';
 import ReviewCard from '../../components/specialist/reviewCard';
 import ReviewForm from '../../components/specialist/reviewForm';
+import AppointmentModal from '../../components/specialist/appointmentModal';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { connect } from 'react-redux';
-import Modal from 'react-bootstrap/Modal';
 import { ApiClient } from '../../utils/apiClient';
-import DatePicker from 'react-datepicker';
 import moment from 'moment';
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -303,7 +302,7 @@ class Specialist extends React.Component {
     return moment(start).add(remainder, "minutes").toDate();
   }
 
-  addAppointment() {
+  addAppointment = () => {
     const { id } = this.props.match.params;
     const { date, time } = this.state;
     const formattedDate = moment(date).format('YYYY-MM-DD')
@@ -326,8 +325,7 @@ class Specialist extends React.Component {
 
   render() {
     const { error, loading, specialist, reviews, favorite, modalVisible, time, excludedDates, firstDate,
-      excludedTimes, date, minAndMaxTimes, submitted, appointmentError, appointmentLoading, pastAppointments,
-      description, stars, canReview } = this.state;
+      excludedTimes, date, minAndMaxTimes, submitted, appointmentError, appointmentLoading, canReview } = this.state;
 
     if(loading) {
       return (
@@ -354,96 +352,23 @@ class Specialist extends React.Component {
 
     return (
       <div className="body-background">
-        <Modal
-          show={modalVisible}
-          onHide={() => this.toggleModal()}
-          size="lg"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title id="example-custom-modal-styling-title">
-                {i18n.t('appointment.reserve')}
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {
-              !submitted &&
-                <div>
-                  <strong>{i18n.t('appointment.selectDateTime')}</strong>
-                  <div className="row mt-2">
-                    <div className="col-sm-6">
-                      <label className="mr-2">{i18n.t('appointment.date')}</label>
-                      <DatePicker
-                        selected={date}
-                        onChange={date => this.onChange(date, 'date')}
-                        excludeDates={excludedDates}
-                        minDate={firstDate}
-                        maxDate={moment(firstDate).add(40, 'days').toDate()}
-                      />
-                    </div>
-                    <div className="col-sm-6 pl-0">
-                      <label className="mr-2">{i18n.t('appointment.time')}</label>
-                      <DatePicker
-                        selected={time}
-                        onChange={date => this.onChange(date, 'time')}
-                        minTime={minAndMaxTimes.min}
-                        maxTime={minAndMaxTimes.max}
-                        excludeTimes={excludedTimes}
-                        showTimeSelect
-                        showTimeSelectOnly
-                        timeIntervals={30}
-                        timeCaption={i18n.t('appointment.time')}
-                        dateFormat="h:mm aa"
-                      />
-                    </div>
-                  </div>
-                </div>
-            }
-            {
-              submitted && appointmentLoading &&
-              <div className="center-horizontal p-5">
-                <BounceLoader
-                  sizeUnit={"px"}
-                  size={75}
-                  color={'rgb(37, 124, 191)'}
-                  loading={true}
-                />
-              </div>
-            }
-            {
-              submitted && appointmentError && !appointmentLoading &&
-              <div>
-                <FontAwesomeIcon icon={faTimesCircle} color="#bb0000" size="4x"/>
-                <h3 className="mt-4">{i18n.t('error.problem')}</h3>
-                <p className="mb-0">{i18n.t('appointment.error')}</p>
-              </div>
-            }
-            {
-              submitted && !appointmentError && !appointmentLoading &&
-              <div>
-                <FontAwesomeIcon icon={faCheckCircle} color="#46ce23" size="4x"/>
-                <h3 className="mt-4">{i18n.t('appointment.reserved')}</h3>
-                <p className="mb-0">{firstName} te espera el {moment(date).format('DD/MM')} a las {moment(time).format('HH:mm')}hs.</p>
-              </div>
-            }
-          </Modal.Body>
-          {
-            !submitted &&
-            <Modal.Footer>
-              <button className="btn btn-success" onClick={() => this.addAppointment()}>
-                  {i18n.t('appointment.reserve')}
-              </button>
-            </Modal.Footer>
-          }
-          {
-            submitted && !loading &&
-            <Modal.Footer>
-              <button className="btn btn-secondary" onClick={() => this.toggleModal()}>
-                  {i18n.t('appointment.close')}
-              </button>
-            </Modal.Footer>
-          }
-        </Modal>
+        <AppointmentModal
+          modalVisible={modalVisible}
+          submitted={submitted}
+          date={date}
+          excludedDates={excludedDates}
+          firstDate={firstDate}
+          minAndMaxTimes={minAndMaxTimes}
+          excludedtimes={excludedTimes}
+          time={time}
+          appointmentLoading={appointmentLoading}
+          loading={loading}
+          addAppointment={this.addAppointment}
+          toggleModal={this.toggleModal}
+          appointmentError={appointmentError}
+          firstName={firstName}
+          onChange={this.onChange}
+        />
         <div className="main-container">
           <div className="container pt-4">
             <div className="login-card w-shadow flex-row">
