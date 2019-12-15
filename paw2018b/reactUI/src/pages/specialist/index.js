@@ -152,7 +152,7 @@ class Specialist extends React.Component {
       } else {
         this.setState({ favorite: false })
       }
-    })
+    }).catch(() => this.setState({ favorite: false }))
   }
 
   removeFromFavorites() {
