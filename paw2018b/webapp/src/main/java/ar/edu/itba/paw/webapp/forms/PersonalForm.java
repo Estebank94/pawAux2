@@ -25,15 +25,12 @@ public class PersonalForm {
 
     @Length(min=6, max=55)
     @NotEmpty
-    @Pattern(regexp = "[a-zA-Z0-9]+")
     private String password;
 
-    @Length(min=6, max=10)
+    @Length(min=6, max=55)
     @NotEmpty
-    @Pattern(regexp = "[a-zA-Z0-9]+")
     private String passwordConfirmation;
 
-//    @Pattern(regexp = "^((\\(|)(011)*(\\)|)(|\\s)(\\d{8}|\\d{4}\\s\\d{4}))$")
     @NotEmpty
     private String phoneNumber;
 
