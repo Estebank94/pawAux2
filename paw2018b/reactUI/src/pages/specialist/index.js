@@ -165,7 +165,7 @@ class Specialist extends React.Component {
   }
 
   renderFavoriteButton(favorite) {
-    if(this.props.user.user.doctor.id === this.state.specialist.id) {
+    if(this.props.user.user.doctor && this.props.user.user.doctor.id === this.state.specialist.id) {
       return null;
     }
 
