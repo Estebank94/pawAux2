@@ -137,7 +137,6 @@ class CompleteProfile extends React.Component {
       let bodyFormData = new FormData();
       bodyFormData.append('file', this.state.files[0])
 
-
       this.setState({ loading: true })
       this.API.put('/doctor/uploadPicture', bodyFormData, conf ).then(() => {
         this.API.post('/doctor/registerProfessional', body).then(() => {
@@ -193,7 +192,7 @@ class CompleteProfile extends React.Component {
 
     for (let [key, value] of wh.entries()) {
       if(value.start && value.end){
-        res.push({ dayOfWeek: this.getDay(value.day), startTime: value.start, finishTime: value.end })
+        res.push({ dayOfWeek: this.getDay(value.name), startTime: value.start, finishTime: value.end })
       }
     }
 
