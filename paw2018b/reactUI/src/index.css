@@ -675,3 +675,7 @@ blue-icon {
 .continue-btn {
     min-width: 88px;
 }
+
+.smaller {
+    font-size: 40px !important;
+}

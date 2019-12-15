@@ -5,7 +5,15 @@ export default {
         labelDoctor: 'Search by doctor\'s name ',
         placeHolderSpeciality: 'Speciality',
         placeHolderInsurance: 'Medical Care',
-        searchButton: 'Search'
+        searchButton: 'Search',
+        title: "Reserving appointments has never been easier",
+        subtitle: "Follow these simple steps",
+        searchTitle: "Search",
+        searchSubtitle: "We have the most qualified doctors",
+        chooseTitle: "Choose",
+        chooseSubtitle: "Choose the doctor that's right for your condition",
+        reserveTitle: "Reserve",
+        reserveSubtitle: "Reserve an appointment with one click",
     },
     navigation:{
         title:'Waldoc',

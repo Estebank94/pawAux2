@@ -5,7 +5,15 @@ export default {
       labelDoctor: 'Buscar por nombre del médico',
       placeHolderSpeciality: 'Especialidad',
       placeHolderInsurance: 'Prepaga',
-      searchButton: "Buscar"
+      searchButton: "Buscar",
+      title: "Sacar un turno nunca fue tan fácil",
+      subtitle: "Seguí estos simples pasos",
+      searchTitle: "Buscá",
+      searchSubtitle: "Contamos con los mejores médicos",
+      chooseTitle: "Elegí",
+      chooseSubtitle: "Lee las especificaciones de los médicos y elegí el adecuado",
+      reserveTitle: "Reservá",
+      reserveSubtitle: "Usa la información de contacto para reservar un turno",
   },
   navigation:{
       title:'Waldoc',
