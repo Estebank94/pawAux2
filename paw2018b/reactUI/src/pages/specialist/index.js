@@ -233,10 +233,14 @@ class Specialist extends React.Component {
 
       for(let i = 0; i < 45; i++) {
         const day = moment().add(i, 'days');
+        let exclude = true
         workingHours.map(wh => {
-          if(wh.dayOfWeek !== day.isoWeekday()){
-            excludedDates.push(day.toDate())
+          if(wh.dayOfWeek === day.isoWeekday()){
+            exclude = false
           }})
+        if(exclude) {
+          excludedDates.push(day.toDate())
+        }
       }
       return excludedDates;
   }
@@ -277,9 +281,13 @@ class Specialist extends React.Component {
   calculateSelectedWorkingHour = () => {
       const { date, specialist } = this.state;
       const workingHours = specialist.workingHours;
-      return workingHours.reduce(wh => {
-        return (wh.dayOfWeek === moment(date).isoWeekday());
+      let selected = workingHours[0]
+      workingHours.forEach(wh => {
+        if(wh.dayOfWeek === moment(date).isoWeekday()) {
+          selected = wh;
+        }
       })
+    return selected;
   }
 
   calculateMinAndMaxTimes = () => {
@@ -330,7 +338,7 @@ class Specialist extends React.Component {
 
   submitReview = (review) => {
     const { id } = this.props.match.params;
-    this.API.post(`/doctor/${id}/makeReview`, { stars: review.stars, description: review.description }).then(response => console.log(response))
+    this.API.post(`/doctor/${id}/makeReview`, { stars: review.stars, description: review.description })
   }
 
 
