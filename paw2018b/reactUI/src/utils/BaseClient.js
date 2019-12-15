@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL } from "../constants/constants";
 
 class BaseClient {
   constructor(props) {
@@ -15,7 +16,7 @@ class BaseClient {
     };
 
     this.instance = axios.create({
-      baseURL: 'http://localhost:8080/api/v1',
+      baseURL: API_URL,
       timeout: 60000,
       headers,
     });

@@ -116,7 +116,7 @@ class CompleteProfile extends React.Component {
 
     this.getWorkingHours(workingHours);
 
-    if(photo && studies && !this.mapIsEmpty(languages) && specialties.length > 0  && !this.mapIsEmpty(insurancePlans) && !this.mapIsEmpty(workingHours) && !this.handleAddWorkingHours(workingHours)) {
+    if(photo && studies && !this.mapIsEmpty(languages) && specialties.length > 0  && !this.mapIsEmpty(insurancePlans) && !this.hasWorkingHoursError(workingHours)) {
       const body = {
         description: {
           certificate: 'cer',
@@ -171,7 +171,7 @@ class CompleteProfile extends React.Component {
 
   hasWorkingHoursError(wh) {
     if(!wh) {
-      return false;
+      return true;
     }
 
     for (let [key, value] of wh.entries()) {

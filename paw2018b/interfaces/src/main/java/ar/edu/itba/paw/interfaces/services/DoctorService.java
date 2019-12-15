@@ -3,10 +3,7 @@ package ar.edu.itba.paw.interfaces.services;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
 
-import javax.print.Doc;
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -48,4 +45,6 @@ public interface DoctorService {
    List<Appointment> getHistoricalAppointments(Doctor doctor);
 
    List<Review> getReviews(Doctor doctor);
+
+   Boolean isAnExistingLicence(Integer licence);
 }

@@ -134,6 +134,8 @@ export default {
         photoUploadError: 'The file must be an image',
         certificate: 'Certificates',
         placeHolderCertificate: 'Enter your academic certificates',
+        repeatedEmail: 'The email address is already being used',
+        repeatedLicense: 'The license is already being used',
     },
     favorite:{
         remove: 'Remove from favorites',

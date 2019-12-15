@@ -4,7 +4,6 @@ import javax.json.Json;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.Map;
 
 public class BaseApiController {
     public URI buildBaseURI(UriInfo uriInfo) {
@@ -30,6 +29,20 @@ public class BaseApiController {
     public String MessageToJSON(Boolean valid){
         return Json.createObjectBuilder()
                 .add("canReview", valid)
+                .build()
+                .toString();
+    }
+
+    public String MessageToJSONEmail(Boolean valid){
+        return Json.createObjectBuilder()
+                .add("emailExists", valid)
+                .build()
+                .toString();
+    }
+
+    public String MessageToJSONLicence(Boolean valid){
+        return Json.createObjectBuilder()
+                .add("licenceExists", valid)
                 .build()
                 .toString();
     }

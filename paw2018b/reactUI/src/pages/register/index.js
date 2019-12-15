@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { isValidEmail } from '../../utils/validations';
 import BounceLoader from 'react-spinners/BounceLoader';
+import PulseLoader from 'react-spinners/PulseLoader';
 import 'rc-steps/assets/index.css';
 import 'rc-steps/assets/iconfont.css';
 import Steps, { Step } from 'rc-steps';
@@ -39,7 +40,10 @@ class Register extends React.Component {
       current: 0,
       submitted: false,
       loading: false,
+      loadingValidation: false,
       role: 'patient',
+      repeatedEmail: false,
+      repeatedLicense: false,
     };
   }
 
@@ -65,6 +69,7 @@ class Register extends React.Component {
         errors.phoneNumber = phone(value, 'ARG', true).length === 0
         break;
       case 'email':
+        this.setState({ repeatedEmail: false });
         errors.email = !isValidEmail(value)
         break;
       case 'password':
@@ -83,7 +88,7 @@ class Register extends React.Component {
         errors.studies = value.length <= 0
         break;
       case 'gender':
-        errors.studies = value !== 'F' || value !== 'M'
+        errors.gender = value === ''
         break;
       default:
         break;
@@ -101,7 +106,20 @@ class Register extends React.Component {
 
     if(current === 0) {
       if(email && password && confirmPassword && this.passwordsMatch()) {
-        this.setState({ current: current + 1, submitted: false })
+        this.setState({ loadingValidation: true })
+        this.API.get(`/patient/email-exists?email=${email}`).then((response) => {
+          if(!response.data.emailExists) {
+            this.setState({ current: current + 1, submitted: false, loadingValidation: false })
+          } else {
+            this.setState({ loadingValidation: false, repeatedEmail: true })
+          }
+        }).catch(err => {
+          if(!err.response.data.emailExists) {
+            this.setState({ current: current + 1, submitted: false, loadingValidation: false })
+          } else {
+            this.setState({ loadingValidation: false, repeatedEmail: true })
+          }
+        })
       }
     } else if(current === 1) {
       if(role === 'patient') {
@@ -137,11 +155,31 @@ class Register extends React.Component {
             sex: gender,
             licence: license
           }
-          this.setState({ loading: true })
-          this.API.post('/doctor/register', body).then((response) => {
-            this.setState({ current: 2, loading: false });
+
+          this.setState({ loadingValidation: true })
+          this.API.get(`/doctor/licence-exists?licence=${license}`).then((response) => {
+            if(!response.data.licenceExists) {
+              console.log('response', response)
+              this.setState({ loading: true, loadingValidation: false, repeatedLicense: false })
+              this.API.post('/doctor/register', body).then((response) => {
+                this.setState({ current: 2, loading: false });
+              }).catch(err => {
+                console.log({err});
+              })
+            } else {
+              this.setState({ loadingValidation: false, repeatedLicense: true })
+            }
           }).catch(err => {
-            console.log({err});
+            if(!err.response.data.licenceExists) {
+              this.setState({ loading: true, loadingValidation: false, repeatedLicense: false })
+              this.API.post('/doctor/register', body).then((response) => {
+                this.setState({ current: 2, loading: false });
+              }).catch(err => {
+                console.log({err});
+              })
+            } else {
+              this.setState({ loadingValidation: false, repeatedEmail: true })
+            }
           })
         }
       }
@@ -175,7 +213,7 @@ class Register extends React.Component {
         case 'studies':
           return  value.length <= 0
         case 'gender':
-          return value !== 'F' || value !== 'M'
+          return value === ""
         default:
           return false;
       }
@@ -207,12 +245,18 @@ class Register extends React.Component {
 
 
   renderBasicForm(){
-    const { email, password, confirmPassword, errors, submitted } = this.state;
+    const { email, password, confirmPassword, errors, submitted, repeatedEmail } = this.state;
     return(
       <div>
         <div className="form-group">
-          <label className={(errors.email || this.hasErrors(email, 'email') ? 'text-danger' : '') + (!errors.email && email !== '' ? 'text-success' : '' )}>Email</label>
-          <input name="email" value={email} type="email" className={'form-control ' + (errors.email ||  this.hasErrors(email, 'email')  ? 'is-invalid' : '') + (!errors.email && email !== '' ? 'is-valid' : '' )} aria-describedby="emailHelp" placeholder={i18n.t('login.placeHolderEmail')} onChange={(e) =>this.handleChange(e)}/>
+          <label className={(errors.email || this.hasErrors(email, 'email') || repeatedEmail ? 'text-danger' : '') + (!errors.email && !repeatedEmail &&email !== '' ? 'text-success' : '' )}>Email</label>
+          <input name="email" value={email} type="email" className={'form-control ' + (errors.email ||  this.hasErrors(email, 'email') || repeatedEmail  ? 'is-invalid' : '') + (!errors.email && !repeatedEmail && email !== '' ? 'is-valid' : '' )} aria-describedby="emailHelp" placeholder={i18n.t('login.placeHolderEmail')} onChange={(e) =>this.handleChange(e)}/>
+          {
+            repeatedEmail &&
+            <div className="text-danger">
+              {i18n.t('register.repeatedEmail')}
+            </div>
+          }
           {
             errors.email &&
             <div className="text-danger">
@@ -220,7 +264,7 @@ class Register extends React.Component {
             </div>
           }
           {
-            !errors.email && email !== '' &&
+            !errors.email && !repeatedEmail &&email !== '' &&
             <div className="text-success">
               {i18n.t('register.validEmail')}
             </div>
@@ -280,7 +324,7 @@ class Register extends React.Component {
   }
 
   renderPersonalForm() {
-    const { name, lastName, address, phoneNumber, gender, errors, role, license } = this.state;
+    const { name, lastName, address, phoneNumber, gender, errors, role, license, repeatedLicense } = this.state;
     return(
       <div>
         <div className="form-row">
@@ -355,8 +399,14 @@ class Register extends React.Component {
                 }
               </div>
               <div className="form-group">
-                <label className={this.hasErrors(license, 'license') ? 'text-danger' : ''}>{i18n.t('register.license')}</label>
-                <input name="license" value={license} type="text" className={'form-control ' + (this.hasErrors(license, 'license') ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder={i18n.t('register.placeHolderLicense')} onChange={(e) =>this.handleChange(e)}/>
+                <label className={this.hasErrors(license, 'license') || repeatedLicense ? 'text-danger' : ''}>{i18n.t('register.license')}</label>
+                <input name="license" value={license} type="text" className={'form-control ' + (this.hasErrors(license, 'license') || repeatedLicense ? 'is-invalid' : '')} aria-describedby="emailHelp" placeholder={i18n.t('register.placeHolderLicense')} onChange={(e) =>this.handleChange(e)}/>
+                {
+                  repeatedLicense &&
+                  <div className="text-danger">
+                    {i18n.t('register.repeatedLicense')}
+                  </div>
+                }
                 {
                   this.renderSpecificError('license', license)
                 }
@@ -368,7 +418,20 @@ class Register extends React.Component {
   }
 
   renderButton() {
-    const { current } = this.state;
+    const { current, loadingValidation } = this.state;
+    if(loadingValidation) {
+      return(
+        <div className="btn btn-primary custom-btn pull-right continue-btn">
+          <PulseLoader
+            sizeUnit={"px"}
+            size={10}
+            color={'#FFF'}
+            loading={true}
+          />
+        </div>
+      )
+    }
+
     if(current === 0) {
       return(
         <div onClick={() => this.handleSubmit()} className="btn btn-primary custom-btn pull-right">{i18n.t('register.continueButton')}</div>

@@ -3,13 +3,14 @@ import BounceLoader from 'react-spinners/BounceLoader';
 import PulseLoader from 'react-spinners/PulseLoader';
 import queryString from 'query-string';
 import _ from 'lodash';
-import Badge from 'react-bootstrap/Badge';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimesCircle, faFrownOpen } from '@fortawesome/free-solid-svg-icons';
+import { faFrownOpen } from '@fortawesome/free-solid-svg-icons';
 
 import { ApiClient } from '../../utils/apiClient';
 
 import SpecialistCard from '../../components/specialist/card';
+import ActiveFilters from '../../components/specialists/activeFilters'
+import Filters from '../../components/specialists/filters'
 import i18n from "../../i18n";
 
 class Specialists extends React.Component {
@@ -87,7 +88,6 @@ class Specialists extends React.Component {
 
   buildQueryParams() {
     let filters = this.state.filters;
-    console.log('filters', filters)
     let str = '?'
     str +=  queryString.stringify(filters, { skipNull: true })
 
@@ -135,7 +135,10 @@ class Specialists extends React.Component {
   }
 
   renderPagePicker = () => {
-    const { pages, filters, loadingPage } = this.state;
+    const { pages, filters, loadingPage, loading, filtering } = this.state;
+    if(loading || filtering ) {
+      return null;
+    }
     if(loadingPage) {
       return(
         <div className="btn btn-light btn-block w-shadow mt-3 w-text-color">
@@ -162,19 +165,18 @@ class Specialists extends React.Component {
     }
   }
 
-  async handleChange(type, value) {
+  handleChange = async (type, value) => {
     let filters = this.state.filters;
     filters[type] = value;
     filters.page = 1;
-    await this.setState({ filters, filtering: true });
-    this.getSpecialists();
+    await this.setState({ filters, filtering: true }, this.getSpecialists());
   }
 
-  handleInputChange(e) {
+  handleInputChange = (e) => {
     this.setState({ auxName: e.target.value });
   }
 
-  async handleNameSearch() {
+  handleNameSearch = async () => {
     const filters = this.state.filters;
     filters.name = this.state.auxName;
     await this.setState({ filters, auxName: null, filtering: true });
@@ -242,16 +244,6 @@ class Specialists extends React.Component {
     const { error, loading, filtering, specialists, filters, specialties, insurances, insurancePlans } = this.state;
     const { name, sex, insurance, specialty, insurancePlan, days } = filters;
 
-    const DAYS = [
-      { name: 'monday', value: 1},
-      { name: 'tuesday', value: 2},
-      { name: 'wednesday', value: 3},
-      { name: 'thursday', value: 4},
-      { name: 'friday', value: 5},
-      { name: 'saturday', value: 6},
-      { name: 'sunday', value: 7},
-    ]
-
       if((loading || !specialists || !insurances) &&!filtering) {
           return (
               <div className="body-background centered">
@@ -275,107 +267,38 @@ class Specialists extends React.Component {
       <div className="body-background">
         <div className="container">
             <div className="row">
-                <div className="col-md-9">
+               <div className="col-md-9">
                   { this.renderSpecialists(filtering, specialists)}
                   { this.renderPagePicker() }
                 </div>
                 <div className="col-md-3">
                     <div className="sidebar-nav-fixed pull-right affix">
                       <h3>{i18n.t('navigation.filters')}</h3>
-                      {
-                        name &&
-                        <Badge className="badge-waldoc p-2" onClick={() => this.handleChange('name', null)}>
-                          {name} <FontAwesomeIcon className="ml-1" icon={faTimesCircle}/>
-                        </Badge>
-                      }
-                      {
-                        sex &&
-                        <Badge className="badge-waldoc p-2" onClick={() => this.handleChange('sex', null)}>
-                          {sex === 'M' ? 'Masculino' : 'Femenino'}
-                          <FontAwesomeIcon className="ml-1" icon={faTimesCircle} />
-                        </Badge>
-                      }
-                      {
-                        insurance &&
-                        <Badge className="badge-waldoc p-2" onClick={() => this.handleChange('insurance', null)}>
-                          {insurance} <FontAwesomeIcon className="ml-1" icon={faTimesCircle}/>
-                        </Badge>
-                      }
-                      {
-                        specialty &&
-                        <Badge className="badge-waldoc p-2" onClick={() => this.handleChange('specialty', null)}>
-                          {specialty} <FontAwesomeIcon className="ml-1" icon={faTimesCircle}/>
-                        </Badge>
-                      }
-                      {
-                        insurancePlan &&
-                        <Badge className="badge-waldoc p-2" onClick={() => this.handleChange('insurancePlan', null)}>
-                          {insurancePlan} <FontAwesomeIcon className="ml-1" icon={faTimesCircle}/>
-                        </Badge>
-                      }
-                      {
-                        days &&
-                        <Badge className="badge-waldoc p-2" onClick={() => this.handleChange('days', null)}>
-                          {i18n.t(`week.${this.dayToString(days)}`)} <FontAwesomeIcon className="ml-1" icon={faTimesCircle}/>
-                        </Badge>
-                      }
-                      {
-                        !name &&
-                        <div>
-                          <h5 className="mb-1 mt-3">{i18n.t('register.name')}</h5>
-                            <div className="input-group mb-3">
-                              <input name="name" value={name} type="text" className="form-control w-shadow" placeholder={i18n.t('specialist.placeHolderName')} onChange={(e) => this.handleInputChange(e)}/>
-                                <div className="input-group-append">
-                                  <span className="input-group-text w-shadow clickeable" onClick={() => this.handleNameSearch()}>{i18n.t('home.searchButton')}</span>
-                                </div>
-                            </div>
-                        </div>
-                      }
-                      {
-                        !sex &&
-                        <div>
-                          <h5 className="mb-1 mt-3">{i18n.t('register.gender')}</h5>
-                          <p className="mb-0 clickeable" onClick={() => this.handleChange('sex', 'F')}>{i18n.t('register.female')}</p>
-                          <p className="mb-0 clickeable" onClick={() => this.handleChange('sex', 'M')}>{i18n.t('register.male')}</p>
-                        </div>
-                      }
-                      {
-                        !specialty &&
-                        <div>
-                          <h5 className="mb-1 mt-3">{i18n.t('home.placeHolderSpeciality')}</h5>
-                          {
-                            specialties.map(s =>  <p className="mb-0 clickeable" onClick={() => this.handleChange('specialty', s.label)}>{s.label}</p>)
-                          }
-                        </div>
-                      }
-                      {
-                        !insurance &&
-                        <div>
-                          <h5 className="mb-1 mt-3">{i18n.t('specialist.insurancesPlans')}</h5>
-                          {
-                            insurances.map(i =>  <p className="mb-0 clickeable" onClick={() => this.handleChange('insurance', i.label)}>{i.label}</p>)
-                          }
-                        </div>
-                      }
-                      {
-                        insurance && !insurancePlan &&
-                        <div>
-                          <h5 className="mb-1 mt-3">Plan</h5>
-                          {
-                            insurancePlans.filter(i => i.name === insurance)[0].plans.map(p =>  <p className="mb-0 clickeable" onClick={() => this.handleChange('insurancePlan', p)}>{p}</p>)
-                          }
-                        </div>
-                      }
-                      {
-                        !days &&
-                        <div>
-                          <h5 className="mb-1 mt-3">{i18n.t('specialist.workingDay')}</h5>
-                          {
-                            DAYS.map(d =>  <p className="mb-0 clickeable" onClick={() => this.handleChange('days', d.value)}>{i18n.t(`week.${d.name}`)}</p>)
-                          }
-                        </div>
-                      }
-
+                      <ActiveFilters
+                        name={name}
+                        sex={sex}
+                        insurance={insurance}
+                        specialty={specialty}
+                        insurancePlan={insurancePlan}
+                        days={days}
+                        handleChange={this.handleChange}
+                        dayToString={this.dayToString}
+                      />
+                      <Filters
+                        name={name}
+                        sex={sex}
+                        insurance={insurance}
+                        insurances={insurances}
+                        specialty={specialty}
+                        specialties={specialties}
+                        insurancePlan={insurancePlan}
+                        insurancePlans={insurancePlans}
+                        days={days}
+                        handleChange={this.handleChange}
+                        dayToString={this.dayToString}
+                        handleInputChange={this.handleInputChange}
+                        handleNameSearch={this.handleNameSearch}
+                      />
                     </div>
                 </div>
             </div>

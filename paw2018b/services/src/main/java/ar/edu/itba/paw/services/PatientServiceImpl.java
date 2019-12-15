@@ -5,7 +5,6 @@ import ar.edu.itba.paw.interfaces.persistance.PatientDao;
 import ar.edu.itba.paw.interfaces.services.PatientService;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.*;
-import org.hibernate.Hibernate;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -274,6 +273,11 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public List<Favorite> getFavoriteDoctors(Patient patient) {
         return patientDao.getFavoriteDoctors(patient);
+    }
+
+    @Override
+    public boolean emailTaken(String email) {
+        return patientDao.emailTaken(email);
     }
 
 }

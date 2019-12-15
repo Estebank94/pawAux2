@@ -134,6 +134,8 @@ export default {
       photoUploadError: 'El archivo debe ser de tipo imagen',
       certificate: 'Titulos',
       placeHolderCertificate: 'Ingresá tus titulos académicos',
+      repeatedEmail: 'El email ya esta siendo utilizado',
+      repeatedLicense: 'La licencia ya esta siendo utilizada'
   },
   favorite:{
       remove: 'Eliminar de favoritos',
