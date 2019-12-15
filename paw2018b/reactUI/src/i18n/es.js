@@ -116,7 +116,7 @@ export default {
       validAddress: 'Ingresá una dirección válida',
       phoneNumber: 'Teléfono',
       placeHolderPhoneNumber: 'Ingresá tu teléfono',
-      validPhoneNumber: 'Ingresá un número de teléfono válida',
+      validPhoneNumber: 'Ingresá un número de teléfono válido',
       gender: 'Sexo',
       optionGender: 'Elegir una opción',
       male: 'Masculino',
