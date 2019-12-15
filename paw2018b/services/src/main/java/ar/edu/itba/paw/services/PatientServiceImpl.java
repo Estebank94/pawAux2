@@ -236,6 +236,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional
     public Optional<Verification> findToken(final String token) {
         Optional<Verification> vt = patientDao.findToken(token);
         if (vt.isPresent()) {
@@ -245,11 +246,13 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional
     public void enableUser(final Patient patient) {
         patientDao.enableUser(patient);
     }
 
     @Override
+    @Transactional
     public void deleteUser(final Patient patient) {
         patientDao.deleteUser(patient);
     }
@@ -272,4 +275,5 @@ public class PatientServiceImpl implements PatientService {
     public List<Favorite> getFavoriteDoctors(Patient patient) {
         return patientDao.getFavoriteDoctors(patient);
     }
+
 }

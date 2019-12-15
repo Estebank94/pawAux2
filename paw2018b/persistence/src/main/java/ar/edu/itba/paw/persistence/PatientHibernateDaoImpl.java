@@ -29,7 +29,7 @@ import java.util.UUID;
 @Repository
 public class PatientHibernateDaoImpl implements PatientDao {
 
-    @PersistenceContext (type = PersistenceContextType.EXTENDED)
+    @PersistenceContext /*(type = PersistenceContextType.EXTENDED)*/
     private EntityManager em;
 
     @Override
@@ -106,7 +106,6 @@ public class PatientHibernateDaoImpl implements PatientDao {
     }
 
     @Override
-    @Transactional
     public void deleteToken(final Verification token) {
         final Verification vt = em.merge(token);
         em.remove(vt);
@@ -116,6 +115,7 @@ public class PatientHibernateDaoImpl implements PatientDao {
     public Patient enableUser(final Patient patient) {
         final Patient u = em.merge(patient);
         u.setEnabled(true);
+
         return u;
     }
 
@@ -174,5 +174,11 @@ public class PatientHibernateDaoImpl implements PatientDao {
         query.setParameter("cancel", false);
         final List<Favorite> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
+    }
+
+    @Override
+    public Patient updatePatient(Patient patient){
+        Patient m = em.merge(patient);
+        return  m;
     }
 }
