@@ -439,4 +439,31 @@ public class PatientApiController extends BaseApiController {
                     .build();
         }
     }
+
+    @GET
+    @Path("/enabled")
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public Response licenceExists(@QueryParam("email")final String email){
+        Patient patient = null;
+        try{
+            patient = patientService.findPatientByEmail(email);
+        } catch (NotValidPatientIdException | NotCreatePatientException | NotFoundPacientException |
+                NotValidEmailException e){
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(MessageToJSONEmail(false))
+                    .build();
+        }
+        if(patient.isEnabled()){
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(MessageToJSONEmail(true))
+                    .build();
+        }else {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(MessageToJSONEmail(false))
+                    .build();
+        }
+    }
 }
