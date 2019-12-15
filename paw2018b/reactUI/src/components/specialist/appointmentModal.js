@@ -11,21 +11,21 @@ import moment from 'moment';
 
 class AppointmentModal extends React.Component {
   static propTypes = {
-    modalVisible: PropTypes.bool,
-    submitted: PropTypes.bool,
-    appointmentLoading: PropTypes.bool,
-    loading: PropTypes.bool,
-    appointmentError: PropTypes.bool,
-    date: PropTypes.object,
-    firstDate: PropTypes.object,
-    time: PropTypes.object,
-    firstName: PropTypes.string,
-    excludedDates: PropTypes.array,
-    excludedTimes: PropTypes.array,
-    minAndMaxTimes: PropTypes.object,
-    addAppointment: PropTypes.func,
-    toggleModal: PropTypes.func,
-    onChange: PropTypes.func,
+    modalVisible: PropTypes.bool.isRequired,
+    submitted: PropTypes.bool.isRequired,
+    appointmentLoading: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired,
+    appointmentError: PropTypes.bool.isRequired,
+    date: PropTypes.object.isRequired,
+    firstDate: PropTypes.object.isRequired,
+    time: PropTypes.object.isRequired,
+    firstName: PropTypes.string.isRequired,
+    excludedDates: PropTypes.array.isRequired,
+    excludedTimes: PropTypes.array.isRequired,
+    minAndMaxTimes: PropTypes.object.isRequired,
+    addAppointment: PropTypes.func.isRequired,
+    toggleModal: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
 
   };
 

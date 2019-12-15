@@ -12,7 +12,7 @@ class Review extends React.Component {
   renderStars = (stars) => {
     let s = []
     for(let i = 0; i < stars; i++){
-      s.push(<FontAwesomeIcon icon={faStar} className="w-star" />)
+      s.push(<FontAwesomeIcon icon={faStar} key={i} className="w-star" />)
     }
     return s;
   }
