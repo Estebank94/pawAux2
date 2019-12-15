@@ -117,6 +117,7 @@ class SearchBar extends React.Component {
               onChange={(e) => this.handleSelect(e, 'specialty')}
               options={specialties}
               placeholder={i18n.t('home.placeHolderSpeciality')}
+              loadingMessage={() => <p className="w-text-light mb-0">{i18n.t('home.loadingSpecialties')}</p>}
               styles={customStyles}
               isLoading={specialties.length === 0 }
             />
@@ -129,6 +130,7 @@ class SearchBar extends React.Component {
               placeholder={i18n.t('home.placeHolderInsurance')}
               styles={customStyles}
               isLoading={insurances.length === 0 }
+              loadingMessage={() => <p className="w-text-light mb-0">{i18n.t('home.loadingInsurances')}</p>}
             />
           </div>
           <div className="col-md-1 pl-1 pr-0 mr-0">

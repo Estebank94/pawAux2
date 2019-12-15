@@ -14,6 +14,8 @@ export default {
       chooseSubtitle: "Lee las especificaciones de los médicos y elegí el adecuado",
       reserveTitle: "Reservá",
       reserveSubtitle: "Usa la información de contacto para reservar un turno",
+      loadingSpecialties: 'Cargando especialidades...',
+      loadingInsurances: 'Cargando prepagas...',
   },
   navigation:{
       title:'Waldoc',

@@ -14,6 +14,9 @@ export default {
         chooseSubtitle: "Choose the doctor that's right for your condition",
         reserveTitle: "Reserve",
         reserveSubtitle: "Reserve an appointment with one click",
+        loadingSpecialties: 'Loading specialties...',
+        loadingInsurances: 'Loading medical care...',
+
     },
     navigation:{
         title:'Waldoc',
