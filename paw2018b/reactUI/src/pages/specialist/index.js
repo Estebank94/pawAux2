@@ -301,7 +301,7 @@ class Specialist extends React.Component {
         min = moment(selectedWorkingHour.startTime, 'HH:mm:ss').toDate();
       }
 
-      max = moment(selectedWorkingHour.finishTime, 'HH:mm:ss').toDate();
+      max = moment(selectedWorkingHour.finishTime, 'HH:mm:ss').subtract(30, 'minutes').toDate();
 
       excludedTimes.map(time => {
         if(moment(time).isSame(min)) {
@@ -378,7 +378,7 @@ class Specialist extends React.Component {
           excludedDates={excludedDates}
           firstDate={firstDate}
           minAndMaxTimes={minAndMaxTimes}
-          excludedtimes={excludedTimes}
+          excludedTimes={excludedTimes}
           time={time}
           appointmentLoading={appointmentLoading}
           loading={loading}
