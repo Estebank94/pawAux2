@@ -12,7 +12,7 @@ class BaseClient {
 
     const headers = {
       'X-AUTH-TOKEN': token,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json; charset=utf-8'
     };
 
     this.instance = axios.create({
