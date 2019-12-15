@@ -679,3 +679,10 @@ blue-icon {
 .smaller {
     font-size: 40px !important;
 }
+
+.click-card {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

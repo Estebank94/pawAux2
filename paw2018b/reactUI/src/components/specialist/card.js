@@ -19,7 +19,7 @@ class SpecialistCard extends React.Component {
   render() {
     const { profilePicture, firstName, lastName, specialties, address, phoneNumber } = this.props.data;
     return(
-      <div className="card-doctor d-flex flex-row box appointment-card" onClick={() => this.handleClick()}>
+      <div className="card-doctor d-flex flex-row box click-card" onClick={() => this.handleClick()}>
         <img className="avatar big" src={`data:image/jpeg;base64,${profilePicture}`} />
         <div className="card-body">
           <div className="card-text">
