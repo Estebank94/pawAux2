@@ -62,7 +62,9 @@ public class InsuranceDTO {
                 map.put(insurance, insurancePlansList);
             }
             List<String> toAdd = map.get(insurance);
-            toAdd.add(ip.getPlan());
+            if(!toAdd.contains(ip.getPlan())) {
+                toAdd.add(ip.getPlan());
+            }
         }
         List<InsuranceDTO> insuranceDTOList = new ArrayList<>();
         for (String insurance : map.keySet()){
