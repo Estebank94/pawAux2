@@ -48,6 +48,7 @@ public class SearchServiceImplTest {
 
     private static int INSURANCES_QUANTITY = 5;
     private static int INSURANCE_PLANS_QUANTITY = 3;
+    private static int INSURANCES_WITH_DOCTOR_QUANTITY = 3;
     private static int SPECIALTIES_QUANTITY = 5;
     private static int SPECIALTIES_QUANTITY_WITH_DOCTORS = 3;
 
@@ -161,21 +162,21 @@ public class SearchServiceImplTest {
 
     @Test
     public void testListInsuranceWithDoctors() {
-        InsurancePlan insurancePlan1 = Mockito.mock(InsurancePlan.class);
-        InsurancePlan insurancePlan2 = Mockito.mock(InsurancePlan.class);
-        InsurancePlan insurancePlan3 = Mockito.mock(InsurancePlan.class);
-        List<InsurancePlan> insurancePlans = new ArrayList<>();
-        insurancePlans.add(0, insurancePlan1);
-        insurancePlans.add(1, insurancePlan2);
-        insurancePlans.add(2, insurancePlan3);
-        //when(searchDao.listInsuranceWithDoctors()).thenReturn(insurancePlans);
+        Insurance insurance1 = Mockito.mock(Insurance.class);
+        Insurance insurance2 = Mockito.mock(Insurance.class);
+        Insurance insurance3 = Mockito.mock(Insurance.class);
+        List<Insurance> insurances = new ArrayList<>();
+        insurances.add(0, insurance1);
+        insurances.add(1, insurance2);
+        insurances.add(2, insurance3);
+        when(searchDao.listInsuranceWithDoctors()).thenReturn(insurances);
 
-        //List<InsurancePlan> insurancePlansListed = searchServiceImpl.listInsuranceWithDoctors();
+        List<Insurance> insurancePlansListed = searchServiceImpl.listInsuranceWithDoctors();
 
-        //assertEquals(INSURANCE_PLANS_QUANTITY, insurancePlansListed.size());
-        //assertEquals(insurancePlan1, insurancePlansListed.get(0));
-        //assertEquals(insurancePlan2, insurancePlansListed.get(1));
-        //assertEquals(insurancePlan3, insurancePlansListed.get(2));
+        assertEquals(INSURANCES_WITH_DOCTOR_QUANTITY, insurancePlansListed.size());
+        assertEquals(insurance1, insurancePlansListed.get(0));
+        assertEquals(insurance2, insurancePlansListed.get(1));
+        assertEquals(insurance3, insurancePlansListed.get(2));
     }
 
     @Test
