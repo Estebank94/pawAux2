@@ -90,7 +90,7 @@ class Login extends React.Component {
               }
             </form>
             <div style={{ marginTop: 8 }}>
-              <small>{i18n.t('login.accountQuestion')} <Link to="/register">{i18n.t('login.register')}</Link></small>
+              <small>{i18n.t('login.accountQuestion')} <Link to="/register/patient">{i18n.t('login.registerPatient')}</Link> {i18n.t('login.or')} <Link to="/register/specialist">{i18n.t('login.registerDoctor')}</Link></small>
               <br/>
               <small><Link to="/">{i18n.t('login.cancel')}</Link></small>
             </div>

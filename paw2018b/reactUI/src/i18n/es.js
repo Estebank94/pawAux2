@@ -76,6 +76,9 @@ export default {
       error: 'Correo Electrónico o Contraseña inválidos',
       accountQuestion:'¿No tenes una cuenta?',
       register: 'Registrate',
+      registerPatient: 'Registrate como paciente',
+      registerDoctor: 'registrate como médico',
+      or: 'o',
       cancel: 'Cancelar'
   },
   register:{

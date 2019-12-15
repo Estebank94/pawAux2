@@ -76,6 +76,9 @@ export default {
         error: 'not valid email or password',
         accountQuestion:'Don\'t have an account?',
         register: 'Sign up',
+        registerPatient: 'Sign up as a patient',
+        registerDoctor: 'sign up as a doctor',
+        or: 'or',
         cancel: 'Cancel'
     },
     register:{
