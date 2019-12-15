@@ -57,8 +57,6 @@ class Account extends React.Component {
     const { user } = this.props.user;
     const { loading, personal } = this.state;
 
-    console.log(user)
-
     if(!this.props.user.auth) {
       return(<Redirect to="/login"/>)
     }
