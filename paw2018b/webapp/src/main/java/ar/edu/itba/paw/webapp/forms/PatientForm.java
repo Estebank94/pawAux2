@@ -31,8 +31,6 @@ public class PatientForm {
     @NotEmpty
     private String passwordConfirmation;
 
-        // TODO
-//    @Pattern(regexp = "^((\\(|)(011)(\\)|)(|\\s)(\\d{8}|\\d{4}\\s\\d{4}))$")
     @NotEmpty
     private String phoneNumber;
 

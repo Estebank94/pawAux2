@@ -35,6 +35,7 @@ public class PersonalForm {
     private String phoneNumber;
 
     @NotEmpty
+    @Length(min=5)
     private String address;
 
     @NotEmpty
@@ -42,6 +43,7 @@ public class PersonalForm {
 
     @Length(max=10)
     @Pattern(regexp = "[0-9]{1,10}")
+    @NotEmpty
     private String licence;
 
     public String getLicence() {
