@@ -45,7 +45,7 @@ public class SearchDaoImpl implements SearchDao {
 
     @Override
     public List<Specialty> listSpecialtiesWithDoctors() {
-        final TypedQuery<Specialty> query = em.createQuery("select distinct s from Doctor d join d.specialties s", Specialty.class);
+        final TypedQuery<Specialty> query = em.createQuery("select distinct s from Doctor d join d.specialties s order by s.speciality", Specialty.class);
         final List<Specialty> list = query.getResultList();
         return list.isEmpty() ? Collections.emptyList() : list;
     }
