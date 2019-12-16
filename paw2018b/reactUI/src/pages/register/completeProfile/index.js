@@ -108,7 +108,7 @@ class CompleteProfile extends React.Component {
   }
 
   handleSubmit() {
-    const { photo, studies, languages, specialties, insurancePlans, workingHours } = this.state;
+    const { photo, studies, languages, specialties, insurancePlans, workingHours, certificate } = this.state;
 
     this.setState({ submitted: true });
 
@@ -116,10 +116,10 @@ class CompleteProfile extends React.Component {
 
     this.getWorkingHours(workingHours);
 
-    if(photo && studies && !this.mapIsEmpty(languages) && specialties.length > 0  && !this.mapIsEmpty(insurancePlans) && !this.hasWorkingHoursError(workingHours)) {
+    if(photo && certificate && studies && !this.mapIsEmpty(languages) && specialties.length > 0  && !this.mapIsEmpty(insurancePlans) && !this.hasWorkingHoursError(workingHours)) {
       const body = {
         description: {
-          certificate: 'cer',
+          certificate,
           languages: this.arrayToString(this.getMapKeys(languages)),
           education: studies,
         },
