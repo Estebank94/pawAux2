@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { isValidEmail } from '../../utils/validations';
+import { isValidEmail, isValidLetters } from '../../utils/validations';
 import BounceLoader from 'react-spinners/BounceLoader';
 import PulseLoader from 'react-spinners/PulseLoader';
 import 'rc-steps/assets/index.css';
@@ -60,10 +60,10 @@ class Register extends React.Component {
 
     switch (name) {
       case 'name':
-        errors.name = value.length <= 2
+        errors.name = value.length <= 2 || !isValidLetters(value)
         break;
       case 'lastName':
-        errors.lastName = value.length <= 1
+        errors.lastName = value.length <= 1 || !isValidLetters(value)
         break;
       case 'phoneNumber':
         errors.phoneNumber = phone(value, 'ARG', true).length === 0
@@ -195,9 +195,9 @@ class Register extends React.Component {
     if(this.state.submitted) {
       switch (name) {
         case 'name':
-          return value.length <= 2
+          return value.length <= 2 || !isValidLetters(value)
         case 'lastName':
-          return value.length <= 1
+          return value.length <= 1 || !isValidLetters(value)
         case 'phoneNumber':
           return phone(value, 'ARG', true).length === 0
         case 'email':
